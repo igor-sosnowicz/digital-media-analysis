@@ -4,9 +4,12 @@ client_secret: "your_client_secret"
 reddit_scraper_user_agent: "script:discussion-exporter:1.0 (by u/your_username)"
 max_concurrent: 3
 reddit_subreddits:
-  - AskReddit
-  - science
-
+  - PolskaPolityka
+  - gry
+  - rower
+  - warszawa
+  - lodz
+  - Szczecin
 
 # Wikipedia scraper
 wikipedia_pages:

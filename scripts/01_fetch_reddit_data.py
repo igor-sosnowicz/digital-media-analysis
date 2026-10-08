@@ -1,7 +1,11 @@
-"""Script for scraping configured Reddit subreddits."""
+"""Download configured Reddit corpora in ConvoKit's original format."""
+
+from pathlib import Path
+
+from convokit import download
+from tqdm import tqdm
 
 from digital_media_analysis.config_reader import get_config
-from digital_media_analysis.reddit_scraper import RedditDiscussionScraper
 
 
 def main() -> None:
@@ -11,23 +15,15 @@ def main() -> None:
     ):
         raise ValueError("'reddit_subreddits' must be a list of names in config.yaml.")
 
-    scraper = RedditDiscussionScraper(
-        client_id=get_config("client_id"),
-        client_secret=get_config("client_secret"),
-        user_agent=get_config("user_agent"),
-        max_concurrent=get_config("max_concurrent"),
-    )
+    output_dir = Path("./data/raw/reddit").resolve()
+    output_dir.mkdir(parents=True, exist_ok=True)
 
-    feeds = scraper.fetch_many(
-        subreddits,
-        start="2016-01-01T00:00:00Z",
-        end="2027-01-01T00:00:00Z",
-        max_items=1000,
-    )
-
-    for subreddit_name, posts in feeds.items():
-        scraper.save_csv(posts, f"{subreddit_name}_posts.csv")
-        print(f"Saved {len(posts)} posts from r/{subreddit_name}.")
+    for subreddit_name in tqdm(subreddits, desc="Downloading Reddit corpora"):
+        corpus_path = download(
+            f"subreddit-{subreddit_name}",
+            data_dir=str(output_dir),
+        )
+        print(f"Downloaded r/{subreddit_name} to {corpus_path}")
 
 
 if __name__ == "__main__":
