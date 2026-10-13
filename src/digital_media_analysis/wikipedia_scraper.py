@@ -64,7 +64,7 @@ class WikipediaScraper:
             "action": "query",
             "prop": "revisions",
             "titles": title,
-            "rvprop": "timestamp|content",
+            "rvprop": "timestamp|content|comment",
             "rvslots": "main",
             "rvstart": end,
             "rvend": self.START,
@@ -98,6 +98,7 @@ class WikipediaScraper:
                                 introduced=datetime.fromisoformat(
                                     revision["timestamp"]
                                 ),
+                                comment=revision.get("comment", ""),
                             )
                         )
 

@@ -8,6 +8,7 @@ from pydantic import BaseModel
 class Revision(BaseModel):
     new_content: str
     introduced: datetime
+    comment: str = ""
 
 
 class WikipediaPage(BaseModel):
