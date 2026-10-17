@@ -11,6 +11,35 @@ reddit_subreddits:
   - lodz
   - Szczecin
 
+# Study period of the year-balanced annotation sample, per platform (UTC, end
+# exclusive). Each platform tests a hypothesis about its own years:
+# - Reddit, 2005-2018: online trust in the scientific consensus declines.
+# - Wikipedia, 2020-2026: users cite alternative sources (blogs, influencers,
+#   "independent experts") more often. The end is the day the raw data was
+#   downloaded, so 2026 is a partial year.
+# The Reddit frame download and the sampling frame both use these.
+study_periods:
+  reddit:
+    start: "2005-01-01T00:00:00Z"
+    end: "2019-01-01T00:00:00Z"
+  wikipedia:
+    start: "2020-01-01T00:00:00Z"
+    end: "2026-10-13T00:00:00Z"
+
+# Reddit sampling frame (scripts/01b_fetch_reddit_frame.py): every post of these
+# subreddits on `days_per_month` random days of each month. A year with fewer
+# than `census_below` posts on those days is downloaded whole instead. Each
+# subreddit counts in the years given; r/reddit.com, the general front page, is
+# the only source for 2005, before topical subreddits existed.
+reddit_frame:
+  days_per_month: 1
+  census_below: 400
+  subreddits:
+    reddit.com: [2005, 2005]
+    science: [2006, 2018]
+    skeptic: [2008, 2018]
+    conspiracy: [2008, 2018]
+
 # Wikipedia scraper
 wikipedia_pages:
   - "https://pl.wikipedia.org/wiki/Szczepionka"

@@ -1,0 +1,266 @@
+{
+  "seed": 20261016,
+  "created_utc": "2026-10-17T08:07:06+00:00",
+  "study_period": {
+    "reddit": {
+      "start": "2005-01-01T00:00:00+00:00",
+      "end": "2019-01-01T00:00:00+00:00",
+      "years": [
+        2005,
+        2006,
+        2007,
+        2008,
+        2009,
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018
+      ]
+    },
+    "wikipedia": {
+      "start": "2020-01-01T00:00:00+00:00",
+      "end": "2026-10-13T00:00:00+00:00",
+      "years": [
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ]
+    }
+  },
+  "reddit": {
+    "strata": "year",
+    "frame": "posts not removed or deleted on drawn days, data/raw/reddit_frame",
+    "pilot_per_year": 2,
+    "estimated_posts_per_year": {
+      "2005": 21028,
+      "2006": 2473,
+      "2007": 24459,
+      "2008": 41515,
+      "2009": 59298,
+      "2010": 53932,
+      "2011": 87529,
+      "2012": 150018,
+      "2013": 172973,
+      "2014": 161863,
+      "2015": 168787,
+      "2016": 147354,
+      "2017": 186804,
+      "2018": 103033
+    }
+  },
+  "wikipedia": {
+    "strata": "year x signal",
+    "frame": "revisions with a non-empty edit summary, data/raw/wikipedia",
+    "pilot_per_year": {
+      "link": 0,
+      "cue": 1,
+      "other": 2
+    },
+    "gold_cue_share": 0.3333333333333333,
+    "link_pattern": "https?://",
+    "source_words_pattern": "źród|przypis|\\bwg\\b|wedł|bada|raport|\\bdane|publik|cyt|artyku|\\bref\\b|\\blink"
+  },
+  "dev_fraction": 0.3333333333333333,
+  "population": {
+    "reddit": {
+      "units": 47792,
+      "sha256": "2ada02f61975b709955b7edc3829c4583d8b93e744e13991ee641dad4a152a6f"
+    },
+    "wikipedia": {
+      "units": 1453,
+      "sha256": "eea2e1e37ba9483feaf4cacba63a67827f47c3fc396ebf37b84adaf8a33305a9"
+    }
+  },
+  "allocation": {
+    "reddit": {
+      "total": 500,
+      "per_year": {
+        "2005": 35,
+        "2006": 36,
+        "2007": 35,
+        "2008": 35,
+        "2009": 36,
+        "2010": 35,
+        "2011": 36,
+        "2012": 36,
+        "2013": 36,
+        "2014": 36,
+        "2015": 36,
+        "2016": 36,
+        "2017": 36,
+        "2018": 36
+      },
+      "whole_years": []
+    },
+    "wikipedia": {
+      "total": 500,
+      "per_year": {
+        "2020": 79,
+        "2021": 79,
+        "2022": 79,
+        "2023": 72,
+        "2024": 79,
+        "2025": 53,
+        "2026": 59
+      },
+      "whole_years": [
+        2023,
+        2025,
+        2026
+      ]
+    }
+  },
+  "sample_sizes": {
+    "reddit": {
+      "dev": 154,
+      "pilot": 28,
+      "test": 318
+    },
+    "wikipedia": {
+      "dev": 152,
+      "pilot": 21,
+      "test": 327
+    }
+  },
+  "per_year": {
+    "reddit": {
+      "2005": {
+        "N (rama)": 685,
+        "pilot": 2,
+        "dev": 11,
+        "test": 22
+      },
+      "2006": {
+        "N (rama)": 2473,
+        "pilot": 2,
+        "dev": 11,
+        "test": 23
+      },
+      "2007": {
+        "N (rama)": 800,
+        "pilot": 2,
+        "dev": 11,
+        "test": 22
+      },
+      "2008": {
+        "N (rama)": 1361,
+        "pilot": 2,
+        "dev": 11,
+        "test": 22
+      },
+      "2009": {
+        "N (rama)": 1953,
+        "pilot": 2,
+        "dev": 11,
+        "test": 23
+      },
+      "2010": {
+        "N (rama)": 1775,
+        "pilot": 2,
+        "dev": 11,
+        "test": 22
+      },
+      "2011": {
+        "N (rama)": 2880,
+        "pilot": 2,
+        "dev": 11,
+        "test": 23
+      },
+      "2012": {
+        "N (rama)": 4922,
+        "pilot": 2,
+        "dev": 11,
+        "test": 23
+      },
+      "2013": {
+        "N (rama)": 5680,
+        "pilot": 2,
+        "dev": 11,
+        "test": 23
+      },
+      "2014": {
+        "N (rama)": 5333,
+        "pilot": 2,
+        "dev": 11,
+        "test": 23
+      },
+      "2015": {
+        "N (rama)": 5557,
+        "pilot": 2,
+        "dev": 11,
+        "test": 23
+      },
+      "2016": {
+        "N (rama)": 4832,
+        "pilot": 2,
+        "dev": 11,
+        "test": 23
+      },
+      "2017": {
+        "N (rama)": 6146,
+        "pilot": 2,
+        "dev": 11,
+        "test": 23
+      },
+      "2018": {
+        "N (rama)": 3395,
+        "pilot": 2,
+        "dev": 11,
+        "test": 23
+      }
+    },
+    "wikipedia": {
+      "2020": {
+        "N (rama)": 762,
+        "pilot": 3,
+        "dev": 25,
+        "test": 51
+      },
+      "2021": {
+        "N (rama)": 264,
+        "pilot": 3,
+        "dev": 24,
+        "test": 52
+      },
+      "2022": {
+        "N (rama)": 134,
+        "pilot": 3,
+        "dev": 24,
+        "test": 52
+      },
+      "2023": {
+        "N (rama)": 72,
+        "pilot": 3,
+        "dev": 22,
+        "test": 47
+      },
+      "2024": {
+        "N (rama)": 109,
+        "pilot": 3,
+        "dev": 24,
+        "test": 52
+      },
+      "2025": {
+        "N (rama)": 53,
+        "pilot": 3,
+        "dev": 15,
+        "test": 35
+      },
+      "2026": {
+        "N (rama)": 59,
+        "pilot": 3,
+        "dev": 18,
+        "test": 38
+      }
+    }
+  }
+}

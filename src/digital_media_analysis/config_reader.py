@@ -1,5 +1,6 @@
 """Read values from the project's config.yaml file."""
 
+from datetime import datetime, timezone
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -27,3 +28,16 @@ def get_config(key: str) -> Any:
         return config[key]
     except KeyError as exc:
         raise KeyError(f"Config key {key!r} not found in {CONFIG_PATH}.") from exc
+
+
+def get_study_period(platform: str) -> tuple[datetime, datetime]:
+    """Return a platform's study period from `study_periods` as timezone-aware UTC datetimes (end exclusive)."""
+    periods = get_config("study_periods")
+    if platform not in periods:
+        raise KeyError(f"No study period for {platform!r} under study_periods in {CONFIG_PATH}.")
+    start, end = (
+        datetime.fromisoformat(str(periods[platform][key])).astimezone(timezone.utc) for key in ("start", "end")
+    )
+    if start >= end:
+        raise ValueError(f"The {platform} study period must start before it ends in {CONFIG_PATH}.")
+    return start, end
