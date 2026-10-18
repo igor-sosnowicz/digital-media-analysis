@@ -62,6 +62,8 @@ The sample is already drawn: `annotations/sample_manifest.csv` lists the units (
 make pilot-sheets ANNOTATORS="JP IS"
 ```
 
+Annotators code the Reddit tab by [`docs/instrukcja_annotacji_reddit.md`](docs/instrukcja_annotacji_reddit.md) and the Wikipedia tab by [`docs/instrukcja_annotacji_wikipedia.md`](docs/instrukcja_annotacji_wikipedia.md): step-by-step guides (in Polish) with the columns to fill, the decision procedure, typical cases and the import error messages.
+
 Write the sample with the full data of every unit to `data_samples/reddit_sample.csv` and `data_samples/wikipedia_sample.csv` (tracked by git, so the team shares one copy). Each file has every column of the raw download, then the sampling columns (`year`, `phase`, `split`, `order`, `stratum`, `signal`, `N_h`, `n_h`, `weight`). The Wikipedia file includes the full article text after each edit (`new_content`, about 51 MB in total); Excel cuts cells longer than 32,767 characters, so read it with pandas:
 
 ```bash
