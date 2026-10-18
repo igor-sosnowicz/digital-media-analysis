@@ -1,10 +1,10 @@
 {
   "seed": 20261016,
-  "created_utc": "2026-10-17T08:07:06+00:00",
+  "created_utc": "2026-10-18T12:47:53+00:00",
   "study_period": {
     "reddit": {
       "start": "2005-01-01T00:00:00+00:00",
-      "end": "2019-01-01T00:00:00+00:00",
+      "end": "2021-01-01T00:00:00+00:00",
       "years": [
         2005,
         2006,
@@ -19,7 +19,9 @@
         2015,
         2016,
         2017,
-        2018
+        2018,
+        2019,
+        2020
       ]
     },
     "wikipedia": {
@@ -38,28 +40,55 @@
   },
   "reddit": {
     "strata": "year",
-    "frame": "posts not removed or deleted on drawn days, data/raw/reddit_frame",
+    "frame": "posts not removed or deleted, on drawn days or in whole years, data/raw/reddit_frame",
+    "subreddits": {
+      "PolskaPolityka": null,
+      "gry": null,
+      "rower": null,
+      "warszawa": null,
+      "lodz": null,
+      "Szczecin": null,
+      "reddit.com": [
+        2005,
+        2005
+      ],
+      "science": null,
+      "skeptic": null,
+      "conspiracy": null
+    },
     "pilot_per_year": 2,
     "estimated_posts_per_year": {
       "2005": 21028,
       "2006": 2473,
       "2007": 24459,
-      "2008": 41515,
-      "2009": 59298,
-      "2010": 53932,
+      "2008": 41412,
+      "2009": 59128,
+      "2010": 54577,
       "2011": 87529,
-      "2012": 150018,
-      "2013": 172973,
-      "2014": 161863,
-      "2015": 168787,
-      "2016": 147354,
-      "2017": 186804,
-      "2018": 103033
+      "2012": 150039,
+      "2013": 173000,
+      "2014": 161975,
+      "2015": 168840,
+      "2016": 147388,
+      "2017": 186866,
+      "2018": 103118,
+      "2019": 101050,
+      "2020": 151554
     }
   },
   "wikipedia": {
     "strata": "year x signal",
     "frame": "revisions with a non-empty edit summary, data/raw/wikipedia",
+    "pages": [
+      "https://pl.wikipedia.org/wiki/Szczepionka",
+      "https://pl.wikipedia.org/wiki/Medycyna",
+      "https://pl.wikipedia.org/wiki/Lekarz",
+      "https://pl.wikipedia.org/wiki/Globalne_ocieplenie",
+      "https://pl.wikipedia.org/wiki/Zmiana_klimatu",
+      "https://pl.wikipedia.org/wiki/COVID-19",
+      "https://pl.wikipedia.org/wiki/Zesp%C3%B3%C5%82_nabytego_niedoboru_odporno%C5%9Bci",
+      "https://pl.wikipedia.org/wiki/Kwas_askorbinowy"
+    ],
     "pilot_per_year": {
       "link": 0,
       "cue": 1,
@@ -72,8 +101,8 @@
   "dev_fraction": 0.3333333333333333,
   "population": {
     "reddit": {
-      "units": 47792,
-      "sha256": "2ada02f61975b709955b7edc3829c4583d8b93e744e13991ee641dad4a152a6f"
+      "units": 62636,
+      "sha256": "af2d0bcbfdf0642359c0a6d3af611588e85ada1b658916f8cfc728365133d27b"
     },
     "wikipedia": {
       "units": 1453,
@@ -84,20 +113,22 @@
     "reddit": {
       "total": 500,
       "per_year": {
-        "2005": 35,
-        "2006": 36,
-        "2007": 35,
-        "2008": 35,
-        "2009": 36,
-        "2010": 35,
-        "2011": 36,
-        "2012": 36,
-        "2013": 36,
-        "2014": 36,
-        "2015": 36,
-        "2016": 36,
-        "2017": 36,
-        "2018": 36
+        "2005": 31,
+        "2006": 31,
+        "2007": 31,
+        "2008": 31,
+        "2009": 31,
+        "2010": 31,
+        "2011": 31,
+        "2012": 31,
+        "2013": 32,
+        "2014": 31,
+        "2015": 32,
+        "2016": 31,
+        "2017": 32,
+        "2018": 31,
+        "2019": 31,
+        "2020": 32
       },
       "whole_years": []
     },
@@ -121,9 +152,9 @@
   },
   "sample_sizes": {
     "reddit": {
-      "dev": 154,
-      "pilot": 28,
-      "test": 318
+      "dev": 148,
+      "pilot": 32,
+      "test": 320
     },
     "wikipedia": {
       "dev": 152,
@@ -136,86 +167,98 @@
       "2005": {
         "N (rama)": 685,
         "pilot": 2,
-        "dev": 11,
-        "test": 22
+        "dev": 9,
+        "test": 20
       },
       "2006": {
         "N (rama)": 2473,
         "pilot": 2,
-        "dev": 11,
-        "test": 23
+        "dev": 9,
+        "test": 20
       },
       "2007": {
         "N (rama)": 800,
         "pilot": 2,
-        "dev": 11,
-        "test": 22
+        "dev": 9,
+        "test": 20
       },
       "2008": {
-        "N (rama)": 1361,
+        "N (rama)": 2178,
         "pilot": 2,
-        "dev": 11,
-        "test": 22
+        "dev": 9,
+        "test": 20
       },
       "2009": {
-        "N (rama)": 1953,
+        "N (rama)": 3207,
         "pilot": 2,
-        "dev": 11,
-        "test": 23
+        "dev": 9,
+        "test": 20
       },
       "2010": {
-        "N (rama)": 1775,
+        "N (rama)": 4536,
         "pilot": 2,
-        "dev": 11,
-        "test": 22
+        "dev": 9,
+        "test": 20
       },
       "2011": {
         "N (rama)": 2880,
         "pilot": 2,
-        "dev": 11,
-        "test": 23
+        "dev": 9,
+        "test": 20
       },
       "2012": {
-        "N (rama)": 4922,
+        "N (rama)": 4943,
         "pilot": 2,
-        "dev": 11,
-        "test": 23
+        "dev": 9,
+        "test": 20
       },
       "2013": {
-        "N (rama)": 5680,
+        "N (rama)": 5707,
         "pilot": 2,
-        "dev": 11,
-        "test": 23
+        "dev": 10,
+        "test": 20
       },
       "2014": {
-        "N (rama)": 5333,
+        "N (rama)": 5445,
         "pilot": 2,
-        "dev": 11,
-        "test": 23
+        "dev": 9,
+        "test": 20
       },
       "2015": {
-        "N (rama)": 5557,
+        "N (rama)": 5610,
         "pilot": 2,
-        "dev": 11,
-        "test": 23
+        "dev": 10,
+        "test": 20
       },
       "2016": {
-        "N (rama)": 4832,
+        "N (rama)": 4866,
         "pilot": 2,
-        "dev": 11,
-        "test": 23
+        "dev": 9,
+        "test": 20
       },
       "2017": {
-        "N (rama)": 6146,
+        "N (rama)": 6208,
         "pilot": 2,
-        "dev": 11,
-        "test": 23
+        "dev": 10,
+        "test": 20
       },
       "2018": {
-        "N (rama)": 3395,
+        "N (rama)": 3480,
         "pilot": 2,
-        "dev": 11,
-        "test": 23
+        "dev": 9,
+        "test": 20
+      },
+      "2019": {
+        "N (rama)": 3401,
+        "pilot": 2,
+        "dev": 9,
+        "test": 20
+      },
+      "2020": {
+        "N (rama)": 6217,
+        "pilot": 2,
+        "dev": 10,
+        "test": 20
       }
     },
     "wikipedia": {

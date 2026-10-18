@@ -6,7 +6,7 @@ PHASE ?= pilot
 pipeline:
 	uv run scripts/00_fetch_wikipedia_data.py && uv run scripts/01_fetch_reddit_data.py && uv run scripts/01b_fetch_reddit_frame.py
 
-# Reddit posts on random days of the study period (config.yaml), the frame of the gold sample.
+# Posts of `reddit_subreddits` on random days (small subreddits: whole years) of the study period (config.yaml), the frame of the gold sample.
 reddit-frame:
 	uv run scripts/01b_fetch_reddit_frame.py
 

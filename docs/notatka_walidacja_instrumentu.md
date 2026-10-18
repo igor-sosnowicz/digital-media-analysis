@@ -231,24 +231,26 @@ Zabrakło: gold standardu, metryk (precyzja, czułość, F1), zgodności annotat
 
 **Krok 1. Zamrożenie instrumentu.** Kod z obu notatników przeniesiono 1:1 do `src/digital_media_analysis/instruments/rules_v1.py` jako punkt odniesienia v1. Identyczność wyników sprawdzono `assert_frame_equal` na pełnych danych, a `tests/test_rules_v1.py` przypina zachowanie v1 razem ze znanymi błędami. Poprawki trafiają do kolejnych wersji, a nie do v1.
 
-**Krok 2. Codebook v1.0** (`codebook/codebook.yaml`, `codebook.md`). Zastępuje dwa schematy jednym:
+**Krok 2. Codebook v2.0** (`codebook/codebook.yaml`, `codebook.md`). Zastępuje dwa schematy jednym:
 
-- 3 zmienne: `cites_source`, `source_types`, `edit_about_sources`;
-- 10 kategorii z definicją, kryteriami włączenia i wykluczenia;
-- 12 reguł rozstrzygania.
+- 3 zmienne: `source_types` (kodowana), `cites_source` (wyliczana z `source_types`: 0 przy `none`) i `edit_about_sources`;
+- 9 kategorii ze slajdu „Codebook” z angielskimi kodami: `scientific`, `institutional`, `media`, `personal`, `social_blog`, `encyclopedia`, `other`, `unknown`, `none`; każda z definicją, kryteriami włączenia i wykluczenia;
+- 13 reguł rozstrzygania.
 
-Kategorie v1 są mapowane na kody codebooka (`REDDIT_CATEGORY_MAP`, `WIKIPEDIA_CATEGORY_MAP`), a wzmianki zwijane do etykiet dokumentu (`instruments/labels.py`).
+Wersja 1.0 miała 10 kategorii z polskimi kodami. W v2.0 `nauka` dzieli się na `scientific` (publikacje) i `institutional` (uczelnie, instytuty, sondażownie), `oficjalne` na `institutional` (instytucje statystyczne i zdrowia publicznego) i `other` (urzędy, administracja, prawo), a `komercyjne`, `organizacje` i `inne` łączą się w `other` (blogi trafiają do `social_blog`).
+
+Kategorie v1 są mapowane na kody codebooka (`REDDIT_CATEGORY_MAP`, `WIKIPEDIA_CATEGORY_MAP`), a wzmianki zwijane do etykiet dokumentu (`instruments/labels.py`). Jednostka bez wzmianek dostaje `none`, a jednostka z samym linkiem bez typu (`link/domena`) dostaje `other`. Kategoria v1, która łączy kilka kategorii codebooka, trafia do tej, do której należy większość jej słów: Reddit „źródła oficjalne” do `other` (gov.pl, sejm, policja, ZUS; tylko GUS jest statystyczny), Wikipedia „instytucje publiczne” do `institutional` (WHO, ECDC, GIS, GUS). Resztę walidacja policzy jako błędy v1.
 
 **Krok 3. Rozbieżności v1 z codebookiem, widoczne bez annotacji:**
 
 - Wikipedia: 274 z 485 wzmianek to skróty `WP:` liczone jako źródło, choć według reguły R9 nie są źródłem; 88 wzmianek to sam znacznik „źródła/przypisy”, który według R10 należy do `edit_about_sources`, a nie do powołania;
 - Reddit: 13 z 97 linków to zdjęcia lub ankiety (R3); 124 z 275 postów ma link w polu `url`, którego v1 nie widzi.
 
-**Krok 4. Próba gold standard** (`gold.py`, ziarno 20261016):
+**Krok 4. Próba gold standard** (`gold.py`, ziarno 20261016, osobny strumień losowy dla każdej platformy), tylko ze źródeł z `config.yaml` (`reddit_subreddits`, `wikipedia_pages`):
 
-- Reddit: warstwy = subreddity; 24 pilot / 47 dev / 99 test;
-- Wikipedia: warstwy = sygnał (`link`, `cue`, `other`) × strona; 30 pilot / 75 dev / 174 test;
-- wagi N_h / n_h korygują nadpróbkowanie;
+- Reddit, lata 2005–2020: warstwy = lata, po 31–32 posty na rok; 32 pilot / 148 dev / 320 test;
+- Wikipedia, lata 2020–2026: warstwy = rok × sygnał (`link`, `cue`, `other`); 21 pilot / 152 dev / 327 test;
+- wagi N_h / n_h (na Reddicie razy `day_weight`) korygują równy przydział lat i nadpróbkowanie;
 - manifest bez tekstu w repo, odcisk danych SHA-256 w `sample_design.json`.
 
 **Krok 5. Ślepa annotacja:** arkusze XLSX bez wyników instrumentu, z walidacją kodów (`annotation_sheets.py`) i importem etykiet (`annotations.py`).
@@ -260,7 +262,7 @@ Kategorie v1 są mapowane na kody codebooka (`REDDIT_CATEGORY_MAP`, `WIKIPEDIA_C
 - progi: α ≥ 0,8 oznacza zgodność rzetelną, 0,667–0,8 tylko wstępne wnioski;
 - kategorie z mniej niż 5 przypadkami są raportowane bez oceny.
 
-**Stan na 16.10.2026:** arkusze pilotażu (`pilot_A.xlsx`, `pilot_B.xlsx`) są puste, więc **nie ma jeszcze żadnych liczb o jakości instrumentu**. Sekcje zgodności w notatnikach wypisują „Brak etykiet pilotażu od dwóch osób”.
+**Stan na 18.10.2026:** arkusze pilotażu (`pilot_A.xlsx`, `pilot_B.xlsx`, wygenerowane na nowo z codebookiem v2.0) są puste, więc **nie ma jeszcze żadnych liczb o jakości instrumentu**. Sekcje zgodności w notatnikach wypisują „Brak etykiet pilotażu od dwóch osób”.
 
 ### 5.3 Co pozostaje do zrobienia (etapy 3–4 planu)
 

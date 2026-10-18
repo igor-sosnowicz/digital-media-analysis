@@ -2,7 +2,8 @@
 
 One workbook per annotator holds an instruction sheet and one sheet per platform.
 Instrument output is never included, so annotators code blind. Label columns use
-the names from `annotation_columns` in the codebook.
+the names from `annotation_columns` in the codebook. `cites_source` is not in
+the sheet: reading derives it from `source_types` (codebook rule R13).
 """
 
 import json
@@ -14,7 +15,7 @@ from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
 
-from digital_media_analysis.codebook import Codebook
+from digital_media_analysis.codebook import NO_SOURCE, Codebook
 from digital_media_analysis.instruments.labels import LABEL_SEPARATOR
 
 SHEET_NAMES = {"reddit": "Reddit", "wikipedia": "Wikipedia"}
@@ -24,10 +25,10 @@ CONTENT_COLUMNS = {
     "wikipedia": [("unit_id", "unit_id", 28), ("group", "strona", 22), ("text", "opis zmiany", 90)],
 }
 LABEL_COLUMNS = {
-    "reddit": ["cites_source", "source_types", "uncertain", "notes", "annotator"],
-    "wikipedia": ["cites_source", "source_types", "edit_about_sources", "uncertain", "notes", "annotator"],
+    "reddit": ["source_types", "uncertain", "notes", "annotator"],
+    "wikipedia": ["source_types", "edit_about_sources", "uncertain", "notes", "annotator"],
 }
-BINARY_COLUMNS = ["cites_source", "edit_about_sources", "uncertain"]
+BINARY_COLUMNS = ["edit_about_sources", "uncertain"]
 LABEL_FILE_COLUMNS = [
     "unit_id", "platform", "annotator", "codebook_version",
     "cites_source", "source_types", "edit_about_sources", "uncertain", "notes",
@@ -67,7 +68,7 @@ def _write_instructions(sheet, annotator: str, phase: str, codebook: Codebook) -
         ["1. Koduj samodzielnie. Nie porównuj etykiet z innymi przed zakończeniem całego arkusza."],
         ["2. Opieraj się tylko na codebooku i tekście w wierszu. Nie otwieraj linków."],
         ["3. Wypełnij żółte kolumny w każdym wierszu. Zmienne binarne: 0 lub 1 (lista rozwijana)."],
-        [f"4. source_types: kody z tabeli poniżej rozdzielone znakiem „{LABEL_SEPARATOR}”; puste, gdy cites_source = 0."],
+        [f"4. source_types: kody z tabeli poniżej rozdzielone znakiem „{LABEL_SEPARATOR}”; {NO_SOURCE}, gdy nie ma powołania (sam, bez innych kodów; R13)."],
         ["5. W razie wątpliwości wybierz najlepszą etykietę, ustaw uncertain = 1 i opisz problem w notes (R12)."],
         ["6. Nie zmieniaj kolumn unit_id ani kolejności wierszy."],
         [],
@@ -175,11 +176,16 @@ def read_workbook(path: Path, codebook: Codebook) -> tuple[pd.DataFrame, list[st
                 problems.append(f"{where}: nieznane kody {unknown}")
                 codes = [code for code in codes if code in known_codes]
             label["source_types"] = LABEL_SEPARATOR.join(codes)
-            cites = label["cites_source"]
-            if not pd.isna(cites) and cites == 1 and not codes:
-                problems.append(f"{where}: cites_source = 1, ale source_types jest puste")
-            if not pd.isna(cites) and cites == 0 and codes:
-                problems.append(f"{where}: cites_source = 0, ale source_types = {label['source_types']}")
+            # cites_source follows from source_types (R13); missing when the label is unusable.
+            if not codes:
+                if not unknown:
+                    problems.append(f"{where}: source_types brak wartości (wpisz {NO_SOURCE}, gdy nie ma powołania)")
+                label["cites_source"] = pd.NA
+            elif NO_SOURCE in codes and len(codes) > 1:
+                problems.append(f"{where}: {NO_SOURCE} razem z innymi kodami ({label['source_types']})")
+                label["cites_source"] = pd.NA
+            else:
+                label["cites_source"] = int(codes != [NO_SOURCE])
             label["notes"] = "" if record["notes"] is None else str(record["notes"])
             labeled.append(label)
     return pd.DataFrame(labeled, columns=LABEL_FILE_COLUMNS), problems

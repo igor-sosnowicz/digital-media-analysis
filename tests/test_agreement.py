@@ -73,21 +73,21 @@ def labels() -> pd.DataFrame:
     return make_labels([
         ("r1", "reddit", "A", 1, "media", None, 0),
         ("r1", "reddit", "B", 1, "media", None, 0),
-        ("r2", "reddit", "A", 1, "media;nauka", None, 0),
-        ("r2", "reddit", "B", 1, "nauka", None, 1),
-        ("r3", "reddit", "A", 0, "", None, 0),
-        ("r3", "reddit", "B", 1, "niesprecyzowane", None, 0),
-        ("r4", "reddit", "A", 0, "", None, 0),
-        ("r4", "reddit", "B", 0, "", None, 0),
-        ("w1", "wikipedia", "A", 0, "", 1, 0),
-        ("w1", "wikipedia", "B", 0, "", 1, 0),
-        ("w2", "wikipedia", "A", 1, "oficjalne", 0, 0),
-        ("w2", "wikipedia", "B", 1, "oficjalne", 0, 0),
+        ("r2", "reddit", "A", 1, "media;scientific", None, 0),
+        ("r2", "reddit", "B", 1, "scientific", None, 1),
+        ("r3", "reddit", "A", 0, "none", None, 0),
+        ("r3", "reddit", "B", 1, "unknown", None, 0),
+        ("r4", "reddit", "A", 0, "none", None, 0),
+        ("r4", "reddit", "B", 0, "none", None, 0),
+        ("w1", "wikipedia", "A", 0, "none", 1, 0),
+        ("w1", "wikipedia", "B", 0, "none", 1, 0),
+        ("w2", "wikipedia", "A", 1, "institutional", 0, 0),
+        ("w2", "wikipedia", "B", 1, "institutional", 0, 0),
     ])
 
 
 def test_agreement_table_rows_and_values(labels):
-    table = agreement.agreement_table(labels, ["media", "nauka", "oficjalne", "niesprecyzowane", "inne"], samples=0)
+    table = agreement.agreement_table(labels, ["scientific", "institutional", "media", "other", "unknown", "none"], samples=0)
     reddit = table[table["platform"].eq("reddit")].set_index("variable")
     assert list(reddit.index[:2]) == ["cites_source", "source_types"]
     assert "edit_about_sources" not in reddit.index
@@ -97,12 +97,15 @@ def test_agreement_table_rows_and_values(labels):
     assert reddit.loc["source_types", "distance"] == "MASI"
     assert np.isnan(reddit.loc["source_types", "kappa"])
     assert reddit.loc["source_types:media", "observed_agreement"] == 0.75
-    # Nobody used `inne`, so agreement on it is undefined rather than perfect.
-    assert np.isnan(reddit.loc["source_types:inne", "alpha"])
-    assert reddit.loc["source_types:inne", "positive_units"] == 0
+    # Nobody used `other`, so agreement on it is undefined rather than perfect.
+    assert np.isnan(reddit.loc["source_types:other", "alpha"])
+    assert reddit.loc["source_types:other", "positive_units"] == 0
+    # `none` is the complement of cites_source and gets no indicator of its own.
+    assert "source_types:none" not in reddit.index
     # `media` agrees perfectly on two units only: reported, but not judged reliable.
     assert reddit.loc["source_types:media", "positive_units"] == 2
     assert reddit.loc["source_types:media", "verdict"] == "za mało przypadków"
+    # Units labelled `none` by everyone carry no source type.
     assert reddit.loc["source_types", "positive_units"] == 3
     wikipedia = table[table["platform"].eq("wikipedia")].set_index("variable")
     assert wikipedia.loc["edit_about_sources", "alpha"] == 1.0
@@ -112,8 +115,8 @@ def test_disagreements_list_only_differing_units(labels):
     table = agreement.disagreements(labels)
     assert table[["unit_id", "variable", "A", "B"]].values.tolist() == [
         ["r3", "cites_source", "0", "1"],
-        ["r2", "source_types", "media;nauka", "nauka"],
-        ["r3", "source_types", "(brak)", "niesprecyzowane"],
+        ["r2", "source_types", "media;scientific", "scientific"],
+        ["r3", "source_types", "none", "unknown"],
     ]
     assert table.set_index(["unit_id", "variable"]).loc[("r2", "source_types"), "uncertain"] == "B"
 

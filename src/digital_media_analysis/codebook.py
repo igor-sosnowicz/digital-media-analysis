@@ -13,6 +13,11 @@ from digital_media_analysis.paths import CODEBOOK_PATH
 
 Platform = Literal["reddit", "wikipedia"]
 RULE_REFERENCE = re.compile(r"\bR\d+\b")
+# Codes are English identifiers; names and definitions stay Polish.
+CODE_PATTERN = re.compile(r"^[a-z][a-z_]*$")
+# The `source_types` code of a unit without any source reference. It stands
+# alone, and `cites_source` is 0 exactly when it is the label (rule R13).
+NO_SOURCE = "none"
 
 
 class Unit(BaseModel):
@@ -30,6 +35,8 @@ class Variable(BaseModel):
     question: str
     values: dict[str, str] = {}
     requires: str = ""
+    # How the variable follows from coded ones; derived variables are not in the sheet.
+    derived: str = ""
 
 
 class Example(BaseModel):
@@ -95,6 +102,12 @@ class Codebook(BaseModel):
             duplicates = sorted({code for code in codes if codes.count(code) > 1})
             if duplicates:
                 raise ValueError(f"Duplicate {kind} codes: {duplicates}")
+
+        codes = [variable.code for variable in self.variables] + self.category_codes
+        if invalid := sorted(code for code in codes if not CODE_PATTERN.match(code)):
+            raise ValueError(f"Codes must be English identifiers (lowercase letters and _): {invalid}")
+        if NO_SOURCE not in self.category_codes:
+            raise ValueError(f"The categories must include {NO_SOURCE!r} for units without a source.")
 
         known_rules = {rule.code for rule in self.rules}
         referenced_rules = set(RULE_REFERENCE.findall(self.model_dump_json()))
@@ -170,6 +183,8 @@ class Codebook(BaseModel):
             ]
             if variable.requires:
                 lines += ["", f"**Warunek:** {variable.requires}"]
+            if variable.derived:
+                lines += ["", f"**Wyliczana** {variable.derived}."]
             if variable.values:
                 lines += ["", *(f"- `{value}`: {meaning}" for value, meaning in variable.values.items())]
 

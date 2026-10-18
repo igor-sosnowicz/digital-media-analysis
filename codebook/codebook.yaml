@@ -1,10 +1,11 @@
 # Codebook: powoływanie się na źródła informacji (Reddit i Wikipedia).
 # Jedno źródło prawdy dla annotatorów i instrumentów. Czytelną wersję
 # codebook/codebook.md generuje `make codebook`; nie edytuj jej ręcznie.
+# Kody (zmienne, kategorie, kolumny) są po angielsku; nazwy i definicje po polsku.
 
 title: Powoływanie się na źródła informacji
-version: "1.0"
-date: 2026-10-16
+version: "2.0"
+date: 2026-10-18
 status: wersja robocza przed pilotażem annotacji
 
 construct: >-
@@ -30,20 +31,22 @@ units:
       narzędzie, a nie treść artykułu ani strona dyskusji.
 
 variables:
+  - code: source_types
+    name: Typy źródeł
+    type: multilabel
+    platforms: [reddit, wikipedia]
+    question: >-
+      Jakiego typu źródła przywołuje autor? Zaznacz wszystkie występujące
+      albo wpisz `none`, gdy jednostka nie zawiera powołania.
   - code: cites_source
     name: Powołanie się na źródło
     type: binary
     platforms: [reddit, wikipedia]
     question: Czy autor wskazuje, skąd pochodzi informacja lub na czym opiera twierdzenie?
+    derived: "z `source_types`: 0, gdy `source_types = none`, w przeciwnym razie 1; nie wypełniamy jej w arkuszu (R13)"
     values:
       "1": jest co najmniej jedno powołanie zgodne z definicją konstruktu i regułami
       "0": brak powołania, także gdy występują tylko linki lub nazwy niebędące źródłem (R2, R3, R8, R9)
-  - code: source_types
-    name: Typy źródeł
-    type: multilabel
-    platforms: [reddit, wikipedia]
-    question: Jakiego typu źródła przywołuje autor? Zaznacz wszystkie występujące.
-    requires: cites_source = 1; przy cites_source = 0 pole zostaje puste
   - code: edit_about_sources
     name: Edycja dotyczy źródeł lub przypisów
     type: binary
@@ -54,149 +57,100 @@ variables:
       "0": brak takiej deklaracji; sam prefiks sekcji `/* Przypisy */` się nie liczy (R9)
 
 categories:
-  - code: media
-    name: Media informacyjne i publicystyczne
-    definition: Portale, gazety, telewizja, radio, agencje prasowe i magazyny publicystyczne.
+  - code: scientific
+    name: Publikacje naukowe
+    definition: >-
+      Konkretne publikacje naukowe: artykuły w czasopismach, preprinty,
+      monografie, podręczniki akademickie i raporty badawcze (np. Nature,
+      PubMed, Science).
     include:
-      - link do artykułu lub materiału redakcji (wp.pl, onet.pl, gazeta.pl, money.pl, krytykapolityczna.pl, bbc.com)
-      - nazwa redakcji jako źródła („jak podaje TVN24”)
-      - porady językowe publikowane w prasie
-    exclude:
-      - media jako temat lub uczestnik zdarzenia („TVP zwolniła dziennikarza”)
-      - konto redakcji w serwisie społecznościowym bez linku do materiału redakcji (wtedy `platformy`)
-    positive:
-      - platform: reddit
-        text: Tytuł artykułu o wecie prezydenta i link do wiadomosci.gazeta.pl jako cała treść posta.
-      - platform: wikipedia
-        text: Poprawa błędu językowego, „por. np.” i link do felietonu w gazetawroclawska.pl.
-    negative:
-      - platform: reddit
-        text: Post o tym, że ZUS konfiskuje oszczędności, z linkiem do wp.pl.
-        why: To jest `media`, a nie `oficjalne`. ZUS i ministerstwo są bohaterami tekstu, a wydawcą jest wp.pl (R4).
-
-  - code: oficjalne
-    name: Instytucje publiczne i oficjalne
-    definition: Organy władzy i administracji, urzędy, agencje rządowe i samorządowe, organizacje międzynarodowe (WHO, ECDC) oraz dokumenty urzędowe.
-    include:
-      - link do domen gov.pl, who.int, ecdc.europa.eu, aids.gov.pl
-      - „według GUS”, „dane NFZ”, „komunikat policji”, treść ustawy
-    exclude:
-      - instytucja jako uczestnik zdarzenia („policja lata i pilnuje kibiców”, „Sejm uchwalił ustawę”)
-      - kontakt z urzędem opisany jako własne przeżycie (wtedy `osobiste`)
-    positive:
-      - platform: wikipedia
-        text: Usunięcie synonimów, bo „według tego źródła” nimi nie są, z linkiem do aids.gov.pl.
-      - platform: wikipedia
-        text: Objawy uzupełnione „według WHO”, z linkiem do strony pytań i odpowiedzi WHO.
-    negative:
-      - platform: reddit
-        text: Zbiórka pomocy w odnalezieniu bliskiej osoby; w tekście słowo „bogusiem”.
-        why: Nie ma żadnej instytucji. Ciąg „gus” jest tylko fragmentem imienia.
-
-  - code: nauka
-    name: Nauka, badania i dane
-    definition: Publikacje naukowe, uczelnie i instytuty, raporty badawcze, sondaże i zbiory danych ośrodków badawczych, biblioteki cyfrowe.
-    include:
-      - doi.org, pubmed, nature.com, repozytoria publikacji (academia.edu), biblioteki cyfrowe
-      - nazwany sondaż lub ośrodek badawczy („sondaż IBRiS”), tabela wyników sondaży
+      - doi.org, pubmed, nature.com, science.org, arxiv.org, repozytoria publikacji (academia.edu), biblioteki cyfrowe
+      - tytuł lub cytat konkretnej publikacji, czasopismo jako źródło („według badania w The Lancet”)
       - „źródło uniwersyteckie” w opisie edycji
     exclude:
+      - instytucja naukowa lub statystyczna bez wskazania publikacji („dane GUS”, „według WHO”; wtedy `institutional`)
       - własne badanie autora, np. rekrutacja do ankiety (R8)
-      - osobista wizyta u lekarza (wtedy `osobiste`)
-      - ogólnik bez wskazania badania („badania pokazują”; wtedy `niesprecyzowane`)
+      - osobista wizyta u lekarza (wtedy `personal`)
+      - ogólnik bez wskazania badania („badania pokazują”; wtedy `unknown`)
     positive:
-      - platform: reddit
-        text: Tabela ostatnich sondaży partyjnych z nazwami sondażowni, terminami i wielkością próby.
       - platform: wikipedia
         text: Cytat z publikacji o wprowadzeniu do medycyny wraz z linkiem do PDF w bibliotece cyfrowej.
+      - platform: reddit
+        text: "Konstruowany: tytuł badania jako tytuł posta i link do artykułu w nature.com."
     negative:
       - platform: reddit
         text: Studentka zbiera odpowiedzi do ankiety do pracy dyplomowej i podaje link do formularza.
         why: To własne badanie autorki, nie powołanie się na badania (R8).
       - platform: reddit
         text: Opis wielu lat problemów zdrowotnych; „ostatni lekarz umocnił moje przypuszczenia”.
-        why: To relacja z osobistej konsultacji, więc `osobiste`, a nie publikacja czy instytucja badawcza.
+        why: To relacja z osobistej konsultacji, więc `personal`, a nie publikacja.
 
-  - code: encyklopedie
-    name: Encyklopedie, słowniki i bazy wiedzy
-    definition: Encyklopedie (w tym artykuły Wikipedii), słowniki, poradnie językowe słowników i bazy wiedzy.
+  - code: institutional
+    name: Instytucje naukowe i statystyczne
+    definition: >-
+      Instytucje, które wytwarzają lub udostępniają wiedzę naukową, dane
+      statystyczne i zalecenia zdrowotne, gdy źródłem jest instytucja, a nie
+      konkretna publikacja: urzędy statystyczne (GUS, Eurostat), organizacje i
+      agencje zdrowia publicznego (WHO, ECDC, CDC, PZH), uczelnie, instytuty
+      badawcze i ośrodki badania opinii.
     include:
-      - link do artykułu Wikipedii, Wikidata, IMDb
-      - sjp.pwn.pl i poradnia językowa PWN
-      - linki objaśniające nazwy, np. nazwa partii podlinkowana do Wikipedii
+      - link do who.int, ecdc.europa.eu, stat.gov.pl, aids.gov.pl albo strony uczelni lub instytutu
+      - „według GUS”, „dane WHO”, „zalecenia ECDC”
+      - nazwany sondaż lub ośrodek badawczy („sondaż IBRiS”), tabela wyników sondaży
     exclude:
-      - skróty zasad i narzędzi Wikipedii w opisach edycji (`[[WP:SK]]`, `[[WP:POP]]`, `[[Pomoc:…]]`; R9)
+      - urzędy i administracja publiczna, ministerstwa, samorządy, policja, sądy, parlament i akty prawne (wtedy `other`)
+      - konkretna publikacja naukowa (wtedy `scientific`)
+      - instytucja jako uczestnik zdarzenia, np. „WHO ogłosiło pandemię” w artykule portalu (liczy się wydawca; R4)
     positive:
       - platform: wikipedia
-        text: „Brzydki rusycyzm” i link do poradni językowej sjp.pwn.pl.
-      - platform: reddit
-        text: Nazwy partii w tabeli sondaży podlinkowane do artykułów angielskiej Wikipedii.
-    negative:
+        text: Usunięcie synonimów, bo „według tego źródła” nimi nie są, z linkiem do aids.gov.pl.
       - platform: wikipedia
-        text: "`[[WP:SK]], drobne techniczne`"
-        why: To odnośnik do narzędzia porządkowania kodu (skrypt WP:SK), a nie źródło informacji (R9).
-
-  - code: platformy
-    name: Media społecznościowe i platformy treści użytkowników
-    definition: YouTube, Facebook, X/Twitter, TikTok, Instagram, Wykop, Reddit, fora i podobne serwisy.
-    include:
-      - link do filmu, wpisu lub wątku udostępnionego jako informacja
-      - „widziałem na Twitterze, że…”, wpis polityka w serwisie społecznościowym
-    exclude:
-      - zdjęcia i filmy autora hostowane przez platformę (i.redd.it, preview.redd.it, v.redd.it, imgur; R3)
-      - nazwa serwisu w innym znaczeniu, np. kod rabatowy „reddit100”
-    positive:
+        text: Objawy uzupełnione „według WHO”, z linkiem do strony pytań i odpowiedzi WHO.
       - platform: reddit
-        text: Post z okazji rocznicy zaprzysiężenia prezydenta z linkiem do filmu na YouTube jako materiałem do dyskusji.
+        text: Tabela ostatnich sondaży partyjnych z nazwami sondażowni, terminami i wielkością próby.
     negative:
       - platform: reddit
-        text: Reklama perfumerii, której treścią jest tylko zdjęcie z preview.redd.it.
-        why: Zdjęcie jest własną treścią autora, a nie źródłem (R3).
+        text: Zbiórka pomocy w odnalezieniu bliskiej osoby; w tekście słowo „bogusiem”.
+        why: Nie ma żadnej instytucji. Ciąg „gus” jest tylko fragmentem imienia.
+      - platform: reddit
+        text: "Konstruowany: „Według komunikatu urzędu miasta tramwaje nie jeżdżą do niedzieli”."
+        why: Urząd miasta to administracja, a nie instytucja naukowa ani statystyczna, więc `other`.
 
-  - code: komercyjne
-    name: Źródła komercyjne
-    definition: Sklepy, producenci, serwisy ogłoszeniowe i rezerwacyjne oraz strony firm użyte jako źródło informacji (cena, specyfikacja, opinie).
+  - code: media
+    name: Media informacyjne
+    definition: >-
+      Portale, gazety, telewizja, radio, agencje prasowe i magazyny
+      publicystyczne (np. BBC, Reuters, Onet, WP).
     include:
-      - „według strony producenta rama waży 1,2 kg”
-      - link do oferty jako dowód ceny lub dostępności
+      - link do artykułu lub materiału redakcji (wp.pl, onet.pl, gazeta.pl, money.pl, bbc.com, reuters.com)
+      - nazwa redakcji jako źródła („jak podaje TVN24”)
+      - porady językowe publikowane w prasie
     exclude:
-      - serwis jako miejsce poszukiwań lub przedmiot pytania („poza OLX i Otodom szukam innych stron”; R2)
-      - reklama, link afiliacyjny, spam, kod rabatowy (R3)
-      - sklep jako miejsce zdarzenia („sklepy zamykały rolety”)
+      - media jako temat lub uczestnik zdarzenia („TVP zwolniła dziennikarza”)
+      - konto redakcji w serwisie społecznościowym bez linku do materiału redakcji (wtedy `social_blog`)
+      - blog prywatny lub na platformie blogowej (wtedy `social_blog`)
     positive:
       - platform: reddit
-        text: "Konstruowany: „Na Allegro ten model kosztuje 300 zł, więc 500 zł to przesada” z linkiem do oferty."
-    negative:
+        text: Tytuł artykułu o wecie prezydenta i link do wiadomosci.gazeta.pl jako cała treść posta.
       - platform: reddit
-        text: Pytanie po angielsku, czy poza OLX i Otodom są inne serwisy z mieszkaniami na krótki termin.
-        why: Serwisy są przedmiotem pytania, a nie źródłem informacji (R2).
-      - platform: reddit
-        text: Post kasyna online o bonusie powitalnym; link posta prowadzi do serwisu z promocjami hazardowymi.
-        why: Reklama lub spam (R3).
-
-  - code: organizacje
-    name: Organizacje pozarządowe, społeczne i polityczne
-    definition: Fundacje, stowarzyszenia, NGO, związki zawodowe i partie polityczne jako wydawcy informacji.
-    include:
-      - link do strony fundacji lub NGO (wwf.pl, greenpeace.org)
-      - „raport fundacji X”, stanowisko partii opublikowane na jej stronie
-    exclude:
-      - organizacja jako temat lub uczestnik zdarzenia
-      - polityk pełniący funkcję państwową, który mówi w imieniu urzędu (wtedy `oficjalne`)
-    positive:
+        text: Post o tym, że ZUS konfiskuje oszczędności, z linkiem do wp.pl (ZUS jest tematem, wydawcą jest wp.pl; R4).
       - platform: wikipedia
-        text: Link do strony WWF o klimacie z dopiskiem „inspiracja”.
+        text: Poprawa błędu językowego, „por. np.” i link do felietonu w gazetawroclawska.pl.
     negative:
       - platform: reddit
-        text: Post o rozłamie w partii z linkiem do artykułu wprost.pl.
-        why: Partia jest tematem, a wydawcą jest medium, więc `media` (R4).
+        text: "Konstruowany: „TVP zwolniła dziennikarza, co o tym myślicie?” bez linku i bez powołania się na relację mediów."
+        why: Medium jest tematem posta, a nie źródłem informacji (R2).
 
-  - code: osobiste
-    name: Doświadczenie własne i relacje z drugiej ręki
-    definition: Autor opiera twierdzenie na własnym doświadczeniu albo na relacji konkretnej osoby z otoczenia, w tym specjalisty spotkanego osobiście.
+  - code: personal
+    name: Doświadczenia własne
+    definition: >-
+      Autor opiera twierdzenie na własnym doświadczeniu albo na relacji
+      konkretnej osoby z otoczenia, w tym specjalisty spotkanego osobiście
+      („Z własnego doświadczenia powiem, że…”).
     include:
       - „z własnego doświadczenia”, „u mnie w pracy zawsze…” użyte jako dowód twierdzenia
       - „znajomy pracuje w szpitalu i mówi, że…”, „lekarz powiedział mi, że…”
+      - kontakt z urzędem opisany jako własne przeżycie
     exclude:
       - opis sytuacji bez funkcji dowodu („mieszkam w centrum, można odebrać”)
       - osoby jako uczestnicy, np. szukanie znajomych czy prezent dla znajomego
@@ -212,9 +166,95 @@ categories:
         text: „Mieszkam na wsi” i pytanie o lepszego dostawcę internetu.
         why: Miejsce zamieszkania jest kontekstem, a nie dowodem.
 
-  - code: niesprecyzowane
-    name: Ogólnikowe powołanie bez wskazania źródła
-    definition: Autor odwołuje się do źródła, którego nie da się zidentyfikować („badania pokazują”, „czytałem gdzieś”, „według ekspertów”, „wg źródła”).
+  - code: social_blog
+    name: Media społecznościowe, blogi
+    definition: >-
+      Serwisy społecznościowe i platformy treści użytkowników (Reddit,
+      YouTube, Facebook, X/Twitter, TikTok, Instagram, Wykop, fora) oraz
+      blogi, w tym prywatne i hobbystyczne.
+    include:
+      - link do filmu, wpisu lub wątku udostępnionego jako informacja
+      - „widziałem na Twitterze, że…”, wpis polityka w serwisie społecznościowym
+      - link do bloga użytego jako źródło informacji
+    exclude:
+      - zdjęcia i filmy autora hostowane przez platformę (i.redd.it, preview.redd.it, v.redd.it, imgur; R3)
+      - nazwa serwisu w innym znaczeniu, np. kod rabatowy „reddit100”
+      - blog redakcji medium informacyjnego (wtedy `media`)
+    positive:
+      - platform: reddit
+        text: Post z okazji rocznicy zaprzysiężenia prezydenta z linkiem do filmu na YouTube jako materiałem do dyskusji.
+      - platform: reddit
+        text: "Konstruowany: „Trasę opisał autor bloga rowerowego X, tam są też wysokości przewyższeń” z linkiem do bloga."
+    negative:
+      - platform: reddit
+        text: Reklama perfumerii, której treścią jest tylko zdjęcie z preview.redd.it.
+        why: Zdjęcie jest własną treścią autora, a nie źródłem (R3).
+
+  - code: encyclopedia
+    name: Encyklopedie, słowniki
+    definition: >-
+      Encyklopedie (w tym artykuły Wikipedii i Britannica), słowniki (np.
+      Słownik Języka Polskiego, sjp.pl), poradnie językowe słowników i bazy
+      wiedzy.
+    include:
+      - link do artykułu Wikipedii, Wikidata, Britannica, IMDb
+      - sjp.pl, sjp.pwn.pl i poradnia językowa PWN
+      - linki objaśniające nazwy, np. nazwa partii podlinkowana do Wikipedii
+    exclude:
+      - skróty zasad i narzędzi Wikipedii w opisach edycji (`[[WP:SK]]`, `[[WP:POP]]`, `[[Pomoc:…]]`; R9)
+    positive:
+      - platform: wikipedia
+        text: „Brzydki rusycyzm” i link do poradni językowej sjp.pwn.pl.
+      - platform: reddit
+        text: Nazwy partii w tabeli sondaży podlinkowane do artykułów angielskiej Wikipedii.
+    negative:
+      - platform: wikipedia
+        text: "`[[WP:SK]], drobne techniczne`"
+        why: To odnośnik do narzędzia porządkowania kodu (skrypt WP:SK), a nie źródło informacji (R9).
+
+  - code: other
+    name: Inne źródła
+    definition: >-
+      Źródło dające się zidentyfikować (nazwa lub link), które nie pasuje do
+      pozostałych kategorii: sklepy, producenci i strony firm, urzędy i
+      administracja publiczna (ministerstwa, samorządy, policja, sądy,
+      parlament, akty prawne), organizacje pozarządowe, społeczne i polityczne
+      oraz inne strony.
+    include:
+      - „według strony producenta rama waży 1,2 kg”, link do oferty jako dowód ceny lub dostępności
+      - link do gov.pl lub strony urzędu, „komunikat policji”, treść ustawy
+      - link do strony fundacji, NGO lub partii (wwf.pl, greenpeace.org), „raport fundacji X”
+    exclude:
+      - źródło pasujące do innej kategorii; `other` stosujemy tylko w ostateczności (R7)
+      - serwis lub strona jako miejsce poszukiwań albo przedmiot rozmowy (R2)
+      - reklama, link afiliacyjny, spam, kod rabatowy (R3)
+      - instytucja lub sklep jako uczestnik albo miejsce zdarzenia („Sejm uchwalił ustawę”, „sklepy zamykały rolety”)
+    positive:
+      - platform: reddit
+        text: "Konstruowany: „Na Allegro ten model kosztuje 300 zł, więc 500 zł to przesada” z linkiem do oferty."
+      - platform: wikipedia
+        text: Link do strony WWF o klimacie z dopiskiem „inspiracja”.
+      - platform: reddit
+        text: "Konstruowany: „Według komunikatu urzędu miasta tramwaje nie jeżdżą do niedzieli”."
+    negative:
+      - platform: reddit
+        text: Pytanie po angielsku, czy poza OLX i Otodom są inne serwisy z mieszkaniami na krótki termin.
+        why: Serwisy są przedmiotem pytania, a nie źródłem informacji (R2).
+      - platform: reddit
+        text: Post kasyna online o bonusie powitalnym; link posta prowadzi do serwisu z promocjami hazardowymi.
+        why: Reklama lub spam (R3).
+      - platform: reddit
+        text: Pytanie o aplikacje do „zbierania kwadratów” z linkami do ich stron głównych.
+        why: Linki wskazują przedmiot rozmowy, a nie źródło informacji (R2).
+      - platform: reddit
+        text: Post o rozłamie w partii z linkiem do artykułu wprost.pl.
+        why: Partia jest tematem, a wydawcą jest medium, więc `media` (R4).
+
+  - code: unknown
+    name: Nieokreślone
+    definition: >-
+      Autor odwołuje się do źródła, którego nie da się zidentyfikować
+      („Badania pokazują, że…”, „czytałem gdzieś”, „według ekspertów”, „wg źródła”).
     include:
       - „takie badania zostały przeprowadzone” bez wskazania których
       - „wg źródła” w opisie edycji bez nazwy lub linku
@@ -230,26 +270,32 @@ categories:
     negative:
       - platform: wikipedia
         text: "„drobne redakcyjne, źródła/przypisy”"
-        why: To znacznik typu edycji, a nie powołanie, więc edit_about_sources = 1 i cites_source = 0 (R10).
+        why: To znacznik typu edycji, a nie powołanie, więc edit_about_sources = 1 i source_types = none (R10).
       - platform: wikipedia
         text: "Bot: „poprawiam link tożsamy z tekstem linka”"
         why: Słowo „link” oznacza tu element techniczny strony.
 
-  - code: inne
-    name: Inne zidentyfikowane źródło
-    definition: Źródło dające się zidentyfikować (nazwa lub link), które nie pasuje do żadnej z powyższych kategorii, np. prywatny blog.
+  - code: none
+    name: Brak
+    definition: >-
+      Brak odwołania do źródła: jednostka nie zawiera żadnego powołania
+      zgodnego z definicją konstruktu i regułami. Kod `none` wpisujemy sam,
+      bez innych kodów (R13).
     include:
-      - link do prywatnego bloga lub strony hobbystycznej użytej jako źródło informacji
+      - tekst bez linków, nazw źródeł i odwołań
+      - linki i nazwy, które nie pełnią funkcji źródła (R2, R3, R8, R9), np. własne zdjęcie z i.redd.it
+      - opis edycji z samym znacznikiem „źródła/przypisy” (R10)
     exclude:
-      - źródło pasujące do innej kategorii; `inne` stosujemy tylko w ostateczności
-      - strona będąca przedmiotem rozmowy, np. aplikacja polecana w poście (R2)
+      - jakiekolwiek rozpoznane powołanie, także ogólnikowe (wtedy jego kategoria albo `unknown`)
     positive:
       - platform: reddit
-        text: "Konstruowany: „Trasę opisał autor bloga rowerowego X, tam są też wysokości przewyższeń” z linkiem do bloga."
+        text: Para szuka znajomych do wspólnego wychodzenia.
+      - platform: wikipedia
+        text: "`[[WP:SK]], drobne techniczne`"
     negative:
-      - platform: reddit
-        text: Pytanie o aplikacje do „zbierania kwadratów” z linkami do ich stron głównych.
-        why: Linki wskazują przedmiot rozmowy, a nie źródło informacji (R2).
+      - platform: wikipedia
+        text: "„wg źródła jeszcze kapusta”"
+        why: To ogólnikowe powołanie, więc `unknown`, a nie `none` (R5).
 
 rules:
   - code: R1
@@ -274,22 +320,21 @@ rules:
       Kategorię wyznacza wydawca lub kanał, z którego pochodzi informacja,
       a nie temat ani osoby opisane w materiale. Artykuł wp.pl o decyzji
       ministerstwa to `media`. Gdy autor wymienia też źródło pierwotne
-      przywołane w materiale („onet, powołując się na raport NIK”),
+      przywołane w materiale („onet, powołując się na raport GUS”),
       zaznacz obie kategorie.
   - code: R5
     text: >-
-      Konkret wygrywa z ogólnikiem. `niesprecyzowane` zaznaczamy tylko
-      wtedy, gdy jakieś odwołanie w jednostce pozostaje nierozpoznawalne.
-      Jeśli ten sam fragment wskazuje konkretne źródło, kodujemy jego
-      kategorię.
+      Konkret wygrywa z ogólnikiem. `unknown` zaznaczamy tylko wtedy, gdy
+      jakieś odwołanie w jednostce pozostaje nierozpoznawalne. Jeśli ten sam
+      fragment wskazuje konkretne źródło, kodujemy jego kategorię.
   - code: R6
     text: >-
       Nie oceniamy wiarygodności. Tekst pseudonaukowy w repozytorium
-      publikacji to nadal `nauka`, a artykuł z portalu o niskiej
+      publikacji to nadal `scientific`, a artykuł z portalu o niskiej
       wiarygodności to nadal `media`.
   - code: R7
     text: >-
-      Kategoria `inne` jest ostatecznością. Gdy domena jest nieznana, można
+      Kategoria `other` jest ostatecznością. Gdy domena jest nieznana, można
       sprawdzić, kto ją prowadzi, ale nie kodujemy treści strony docelowej.
   - code: R8
     text: >-
@@ -307,8 +352,8 @@ rules:
     text: >-
       Wikipedia, praca nad przypisami. Deklaracja pracy nad źródłami
       (znacznik „źródła/przypisy”, „dodano przypis”, poprawa przypisów) daje
-      `edit_about_sources = 1`. `cites_source = 1` dajemy tylko wtedy, gdy
-      opis identyfikuje źródło albo jego typ („wg WHO”, „źródło
+      `edit_about_sources = 1`. Kategorię źródła zamiast `none` dajemy tylko
+      wtedy, gdy opis identyfikuje źródło albo jego typ („wg WHO”, „źródło
       uniwersyteckie”).
   - code: R11
     text: Wpisy po angielsku i w innych językach kodujemy według tych samych reguł.
@@ -317,16 +362,20 @@ rules:
       W razie wątpliwości wybierz najlepszą etykietę, ustaw `uncertain = 1`
       i opisz problem w `notes`. Takie przypadki omawiamy przy uzgadnianiu
       etykiet i mogą one zmienić codebook.
+  - code: R13
+    text: >-
+      `source_types` wypełniamy zawsze. `none` wpisujemy wtedy i tylko wtedy,
+      gdy jednostka nie zawiera żadnego powołania, i nie łączymy go z innymi
+      kodami. `cites_source` nie jest kodowane w arkuszu: wynosi 0 przy
+      `none` i 1 przy każdej innej etykiecie.
 
 annotation_columns:
   - name: unit_id
     description: identyfikator jednostki (Reddit `id` posta; Wikipedia `strona#numer_rewizji`)
   - name: annotator
     description: inicjały osoby annotującej
-  - name: cites_source
-    description: 0 lub 1
   - name: source_types
-    description: kody kategorii rozdzielone średnikiem, np. `media;nauka`; puste przy cites_source = 0
+    description: kody kategorii rozdzielone średnikiem, np. `media;scientific`; `none`, gdy nie ma powołania (R13)
   - name: edit_about_sources
     description: 0 lub 1 (tylko Wikipedia; dla Reddita puste)
   - name: uncertain
@@ -344,3 +393,16 @@ changelog:
       10 kategorii. Dodaje definicje, kryteria wykluczenia, przykłady z danych
       i reguły rozstrzygania. Wydziela zmienną `edit_about_sources` dla
       Wikipedii.
+  - version: "2.0"
+    date: 2026-10-18
+    changes: >-
+      Kategorie i kody zgodne ze slajdem „Codebook”: dziewięć angielskich
+      kodów (`scientific`, `institutional`, `media`, `personal`,
+      `social_blog`, `encyclopedia`, `other`, `unknown`, `none`) zamiast
+      dziesięciu polskich. `nauka` dzieli się na `scientific` (publikacje) i
+      `institutional` (uczelnie, instytuty, sondażownie); `oficjalne` na
+      `institutional` (instytucje statystyczne i zdrowia publicznego) i
+      `other` (urzędy, administracja, prawo). `komercyjne`, `organizacje` i
+      `inne` łączą się w `other`, z wyjątkiem blogów, które trafiają do
+      `social_blog`. Nowy kod `none` zastępuje puste `source_types`, a
+      `cites_source` jest wyliczane z `source_types` (R13).

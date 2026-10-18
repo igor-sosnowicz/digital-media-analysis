@@ -23,7 +23,7 @@ CSV_ENCODING = "utf-8-sig"
 
 
 def wikipedia_keys(manifest: pd.DataFrame) -> set[tuple[str, int]]:
-    """(page, revision_number) of every sampled Wikipedia unit, for `datasets.load_wikipedia_revisions`."""
+    """(page, revision_number) of every sampled Wikipedia unit, for `gold.load_wikipedia_frame`."""
     unit_ids = manifest.loc[manifest["platform"].eq("wikipedia"), "unit_id"]
     return {(page, int(number)) for page, number in unit_ids.str.rsplit("#", n=1)}
 
@@ -37,7 +37,7 @@ def reddit_sample(manifest: pd.DataFrame, posts: pd.DataFrame) -> pd.DataFrame:
 def wikipedia_sample(manifest: pd.DataFrame, revisions: pd.DataFrame) -> pd.DataFrame:
     """Sampled Wikipedia revisions with every raw field and the article length, then the sampling columns.
 
-    `revisions` must come from `load_wikipedia_revisions(with_content=wikipedia_keys(manifest))`.
+    `revisions` must come from `gold.load_wikipedia_frame(with_content=wikipedia_keys(manifest))`.
     """
     if "new_content" not in revisions:
         raise ValueError("Load the revisions with `with_content=wikipedia_keys(manifest)` to export the article text.")

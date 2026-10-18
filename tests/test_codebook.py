@@ -14,7 +14,11 @@ def raw_codebook() -> dict:
 
 def test_codebook_loads_and_validates():
     codebook = load_codebook()
-    assert len(codebook.category_codes) == 10
+    # The categories and codes of the "Codebook" slide, in its order.
+    assert codebook.category_codes == [
+        "scientific", "institutional", "media", "personal", "social_blog",
+        "encyclopedia", "other", "unknown", "none",
+    ]
     assert {variable.code for variable in codebook.variables_for("wikipedia")} == {
         "cites_source", "source_types", "edit_about_sources",
     }
@@ -56,6 +60,25 @@ def test_negative_example_without_reason_is_rejected(raw_codebook):
 def test_reference_to_undefined_rule_is_rejected(raw_codebook):
     raw_codebook["rules"] = [rule for rule in raw_codebook["rules"] if rule["code"] != "R3"]
     with pytest.raises(ValidationError, match="R3"):
+        Codebook.model_validate(raw_codebook)
+
+
+def test_cites_source_is_derived_and_not_in_the_sheet():
+    codebook = load_codebook()
+    derived = {variable.code for variable in codebook.variables if variable.derived}
+    assert derived == {"cites_source"}
+    assert derived.isdisjoint(column.name for column in codebook.annotation_columns)
+
+
+def test_non_english_code_is_rejected(raw_codebook):
+    raw_codebook["categories"][0]["code"] = "nauka-i-dane"
+    with pytest.raises(ValidationError, match="English identifiers"):
+        Codebook.model_validate(raw_codebook)
+
+
+def test_codebook_without_none_is_rejected(raw_codebook):
+    raw_codebook["categories"] = [category for category in raw_codebook["categories"] if category["code"] != "none"]
+    with pytest.raises(ValidationError, match="'none'"):
         Codebook.model_validate(raw_codebook)
 
 

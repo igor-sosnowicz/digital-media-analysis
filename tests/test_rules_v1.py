@@ -101,16 +101,17 @@ def test_document_labels_map_v1_into_codebook_space():
         non_citation=rules_v1.WIKIPEDIA_NON_CITATION,
     )
     assert labels[["revision_number", "cites_source", "source_types"]].values.tolist() == [
-        [1, 1, "encyklopedie"],
-        [2, 0, ""],
-        [3, 1, "niesprecyzowane"],
+        [1, 1, "encyclopedia"],
+        [2, 0, "none"],
+        [3, 1, "unknown"],
     ]
 
 
-def test_document_labels_link_without_type_still_cites():
-    units = pd.DataFrame({"row_index": [0]})
-    mentions = pd.DataFrame({"row_index": [0], "category": ["link/domena"]})
+def test_document_labels_link_without_type_is_other():
+    units = pd.DataFrame({"row_index": [0, 1]})
+    mentions = pd.DataFrame({"row_index": [0, 1, 1], "category": ["link/domena", "link/domena", "media informacyjne"]})
     labels = to_document_labels(
         mentions, units, ["row_index"], "category", rules_v1.REDDIT_CATEGORY_MAP,
     )
-    assert labels[["cites_source", "source_types"]].values.tolist() == [[1, ""]]
+    # An untyped link alone is an identified source of no other category; next to a typed one it adds nothing.
+    assert labels[["cites_source", "source_types"]].values.tolist() == [[1, "other"], [1, "media"]]

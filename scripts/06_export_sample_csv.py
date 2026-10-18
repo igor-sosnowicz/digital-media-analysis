@@ -6,16 +6,16 @@ that each file has the number of units the design asked for.
 
 import json
 
-from digital_media_analysis import datasets, gold, sample_export
-from digital_media_analysis.paths import RAW_REDDIT_FRAME_DIR
+from digital_media_analysis import gold, sample_export
 
 
 def main() -> None:
     manifest = gold.load_manifest()
     design = json.loads(gold.DESIGN_PATH.read_text(encoding="utf-8"))
 
-    posts = datasets.load_reddit_posts(RAW_REDDIT_FRAME_DIR)
-    revisions = datasets.load_wikipedia_revisions(with_content=sample_export.wikipedia_keys(manifest))
+    # Only the subreddits and pages config.yaml lists, as in the draw.
+    posts = gold.load_reddit_frame()
+    revisions = gold.load_wikipedia_frame(with_content=sample_export.wikipedia_keys(manifest))
     sample_export.check_snapshot(design, "reddit", gold.reddit_units(posts))
     sample_export.check_snapshot(design, "wikipedia", gold.wikipedia_units(revisions))
 

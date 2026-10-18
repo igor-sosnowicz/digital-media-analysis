@@ -35,7 +35,7 @@
 
 # Codebook
 
-The annotation codebook lives in `codebook/codebook.yaml`. After editing it, regenerate the annotator guide `codebook/codebook.md`:
+The annotation codebook lives in `codebook/codebook.yaml`. Version 2.0 uses the nine categories of the "Codebook" slide, with English codes: `scientific`, `institutional`, `media`, `personal`, `social_blog`, `encyclopedia`, `other`, `unknown` and `none` (no source reference). Annotators fill in `source_types` only; `cites_source` is derived from it (0 for `none`, otherwise 1). After editing the codebook, regenerate the annotator guide `codebook/codebook.md`:
 
 ```bash
 make codebook
@@ -47,10 +47,10 @@ The frozen baseline instrument is `src/digital_media_analysis/instruments/rules_
 
 The sample holds 500 Reddit posts and 500 Wikipedia edit summaries (pilot, dev and test together), split as evenly as possible across the years of each platform's study period (`study_periods` in `config.yaml`). Each period serves one hypothesis:
 
-- Reddit, 2005–2018: online trust in the scientific consensus declines. Years get 35 or 36 posts.
+- Reddit, 2005–2020: online trust in the scientific consensus declines. Years get 31 or 32 posts.
 - Wikipedia, 2020 to 13 October 2026: users cite alternative sources (blogs, influencers, "independent experts") more often. 2023, 2025 and 2026 are smaller than an even share, so they are taken whole (72, 53 and 59 summaries); the other years get 79.
 
-Each year gives 2 Reddit posts and 3 Wikipedia summaries to the pilot. The Reddit frame (`reddit_frame` in `config.yaml`) is r/reddit.com in 2005, the only source before topical subreddits, r/science from 2006 and r/skeptic and r/conspiracy from 2008. These are too large to download whole, so the frame is every post on one random day of each month; a year whose drawn days hold fewer than 400 posts (2006) is downloaded whole. `day_weight` (days in the month per drawn day) scales the posts up to their month, and the sample weights include it. Download the frame into `data/raw/reddit_frame/` (separate from the newest posts in `data/raw/reddit/` used by the EDA notebook):
+Each year gives 2 Reddit posts and 3 Wikipedia summaries to the pilot. Every script downloads and samples only the sources `config.yaml` lists: the subreddits of `reddit_subreddits` and the pages of `wikipedia_pages`. For Reddit these are six Polish subreddits (posts from 2012, r/PolskaPolityka from 2020) and r/reddit.com (2005 only, the only source before topical subreddits), r/science (from 2006), r/skeptic and r/conspiracy (from 2008). For each subreddit and year the frame is every post on one random day of each month; a subreddit with fewer than 100 posts on those days is downloaded whole for that year (the Polish subreddits, r/science in 2006, r/skeptic in 2008–2010, r/conspiracy in 2008). `day_weight` (days in the month per drawn day, 1 for a whole year) scales the posts up to their month, and the sample weights include it. Download the frame into `data/raw/reddit_frame/` (separate from the newest posts in `data/raw/reddit/` used by the EDA notebook):
 
 ```bash
 make reddit-frame

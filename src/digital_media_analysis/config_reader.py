@@ -30,6 +30,37 @@ def get_config(key: str) -> Any:
         raise KeyError(f"Config key {key!r} not found in {CONFIG_PATH}.") from exc
 
 
+def get_reddit_subreddits() -> dict[str, tuple[int, int] | None]:
+    """Return `reddit_subreddits` as {name: (first, last) frame years, or None for every year}.
+
+    Entries are plain names or one-key mappings `name: [first, last]`.
+    """
+    entries = get_config("reddit_subreddits")
+    if not isinstance(entries, list):
+        raise ValueError(f"'reddit_subreddits' must be a list in {CONFIG_PATH}.")
+    subreddits: dict[str, tuple[int, int] | None] = {}
+    for entry in entries:
+        if isinstance(entry, str):
+            subreddits[entry] = None
+        elif isinstance(entry, dict) and len(entry) == 1:
+            ((name, years),) = entry.items()
+            first, last = (int(year) for year in years)
+            if first > last:
+                raise ValueError(f"r/{name}: the first year must not be after the last in {CONFIG_PATH}.")
+            subreddits[str(name)] = (first, last)
+        else:
+            raise ValueError(f"Invalid entry {entry!r} under reddit_subreddits in {CONFIG_PATH}; use a name or `name: [first, last]`.")
+    return subreddits
+
+
+def get_wikipedia_pages() -> list[str]:
+    """Return the page URLs listed under `wikipedia_pages`."""
+    pages = get_config("wikipedia_pages")
+    if not isinstance(pages, list) or not all(isinstance(page, str) for page in pages):
+        raise ValueError(f"'wikipedia_pages' must be a list of URLs in {CONFIG_PATH}.")
+    return pages
+
+
 def get_study_period(platform: str) -> tuple[datetime, datetime]:
     """Return a platform's study period from `study_periods` as timezone-aware UTC datetimes (end exclusive)."""
     periods = get_config("study_periods")

@@ -17,14 +17,18 @@ equally precise:
    and `test` (final metrics only).
 
 The frame is every unit created in the platform's study period (`study_periods`
-in config.yaml). The manifest stores identifiers and design weights only, never
-post text; `sample_export` joins it with the full data.
+in config.yaml), and only from the sources config.yaml lists: the subreddits of
+`reddit_subreddits` (each in its configured years) and the pages of
+`wikipedia_pages`. Each platform draws from its own random stream, so a change
+in one platform's frame leaves the other platform's sample as it is. The
+manifest stores identifiers and design weights only, never post text;
+`sample_export` joins it with the full data.
 """
 
 import hashlib
 import json
 import re
-from collections.abc import Callable
+from collections.abc import Callable, Collection
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
@@ -32,7 +36,7 @@ import numpy as np
 import pandas as pd
 
 from digital_media_analysis import datasets
-from digital_media_analysis.config_reader import get_study_period
+from digital_media_analysis.config_reader import get_reddit_subreddits, get_study_period, get_wikipedia_pages
 from digital_media_analysis.paths import ANNOTATIONS_DIR, RAW_REDDIT_FRAME_DIR
 
 SEED = 20261016
@@ -123,17 +127,37 @@ def wikipedia_units(revisions: pd.DataFrame) -> pd.DataFrame:
     }).sort_values("unit_id", ignore_index=True)
 
 
+def load_reddit_frame() -> pd.DataFrame:
+    """Frame posts of the subreddits in `reddit_subreddits` (config.yaml), each only in its configured years."""
+    subreddits = get_reddit_subreddits()
+    posts = datasets.load_reddit_posts(RAW_REDDIT_FRAME_DIR, subreddits=subreddits)
+    years = utc_year(posts["created_at_utc"])
+    active = {
+        int(year): {name.casefold() for name in frame_subreddits(subreddits, int(year))}
+        for year in years.dropna().unique()
+    }
+    keep = [not pd.isna(year) and name.casefold() in active[int(year)] for name, year in zip(posts["subreddit"], years)]
+    return posts[keep].reset_index(drop=True)
+
+
+def load_wikipedia_frame(with_content: Collection[tuple[str, int]] = ()) -> pd.DataFrame:
+    """Revisions of the pages in `wikipedia_pages` (config.yaml); see `datasets.load_wikipedia_revisions`."""
+    return datasets.load_wikipedia_revisions(with_content=with_content, pages=get_wikipedia_pages())
+
+
 def load_units() -> tuple[pd.DataFrame, pd.DataFrame]:
     """Reddit and Wikipedia units from the local data the sample is drawn from."""
-    return (
-        reddit_units(datasets.load_reddit_posts(RAW_REDDIT_FRAME_DIR)),
-        wikipedia_units(datasets.load_wikipedia_revisions()),
-    )
+    return reddit_units(load_reddit_frame()), wikipedia_units(load_wikipedia_frame())
 
 
 def study_years(start: datetime, end: datetime) -> list[int]:
     """Calendar years that overlap the study period [start, end)."""
     return list(range(start.year, (end - timedelta(microseconds=1)).year + 1))
+
+
+def frame_subreddits(subreddits: dict[str, tuple[int, int] | None], year: int) -> list[str]:
+    """Subreddits of `reddit_subreddits` (config.yaml) that enter the Reddit frame in `year`."""
+    return [name for name, years in subreddits.items() if years is None or years[0] <= year <= years[1]]
 
 
 def in_study_period(units: pd.DataFrame, start: datetime, end: datetime) -> pd.DataFrame:
@@ -250,7 +274,7 @@ def draw_sample(
     periods = periods or {platform: get_study_period(platform) for platform in SAMPLE_TOTALS}
     totals = totals or SAMPLE_TOTALS
     years = {platform: study_years(*period) for platform, period in periods.items()}
-    rng = np.random.default_rng(seed)
+    reddit_rng, wikipedia_rng = (np.random.default_rng(stream) for stream in np.random.SeedSequence(seed).spawn(2))
 
     reddit_years = years["reddit"]
     reddit = in_study_period(reddit, *periods["reddit"])
@@ -267,7 +291,7 @@ def draw_sample(
         reddit,
         pilot_quotas=pd.Series(REDDIT_PILOT_PER_YEAR, index=[str(year) for year in reddit_years]),
         gold_quotas=reddit_gold,
-        rng=rng,
+        rng=reddit_rng,
     )
     # The frame holds only posts of drawn days: a post stands for N_h / n_h frame
     # posts, and each frame post for `day_weight` posts of its month.
@@ -295,7 +319,7 @@ def draw_sample(
             {f"{year}|{signal}": WIKIPEDIA_PILOT_PER_YEAR[signal] for year in wikipedia_years for signal in WIKIPEDIA_SIGNALS}
         ),
         gold_quotas=wikipedia_gold,
-        rng=rng,
+        rng=wikipedia_rng,
     )
 
     manifest = pd.concat([reddit_sample, wikipedia_sample], ignore_index=True)[MANIFEST_COLUMNS]
@@ -311,7 +335,8 @@ def draw_sample(
         },
         "reddit": {
             "strata": "year",
-            "frame": "posts not removed or deleted on drawn days, data/raw/reddit_frame",
+            "frame": "posts not removed or deleted, on drawn days or in whole years, data/raw/reddit_frame",
+            "subreddits": {name: list(window) if window else None for name, window in get_reddit_subreddits().items()},
             "pilot_per_year": REDDIT_PILOT_PER_YEAR,
             # Frame posts scaled up by their day weights: the posts each year is estimated to have.
             "estimated_posts_per_year": {
@@ -321,6 +346,7 @@ def draw_sample(
         "wikipedia": {
             "strata": "year x signal",
             "frame": "revisions with a non-empty edit summary, data/raw/wikipedia",
+            "pages": get_wikipedia_pages(),
             "pilot_per_year": WIKIPEDIA_PILOT_PER_YEAR,
             "gold_cue_share": WIKIPEDIA_GOLD_CUE_SHARE,
             "link_pattern": WIKIPEDIA_LINK.pattern,

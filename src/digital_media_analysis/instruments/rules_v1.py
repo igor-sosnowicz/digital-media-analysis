@@ -146,28 +146,33 @@ def extract_wikipedia_references(df: pd.DataFrame) -> pd.DataFrame:
 # A value of None means "v1 detected a reference but assigns no codebook type"
 # (it still counts towards `cites_source`). Categories listed in the
 # *_NON_CITATION sets are, by v1's own definition, not source references.
+# A v1 category that mixes codebook categories maps to the one most of its
+# terms belong to; validation measures the rest as v1 errors.
 
 REDDIT_CATEGORY_MAP: dict[str, str | None] = {
+    # Every URL, next to any keyword category of the same link.
     "link/domena": None,
     "media informacyjne": "media",
-    "źródła oficjalne": "oficjalne",
-    "nauka i medycyna": "nauka",
-    "platformy i media społecznościowe": "platformy",
-    "encyklopedie i bazy wiedzy": "encyklopedie",
-    "źródła komercyjne": "komercyjne",
-    "źródła osobiste i społecznościowe": "osobiste",
-    "sygnał powołania": "niesprecyzowane",
+    # Mostly offices and administration (gov.pl, sejm, gmina, policja, ZUS); only GUS is statistical.
+    "źródła oficjalne": "other",
+    "nauka i medycyna": "scientific",
+    "platformy i media społecznościowe": "social_blog",
+    "encyklopedie i bazy wiedzy": "encyclopedia",
+    "źródła komercyjne": "other",
+    "źródła osobiste i społecznościowe": "personal",
+    "sygnał powołania": "unknown",
 }
 REDDIT_NON_CITATION: frozenset[str] = frozenset()
 
 WIKIPEDIA_CATEGORY_MAP: dict[str, str | None] = {
-    "instytucje publiczne": "oficjalne",
-    "nauka i edukacja": "nauka",
+    # Mostly health and statistical bodies (WHO, ECDC, GIS, GUS); gov.pl, ministries and offices are `other`.
+    "instytucje publiczne": "institutional",
+    "nauka i edukacja": "scientific",
     "media": "media",
-    "organizacje społeczne i środowiskowe": "organizacje",
-    "źródła encyklopedyczne": "encyklopedie",
-    "źródła osobiste": "osobiste",
-    "inna domena zewnętrzna": "inne",
-    "powołanie bez wskazanego źródła": "niesprecyzowane",
+    "organizacje społeczne i środowiskowe": "other",
+    "źródła encyklopedyczne": "encyclopedia",
+    "źródła osobiste": "personal",
+    "inna domena zewnętrzna": "other",
+    "powołanie bez wskazanego źródła": "unknown",
 }
 WIKIPEDIA_NON_CITATION: frozenset[str] = frozenset({"odniesienie techniczne Wikipedii"})

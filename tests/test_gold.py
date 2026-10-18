@@ -188,6 +188,17 @@ def test_sample_is_deterministic(sample):
     pd.testing.assert_frame_equal(manifest, again)
 
 
+def test_a_changed_reddit_frame_leaves_the_wikipedia_sample_alone(sample):
+    manifest, _, reddit, wikipedia = sample
+    other, _ = gold.draw_sample(reddit[reddit["group"].eq("a")], wikipedia, seed=1, periods=PERIODS, totals=TOTALS)
+
+    def platform(frame: pd.DataFrame, name: str) -> pd.DataFrame:
+        return frame[frame["platform"].eq(name)].reset_index(drop=True)
+
+    pd.testing.assert_frame_equal(platform(other, "wikipedia"), platform(manifest, "wikipedia"))
+    assert set(platform(other, "reddit")["group"]) == {"a"}
+
+
 def test_pilot_is_disjoint_from_gold(sample):
     manifest, _, _, _ = sample
     assert not manifest["unit_id"].duplicated().any()

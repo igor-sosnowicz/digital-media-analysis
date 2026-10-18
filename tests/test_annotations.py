@@ -22,11 +22,10 @@ def units() -> dict[str, pd.DataFrame]:
 def write_filled(path, annotator="A") -> None:
     write_workbook(path, annotator, "pilot", units(), load_codebook())
     workbook = load_workbook(path)
-    for sheet_name, rows in {"Reddit": [(1, "media"), (0, None)], "Wikipedia": [(1, "oficjalne")]}.items():
+    for sheet_name, rows in {"Reddit": ["media", "none"], "Wikipedia": ["institutional"]}.items():
         sheet = workbook[sheet_name]
         header = [cell.value for cell in sheet[1]]
-        for row_number, (cites, types) in enumerate(rows, start=2):
-            sheet.cell(row_number, header.index("cites_source") + 1, cites)
+        for row_number, types in enumerate(rows, start=2):
             sheet.cell(row_number, header.index("source_types") + 1, types)
             if "edit_about_sources" in header:
                 sheet.cell(row_number, header.index("edit_about_sources") + 1, 0)
@@ -44,8 +43,8 @@ def test_import_save_and_load_round_trip(tmp_path):
     loaded = annotations.load_labels("pilot", tmp_path)
     assert loaded[["unit_id", "cites_source", "source_types", "edit_about_sources"]].values.tolist() == [
         ["r1", 1, "media", pd.NA],
-        ["r2", 0, "", pd.NA],
-        ["COVID-19#3", 1, "oficjalne", 0],
+        ["r2", 0, "none", pd.NA],
+        ["COVID-19#3", 1, "institutional", 0],
     ]
     assert str(loaded["cites_source"].dtype) == "Int64"
 

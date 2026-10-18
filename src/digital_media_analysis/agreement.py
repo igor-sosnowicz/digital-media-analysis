@@ -12,6 +12,7 @@ from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 
+from digital_media_analysis.codebook import NO_SOURCE
 from digital_media_analysis.instruments.labels import LABEL_SEPARATOR
 
 BOOTSTRAP_SAMPLES = 2000
@@ -144,9 +145,13 @@ def _estimate(statistic: Callable[[np.ndarray], np.ndarray], units: int, samples
 
 
 def variables_for(platform: str, category_codes: Sequence[str]) -> list[str]:
-    """Variables to compare: binary codes, the whole label set, then one indicator per category."""
+    """Variables to compare: binary codes, the whole label set, then one indicator per source category.
+
+    `none` gets no indicator of its own: it is the complement of `cites_source`.
+    """
     binary = ["cites_source"] + (["edit_about_sources"] if platform == "wikipedia" else [])
-    return binary + ["source_types"] + [f"source_types:{code}" for code in category_codes]
+    indicators = [f"source_types:{code}" for code in category_codes if code != NO_SOURCE]
+    return binary + ["source_types"] + indicators
 
 
 def coded_values(labels: pd.DataFrame, variable: str) -> pd.Series:
@@ -255,8 +260,8 @@ def disagreements(labels: pd.DataFrame) -> pd.DataFrame:
 
 
 def _positive(value: object) -> bool:
-    """A non-empty label set or a 1 on a binary variable."""
-    return len(value) > 0 if isinstance(value, frozenset) else value == 1
+    """A label set with a source type (anything but `none`) or a 1 on a binary variable."""
+    return len(value - {NO_SOURCE}) > 0 if isinstance(value, frozenset) else value == 1
 
 
 def _display(value: object) -> str:
