@@ -2,3 +2,5 @@
 data/
 __pycache__
 .python-version
+# Annotation workbooks contain post text; commit only labels and the manifest.
+annotations/sheets/

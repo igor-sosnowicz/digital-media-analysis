@@ -1,0 +1,309 @@
+{
+  "seed": 20261016,
+  "created_utc": "2026-10-18T12:47:53+00:00",
+  "study_period": {
+    "reddit": {
+      "start": "2005-01-01T00:00:00+00:00",
+      "end": "2021-01-01T00:00:00+00:00",
+      "years": [
+        2005,
+        2006,
+        2007,
+        2008,
+        2009,
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020
+      ]
+    },
+    "wikipedia": {
+      "start": "2020-01-01T00:00:00+00:00",
+      "end": "2026-10-13T00:00:00+00:00",
+      "years": [
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ]
+    }
+  },
+  "reddit": {
+    "strata": "year",
+    "frame": "posts not removed or deleted, on drawn days or in whole years, data/raw/reddit_frame",
+    "subreddits": {
+      "PolskaPolityka": null,
+      "gry": null,
+      "rower": null,
+      "warszawa": null,
+      "lodz": null,
+      "Szczecin": null,
+      "reddit.com": [
+        2005,
+        2005
+      ],
+      "science": null,
+      "skeptic": null,
+      "conspiracy": null
+    },
+    "pilot_per_year": 2,
+    "estimated_posts_per_year": {
+      "2005": 21028,
+      "2006": 2473,
+      "2007": 24459,
+      "2008": 41412,
+      "2009": 59128,
+      "2010": 54577,
+      "2011": 87529,
+      "2012": 150039,
+      "2013": 173000,
+      "2014": 161975,
+      "2015": 168840,
+      "2016": 147388,
+      "2017": 186866,
+      "2018": 103118,
+      "2019": 101050,
+      "2020": 151554
+    }
+  },
+  "wikipedia": {
+    "strata": "year x signal",
+    "frame": "revisions with a non-empty edit summary, data/raw/wikipedia",
+    "pages": [
+      "https://pl.wikipedia.org/wiki/Szczepionka",
+      "https://pl.wikipedia.org/wiki/Medycyna",
+      "https://pl.wikipedia.org/wiki/Lekarz",
+      "https://pl.wikipedia.org/wiki/Globalne_ocieplenie",
+      "https://pl.wikipedia.org/wiki/Zmiana_klimatu",
+      "https://pl.wikipedia.org/wiki/COVID-19",
+      "https://pl.wikipedia.org/wiki/Zesp%C3%B3%C5%82_nabytego_niedoboru_odporno%C5%9Bci",
+      "https://pl.wikipedia.org/wiki/Kwas_askorbinowy"
+    ],
+    "pilot_per_year": {
+      "link": 0,
+      "cue": 1,
+      "other": 2
+    },
+    "gold_cue_share": 0.3333333333333333,
+    "link_pattern": "https?://",
+    "source_words_pattern": "źród|przypis|\\bwg\\b|wedł|bada|raport|\\bdane|publik|cyt|artyku|\\bref\\b|\\blink"
+  },
+  "dev_fraction": 0.3333333333333333,
+  "population": {
+    "reddit": {
+      "units": 62636,
+      "sha256": "af2d0bcbfdf0642359c0a6d3af611588e85ada1b658916f8cfc728365133d27b"
+    },
+    "wikipedia": {
+      "units": 1453,
+      "sha256": "eea2e1e37ba9483feaf4cacba63a67827f47c3fc396ebf37b84adaf8a33305a9"
+    }
+  },
+  "allocation": {
+    "reddit": {
+      "total": 500,
+      "per_year": {
+        "2005": 31,
+        "2006": 31,
+        "2007": 31,
+        "2008": 31,
+        "2009": 31,
+        "2010": 31,
+        "2011": 31,
+        "2012": 31,
+        "2013": 32,
+        "2014": 31,
+        "2015": 32,
+        "2016": 31,
+        "2017": 32,
+        "2018": 31,
+        "2019": 31,
+        "2020": 32
+      },
+      "whole_years": []
+    },
+    "wikipedia": {
+      "total": 500,
+      "per_year": {
+        "2020": 79,
+        "2021": 79,
+        "2022": 79,
+        "2023": 72,
+        "2024": 79,
+        "2025": 53,
+        "2026": 59
+      },
+      "whole_years": [
+        2023,
+        2025,
+        2026
+      ]
+    }
+  },
+  "sample_sizes": {
+    "reddit": {
+      "dev": 148,
+      "pilot": 32,
+      "test": 320
+    },
+    "wikipedia": {
+      "dev": 152,
+      "pilot": 21,
+      "test": 327
+    }
+  },
+  "per_year": {
+    "reddit": {
+      "2005": {
+        "N (rama)": 685,
+        "pilot": 2,
+        "dev": 9,
+        "test": 20
+      },
+      "2006": {
+        "N (rama)": 2473,
+        "pilot": 2,
+        "dev": 9,
+        "test": 20
+      },
+      "2007": {
+        "N (rama)": 800,
+        "pilot": 2,
+        "dev": 9,
+        "test": 20
+      },
+      "2008": {
+        "N (rama)": 2178,
+        "pilot": 2,
+        "dev": 9,
+        "test": 20
+      },
+      "2009": {
+        "N (rama)": 3207,
+        "pilot": 2,
+        "dev": 9,
+        "test": 20
+      },
+      "2010": {
+        "N (rama)": 4536,
+        "pilot": 2,
+        "dev": 9,
+        "test": 20
+      },
+      "2011": {
+        "N (rama)": 2880,
+        "pilot": 2,
+        "dev": 9,
+        "test": 20
+      },
+      "2012": {
+        "N (rama)": 4943,
+        "pilot": 2,
+        "dev": 9,
+        "test": 20
+      },
+      "2013": {
+        "N (rama)": 5707,
+        "pilot": 2,
+        "dev": 10,
+        "test": 20
+      },
+      "2014": {
+        "N (rama)": 5445,
+        "pilot": 2,
+        "dev": 9,
+        "test": 20
+      },
+      "2015": {
+        "N (rama)": 5610,
+        "pilot": 2,
+        "dev": 10,
+        "test": 20
+      },
+      "2016": {
+        "N (rama)": 4866,
+        "pilot": 2,
+        "dev": 9,
+        "test": 20
+      },
+      "2017": {
+        "N (rama)": 6208,
+        "pilot": 2,
+        "dev": 10,
+        "test": 20
+      },
+      "2018": {
+        "N (rama)": 3480,
+        "pilot": 2,
+        "dev": 9,
+        "test": 20
+      },
+      "2019": {
+        "N (rama)": 3401,
+        "pilot": 2,
+        "dev": 9,
+        "test": 20
+      },
+      "2020": {
+        "N (rama)": 6217,
+        "pilot": 2,
+        "dev": 10,
+        "test": 20
+      }
+    },
+    "wikipedia": {
+      "2020": {
+        "N (rama)": 762,
+        "pilot": 3,
+        "dev": 25,
+        "test": 51
+      },
+      "2021": {
+        "N (rama)": 264,
+        "pilot": 3,
+        "dev": 24,
+        "test": 52
+      },
+      "2022": {
+        "N (rama)": 134,
+        "pilot": 3,
+        "dev": 24,
+        "test": 52
+      },
+      "2023": {
+        "N (rama)": 72,
+        "pilot": 3,
+        "dev": 22,
+        "test": 47
+      },
+      "2024": {
+        "N (rama)": 109,
+        "pilot": 3,
+        "dev": 24,
+        "test": 52
+      },
+      "2025": {
+        "N (rama)": 53,
+        "pilot": 3,
+        "dev": 15,
+        "test": 35
+      },
+      "2026": {
+        "N (rama)": 59,
+        "pilot": 3,
+        "dev": 18,
+        "test": 38
+      }
+    }
+  }
+}

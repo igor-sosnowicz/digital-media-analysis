@@ -8,7 +8,7 @@ from pathlib import Path
 import httpx
 from tqdm import tqdm
 
-from digital_media_analysis.config_reader import get_config
+from digital_media_analysis.config_reader import get_reddit_subreddits
 
 
 API_URL = "https://arctic-shift.photon-reddit.com/api/posts/search"
@@ -81,11 +81,7 @@ def write_posts(posts: list[dict], output_path: Path) -> None:
 
 
 def main() -> None:
-    subreddits = get_config("reddit_subreddits")
-    if not isinstance(subreddits, list) or not all(
-        isinstance(name, str) for name in subreddits
-    ):
-        raise ValueError("'reddit_subreddits' must be a list of names in config.yaml.")
+    subreddits = list(get_reddit_subreddits())
 
     output_dir = Path("./data/raw/reddit").resolve()
     output_dir.mkdir(parents=True, exist_ok=True)

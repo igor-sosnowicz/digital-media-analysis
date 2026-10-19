@@ -3,6 +3,14 @@ client_id: "your_client_id"
 client_secret: "your_client_secret"
 reddit_scraper_user_agent: "script:discussion-exporter:1.0 (by u/your_username)"
 max_concurrent: 3
+# The only subreddits any script downloads or samples: the newest posts for the
+# EDA notebook (01_fetch_reddit_data.py) and the sampling frame of the annotation
+# sample (01b_fetch_reddit_frame.py). `name: [first, last]` limits the years a
+# subreddit enters the sampling frame; the others enter every study year in
+# which they have posts. r/reddit.com, the general front page, is the only
+# source for 2005, before topical subreddits existed. The Polish subreddits
+# have posts from 2012 (r/PolskaPolityka from 2020), the English ones from 2006
+# (r/science) and 2008 (r/skeptic, r/conspiracy).
 reddit_subreddits:
   - PolskaPolityka
   - gry
@@ -10,6 +18,33 @@ reddit_subreddits:
   - warszawa
   - lodz
   - Szczecin
+  - reddit.com: [2005, 2005]
+  - science
+  - skeptic
+  - conspiracy
+
+# Study period of the year-balanced annotation sample, per platform (UTC, end
+# exclusive). Each platform tests a hypothesis about its own years:
+# - Reddit, 2005-2020: online trust in the scientific consensus declines.
+# - Wikipedia, 2020-2026: users cite alternative sources (blogs, influencers,
+#   "independent experts") more often. The end is the day the raw data was
+#   downloaded, so 2026 is a partial year.
+# The Reddit frame download and the sampling frame both use these.
+study_periods:
+  reddit:
+    start: "2005-01-01T00:00:00Z"
+    end: "2021-01-01T00:00:00Z"
+  wikipedia:
+    start: "2020-01-01T00:00:00Z"
+    end: "2026-10-13T00:00:00Z"
+
+# Reddit sampling frame (scripts/01b_fetch_reddit_frame.py), per subreddit and
+# year: every post on `days_per_month` random days of each month. A subreddit
+# with fewer than `census_below` posts on those days of a year is downloaded
+# whole for that year instead, so small subreddits are not lost to the day draw.
+reddit_frame:
+  days_per_month: 1
+  census_below: 100
 
 # Wikipedia scraper
 wikipedia_pages:
