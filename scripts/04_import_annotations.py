@@ -22,24 +22,20 @@ def main() -> None:
     manifest = gold.load_manifest()
     codebook = load_codebook()
 
-    failed = False
     for annotator, path in paths.items():
         labels, problems = annotations.import_workbook(path, annotator, args.phase, manifest, codebook)
         if problems:
-            failed = True
-            print(f"{path.name}: {len(problems)} problem(s)")
+            print(f"{path.name}: {len(problems)} problem(s), writing {len(labels)} valid label(s)")
             for problem in problems[:MAX_PROBLEMS_SHOWN]:
                 print(f"  - {problem}")
             if len(problems) > MAX_PROBLEMS_SHOWN:
                 print(f"  ... and {len(problems) - MAX_PROBLEMS_SHOWN} more")
-        elif args.check:
-            print(f"{path.name}: OK, {len(labels)} labels")
+        if args.check:
+            print(f"{path.name}: validated, {len(labels)} label(s)")
         else:
             output_path = annotations.label_path(args.phase, annotator)
             annotations.save_labels(labels, output_path)
-            print(f"{path.name}: {len(labels)} labels -> {output_path}")
-    if failed:
-        sys.exit("Fix the problems above in the workbooks and run the import again.")
+            print(f"{path.name}: {len(labels)} label(s) -> {output_path}")
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-sheets sample-csv import-labels agreement
+.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-sheets sample-csv import-labels agreement kappa-consensus combine-labels
 
 ANNOTATORS ?= A B
 PHASE ?= pilot
@@ -34,3 +34,11 @@ import-labels:
 
 agreement:
 	uv run scripts/05_compute_agreement.py --phase $(PHASE)
+
+# Cohen's kappa per annotator pair plus consensus cases (single-label agreement).
+kappa-consensus:
+	uv run scripts/07_kappa_consensus.py --phase $(PHASE)
+
+# Combine both annotators' labels into one dataset per phase.
+combine-labels:
+	uv run scripts/08_combine_labels.py --phase $(PHASE)
