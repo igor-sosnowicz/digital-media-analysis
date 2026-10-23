@@ -79,4 +79,6 @@ make import-labels
 make agreement
 ```
 
+`scripts/07_kappa_consensus.py` (`make kappa-consensus`) additionally computes Cohen's kappa per annotator pair and variable and writes `annotations/agreement/<phase>_consensus.csv` with the units where both annotators of a pair agreed on a single label.
+
 Both take `PHASE=gold` for the main sample.
