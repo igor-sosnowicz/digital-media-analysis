@@ -129,11 +129,48 @@ def _write_platform_sheet(sheet, platform: str, units: pd.DataFrame, annotator: 
     sheet.auto_filter.ref = f"A1:{get_column_letter(len(content) + len(labels))}{last_row}"
 
 
-def read_workbook(path: Path, codebook: Codebook) -> tuple[pd.DataFrame, list[str]]:
+def units_after(units: pd.DataFrame, coded: list[str], count: int | None = None) -> pd.DataFrame:
+    """The next `count` units (all when None) after the last coded one, in presentation order.
+
+    `units` are in presentation order; `coded` are the unit IDs another annotator
+    labelled (`coded_unit_ids`). Coded units never reappear, and units before the
+    last coded one are left to that annotator even if they skipped some.
+    """
+    ids = units["unit_id"].astype(str).tolist()
+    if unknown := sorted(set(coded) - set(ids)):
+        raise ValueError(f"{len(unknown)} coded units are not in this phase of the sample, e.g. {unknown[:3]}.")
+    start = max((ids.index(unit_id) for unit_id in coded), default=-1) + 1
+    rest = units.iloc[start:]
+    rest = rest[~rest["unit_id"].astype(str).isin(set(coded))]
+    return rest if count is None else rest.head(count)
+
+
+def coded_unit_ids(path: Path) -> dict[str, list[str]]:
+    """Unit IDs of the rows that carry any label, per platform, in sheet order."""
+    workbook = load_workbook(path, read_only=True, data_only=True)
+    coded = {}
+    for platform, sheet_name in SHEET_NAMES.items():
+        if sheet_name not in workbook.sheetnames:
+            continue
+        rows = list(workbook[sheet_name].iter_rows(values_only=True))
+        header = list(rows[0])
+        records = (dict(zip(header, values)) for values in rows[1:])
+        coded[platform] = [str(record["unit_id"]) for record in records if record["unit_id"] is not None and _has_labels(record)]
+    return coded
+
+
+def workbook_metadata(path: Path) -> dict:
+    """Phase, annotator and codebook version stored by `write_workbook` ({} if absent)."""
+    return _metadata(load_workbook(path, read_only=True))
+
+
+def read_workbook(path: Path, codebook: Codebook, partial: bool = False) -> tuple[pd.DataFrame, list[str]]:
     """Return the labels of a filled workbook and a list of problems found.
 
     Rows with problems are still returned, with the offending value set to missing,
-    so the problems can be fixed in the workbook and the file read again.
+    so the problems can be fixed in the workbook and the file read again. With
+    `partial`, rows without any label are skipped instead of reported, for a
+    phase the annotators split between them; filled rows are checked as usual.
     """
     workbook = load_workbook(path, read_only=True, data_only=True)
     metadata = _metadata(workbook)
@@ -150,7 +187,7 @@ def read_workbook(path: Path, codebook: Codebook) -> tuple[pd.DataFrame, list[st
             continue
         for excel_row, values in enumerate(body, start=2):
             record = dict(zip(header, values))
-            if record["unit_id"] is None:
+            if record["unit_id"] is None or (partial and not _has_labels(record)):
                 continue
             where = f"{sheet_name}, wiersz {excel_row} ({record['unit_id']})"
             label = {
@@ -189,6 +226,15 @@ def read_workbook(path: Path, codebook: Codebook) -> tuple[pd.DataFrame, list[st
             label["notes"] = "" if record["notes"] is None else str(record["notes"])
             labeled.append(label)
     return pd.DataFrame(labeled, columns=LABEL_FILE_COLUMNS), problems
+
+
+def _has_labels(record: dict) -> bool:
+    """Whether the annotator filled any label cell of a sheet row (the annotator column does not count)."""
+    return any(
+        value is not None and str(value).strip() != ""
+        for name, value in record.items()
+        if name in LABEL_FILE_COLUMNS and name not in {"unit_id", "annotator"}
+    )
 
 
 def _metadata(workbook) -> dict:

@@ -14,6 +14,17 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--phase", choices=gold.PHASE_SPLITS, default="pilot")
     parser.add_argument("--check", action="store_true", help="Only validate the workbooks; write nothing.")
+    parser.add_argument(
+        "--partial",
+        action="store_true",
+        help="The phase is split between annotators: skip rows without labels and allow missing units.",
+    )
+    parser.add_argument(
+        "--drop-invalid",
+        action="store_true",
+        help="Import a workbook without its invalid rows (listed) instead of rejecting it; "
+        "header and manifest problems still block.",
+    )
     args = parser.parse_args()
 
     paths = annotations.workbook_paths(args.phase)
@@ -24,7 +35,13 @@ def main() -> None:
 
     failed = False
     for annotator, path in paths.items():
-        labels, problems = annotations.import_workbook(path, annotator, args.phase, manifest, codebook)
+        labels, problems = annotations.import_workbook(path, annotator, args.phase, manifest, codebook, partial=args.partial)
+        if problems and args.drop_invalid:
+            labels, dropped, problems = annotations.drop_invalid_rows(labels, problems)
+            if dropped:
+                print(f"{path.name}: {len(dropped)} invalid row(s) left out")
+                for problem in dropped[:MAX_PROBLEMS_SHOWN]:
+                    print(f"  - {problem}")
         if problems:
             failed = True
             print(f"{path.name}: {len(problems)} problem(s)")

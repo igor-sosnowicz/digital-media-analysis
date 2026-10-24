@@ -14,7 +14,7 @@
 
 `data_samples/reddit_sample.csv` zawiera 500 postów wylosowanych do gold standardu: lata 2005–2020, po 31–32 posty na rok, z subredditów wymienionych w `config.yaml` (`reddit_subreddits`). To plik referencyjny z pełnymi danymi. Etykiety wpisujemy w arkuszu XLSX, który koordynator generuje z tej samej próby. Zakładka Reddit zawiera posty jednej fazy:
 
-- **pilotaż:** 32 posty (`phase = pilot`), na kalibrację codebooka;
+- **pilotaż:** 62 posty (`phase = pilot`), na kalibrację codebooka: najpierw 32 z pierwszej rundy (`split = pilot`), potem 30 z drugiej (`split = pilot2`). Druga runda pochodzi spoza 500 postów próby, więc plik CSV ma 530 wierszy;
 - **próba główna:** 468 postów (`phase = gold`). Posty `dev` i `test` są wymieszane, więc nie wiadomo, które są testowe.
 
 Dlaczego arkusz, a nie CSV:
@@ -47,6 +47,7 @@ Czego się spodziewać w tej próbie:
 1. Generuje arkusze pilotażu: `make pilot-sheets ANNOTATORS="JP IS"`. Bez `make`: `uv run scripts/03_export_annotation_sheets.py --phase pilot --annotators JP IS`. Powstają pliki `annotations/sheets/pilot_JP.xlsx` i `pilot_IS.xlsx`; jeden plik zawiera zakładki Reddit i Wikipedia.
 2. Przekazuje każdej osobie jej plik poza gitem, np. na dysku zespołu. Arkusze zawierają treść postów, więc są w `.gitignore` i nie trafiają do repozytorium.
 3. Po pilotażu i poprawkach codebooka (v2.1) generuje arkusze próby głównej: `uv run scripts/03_export_annotation_sheets.py --phase gold --annotators JP IS`.
+4. Gdy próbę główną dzielicie między osoby, eksportuje tylko kolejne jednostki za ostatnim wierszem zakodowanym przez kogoś innego, np. `uv run scripts/03_export_annotation_sheets.py --phase gold --annotators JP --after annotations/sheets/gold_IS.xlsx --reddit 60 --wikipedia 130`. Arkusz ma te same zakładki i kolumny, ale tylko wybrane wiersze. Zgodność liczymy wtedy tylko na pilotażu, który obie osoby kodują w całości.
 
 **Annotator:**
 
@@ -170,7 +171,7 @@ Etykietę wybierasz zawsze, także przy wątpliwościach; `source_types` nigdy n
 
 1. Sprawdź, czy każdy wiersz ma `source_types` i czy `none` nie występuje razem z innymi kodami.
 2. Zapisz plik jako `.xlsx` pod tą samą nazwą (np. `pilot_JP.xlsx`) i oddaj go koordynatorowi poza gitem.
-3. Koordynator kopiuje plik do `annotations/sheets/` i uruchamia `make import-labels`. Bez `make`: `uv run scripts/04_import_annotations.py --phase pilot`; z opcją `--check` skrypt tylko sprawdza arkusze. Arkusz z błędami nie jest importowany. Typowe komunikaty:
+3. Koordynator kopiuje plik do `annotations/sheets/` i uruchamia `make import-labels`. Bez `make`: `uv run scripts/04_import_annotations.py --phase pilot`; z opcją `--check` skrypt tylko sprawdza arkusze. Gdy próba główna jest podzielona między osoby albo zakodowana tylko w części, import uruchamia z `--partial` (`make import-labels PHASE=gold PARTIAL=1`). Wiersze bez żadnej etykiety są wtedy pomijane, a brakujące jednostki nie są błędem. Wiersze częściowo wypełnione nadal są sprawdzane. Arkusz z błędami nie jest importowany. Typowe komunikaty:
 
    | Komunikat | Co poprawić |
    |---|---|

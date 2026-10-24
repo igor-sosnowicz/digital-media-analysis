@@ -45,7 +45,7 @@ The frozen baseline instrument is `src/digital_media_analysis/instruments/rules_
 
 # Gold standard
 
-The sample holds 500 Reddit posts and 500 Wikipedia edit summaries (pilot, dev and test together), split as evenly as possible across the years of each platform's study period (`study_periods` in `config.yaml`). Each period serves one hypothesis:
+The sample holds 500 Reddit posts and 500 Wikipedia edit summaries (pilot, dev and test together), plus later pilot rounds drawn from outside it (currently `pilot2`: 30 posts and 30 summaries, so the CSVs hold 530 rows each). The 500 are split as evenly as possible across the years of each platform's study period (`study_periods` in `config.yaml`). Each period serves one hypothesis:
 
 - Reddit, 2005–2020: online trust in the scientific consensus declines. Years get 31 or 32 posts.
 - Wikipedia, 2020 to 13 October 2026: users cite alternative sources (blogs, influencers, "independent experts") more often. 2023, 2025 and 2026 are smaller than an even share, so they are taken whole (72, 53 and 59 summaries); the other years get 79.
@@ -79,4 +79,41 @@ make import-labels
 make agreement
 ```
 
-Both take `PHASE=gold` for the main sample.
+Both take `PHASE=gold` for the main sample. `DROP_INVALID=1` imports a workbook without its invalid rows (they are listed) instead of rejecting it; header and manifest problems still block.
+
+By default every annotator gets every unit of a phase, as agreement needs. To split the main sample between annotators instead, export only the units after the last row someone already coded and cap how many each platform gets, then import with `PARTIAL=1` (`--partial`), which skips rows without labels and does not require every unit of the phase:
+
+```bash
+uv run scripts/03_export_annotation_sheets.py --phase gold --annotators JP --after annotations/sheets/gold_IS.xlsx --reddit 60 --wikipedia 130
+make import-labels PHASE=gold PARTIAL=1
+```
+
+Agreement is computed only on units at least two people coded, so with a split main sample the pilot is the agreement set.
+
+Another pilot round takes fresh units from the frame that are in none of the earlier splits, so it never touches dev or test. It is appended to the manifest with phase `pilot` and the next split name (`pilot2`, `pilot3`, ...); every pilot workbook then lists the first round, then the next. Re-export the CSVs and the pilot workbooks afterwards:
+
+```bash
+make pilot-round REDDIT=30 WIKIPEDIA=30
+make sample-csv
+```
+
+# Instrument validation
+
+Three instruments label the gold units in codebook space (`cites_source`, `source_types`, `edit_about_sources`), and `scripts/07_validate_instruments.py` compares them with the imported gold labels:
+
+- `rules_v1`: the frozen keyword and regex extractor from the EDA notebooks (`instruments/rules_v1.py`); it reads only the Reddit post body and does not measure `edit_about_sources`;
+- `zeroshot_v1`: a multilingual NLI model ([`MoritzLaurer/mDeBERTa-v3-base-xnli-multilingual-nli-2mil7`](https://huggingface.co/MoritzLaurer/mDeBERTa-v3-base-xnli-multilingual-nli-2mil7), MIT) scores one hypothesis per category and one for `edit_about_sources` (`instruments/zeroshot_v1.py`);
+- `gliner_v1`: zero-shot entity extraction ([`urchade/gliner_multi-v2.1`](https://huggingface.co/urchade/gliner_multi-v2.1), Apache-2.0) finds source mentions and maps their labels onto the categories (`instruments/gliner_v1.py`).
+
+Both models are pinned to a Hugging Face commit and run locally, so no text leaves the machine; a CPU is enough. Install their dependencies with `uv sync --group ml`; the models (about 2.5 GB each) download on first use. The instruments read each unit as the codebook defines it: Reddit title, body and post link (without the author's own image and video hosts, R3), Wikipedia edit summary without the automatic section prefix (R9).
+
+Import the gold labels, tune the model instruments on the dev split, freeze the chosen hypothesis language and thresholds in the instrument modules and commit them, then run the test split once:
+
+```bash
+make import-labels PHASE=gold PARTIAL=1 DROP_INVALID=1
+make tune
+make validate SPLIT=test FROZEN=1
+```
+
+The test split refuses to run without `FROZEN=1` or with uncommitted instrument or validation code. Metrics are weighted by the design weights of the coded units in each stratum, with stratified bootstrap intervals: precision, recall, F1 and kappa for `cites_source` and `edit_about_sources`, one-vs-rest F1 for every category (judged only with at least 10 gold positives), and the weighted MASI similarity and macro-F1 for the label set. They are reported per platform, split and annotator. Results go to `annotations/validation/` (metrics, confusion counts, run settings with the commit), instrument labels to `annotations/predictions/`, and raw model output is cached in `data/model_cache/`.
+

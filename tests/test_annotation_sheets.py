@@ -1,7 +1,8 @@
 import pandas as pd
+import pytest
 from openpyxl import load_workbook
 
-from digital_media_analysis.annotation_sheets import read_workbook, write_workbook
+from digital_media_analysis.annotation_sheets import coded_unit_ids, read_workbook, units_after, workbook_metadata, write_workbook
 from digital_media_analysis.codebook import load_codebook
 
 
@@ -83,3 +84,48 @@ def test_problems_are_reported(tmp_path):
     assert any("COVID-19#4" in problem and "nieznane kody ['oficjalne']" in problem for problem in problems)
     # A label that breaks R13 gives no cites_source.
     assert labels["cites_source"].isna().all()
+
+
+def test_partial_read_skips_rows_without_labels_and_checks_the_rest(tmp_path):
+    path = tmp_path / "gold_A.xlsx"
+    write_workbook(path, "A", "gold", units(), load_codebook())
+    fill(path, {
+        "Reddit": [["media", None, None], [None, None, None]],
+        "Wikipedia": [[None, None, None], ["none;media", 1, None]],
+    })
+    labels, problems = read_workbook(path, load_codebook(), partial=True)
+    assert labels["unit_id"].tolist() == ["r1", "COVID-19#4"]
+    assert problems == ["Wikipedia, wiersz 3 (COVID-19#4): none razem z innymi kodami (media;none)"]
+    # Without partial the empty rows are reported.
+    _, problems = read_workbook(path, load_codebook())
+    assert any("r2" in problem and "source_types brak wartości" in problem for problem in problems)
+
+
+def test_coded_unit_ids_lists_rows_with_any_label(tmp_path):
+    path = tmp_path / "gold_A.xlsx"
+    write_workbook(path, "A", "gold", units(), load_codebook())
+    # A note alone counts as started work; the prefilled annotator column does not.
+    fill(path, {"Reddit": [[None, None, None, "R2?"], [None, None, None]], "Wikipedia": [["none", 0, None]]})
+    assert coded_unit_ids(path) == {"reddit": ["r1"], "wikipedia": ["COVID-19#3"]}
+    assert workbook_metadata(path)["phase"] == "gold"
+
+
+def presentation() -> pd.DataFrame:
+    return pd.DataFrame({"unit_id": [f"u{i}" for i in range(1, 9)]})
+
+
+def test_units_after_starts_behind_the_last_coded_unit():
+    # u3 was skipped by the first annotator: it stays theirs and is not handed over.
+    chosen = units_after(presentation(), ["u1", "u2", "u4"], count=3)
+    assert chosen["unit_id"].tolist() == ["u5", "u6", "u7"]
+    assert units_after(presentation(), ["u1", "u2", "u4"])["unit_id"].tolist() == ["u5", "u6", "u7", "u8"]
+
+
+def test_units_after_without_coded_units_takes_the_first_ones():
+    assert units_after(presentation(), [], count=2)["unit_id"].tolist() == ["u1", "u2"]
+    assert units_after(presentation(), ["u8"], count=5).empty
+
+
+def test_units_after_rejects_units_from_another_phase():
+    with pytest.raises(ValueError, match="not in this phase"):
+        units_after(presentation(), ["u1", "x9"])

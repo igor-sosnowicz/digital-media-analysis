@@ -1,0 +1,592 @@
+instrument,platform,split,subset,variable,metric,value,low,high,support,units,note
+rules_v1,reddit,dev,all,cites_source,precision,,,,73,78,
+rules_v1,reddit,dev,all,cites_source,recall,0.0,0.0,0.0,73,78,
+rules_v1,reddit,dev,all,cites_source,f1,0.0,0.0,0.0,73,78,
+rules_v1,reddit,dev,all,cites_source,accuracy,0.07038714246161054,0.026847875135774118,0.12523534172470344,73,78,
+rules_v1,reddit,dev,all,cites_source,kappa,0.0,0.0,0.0,73,78,
+rules_v1,reddit,dev,all,source_types:scientific,precision,,,,3,78,za mało przypadków
+rules_v1,reddit,dev,all,source_types:scientific,recall,0.0,0.0,0.0,3,78,za mało przypadków
+rules_v1,reddit,dev,all,source_types:scientific,f1,0.0,0.0,0.0,3,78,za mało przypadków
+rules_v1,reddit,dev,all,source_types:institutional,precision,,,,2,78,za mało przypadków
+rules_v1,reddit,dev,all,source_types:institutional,recall,0.0,0.0,0.0,2,78,za mało przypadków
+rules_v1,reddit,dev,all,source_types:institutional,f1,0.0,0.0,0.0,2,78,za mało przypadków
+rules_v1,reddit,dev,all,source_types:media,precision,,,,38,78,
+rules_v1,reddit,dev,all,source_types:media,recall,0.0,0.0,0.0,38,78,
+rules_v1,reddit,dev,all,source_types:media,f1,0.0,0.0,0.0,38,78,
+rules_v1,reddit,dev,all,source_types:personal,precision,,,,2,78,za mało przypadków
+rules_v1,reddit,dev,all,source_types:personal,recall,0.0,0.0,0.0,2,78,za mało przypadków
+rules_v1,reddit,dev,all,source_types:personal,f1,0.0,0.0,0.0,2,78,za mało przypadków
+rules_v1,reddit,dev,all,source_types:social_blog,precision,,,,28,78,
+rules_v1,reddit,dev,all,source_types:social_blog,recall,0.0,0.0,0.0,28,78,
+rules_v1,reddit,dev,all,source_types:social_blog,f1,0.0,0.0,0.0,28,78,
+rules_v1,reddit,dev,all,source_types:encyclopedia,precision,,,,0,78,za mało przypadków
+rules_v1,reddit,dev,all,source_types:encyclopedia,recall,,,,0,78,za mało przypadków
+rules_v1,reddit,dev,all,source_types:encyclopedia,f1,,,,0,78,za mało przypadków
+rules_v1,reddit,dev,all,source_types:other,precision,,,,1,78,za mało przypadków
+rules_v1,reddit,dev,all,source_types:other,recall,0.0,0.0,0.0,1,78,za mało przypadków
+rules_v1,reddit,dev,all,source_types:other,f1,0.0,0.0,0.0,1,78,za mało przypadków
+rules_v1,reddit,dev,all,source_types:unknown,precision,,,,1,78,za mało przypadków
+rules_v1,reddit,dev,all,source_types:unknown,recall,0.0,0.0,0.0,1,78,za mało przypadków
+rules_v1,reddit,dev,all,source_types:unknown,f1,0.0,0.0,0.0,1,78,za mało przypadków
+rules_v1,reddit,dev,all,source_types,masi,0.07038714246161054,0.026847875135774118,0.12523534172470344,78,78,
+rules_v1,reddit,dev,all,source_types,exact_match,0.07038714246161054,0.026847875135774118,0.12523534172470344,78,78,
+rules_v1,reddit,dev,all,source_types,macro_f1,0.0,0.0,0.0,78,78,
+rules_v1,reddit,dev,IS,cites_source,precision,,,,32,33,
+rules_v1,reddit,dev,IS,cites_source,recall,0.0,0.0,0.0,32,33,
+rules_v1,reddit,dev,IS,cites_source,f1,0.0,0.0,0.0,32,33,
+rules_v1,reddit,dev,IS,cites_source,accuracy,0.033670538342156234,0.0,0.06734107668431247,32,33,
+rules_v1,reddit,dev,IS,cites_source,kappa,0.0,0.0,0.0,32,33,
+rules_v1,reddit,dev,IS,source_types:scientific,precision,,,,2,33,za mało przypadków
+rules_v1,reddit,dev,IS,source_types:scientific,recall,0.0,0.0,0.0,2,33,za mało przypadków
+rules_v1,reddit,dev,IS,source_types:scientific,f1,0.0,0.0,0.0,2,33,za mało przypadków
+rules_v1,reddit,dev,IS,source_types:institutional,precision,,,,1,33,za mało przypadków
+rules_v1,reddit,dev,IS,source_types:institutional,recall,0.0,0.0,0.0,1,33,za mało przypadków
+rules_v1,reddit,dev,IS,source_types:institutional,f1,0.0,0.0,0.0,1,33,za mało przypadków
+rules_v1,reddit,dev,IS,source_types:media,precision,,,,13,33,
+rules_v1,reddit,dev,IS,source_types:media,recall,0.0,0.0,0.0,13,33,
+rules_v1,reddit,dev,IS,source_types:media,f1,0.0,0.0,0.0,13,33,
+rules_v1,reddit,dev,IS,source_types:personal,precision,,,,1,33,za mało przypadków
+rules_v1,reddit,dev,IS,source_types:personal,recall,0.0,0.0,0.0,1,33,za mało przypadków
+rules_v1,reddit,dev,IS,source_types:personal,f1,0.0,0.0,0.0,1,33,za mało przypadków
+rules_v1,reddit,dev,IS,source_types:social_blog,precision,,,,14,33,
+rules_v1,reddit,dev,IS,source_types:social_blog,recall,0.0,0.0,0.0,14,33,
+rules_v1,reddit,dev,IS,source_types:social_blog,f1,0.0,0.0,0.0,14,33,
+rules_v1,reddit,dev,IS,source_types:encyclopedia,precision,,,,0,33,za mało przypadków
+rules_v1,reddit,dev,IS,source_types:encyclopedia,recall,,,,0,33,za mało przypadków
+rules_v1,reddit,dev,IS,source_types:encyclopedia,f1,,,,0,33,za mało przypadków
+rules_v1,reddit,dev,IS,source_types:other,precision,,,,1,33,za mało przypadków
+rules_v1,reddit,dev,IS,source_types:other,recall,0.0,0.0,0.0,1,33,za mało przypadków
+rules_v1,reddit,dev,IS,source_types:other,f1,0.0,0.0,0.0,1,33,za mało przypadków
+rules_v1,reddit,dev,IS,source_types:unknown,precision,,,,0,33,za mało przypadków
+rules_v1,reddit,dev,IS,source_types:unknown,recall,,,,0,33,za mało przypadków
+rules_v1,reddit,dev,IS,source_types:unknown,f1,,,,0,33,za mało przypadków
+rules_v1,reddit,dev,IS,source_types,masi,0.033670538342156234,0.0,0.06734107668431247,33,33,
+rules_v1,reddit,dev,IS,source_types,exact_match,0.033670538342156234,0.0,0.06734107668431247,33,33,
+rules_v1,reddit,dev,IS,source_types,macro_f1,0.0,0.0,0.0,33,33,
+rules_v1,reddit,dev,JP,cites_source,precision,,,,41,45,
+rules_v1,reddit,dev,JP,cites_source,recall,0.0,0.0,0.0,41,45,
+rules_v1,reddit,dev,JP,cites_source,f1,0.0,0.0,0.0,41,45,
+rules_v1,reddit,dev,JP,cites_source,accuracy,0.09181723530742313,0.022948142804652617,0.1606863278101936,41,45,
+rules_v1,reddit,dev,JP,cites_source,kappa,0.0,0.0,0.0,41,45,
+rules_v1,reddit,dev,JP,source_types:scientific,precision,,,,1,45,za mało przypadków
+rules_v1,reddit,dev,JP,source_types:scientific,recall,0.0,0.0,0.0,1,45,za mało przypadków
+rules_v1,reddit,dev,JP,source_types:scientific,f1,0.0,0.0,0.0,1,45,za mało przypadków
+rules_v1,reddit,dev,JP,source_types:institutional,precision,,,,1,45,za mało przypadków
+rules_v1,reddit,dev,JP,source_types:institutional,recall,0.0,0.0,0.0,1,45,za mało przypadków
+rules_v1,reddit,dev,JP,source_types:institutional,f1,0.0,0.0,0.0,1,45,za mało przypadków
+rules_v1,reddit,dev,JP,source_types:media,precision,,,,25,45,
+rules_v1,reddit,dev,JP,source_types:media,recall,0.0,0.0,0.0,25,45,
+rules_v1,reddit,dev,JP,source_types:media,f1,0.0,0.0,0.0,25,45,
+rules_v1,reddit,dev,JP,source_types:personal,precision,,,,1,45,za mało przypadków
+rules_v1,reddit,dev,JP,source_types:personal,recall,0.0,0.0,0.0,1,45,za mało przypadków
+rules_v1,reddit,dev,JP,source_types:personal,f1,0.0,0.0,0.0,1,45,za mało przypadków
+rules_v1,reddit,dev,JP,source_types:social_blog,precision,,,,14,45,
+rules_v1,reddit,dev,JP,source_types:social_blog,recall,0.0,0.0,0.0,14,45,
+rules_v1,reddit,dev,JP,source_types:social_blog,f1,0.0,0.0,0.0,14,45,
+rules_v1,reddit,dev,JP,source_types:encyclopedia,precision,,,,0,45,za mało przypadków
+rules_v1,reddit,dev,JP,source_types:encyclopedia,recall,,,,0,45,za mało przypadków
+rules_v1,reddit,dev,JP,source_types:encyclopedia,f1,,,,0,45,za mało przypadków
+rules_v1,reddit,dev,JP,source_types:other,precision,,,,0,45,za mało przypadków
+rules_v1,reddit,dev,JP,source_types:other,recall,,,,0,45,za mało przypadków
+rules_v1,reddit,dev,JP,source_types:other,f1,,,,0,45,za mało przypadków
+rules_v1,reddit,dev,JP,source_types:unknown,precision,,,,1,45,za mało przypadków
+rules_v1,reddit,dev,JP,source_types:unknown,recall,0.0,0.0,0.0,1,45,za mało przypadków
+rules_v1,reddit,dev,JP,source_types:unknown,f1,0.0,0.0,0.0,1,45,za mało przypadków
+rules_v1,reddit,dev,JP,source_types,masi,0.09181723530742313,0.022948142804652617,0.1606863278101936,45,45,
+rules_v1,reddit,dev,JP,source_types,exact_match,0.09181723530742313,0.022948142804652617,0.1606863278101936,45,45,
+rules_v1,reddit,dev,JP,source_types,macro_f1,0.0,0.0,0.0,45,45,
+rules_v1,wikipedia,dev,all,cites_source,precision,0.19787348217047523,0.09773891883379048,0.3395287151402387,23,147,
+rules_v1,wikipedia,dev,all,cites_source,recall,0.24922081930974047,0.120223105840179,0.4880835018983682,23,147,
+rules_v1,wikipedia,dev,all,cites_source,f1,0.2205986127889816,0.11864299305114724,0.3495983793180623,23,147,
+rules_v1,wikipedia,dev,all,cites_source,accuracy,0.7885892953200646,0.7102952864443249,0.8566549649602533,23,147,
+rules_v1,wikipedia,dev,all,cites_source,kappa,0.17392525990446722,0.022683426277819125,0.3294500337291367,23,147,
+rules_v1,wikipedia,dev,all,source_types:scientific,precision,,,,0,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:scientific,recall,,,,0,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:scientific,f1,,,,0,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:institutional,precision,0.5970149253731343,0.3305785123966942,1.0,4,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:institutional,recall,0.15762352227947862,0.07356592120275136,1.0,4,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:institutional,f1,0.24940047961630696,0.1293452794153438,0.7476635514018691,4,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:media,precision,,,,1,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:media,recall,0.0,0.0,0.0,1,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:media,f1,0.0,0.0,0.0,1,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:personal,precision,,,,5,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:personal,recall,0.0,0.0,0.0,5,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:personal,f1,0.0,0.0,0.0,5,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:social_blog,precision,,,,0,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:social_blog,recall,,,,0,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:social_blog,f1,,,,0,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:encyclopedia,precision,0.0,0.0,0.0,4,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:encyclopedia,recall,0.0,0.0,0.0,4,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:encyclopedia,f1,0.0,0.0,0.0,4,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:other,precision,1.0,1.0,1.0,7,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:other,recall,0.05871958678809298,0.030538668174749043,0.21974776067315502,7,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:other,f1,0.11092566439851073,0.059267389216627796,0.36031435963777464,7,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:unknown,precision,0.0383325347388596,0.0,0.1273328298185313,2,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:unknown,recall,0.5803108808290155,0.0,1.0,2,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types:unknown,f1,0.0719147296776679,0.0,0.2195727824971956,2,147,za mało przypadków
+rules_v1,wikipedia,dev,all,source_types,masi,0.7675286892594585,0.6898940383868267,0.8378327879385572,147,147,
+rules_v1,wikipedia,dev,all,source_types,exact_match,0.7675286892594585,0.6898940383868267,0.8378327879385572,147,147,
+rules_v1,wikipedia,dev,all,source_types,macro_f1,,0.0,0.10873183645227856,147,147,
+rules_v1,wikipedia,dev,IS,cites_source,precision,0.28644113183968584,0.10792521710235405,0.5589520590424591,17,67,
+rules_v1,wikipedia,dev,IS,cites_source,recall,0.21265449824814195,0.07862591338880341,0.4922176533418005,17,67,
+rules_v1,wikipedia,dev,IS,cites_source,f1,0.24409348227825267,0.09552342185649372,0.4385623175613284,17,67,
+rules_v1,wikipedia,dev,IS,cites_source,accuracy,0.7392642829644163,0.6038694488168582,0.8518757640978738,17,67,
+rules_v1,wikipedia,dev,IS,cites_source,kappa,0.13294117647058834,-0.08533351961529503,0.36545961002785543,17,67,
+rules_v1,wikipedia,dev,IS,source_types:scientific,precision,,,,0,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:scientific,recall,,,,0,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:scientific,f1,,,,0,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:institutional,precision,0.0,0.0,0.0,3,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:institutional,recall,0.0,0.0,0.0,3,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:institutional,f1,0.0,0.0,0.0,3,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:media,precision,,,,1,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:media,recall,0.0,0.0,0.0,1,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:media,f1,0.0,0.0,0.0,1,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:personal,precision,,,,5,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:personal,recall,0.0,0.0,0.0,5,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:personal,f1,0.0,0.0,0.0,5,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:social_blog,precision,,,,0,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:social_blog,recall,,,,0,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:social_blog,f1,,,,0,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:encyclopedia,precision,0.0,0.0,0.0,3,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:encyclopedia,recall,0.0,0.0,0.0,3,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:encyclopedia,f1,0.0,0.0,0.0,3,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:other,precision,,,,5,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:other,recall,0.0,0.0,0.0,5,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:other,f1,0.0,0.0,0.0,5,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:unknown,precision,0.0,0.0,0.0,0,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:unknown,recall,,,,0,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types:unknown,f1,0.0,0.0,0.0,0,67,za mało przypadków
+rules_v1,wikipedia,dev,IS,source_types,masi,0.6971665581575505,0.56326873775278,0.8057740655195481,67,67,
+rules_v1,wikipedia,dev,IS,source_types,exact_match,0.6971665581575505,0.56326873775278,0.8057740655195481,67,67,
+rules_v1,wikipedia,dev,IS,source_types,macro_f1,,0.0,0.0,67,67,
+rules_v1,wikipedia,dev,JP,cites_source,precision,0.13057157565933647,0.05811208147416986,0.2617964029786772,6,80,
+rules_v1,wikipedia,dev,JP,cites_source,recall,0.34936479128856623,0.14963364972901777,1.0,6,80,
+rules_v1,wikipedia,dev,JP,cites_source,f1,0.19009649786924807,0.09212051889491184,0.31096185874819704,6,80,
+rules_v1,wikipedia,dev,JP,cites_source,accuracy,0.8280127483797355,0.75935382587834,0.8991452149282779,6,80,
+rules_v1,wikipedia,dev,JP,cites_source,kappa,0.2173913043478258,0.07513422335589232,0.36430317848410765,6,80,
+rules_v1,wikipedia,dev,JP,source_types:scientific,precision,,,,0,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:scientific,recall,,,,0,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:scientific,f1,,,,0,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:institutional,precision,1.0,1.0,1.0,1,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:institutional,recall,1.0,1.0,1.0,1,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:institutional,f1,1.0,1.0,1.0,1,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:media,precision,,,,0,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:media,recall,,,,0,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:media,f1,,,,0,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:personal,precision,,,,0,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:personal,recall,,,,0,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:personal,f1,,,,0,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:social_blog,precision,,,,0,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:social_blog,recall,,,,0,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:social_blog,f1,,,,0,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:encyclopedia,precision,0.0,0.0,0.0,1,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:encyclopedia,recall,0.0,0.0,0.0,1,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:encyclopedia,f1,0.0,0.0,0.0,1,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:other,precision,1.0,1.0,1.0,2,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:other,recall,0.12834224598930483,0.04678362573099415,1.0,2,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:other,f1,0.22748815165876776,0.0893854748603352,1.0,2,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:unknown,precision,0.07004377736085052,0.0,0.27965043695380776,2,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:unknown,recall,0.5803108808290155,0.0,1.0,2,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types:unknown,f1,0.125,0.0,0.4050632911392405,2,80,za mało przypadków
+rules_v1,wikipedia,dev,JP,source_types,masi,0.823766245829616,0.7552094665685719,0.8950282044929583,80,80,
+rules_v1,wikipedia,dev,JP,source_types,exact_match,0.823766245829616,0.7552094665685719,0.8950282044929583,80,80,
+rules_v1,wikipedia,dev,JP,source_types,macro_f1,,,,80,80,
+zeroshot_v1,reddit,dev,all,cites_source,precision,0.9377225804671239,0.8858313085733234,0.984025049447605,73,78,
+zeroshot_v1,reddit,dev,all,cites_source,recall,0.9390815582231649,0.8905890537335734,0.9787327285983308,73,78,
+zeroshot_v1,reddit,dev,all,cites_source,f1,0.9384015773330843,0.9040988737271975,0.9703618858613989,73,78,
+zeroshot_v1,reddit,dev,all,cites_source,accuracy,0.8853916416416415,0.8273839863799971,0.9435155900581432,73,78,
+zeroshot_v1,reddit,dev,all,cites_source,kappa,0.12030075187969827,-0.08333333333333463,0.4144144144144139,73,78,
+zeroshot_v1,reddit,dev,all,source_types:scientific,precision,0.0,0.0,0.0,3,78,za mało przypadków
+zeroshot_v1,reddit,dev,all,source_types:scientific,recall,0.0,0.0,0.0,3,78,za mało przypadków
+zeroshot_v1,reddit,dev,all,source_types:scientific,f1,0.0,0.0,0.0,3,78,za mało przypadków
+zeroshot_v1,reddit,dev,all,source_types:institutional,precision,0.0,0.0,0.0,2,78,za mało przypadków
+zeroshot_v1,reddit,dev,all,source_types:institutional,recall,0.0,0.0,0.0,2,78,za mało przypadków
+zeroshot_v1,reddit,dev,all,source_types:institutional,f1,0.0,0.0,0.0,2,78,za mało przypadków
+zeroshot_v1,reddit,dev,all,source_types:media,precision,0.8931431158006462,0.6548886866495178,1.0,38,78,
+zeroshot_v1,reddit,dev,all,source_types:media,recall,0.34153777650975026,0.18143731679939112,0.47842501140066956,38,78,
+zeroshot_v1,reddit,dev,all,source_types:media,f1,0.4941230009719079,0.29818503012602077,0.6327128071863574,38,78,
+zeroshot_v1,reddit,dev,all,source_types:personal,precision,0.5,0.0,1.0,2,78,za mało przypadków
+zeroshot_v1,reddit,dev,all,source_types:personal,recall,0.5171552991429285,0.0,1.0,2,78,za mało przypadków
+zeroshot_v1,reddit,dev,all,source_types:personal,f1,0.5084329792890937,0.0,1.0,2,78,za mało przypadków
+zeroshot_v1,reddit,dev,all,source_types:social_blog,precision,0.44107318877186524,0.34250544708837377,0.5384138279158467,28,78,
+zeroshot_v1,reddit,dev,all,source_types:social_blog,recall,0.9630629384923379,0.8928705576147385,1.0,28,78,
+zeroshot_v1,reddit,dev,all,source_types:social_blog,f1,0.6050428203089614,0.5045229286768583,0.6924526593020633,28,78,
+zeroshot_v1,reddit,dev,all,source_types:encyclopedia,precision,,,,0,78,za mało przypadków
+zeroshot_v1,reddit,dev,all,source_types:encyclopedia,recall,,,,0,78,za mało przypadków
+zeroshot_v1,reddit,dev,all,source_types:encyclopedia,f1,,,,0,78,za mało przypadków
+zeroshot_v1,reddit,dev,all,source_types:other,precision,0.0,0.0,0.0,1,78,za mało przypadków
+zeroshot_v1,reddit,dev,all,source_types:other,recall,0.0,0.0,0.0,1,78,za mało przypadków
+zeroshot_v1,reddit,dev,all,source_types:other,f1,0.0,0.0,0.0,1,78,za mało przypadków
+zeroshot_v1,reddit,dev,all,source_types:unknown,precision,0.07585731582681832,0.0,0.21946655677199575,1,78,za mało przypadków
+zeroshot_v1,reddit,dev,all,source_types:unknown,recall,1.0,1.0,1.0,1,78,za mało przypadków
+zeroshot_v1,reddit,dev,all,source_types:unknown,f1,0.14101742807506107,0.0,0.3599384051678365,1,78,za mało przypadków
+zeroshot_v1,reddit,dev,all,source_types,masi,0.4289063147071421,0.3444511318351448,0.5174596423403308,78,78,
+zeroshot_v1,reddit,dev,all,source_types,exact_match,0.3577340638510852,0.2702766496549741,0.4498224554341575,78,78,
+zeroshot_v1,reddit,dev,all,source_types,macro_f1,0.5495829106404346,0.44448025864034796,0.6302664374047464,78,78,
+zeroshot_v1,reddit,dev,IS,cites_source,precision,1.0,1.0,1.0,32,33,
+zeroshot_v1,reddit,dev,IS,cites_source,recall,0.8732595880570327,0.790150385944244,0.9316624981578836,32,33,
+zeroshot_v1,reddit,dev,IS,cites_source,f1,0.9323423124317628,0.8827754273029595,0.964618679159324,32,33,
+zeroshot_v1,reddit,dev,IS,cites_source,accuracy,0.8775270059568592,0.7972161354203949,0.9317386042970426,32,33,
+zeroshot_v1,reddit,dev,IS,cites_source,kappa,0.2978723404255316,0.0,0.6373626373626374,32,33,
+zeroshot_v1,reddit,dev,IS,source_types:scientific,precision,,,,2,33,za mało przypadków
+zeroshot_v1,reddit,dev,IS,source_types:scientific,recall,0.0,0.0,0.0,2,33,za mało przypadków
+zeroshot_v1,reddit,dev,IS,source_types:scientific,f1,0.0,0.0,0.0,2,33,za mało przypadków
+zeroshot_v1,reddit,dev,IS,source_types:institutional,precision,,,,1,33,za mało przypadków
+zeroshot_v1,reddit,dev,IS,source_types:institutional,recall,0.0,0.0,0.0,1,33,za mało przypadków
+zeroshot_v1,reddit,dev,IS,source_types:institutional,f1,0.0,0.0,0.0,1,33,za mało przypadków
+zeroshot_v1,reddit,dev,IS,source_types:media,precision,0.6895674531018314,0.3951361738784706,1.0,13,33,
+zeroshot_v1,reddit,dev,IS,source_types:media,recall,0.24879057523955364,0.09357463949102586,0.4352594460807608,13,33,
+zeroshot_v1,reddit,dev,IS,source_types:media,f1,0.3656554921300549,0.15572983363274018,0.5457964199921793,13,33,
+zeroshot_v1,reddit,dev,IS,source_types:personal,precision,,,,1,33,za mało przypadków
+zeroshot_v1,reddit,dev,IS,source_types:personal,recall,0.0,0.0,0.0,1,33,za mało przypadków
+zeroshot_v1,reddit,dev,IS,source_types:personal,f1,0.0,0.0,0.0,1,33,za mało przypadków
+zeroshot_v1,reddit,dev,IS,source_types:social_blog,precision,0.4572140282997064,0.3033146388506714,0.6078145204060653,14,33,
+zeroshot_v1,reddit,dev,IS,source_types:social_blog,recall,0.9014869449273406,0.852411325549494,0.9275951288918749,14,33,
+zeroshot_v1,reddit,dev,IS,source_types:social_blog,f1,0.606715510876356,0.446960873483428,0.7339606099501873,14,33,
+zeroshot_v1,reddit,dev,IS,source_types:encyclopedia,precision,,,,0,33,za mało przypadków
+zeroshot_v1,reddit,dev,IS,source_types:encyclopedia,recall,,,,0,33,za mało przypadków
+zeroshot_v1,reddit,dev,IS,source_types:encyclopedia,f1,,,,0,33,za mało przypadków
+zeroshot_v1,reddit,dev,IS,source_types:other,precision,,,,1,33,za mało przypadków
+zeroshot_v1,reddit,dev,IS,source_types:other,recall,0.0,0.0,0.0,1,33,za mało przypadków
+zeroshot_v1,reddit,dev,IS,source_types:other,f1,0.0,0.0,0.0,1,33,za mało przypadków
+zeroshot_v1,reddit,dev,IS,source_types:unknown,precision,0.0,0.0,0.0,0,33,za mało przypadków
+zeroshot_v1,reddit,dev,IS,source_types:unknown,recall,,,,0,33,za mało przypadków
+zeroshot_v1,reddit,dev,IS,source_types:unknown,f1,0.0,0.0,0.0,0,33,za mało przypadków
+zeroshot_v1,reddit,dev,IS,source_types,masi,0.3934068468905783,0.2768626967997368,0.5118358307981858,33,33,
+zeroshot_v1,reddit,dev,IS,source_types,exact_match,0.3254392519921509,0.19788597055484783,0.4576418487680863,33,33,
+zeroshot_v1,reddit,dev,IS,source_types,macro_f1,0.48618550150320544,0.3670788823971059,0.7099443667556932,33,33,
+zeroshot_v1,reddit,dev,JP,cites_source,precision,0.9064806343626561,0.8363348298052197,0.9757379235546461,41,45,
+zeroshot_v1,reddit,dev,JP,cites_source,recall,0.9799590639392672,0.9400891618441186,1.0,41,45,
+zeroshot_v1,reddit,dev,JP,cites_source,f1,0.9417888255094679,0.8966192524623154,0.9789933103594188,41,45,
+zeroshot_v1,reddit,dev,JP,cites_source,accuracy,0.8899819319739135,0.8126109277934557,0.9588510244766839,41,45,
+zeroshot_v1,reddit,dev,JP,cites_source,kappa,-0.036866359447003644,-0.08006185567010328,0.0,41,45,
+zeroshot_v1,reddit,dev,JP,source_types:scientific,precision,0.0,0.0,0.0,1,45,za mało przypadków
+zeroshot_v1,reddit,dev,JP,source_types:scientific,recall,0.0,0.0,0.0,1,45,za mało przypadków
+zeroshot_v1,reddit,dev,JP,source_types:scientific,f1,0.0,0.0,0.0,1,45,za mało przypadków
+zeroshot_v1,reddit,dev,JP,source_types:institutional,precision,0.0,0.0,0.0,1,45,za mało przypadków
+zeroshot_v1,reddit,dev,JP,source_types:institutional,recall,0.0,0.0,0.0,1,45,za mało przypadków
+zeroshot_v1,reddit,dev,JP,source_types:institutional,f1,0.0,0.0,0.0,1,45,za mało przypadków
+zeroshot_v1,reddit,dev,JP,source_types:media,precision,1.0,1.0,1.0,25,45,
+zeroshot_v1,reddit,dev,JP,source_types:media,recall,0.39481107962020456,0.22788332982712606,0.542783059297102,25,45,
+zeroshot_v1,reddit,dev,JP,source_types:media,f1,0.5661140571491708,0.3711803155306805,0.7036413716052874,25,45,
+zeroshot_v1,reddit,dev,JP,source_types:personal,precision,0.5,0.0,1.0,1,45,za mało przypadków
+zeroshot_v1,reddit,dev,JP,source_types:personal,recall,1.0,1.0,1.0,1,45,za mało przypadków
+zeroshot_v1,reddit,dev,JP,source_types:personal,f1,0.6666666666666666,0.0,1.0,1,45,za mało przypadków
+zeroshot_v1,reddit,dev,JP,source_types:social_blog,precision,0.43281062466067244,0.3432933421894557,0.5285049832716308,14,45,
+zeroshot_v1,reddit,dev,JP,source_types:social_blog,recall,1.0,1.0,1.0,14,45,
+zeroshot_v1,reddit,dev,JP,source_types:social_blog,f1,0.6041421206841951,0.511121925785515,0.6915319069370865,14,45,
+zeroshot_v1,reddit,dev,JP,source_types:encyclopedia,precision,,,,0,45,za mało przypadków
+zeroshot_v1,reddit,dev,JP,source_types:encyclopedia,recall,,,,0,45,za mało przypadków
+zeroshot_v1,reddit,dev,JP,source_types:encyclopedia,f1,,,,0,45,za mało przypadków
+zeroshot_v1,reddit,dev,JP,source_types:other,precision,0.0,0.0,0.0,0,45,za mało przypadków
+zeroshot_v1,reddit,dev,JP,source_types:other,recall,,,,0,45,za mało przypadków
+zeroshot_v1,reddit,dev,JP,source_types:other,f1,0.0,0.0,0.0,0,45,za mało przypadków
+zeroshot_v1,reddit,dev,JP,source_types:unknown,precision,0.10136677974947808,0.0,0.2810719274795735,1,45,za mało przypadków
+zeroshot_v1,reddit,dev,JP,source_types:unknown,recall,1.0,1.0,1.0,1,45,za mało przypadków
+zeroshot_v1,reddit,dev,JP,source_types:unknown,f1,0.18407451834081182,0.0,0.4388074103420007,1,45,za mało przypadków
+zeroshot_v1,reddit,dev,JP,source_types,masi,0.4496260111368785,0.3762584025666956,0.526437417474556,45,45,
+zeroshot_v1,reddit,dev,JP,source_types,exact_match,0.37658332382957843,0.2976641052553693,0.46072682329276543,45,45,
+zeroshot_v1,reddit,dev,JP,source_types,macro_f1,0.585128088916683,0.495242318824882,0.6682305824622439,45,45,
+zeroshot_v1,wikipedia,dev,all,cites_source,precision,0.2196109097606583,0.05683033622078491,0.4075877450375986,23,147,
+zeroshot_v1,wikipedia,dev,all,cites_source,recall,0.5253831179176707,0.19664512301193296,0.745667111189941,23,147,
+zeroshot_v1,wikipedia,dev,all,cites_source,f1,0.3097470857809593,0.08868329768103231,0.5023465173191761,23,147,
+zeroshot_v1,wikipedia,dev,all,cites_source,accuracy,0.7188996473611858,0.6295687047994741,0.8023263291195983,23,147,
+zeroshot_v1,wikipedia,dev,all,cites_source,kappa,0.023814975956033782,-0.09054755349964767,0.14786489684861812,23,147,
+zeroshot_v1,wikipedia,dev,all,edit_about_sources,precision,0.1796481869107732,0.10694351933893033,0.2566028669581168,31,147,
+zeroshot_v1,wikipedia,dev,all,edit_about_sources,recall,0.5738164358541642,0.35754480735118394,0.7836226471128119,31,147,
+zeroshot_v1,wikipedia,dev,all,edit_about_sources,f1,0.273629522093601,0.168267365408639,0.3746515965776178,31,147,
+zeroshot_v1,wikipedia,dev,all,edit_about_sources,accuracy,0.44271427290658055,0.33358066052537205,0.5518693686121571,31,147,
+zeroshot_v1,wikipedia,dev,all,edit_about_sources,kappa,0.04810360777058284,-0.04088255189504696,0.13455306913344173,31,147,
+zeroshot_v1,wikipedia,dev,all,source_types:scientific,precision,,,,0,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:scientific,recall,,,,0,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:scientific,f1,,,,0,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:institutional,precision,,,,4,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:institutional,recall,0.0,0.0,0.0,4,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:institutional,f1,0.0,0.0,0.0,4,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:media,precision,0.009262517152809542,0.0,0.03187538047583305,1,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:media,recall,1.0,1.0,1.0,1,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:media,f1,0.018355020612356956,0.0,0.06178144863805536,1,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:personal,precision,,,,5,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:personal,recall,0.0,0.0,0.0,5,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:personal,f1,0.0,0.0,0.0,5,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:social_blog,precision,0.0,0.0,0.0,0,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:social_blog,recall,,,,0,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:social_blog,f1,0.0,0.0,0.0,0,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:encyclopedia,precision,0.0,0.0,0.0,4,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:encyclopedia,recall,0.0,0.0,0.0,4,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:encyclopedia,f1,0.0,0.0,0.0,4,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:other,precision,,,,7,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:other,recall,0.0,0.0,0.0,7,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:other,f1,0.0,0.0,0.0,7,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:unknown,precision,0.0,0.0,0.0,2,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:unknown,recall,0.0,0.0,0.0,2,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types:unknown,f1,0.0,0.0,0.0,2,147,za mało przypadków
+zeroshot_v1,wikipedia,dev,all,source_types,masi,0.6581886916502301,0.5562332104327297,0.7561818872900603,147,147,
+zeroshot_v1,wikipedia,dev,all,source_types,exact_match,0.6581886916502301,0.5562332104327297,0.7561818872900603,147,147,
+zeroshot_v1,wikipedia,dev,all,source_types,macro_f1,,0.0,0.0,147,147,
+zeroshot_v1,wikipedia,dev,IS,cites_source,precision,0.2550864276659823,0.051929940341084314,0.5486259423112684,17,67,
+zeroshot_v1,wikipedia,dev,IS,cites_source,recall,0.455792346198417,0.11385102960916346,0.7283882427669092,17,67,
+zeroshot_v1,wikipedia,dev,IS,cites_source,f1,0.327106239836692,0.07505021200738497,0.5946474809018648,17,67,
+zeroshot_v1,wikipedia,dev,IS,cites_source,accuracy,0.6287736911336642,0.47177629114775865,0.7735525091338552,17,67,
+zeroshot_v1,wikipedia,dev,IS,cites_source,kappa,-0.0062143966856551885,-0.19200939749575943,0.195898995741351,17,67,
+zeroshot_v1,wikipedia,dev,IS,edit_about_sources,precision,0.1723079681344143,0.0966391171765761,0.27091990008495026,20,67,
+zeroshot_v1,wikipedia,dev,IS,edit_about_sources,recall,0.5679654462811786,0.3276390915713849,0.8465579380944344,20,67,
+zeroshot_v1,wikipedia,dev,IS,edit_about_sources,f1,0.26440223331949586,0.15418147981800187,0.39220848075207454,20,67,
+zeroshot_v1,wikipedia,dev,IS,edit_about_sources,accuracy,0.2948665573334306,0.18122733985711112,0.4384725140045717,20,67,
+zeroshot_v1,wikipedia,dev,IS,edit_about_sources,kappa,0.03414264036418817,-0.10331407409899297,0.15441722345953968,20,67,
+zeroshot_v1,wikipedia,dev,IS,source_types:scientific,precision,,,,0,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:scientific,recall,,,,0,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:scientific,f1,,,,0,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:institutional,precision,,,,3,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:institutional,recall,0.0,0.0,0.0,3,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:institutional,f1,0.0,0.0,0.0,3,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:media,precision,0.016980839979100503,0.0,0.05671154959946706,1,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:media,recall,1.0,1.0,1.0,1,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:media,f1,0.03339461140575563,0.0,0.10733591315478366,1,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:personal,precision,,,,5,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:personal,recall,0.0,0.0,0.0,5,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:personal,f1,0.0,0.0,0.0,5,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:social_blog,precision,0.0,0.0,0.0,0,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:social_blog,recall,,,,0,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:social_blog,f1,0.0,0.0,0.0,0,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:encyclopedia,precision,0.0,0.0,0.0,3,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:encyclopedia,recall,0.0,0.0,0.0,3,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:encyclopedia,f1,0.0,0.0,0.0,3,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:other,precision,,,,5,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:other,recall,0.0,0.0,0.0,5,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:other,f1,0.0,0.0,0.0,5,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:unknown,precision,0.0,0.0,0.0,0,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:unknown,recall,,,,0,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types:unknown,f1,0.0,0.0,0.0,0,67,za mało przypadków
+zeroshot_v1,wikipedia,dev,IS,source_types,masi,0.5438567161648757,0.37910016033336175,0.6935694851622265,67,67,
+zeroshot_v1,wikipedia,dev,IS,source_types,exact_match,0.5438567161648757,0.37910016033336175,0.6935694851622265,67,67,
+zeroshot_v1,wikipedia,dev,IS,source_types,macro_f1,,0.0,0.0,67,67,
+zeroshot_v1,wikipedia,dev,JP,cites_source,precision,0.17675360647206212,0.017878993709952256,0.3708186136369241,6,80,
+zeroshot_v1,wikipedia,dev,JP,cites_source,recall,0.7159709618874772,0.187012987012987,0.8974358974358975,6,80,
+zeroshot_v1,wikipedia,dev,JP,cites_source,f1,0.28351510449730455,0.0324467962766201,0.5112295068427631,6,80,
+zeroshot_v1,wikipedia,dev,JP,cites_source,accuracy,0.790933616236346,0.6821030518225214,0.8689045145873882,6,80,
+zeroshot_v1,wikipedia,dev,JP,cites_source,kappa,0.05383360522022811,-0.042290813183011935,0.1666666666666665,6,80,
+zeroshot_v1,wikipedia,dev,JP,edit_about_sources,precision,0.18895793851199708,0.06858913230192226,0.31975119997644236,11,80,
+zeroshot_v1,wikipedia,dev,JP,edit_about_sources,recall,0.5807356247247781,0.23161695880636587,0.9164331692020032,11,80,
+zeroshot_v1,wikipedia,dev,JP,edit_about_sources,f1,0.28513842835584163,0.10664724371395264,0.4480805419832716,11,80,
+zeroshot_v1,wikipedia,dev,JP,edit_about_sources,accuracy,0.5608828692538295,0.4059162592116776,0.6946089043741127,11,80,
+zeroshot_v1,wikipedia,dev,JP,edit_about_sources,kappa,0.041167274622199025,-0.06439595529536983,0.1404739146094811,11,80,
+zeroshot_v1,wikipedia,dev,JP,source_types:scientific,precision,,,,0,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:scientific,recall,,,,0,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:scientific,f1,,,,0,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:institutional,precision,,,,1,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:institutional,recall,0.0,0.0,0.0,1,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:institutional,f1,0.0,0.0,0.0,1,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:media,precision,0.0,0.0,0.0,0,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:media,recall,,,,0,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:media,f1,0.0,0.0,0.0,0,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:personal,precision,,,,0,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:personal,recall,,,,0,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:personal,f1,,,,0,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:social_blog,precision,0.0,0.0,0.0,0,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:social_blog,recall,,,,0,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:social_blog,f1,0.0,0.0,0.0,0,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:encyclopedia,precision,0.0,0.0,0.0,1,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:encyclopedia,recall,0.0,0.0,0.0,1,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:encyclopedia,f1,0.0,0.0,0.0,1,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:other,precision,,,,2,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:other,recall,0.0,0.0,0.0,2,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:other,f1,0.0,0.0,0.0,2,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:unknown,precision,0.0,0.0,0.0,2,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:unknown,recall,0.0,0.0,0.0,2,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types:unknown,f1,0.0,0.0,0.0,2,80,za mało przypadków
+zeroshot_v1,wikipedia,dev,JP,source_types,masi,0.7495695358407369,0.6271588807622681,0.8430198198348368,80,80,
+zeroshot_v1,wikipedia,dev,JP,source_types,exact_match,0.7495695358407369,0.6271588807622681,0.8430198198348368,80,80,
+zeroshot_v1,wikipedia,dev,JP,source_types,macro_f1,,,,80,80,
+gliner_v1,reddit,dev,all,cites_source,precision,0.9384143146275917,0.8849137605816674,0.9838602036139505,73,78,
+gliner_v1,reddit,dev,all,cites_source,recall,0.9503298968540735,0.8976089491722389,1.0,73,78,
+gliner_v1,reddit,dev,all,cites_source,f1,0.9443345196296661,0.9101756277776789,0.9774875131039794,73,78,
+gliner_v1,reddit,dev,all,cites_source,accuracy,0.89584824185888,0.8357851801269354,0.9565127627627629,73,78,
+gliner_v1,reddit,dev,all,cites_source,kappa,0.17522658610271946,-0.06849315068493156,0.5113391333695831,73,78,
+gliner_v1,reddit,dev,all,source_types:scientific,precision,0.21663601434892657,0.0,0.7414041065256775,3,78,za mało przypadków
+gliner_v1,reddit,dev,all,source_types:scientific,recall,0.7065565981708042,0.0,1.0,3,78,za mało przypadków
+gliner_v1,reddit,dev,all,source_types:scientific,f1,0.3316005853250645,0.0,0.7570475748349035,3,78,za mało przypadków
+gliner_v1,reddit,dev,all,source_types:institutional,precision,0.0,0.0,0.0,2,78,za mało przypadków
+gliner_v1,reddit,dev,all,source_types:institutional,recall,0.0,0.0,0.0,2,78,za mało przypadków
+gliner_v1,reddit,dev,all,source_types:institutional,f1,0.0,0.0,0.0,2,78,za mało przypadków
+gliner_v1,reddit,dev,all,source_types:media,precision,0.962309603246672,0.8893392453061596,1.0,38,78,
+gliner_v1,reddit,dev,all,source_types:media,recall,0.5648477700455952,0.4079596119680181,0.7075180901467493,38,78,
+gliner_v1,reddit,dev,all,source_types:media,f1,0.7118564766059877,0.5719645249642038,0.820101574824645,38,78,
+gliner_v1,reddit,dev,all,source_types:personal,precision,0.0,0.0,0.0,2,78,za mało przypadków
+gliner_v1,reddit,dev,all,source_types:personal,recall,0.0,0.0,0.0,2,78,za mało przypadków
+gliner_v1,reddit,dev,all,source_types:personal,f1,0.0,0.0,0.0,2,78,za mało przypadków
+gliner_v1,reddit,dev,all,source_types:social_blog,precision,0.7853454613196312,0.6616205265886594,0.8955310714015539,28,78,
+gliner_v1,reddit,dev,all,source_types:social_blog,recall,0.8176916045200564,0.6923286239790954,0.9416700094799315,28,78,
+gliner_v1,reddit,dev,all,source_types:social_blog,f1,0.8011921920627799,0.7002360864676168,0.8863843970068951,28,78,
+gliner_v1,reddit,dev,all,source_types:encyclopedia,precision,,,,0,78,za mało przypadków
+gliner_v1,reddit,dev,all,source_types:encyclopedia,recall,,,,0,78,za mało przypadków
+gliner_v1,reddit,dev,all,source_types:encyclopedia,f1,,,,0,78,za mało przypadków
+gliner_v1,reddit,dev,all,source_types:other,precision,0.007345965298470173,0.0,0.02342769321924165,1,78,za mało przypadków
+gliner_v1,reddit,dev,all,source_types:other,recall,1.0,1.0,1.0,1,78,za mało przypadków
+gliner_v1,reddit,dev,all,source_types:other,f1,0.014584791226703548,0.0,0.04578280063797939,1,78,za mało przypadków
+gliner_v1,reddit,dev,all,source_types:unknown,precision,0.0,0.0,0.0,1,78,za mało przypadków
+gliner_v1,reddit,dev,all,source_types:unknown,recall,0.0,0.0,0.0,1,78,za mało przypadków
+gliner_v1,reddit,dev,all,source_types:unknown,f1,0.0,0.0,0.0,1,78,za mało przypadków
+gliner_v1,reddit,dev,all,source_types,masi,0.4987382329137648,0.3906422646050305,0.5960187381530467,78,78,
+gliner_v1,reddit,dev,all,source_types,exact_match,0.43940030455987905,0.3143515756447937,0.5513159535865653,78,78,
+gliner_v1,reddit,dev,all,source_types,macro_f1,0.7565243343343838,0.6631486047872166,0.8321896097450623,78,78,
+gliner_v1,reddit,dev,IS,cites_source,precision,0.9629336583057829,0.9215992162024081,1.0,32,33,
+gliner_v1,reddit,dev,IS,cites_source,recall,0.9051936149886601,0.8487482626861187,0.9578378764933232,32,33,
+gliner_v1,reddit,dev,IS,cites_source,f1,0.9331713225501247,0.8836748073161015,0.9784649566683257,32,33,
+gliner_v1,reddit,dev,IS,cites_source,accuracy,0.8747152586681095,0.7915926408428956,0.957837876493323,32,33,
+gliner_v1,reddit,dev,IS,cites_source,kappa,-0.04210526315789561,-0.07843137254901962,0.0,32,33,
+gliner_v1,reddit,dev,IS,source_types:scientific,precision,1.0,1.0,1.0,2,33,za mało przypadków
+gliner_v1,reddit,dev,IS,source_types:scientific,recall,0.5,0.0,1.0,2,33,za mało przypadków
+gliner_v1,reddit,dev,IS,source_types:scientific,f1,0.6666666666666666,0.0,1.0,2,33,za mało przypadków
+gliner_v1,reddit,dev,IS,source_types:institutional,precision,0.0,0.0,0.0,1,33,za mało przypadków
+gliner_v1,reddit,dev,IS,source_types:institutional,recall,0.0,0.0,0.0,1,33,za mało przypadków
+gliner_v1,reddit,dev,IS,source_types:institutional,f1,0.0,0.0,0.0,1,33,za mało przypadków
+gliner_v1,reddit,dev,IS,source_types:media,precision,0.9058812476035458,0.7411475452217505,1.0,13,33,
+gliner_v1,reddit,dev,IS,source_types:media,recall,0.5836421313360851,0.36653842883769094,0.8314980920566144,13,33,
+gliner_v1,reddit,dev,IS,source_types:media,f1,0.7099055571254025,0.4996695199133436,0.875351551904474,13,33,
+gliner_v1,reddit,dev,IS,source_types:personal,precision,0.0,0.0,0.0,1,33,za mało przypadków
+gliner_v1,reddit,dev,IS,source_types:personal,recall,0.0,0.0,0.0,1,33,za mało przypadków
+gliner_v1,reddit,dev,IS,source_types:personal,f1,0.0,0.0,0.0,1,33,za mało przypadków
+gliner_v1,reddit,dev,IS,source_types:social_blog,precision,0.7959128394681024,0.5827459430315911,1.0,14,33,
+gliner_v1,reddit,dev,IS,source_types:social_blog,recall,0.6447231176897501,0.4553782117816518,0.8433318589397595,14,33,
+gliner_v1,reddit,dev,IS,source_types:social_blog,f1,0.7123845614453876,0.5218191932269478,0.8709958385313998,14,33,
+gliner_v1,reddit,dev,IS,source_types:encyclopedia,precision,,,,0,33,za mało przypadków
+gliner_v1,reddit,dev,IS,source_types:encyclopedia,recall,,,,0,33,za mało przypadków
+gliner_v1,reddit,dev,IS,source_types:encyclopedia,f1,,,,0,33,za mało przypadków
+gliner_v1,reddit,dev,IS,source_types:other,precision,0.014418674611363416,0.0,0.04416934739870284,1,33,za mało przypadków
+gliner_v1,reddit,dev,IS,source_types:other,recall,1.0,1.0,1.0,1,33,za mało przypadków
+gliner_v1,reddit,dev,IS,source_types:other,f1,0.028427462885356268,0.0,0.08460185455332897,1,33,za mało przypadków
+gliner_v1,reddit,dev,IS,source_types:unknown,precision,,,,0,33,za mało przypadków
+gliner_v1,reddit,dev,IS,source_types:unknown,recall,,,,0,33,za mało przypadków
+gliner_v1,reddit,dev,IS,source_types:unknown,f1,,,,0,33,za mało przypadków
+gliner_v1,reddit,dev,IS,source_types,masi,0.4296957835107484,0.3331501032418706,0.5486392852684066,33,33,
+gliner_v1,reddit,dev,IS,source_types,exact_match,0.36584787092761656,0.2563995151586949,0.5027247673220427,33,33,
+gliner_v1,reddit,dev,IS,source_types,macro_f1,0.7111450592853951,0.5714249314370601,0.8257897773092241,33,33,
+gliner_v1,reddit,dev,JP,cites_source,precision,0.9248825343312659,0.8700643057316912,0.9765918347950356,41,45,
+gliner_v1,reddit,dev,JP,cites_source,recall,0.9783609420400531,0.9347266102811628,1.0,41,45,
+gliner_v1,reddit,dev,JP,cites_source,f1,0.9508704049677676,0.9117340712442887,0.987542501970495,41,45,
+gliner_v1,reddit,dev,JP,cites_source,accuracy,0.908182764692577,0.8409739658948353,0.9753915634903186,41,45,
+gliner_v1,reddit,dev,JP,cites_source,kappa,0.2913385826771649,-0.07142857142857167,0.7272727272727276,41,45,
+gliner_v1,reddit,dev,JP,source_types:scientific,precision,0.13918680966864094,0.0,0.6053959965187119,1,45,za mało przypadków
+gliner_v1,reddit,dev,JP,source_types:scientific,recall,1.0,1.0,1.0,1,45,za mało przypadków
+gliner_v1,reddit,dev,JP,source_types:scientific,f1,0.24436169465327057,0.0,0.7542014528895153,1,45,za mało przypadków
+gliner_v1,reddit,dev,JP,source_types:institutional,precision,0.0,0.0,0.0,1,45,za mało przypadków
+gliner_v1,reddit,dev,JP,source_types:institutional,recall,0.0,0.0,0.0,1,45,za mało przypadków
+gliner_v1,reddit,dev,JP,source_types:institutional,f1,0.0,0.0,0.0,1,45,za mało przypadków
+gliner_v1,reddit,dev,JP,source_types:media,precision,1.0,1.0,1.0,25,45,
+gliner_v1,reddit,dev,JP,source_types:media,recall,0.5540524286004255,0.37395355345623615,0.7311785097285652,25,45,
+gliner_v1,reddit,dev,JP,source_types:media,f1,0.7130421321749142,0.5443467164666944,0.8447176366187952,25,45,
+gliner_v1,reddit,dev,JP,source_types:personal,precision,,,,1,45,za mało przypadków
+gliner_v1,reddit,dev,JP,source_types:personal,recall,0.0,0.0,0.0,1,45,za mało przypadków
+gliner_v1,reddit,dev,JP,source_types:personal,f1,0.0,0.0,0.0,1,45,za mało przypadków
+gliner_v1,reddit,dev,JP,source_types:social_blog,precision,0.7809933294346258,0.651559236981195,0.9217066645821053,14,45,
+gliner_v1,reddit,dev,JP,source_types:social_blog,recall,0.9214487226280145,0.7903983178347292,1.0,14,45,
+gliner_v1,reddit,dev,JP,source_types:social_blog,f1,0.8454270791967693,0.7367867817016741,0.9432754653921636,14,45,
+gliner_v1,reddit,dev,JP,source_types:encyclopedia,precision,,,,0,45,za mało przypadków
+gliner_v1,reddit,dev,JP,source_types:encyclopedia,recall,,,,0,45,za mało przypadków
+gliner_v1,reddit,dev,JP,source_types:encyclopedia,f1,,,,0,45,za mało przypadków
+gliner_v1,reddit,dev,JP,source_types:other,precision,0.0,0.0,0.0,0,45,za mało przypadków
+gliner_v1,reddit,dev,JP,source_types:other,recall,,,,0,45,za mało przypadków
+gliner_v1,reddit,dev,JP,source_types:other,f1,0.0,0.0,0.0,0,45,za mało przypadków
+gliner_v1,reddit,dev,JP,source_types:unknown,precision,0.0,0.0,0.0,1,45,za mało przypadków
+gliner_v1,reddit,dev,JP,source_types:unknown,recall,0.0,0.0,0.0,1,45,za mało przypadków
+gliner_v1,reddit,dev,JP,source_types:unknown,f1,0.0,0.0,0.0,1,45,za mało przypadków
+gliner_v1,reddit,dev,JP,source_types,masi,0.5390356987740403,0.40949426180487586,0.6681413121590374,45,45,
+gliner_v1,reddit,dev,JP,source_types,exact_match,0.4823300776033422,0.3244659697761618,0.6392817933280056,45,45,
+gliner_v1,reddit,dev,JP,source_types,macro_f1,0.7792346056858417,0.6784230945210894,0.8682932830544748,45,45,
+gliner_v1,wikipedia,dev,all,cites_source,precision,0.7913043478260869,0.47058823529411764,1.0,23,147,
+gliner_v1,wikipedia,dev,all,cites_source,recall,0.06626147611176389,0.032074375679487274,0.13688078679889715,23,147,
+gliner_v1,wikipedia,dev,all,cites_source,f1,0.12228331091798049,0.06123154470840565,0.23630895368142016,23,147,
+gliner_v1,wikipedia,dev,all,cites_source,accuracy,0.8858088279242124,0.8081464104805451,0.9406452636572828,23,147,
+gliner_v1,wikipedia,dev,all,cites_source,kappa,0.18441215323645974,0.08569454042847283,0.32838162674537447,23,147,
+gliner_v1,wikipedia,dev,all,source_types:scientific,precision,,,,0,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:scientific,recall,,,,0,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:scientific,f1,,,,0,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:institutional,precision,1.0,1.0,1.0,4,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:institutional,recall,0.15762352227947862,0.07356592120275136,1.0,4,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:institutional,f1,0.27232259753862265,0.1370496156452883,1.0,4,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:media,precision,,,,1,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:media,recall,0.0,0.0,0.0,1,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:media,f1,0.0,0.0,0.0,1,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:personal,precision,,,,5,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:personal,recall,0.0,0.0,0.0,5,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:personal,f1,0.0,0.0,0.0,5,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:social_blog,precision,,,,0,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:social_blog,recall,,,,0,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:social_blog,f1,,,,0,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:encyclopedia,precision,0.0,0.0,0.0,4,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:encyclopedia,recall,0.0,0.0,0.0,4,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:encyclopedia,f1,0.0,0.0,0.0,4,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:other,precision,1.0,1.0,1.0,7,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:other,recall,0.05871958678809298,0.030538668174749043,0.21974776067315502,7,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:other,f1,0.11092566439851073,0.059267389216627796,0.36031435963777464,7,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:unknown,precision,,,,2,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:unknown,recall,0.0,0.0,0.0,2,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types:unknown,f1,0.0,0.0,0.0,2,147,za mało przypadków
+gliner_v1,wikipedia,dev,all,source_types,masi,0.8834486880640726,0.807899251389636,0.9388905885780886,147,147,
+gliner_v1,wikipedia,dev,all,source_types,exact_match,0.8834486880640726,0.807899251389636,0.9388905885780886,147,147,
+gliner_v1,wikipedia,dev,all,source_types,macro_f1,,0.0,0.10873183645227856,147,147,
+gliner_v1,wikipedia,dev,IS,cites_source,precision,,,,17,67,
+gliner_v1,wikipedia,dev,IS,cites_source,recall,0.0,0.0,0.0,17,67,
+gliner_v1,wikipedia,dev,IS,cites_source,f1,0.0,0.0,0.0,17,67,
+gliner_v1,wikipedia,dev,IS,cites_source,accuracy,0.8020369888543672,0.6699036259087815,0.9033723405525675,17,67,
+gliner_v1,wikipedia,dev,IS,cites_source,kappa,0.0,0.0,0.0,17,67,
+gliner_v1,wikipedia,dev,IS,source_types:scientific,precision,,,,0,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:scientific,recall,,,,0,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:scientific,f1,,,,0,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:institutional,precision,,,,3,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:institutional,recall,0.0,0.0,0.0,3,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:institutional,f1,0.0,0.0,0.0,3,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:media,precision,,,,1,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:media,recall,0.0,0.0,0.0,1,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:media,f1,0.0,0.0,0.0,1,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:personal,precision,,,,5,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:personal,recall,0.0,0.0,0.0,5,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:personal,f1,0.0,0.0,0.0,5,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:social_blog,precision,,,,0,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:social_blog,recall,,,,0,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:social_blog,f1,,,,0,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:encyclopedia,precision,,,,3,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:encyclopedia,recall,0.0,0.0,0.0,3,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:encyclopedia,f1,0.0,0.0,0.0,3,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:other,precision,,,,5,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:other,recall,0.0,0.0,0.0,5,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:other,f1,0.0,0.0,0.0,5,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:unknown,precision,,,,0,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:unknown,recall,,,,0,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types:unknown,f1,,,,0,67,za mało przypadków
+gliner_v1,wikipedia,dev,IS,source_types,masi,0.8020369888543672,0.6699036259087815,0.9033723405525675,67,67,
+gliner_v1,wikipedia,dev,IS,source_types,exact_match,0.8020369888543672,0.6699036259087815,0.9033723405525675,67,67,
+gliner_v1,wikipedia,dev,IS,source_types,macro_f1,,0.0,0.0,67,67,
+gliner_v1,wikipedia,dev,JP,cites_source,precision,0.7913043478260869,0.5500117804131011,1.0,6,80,
+gliner_v1,wikipedia,dev,JP,cites_source,recall,0.24773139745916517,0.10378378378378379,0.7596566523605149,6,80,
+gliner_v1,wikipedia,dev,JP,cites_source,f1,0.37733241188666206,0.187683284457478,0.8297872340425532,6,80,
+gliner_v1,wikipedia,dev,JP,cites_source,accuracy,0.9527642123745963,0.8956146762031725,0.994128292770205,6,80,
+gliner_v1,wikipedia,dev,JP,cites_source,kappa,0.5744680851063824,0.36165957446808517,0.8507462686567171,6,80,
+gliner_v1,wikipedia,dev,JP,source_types:scientific,precision,,,,0,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:scientific,recall,,,,0,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:scientific,f1,,,,0,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:institutional,precision,1.0,1.0,1.0,1,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:institutional,recall,1.0,1.0,1.0,1,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:institutional,f1,1.0,1.0,1.0,1,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:media,precision,,,,0,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:media,recall,,,,0,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:media,f1,,,,0,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:personal,precision,,,,0,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:personal,recall,,,,0,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:personal,f1,,,,0,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:social_blog,precision,,,,0,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:social_blog,recall,,,,0,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:social_blog,f1,,,,0,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:encyclopedia,precision,0.0,0.0,0.0,1,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:encyclopedia,recall,0.0,0.0,0.0,1,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:encyclopedia,f1,0.0,0.0,0.0,1,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:other,precision,1.0,1.0,1.0,2,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:other,recall,0.12834224598930483,0.04678362573099415,1.0,2,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:other,f1,0.22748815165876776,0.0893854748603352,1.0,2,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:unknown,precision,,,,2,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:unknown,recall,0.0,0.0,0.0,2,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types:unknown,f1,0.0,0.0,0.0,2,80,za mało przypadków
+gliner_v1,wikipedia,dev,JP,source_types,masi,0.9485177098244767,0.8913734162487937,0.9898817902200854,80,80,
+gliner_v1,wikipedia,dev,JP,source_types,exact_match,0.9485177098244767,0.8913734162487937,0.9898817902200854,80,80,
+gliner_v1,wikipedia,dev,JP,source_types,macro_f1,,,,80,80,

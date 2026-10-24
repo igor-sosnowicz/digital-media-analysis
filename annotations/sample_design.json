@@ -154,11 +154,13 @@
     "reddit": {
       "dev": 148,
       "pilot": 32,
+      "pilot2": 30,
       "test": 320
     },
     "wikipedia": {
       "dev": 152,
       "pilot": 21,
+      "pilot2": 30,
       "test": 327
     }
   },
@@ -303,6 +305,42 @@
         "pilot": 3,
         "dev": 18,
         "test": 38
+      }
+    }
+  },
+  "pilot_rounds": {
+    "pilot2": {
+      "created_utc": "2026-10-23T05:51:59+00:00",
+      "counts": {
+        "reddit": 30,
+        "wikipedia": 30
+      },
+      "frame": "units of the sampling frame in none of the earlier splits",
+      "per_year": {
+        "reddit": {
+          "2005": 1,
+          "2006": 2,
+          "2007": 1,
+          "2008": 2,
+          "2009": 2,
+          "2010": 2,
+          "2011": 2,
+          "2012": 2,
+          "2013": 2,
+          "2014": 2,
+          "2015": 2,
+          "2016": 2,
+          "2017": 2,
+          "2018": 2,
+          "2019": 2,
+          "2020": 2
+        },
+        "wikipedia": {
+          "2020": 8,
+          "2021": 8,
+          "2022": 7,
+          "2024": 7
+        }
       }
     }
   }

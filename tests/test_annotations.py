@@ -71,3 +71,41 @@ def test_manifest_check_reports_missing_unexpected_repeated_and_wrong_annotator(
     assert any("spoza fazy 'pilot'" in problem and "r9" in problem for problem in problems)
     assert any("wikipedia: brak 1 jednostek" in problem for problem in problems)
     assert any("annotator zawiera ['B']" in problem for problem in problems)
+
+
+def test_partial_manifest_check_allows_missing_units_only():
+    labels = pd.DataFrame({"unit_id": ["r1", "r1", "r9"], "platform": "reddit", "annotator": "A"})
+    problems = annotations.check_against_manifest(labels, MANIFEST, "pilot", "A", partial=True)
+    assert not any("brak" in problem for problem in problems)
+    assert any("powtórzone unit_id ['r1']" in problem for problem in problems)
+    assert any("spoza fazy 'pilot'" in problem for problem in problems)
+
+
+def test_partial_import_of_a_workbook_coded_in_part(tmp_path):
+    path = tmp_path / "pilot_A.xlsx"
+    write_workbook(path, "A", "pilot", units(), load_codebook())
+    workbook = load_workbook(path)
+    sheet = workbook["Reddit"]
+    header = [cell.value for cell in sheet[1]]
+    sheet.cell(2, header.index("source_types") + 1, "media")
+    workbook.save(path)
+
+    labels, problems = annotations.import_workbook(path, "A", "pilot", MANIFEST, load_codebook(), partial=True)
+    assert problems == []
+    assert labels[["unit_id", "cites_source", "source_types"]].values.tolist() == [["r1", 1, "media"]]
+    _, problems = annotations.import_workbook(path, "A", "pilot", MANIFEST, load_codebook())
+    assert problems
+
+
+def test_drop_invalid_rows_keeps_valid_rows_and_blocks_workbook_problems():
+    labels = pd.DataFrame({"unit_id": ["r1", "r2", "COVID-19#3"], "platform": ["reddit", "reddit", "wikipedia"]})
+    problems = [
+        "Reddit, wiersz 3 (r2): nieznane kody ['blog']",
+        "Wikipedia, wiersz 2 (COVID-19#3): source_types brak wartości (wpisz none, gdy nie ma powołania)",
+        "reddit: powtórzone unit_id ['r1']",
+    ]
+    kept, dropped, blocking = annotations.drop_invalid_rows(labels, problems)
+    assert kept["unit_id"].tolist() == ["r1"]
+    assert dropped == problems[:2]
+    assert blocking == problems[2:]
+

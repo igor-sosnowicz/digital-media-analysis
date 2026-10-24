@@ -34,3 +34,8 @@ ANNOTATIONS_DIR = PROJECT_ROOT / "annotations"
 SHEETS_DIR = ANNOTATIONS_DIR / "sheets"
 LABELS_DIR = ANNOTATIONS_DIR / "labels"
 AGREEMENT_DIR = ANNOTATIONS_DIR / "agreement"
+# Instrument labels for gold units (IDs and labels only) and validation results.
+PREDICTIONS_DIR = ANNOTATIONS_DIR / "predictions"
+VALIDATION_DIR = ANNOTATIONS_DIR / "validation"
+# Raw model output (scores, extracted spans with text), outside git.
+MODEL_CACHE_DIR = DATA_DIR / "model_cache"

@@ -1,4 +1,4 @@
-.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-sheets sample-csv import-labels agreement
+.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets sample-csv import-labels agreement tune validate
 
 ANNOTATORS ?= A B
 PHASE ?= pilot
@@ -22,6 +22,10 @@ notebooks:
 gold-sample:
 	uv run scripts/02_draw_gold_sample.py
 
+# Another pilot round from units outside the sample, e.g. make pilot-round REDDIT=30 WIKIPEDIA=30.
+pilot-round:
+	uv run scripts/02b_add_pilot_round.py --reddit $(or $(REDDIT),0) --wikipedia $(or $(WIKIPEDIA),0)
+
 pilot-sheets:
 	uv run scripts/03_export_annotation_sheets.py --phase pilot --annotators $(ANNOTATORS)
 
@@ -29,8 +33,19 @@ pilot-sheets:
 sample-csv:
 	uv run scripts/06_export_sample_csv.py
 
+# PARTIAL=1 when a phase is split between annotators (rows without labels are skipped).
+# DROP_INVALID=1 imports a workbook without its invalid rows (listed) instead of rejecting it.
 import-labels:
-	uv run scripts/04_import_annotations.py --phase $(PHASE)
+	uv run scripts/04_import_annotations.py --phase $(PHASE) $(if $(PARTIAL),--partial) $(if $(DROP_INVALID),--drop-invalid)
 
 agreement:
 	uv run scripts/05_compute_agreement.py --phase $(PHASE)
+
+# Instrument validation on gold (needs `uv sync --group ml`). Tune on dev, freeze, then: make validate SPLIT=test FROZEN=1.
+SPLIT ?= dev
+tune:
+	uv run --group ml scripts/07_validate_instruments.py --split dev --tune
+
+validate:
+	uv run --group ml scripts/07_validate_instruments.py --split $(SPLIT) $(if $(FROZEN),--frozen)
+

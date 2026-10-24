@@ -31,3 +31,10 @@ dev = [
     "nbconvert>=7.17.2",
     "pytest>=9.1.1",
 ]
+ml = [
+    "gliner>=0.2.16",
+    "protobuf>=5",
+    "sentencepiece>=0.2",
+    "torch>=2.7",
+    "transformers>=4.46",
+]
