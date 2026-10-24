@@ -1,6 +1,6 @@
 # Instrukcja annotacji: Reddit (`reddit_sample.csv`)
 
-*Codebook v2.0 z 18.10.2026.* Ta instrukcja prowadzi krok po kroku przez kodowanie postów z Reddita. Pełne definicje kategorii i reguły R1–R13 są w [`codebook/codebook.md`](../codebook/codebook.md); gdy instrukcja i codebook się różnią, rozstrzyga codebook. Opisy zmian z Wikipedii kodujemy według osobnej instrukcji: [`instrukcja_annotacji_wikipedia.md`](instrukcja_annotacji_wikipedia.md).
+*Codebook v2.1 z 24.10.2026* (kategorie źródeł bez zmian od v2.0; stanowisko wobec konsensusu w punkcie 11). Ta instrukcja prowadzi krok po kroku przez kodowanie postów z Reddita. Pełne definicje kategorii i reguły R1–R14 są w [`codebook/codebook.md`](../codebook/codebook.md); gdy instrukcja i codebook się różnią, rozstrzyga codebook. Opisy zmian z Wikipedii kodujemy według osobnej instrukcji: [`instrukcja_annotacji_wikipedia.md`](instrukcja_annotacji_wikipedia.md).
 
 ## W skrócie
 
@@ -195,3 +195,31 @@ Etykietę wybierasz zawsze, także przy wątpliwościach; `source_types` nigdy n
 - Nie zostawiaj pustego `source_types` i nie łącz `none` z innymi kodami.
 - Nie oceniaj wiarygodności źródła ani tego, czy autor ma rację (R6).
 - Nie wpisuj etykiet do `data_samples/reddit_sample.csv`.
+
+## 11. Arkusz stanowiska: `consensus_stance` (codebook 2.1)
+
+Stanowisko wobec konsensusu naukowego kodujemy w osobnym przebiegu, w arkuszu `annotations/sheets/stance_<faza>_<inicjały>.xlsx`. Arkusz ma te same posty i kolumny z treścią co zakładka Reddit, a do wypełnienia są w nim tylko `consensus_stance`, `uncertain` i `notes`. Źródeł w tym arkuszu nie kodujesz.
+
+| Wartość | Kiedy |
+|---|---|
+| `supports` | autor ufa nauce lub naukowcom, broni ustaleń naukowych albo przedstawia je jako wiarygodne; także kpina z pseudonauki (typowa dla r/skeptic) |
+| `challenges` | autor podważa konsensus naukowy, wyraża nieufność wobec naukowców lub instytucji naukowych albo promuje twierdzenie sprzeczne z ustaleniami nauki („szczepionki powodują autyzm”, „ocieplenie to oszustwo”); także ironia lub kpina wobec naukowców |
+| `neutral` | post dotyczy nauki, naukowców lub twierdzenia naukowego, ale autor nie zajmuje stanowiska: samo przekazanie wiadomości o badaniu, pytanie |
+| `not_applicable` | post nie dotyczy nauki, naukowców ani twierdzeń naukowych: polityka, technologia, rozrywka bez twierdzeń naukowych |
+
+Krok po kroku (reguła R14):
+
+1. **Czy post dotyczy nauki?** Chodzi o naukę, naukowców, badania albo twierdzenie, które nauka rozstrzyga (zdrowie, klimat, szczepionki, ewolucja). Jeśli nie, wpisz `not_applicable`.
+2. **Czy autor zajmuje stanowisko?** Decyduje to, co pisze sam, albo jak przedstawia linkowany materiał w tytule. Tytuł artykułu przepisany bez komentarza to `neutral`.
+3. **Jakie stanowisko?** Zaufanie lub obrona nauki to `supports`; podważanie, nieufność albo twierdzenia sprzeczne z nauką to `challenges`.
+4. **Nie oceniamy, kto ma rację** (R6). Nie otwieramy linków.
+5. Przy wątpliwościach: najlepsza wartość, `uncertain = 1` i krótki opis w `notes` (R12).
+
+Przykłady (uproszczone):
+- r/science, „New study finds bees can count”, link do phys.org → `neutral`;
+- r/conspiracy, „They lied about vaccines from the start, wake up” → `challenges`;
+- r/skeptic, „Homeopathy is just expensive water — again shown in a large trial” → `supports`;
+- r/conspiracy, „The Fed is printing money again” → `not_applicable` (gospodarka, bez twierdzenia naukowego).
+
+Import: `make import-stance PHASE=pilot` (albo `PHASE=gold`, z `PARTIAL=1` dla arkusza wypełnionego w części). Etykiety trafiają do `annotations/labels/<faza>/stance_<inicjały>.csv`. Po imporcie obu osób skrypt wypisuje zgodność (α Krippendorffa, κ Cohena) na wspólnych postach rundy `pilot2`.
+

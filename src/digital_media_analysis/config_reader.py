@@ -61,6 +61,19 @@ def get_wikipedia_pages() -> list[str]:
     return pages
 
 
+def get_hypotheses() -> dict[str, Any]:
+    """The `hypotheses` section, checked: H1 subreddits must be listed in `reddit_subreddits`."""
+    settings = get_config("hypotheses")
+    known = {name.casefold() for name in get_reddit_subreddits()}
+    if unknown := sorted(name for name in settings["h1"]["subreddits"] if name.casefold() not in known):
+        raise ValueError(f"hypotheses.h1.subreddits {unknown} are not in reddit_subreddits in {CONFIG_PATH}.")
+    for key in ("h1", "h2"):
+        first, last = settings[key]["period"]
+        if first > last:
+            raise ValueError(f"hypotheses.{key}.period must start before it ends in {CONFIG_PATH}.")
+    return settings
+
+
 def get_study_period(platform: str) -> tuple[datetime, datetime]:
     """Return a platform's study period from `study_periods` as timezone-aware UTC datetimes (end exclusive)."""
     periods = get_config("study_periods")

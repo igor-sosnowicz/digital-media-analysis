@@ -39,3 +39,6 @@ PREDICTIONS_DIR = ANNOTATIONS_DIR / "predictions"
 VALIDATION_DIR = ANNOTATIONS_DIR / "validation"
 # Raw model output (scores, extracted spans with text), outside git.
 MODEL_CACHE_DIR = DATA_DIR / "model_cache"
+# Hypothesis tests (docs/hipotezy.md): analysis samples, results, and instrument labels of frame posts.
+HYPOTHESES_DIR = ANNOTATIONS_DIR / "hypotheses"
+FRAME_LABELS_DIR = ANNOTATIONS_DIR / "frame_labels"

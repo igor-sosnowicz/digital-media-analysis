@@ -72,6 +72,15 @@ def test_evaluate_reports_subsets_support_and_intervals():
     pd.testing.assert_frame_equal(table, again)
 
 
+def test_nominal_metrics():
+    truth = pd.Series(["a", "a", "b", "c"])
+    predicted = pd.Series(["a", "b", "b", "c"])
+    values = validation.nominal_metrics(truth, predicted, pd.Series([1.0, 1.0, 1.0, 1.0]), ["a", "b", "c"])
+    assert values["accuracy"] == 0.75
+    assert values["a:recall"] == 0.5 and values["b:precision"] == 0.5
+    assert values["macro_f1"] == pytest.approx(np.mean([2 / 3, 2 / 3, 1.0]))
+
+
 def test_confusion_counts():
     counts = validation.confusion(reference(), predictions(), MANIFEST, "fake").iloc[0]
     assert (counts["tp"], counts["fp"], counts["fn"], counts["tn"]) == (2, 1, 1, 0)

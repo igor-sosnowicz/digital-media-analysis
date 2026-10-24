@@ -174,6 +174,29 @@ Cel: wybrać instrument do bloku 4 albo uczciwie stwierdzić, że czegoś nie da
 - Reguła wyboru, zapisana z góry: najprostszy instrument, którego κ z gold nie jest wyraźnie niższe od κ między annotatorami; przy remisie tańszy i deterministyczny. Jeśli dla danej kategorii nie przechodzi żaden instrument, to wynik negatywny, który zasady kursu wprost uznają.
 - Na slajd: tabela I1–I4, wykres κ instrumentów na tle pasma zgodności ludzi, odporność rankingu, decyzja, którym instrumentem liczymy pełne dane w bloku 4.
 
+## Etap 5: weryfikacja hipotez (blok 4)
+
+Preregistracja: [`docs/hipotezy.md`](hipotezy.md); ustawienia w sekcji `hypotheses` w `config.yaml`. Stan na 24.10.2026:
+
+- **Gotowe (kod i testy):**
+  - codebook v2.1 ze zmienną `consensus_stance` (R14) i przebiegiem stanowiska (`stance.py`, skrypty `03b` i `04b`);
+  - instrument `stance_v1` (zero-shot NLI, jeszcze niestrojony) i jego walidacja (`07b`);
+  - próba analityczna H1 z etykietami (`08`);
+  - przypisy Wikipedii ze słownikiem domen (`wikipedia_refs.py`, `codebook/domains.yaml`, lista do przeglądu `08b`);
+  - analiza (`hypotheses.py`, skrypt `09`): ważona regresja logistyczna z efektami stałymi i jawnie liczonymi błędami grupowanymi, sprawdzonymi względem `statsmodels`.
+- **Arkusze dla ludzi:**
+  - `stance_pilot_IS/JP.xlsx`: 30 postów `pilot2`, obie osoby, do zgodności;
+  - `stance_gold_IS.xlsx` (67 postów) i `stance_gold_JP.xlsx` (90 postów): posty, które każda osoba kodowała już w gold;
+  - `audit_IS/JP.xlsx`: audyt rzadkich kategorii z próby H1;
+  - `annotations/hypotheses/domain_review.csv`: przegląd 222 domen.
+- **Czeka:**
+  - commit preregistracji;
+  - kodowanie stanowiska i audyt;
+  - strojenie `stance_v1` na `dev` i jednorazowy test;
+  - uruchomienie potwierdzające `make hypotheses CONFIRMATORY=1`.
+
+  Wyników hipotez jeszcze nie liczyliśmy.
+
 ## Kolejność prac
 
 1. **Teraz, równolegle z pilotażem (bez etykiet):** pilotaż (dwie osoby kodują); `validation.py` z testami; poprawka błędu #10; I4; szkielet I3 (prompt z codebooka, cache, parser JSON).

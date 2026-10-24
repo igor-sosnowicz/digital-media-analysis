@@ -30,7 +30,8 @@ class Unit(BaseModel):
 class Variable(BaseModel):
     code: str
     name: str
-    type: Literal["binary", "multilabel"]
+    # nominal: one of `values`, whose keys are English codes like category codes.
+    type: Literal["binary", "multilabel", "nominal"]
     platforms: list[Platform]
     question: str
     values: dict[str, str] = {}
@@ -108,6 +109,12 @@ class Codebook(BaseModel):
             raise ValueError(f"Codes must be English identifiers (lowercase letters and _): {invalid}")
         if NO_SOURCE not in self.category_codes:
             raise ValueError(f"The categories must include {NO_SOURCE!r} for units without a source.")
+        for variable in self.variables:
+            if variable.type == "nominal":
+                if len(variable.values) < 2:
+                    raise ValueError(f"Nominal variable {variable.code!r} needs at least two values.")
+                if invalid := sorted(value for value in variable.values if not CODE_PATTERN.match(value)):
+                    raise ValueError(f"Values of {variable.code!r} must be English identifiers: {invalid}")
 
         known_rules = {rule.code for rule in self.rules}
         referenced_rules = set(RULE_REFERENCE.findall(self.model_dump_json()))
@@ -121,6 +128,13 @@ class Codebook(BaseModel):
     @property
     def category_codes(self) -> list[str]:
         return [category.code for category in self.categories]
+
+    def variable(self, code: str) -> Variable:
+        """The variable with this code."""
+        for variable in self.variables:
+            if variable.code == code:
+                return variable
+        raise KeyError(f"No variable {code!r} in the codebook.")
 
     def variables_for(self, platform: Platform) -> list[Variable]:
         return [variable for variable in self.variables if platform in variable.platforms]

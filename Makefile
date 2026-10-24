@@ -1,4 +1,4 @@
-.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets sample-csv import-labels agreement tune validate
+.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets sample-csv import-labels agreement tune validate import-stance validate-stance label-h1 domain-review hypotheses
 
 ANNOTATORS ?= A B
 PHASE ?= pilot
@@ -48,4 +48,22 @@ tune:
 
 validate:
 	uv run --group ml scripts/07_validate_instruments.py --split $(SPLIT) $(if $(FROZEN),--frozen)
+
+# Hypotheses (docs/hipotezy.md). Stance sheets: scripts/03b_export_stance_sheets.py; then import them.
+import-stance:
+	uv run scripts/04b_import_stance_labels.py --phase $(PHASE) $(if $(PARTIAL),--partial)
+
+# Tune on dev (STANCE_TUNE=1), freeze stance_v1, then: make validate-stance SPLIT=test FROZEN=1.
+validate-stance:
+	uv run --group ml scripts/07b_validate_stance.py --split $(SPLIT) $(if $(STANCE_TUNE),--tune) $(if $(FROZEN),--frozen)
+
+label-h1:
+	uv run --group ml scripts/08_label_h1_sample.py
+
+domain-review:
+	uv run scripts/08b_export_domain_review.py
+
+# CONFIRMATORY=1 for the reported run, once the preregistration is committed.
+hypotheses:
+	uv run scripts/09_test_hypotheses.py $(if $(CONFIRMATORY),--confirmatory)
 

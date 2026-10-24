@@ -1,0 +1,259 @@
+# Domain of a link -> codebook category (codebook v2.1), for links in Wikipedia
+# references (hypothesis H2, docs/hipotezy.md). A domain matches itself and its
+# subdomains, and the longest matching entry wins (ncbi.nlm.nih.gov before
+# nih.gov, szczepienia.pzh.gov.pl before gov.pl). Domains not listed stay
+# `unclassified`; every domain is reviewed by hand before the confirmatory run
+# (annotations/hypotheses/domain_review.csv).
+#
+# As in the codebook: ministries, offices and law are `other`; public health,
+# statistical and research bodies are `institutional`; code and data hosting
+# (GitHub, GitLab) is `other`, not a blog or social medium.
+
+version: "1.0"
+
+scientific:
+  - nature.com
+  - sciencemag.org
+  - science.org
+  - ncbi.nlm.nih.gov
+  - linkinghub.elsevier.com
+  - elsevier.com
+  - sciencedirect.com
+  - biorxiv.org
+  - medrxiv.org
+  - arxiv.org
+  - jamanetwork.com
+  - thelancet.com
+  - springer.com
+  - doi.org
+  - academic.oup.com
+  - nejm.org
+  - pubs.rsna.org
+  - jstage.jst.go.jp
+  - ametsoc.org
+  - wiley.com
+  - sagepub.com
+  - bmj.com
+  - asm.org
+  - mdpi.com
+  - tandfonline.com
+  - ijidonline.com
+  - copernicus.org
+  - frontiersin.org
+  - aging-us.com
+  - plos.org
+  - pnas.org
+  - cell.com
+  - rjp.pan.pl
+  - pm.microbiology.pl
+  - annals.org
+  - czasopismo.legeartis.org
+  - europeanreview.org
+  - iopscience.iop.org
+  - psychiatriapolska.pl
+
+institutional:
+  - who.int
+  - cdc.gov
+  - ecdc.europa.eu
+  - ema.europa.eu
+  - nih.gov
+  - fda.gov
+  - clinicaltrials.gov
+  - cdc.go.kr
+  - chinacdc.cn
+  - rki.de
+  - epicentro.iss.it
+  - euromomo.eu
+  - ipcc.ch
+  - wmo.int
+  - nasa.gov
+  - noaa.gov
+  - metoffice.gov.uk
+  - unenvironment.org
+  - inis.iaea.org
+  - nationalacademies.org
+  - gisaid.org
+  - globalcarbonproject.org
+  - mbari.org
+  - climate.be
+  - ourworldindata.org
+  - ndb.nal.usda.gov
+  - gisanddata.maps.arcgis.com
+  - experience.arcgis.com
+  - institutefordiseasemodeling.github.io
+  - imperial.ac.uk
+  - ac.uk
+  - edu
+  - edu.pl
+  - umk.pl
+  - sechenov.ru
+  - stat.gov.pl
+  - pzh.gov.pl
+  - aids.gov.pl
+  - informacje.pan.pl
+  - kslw.piwet.pulawy.pl
+  - vaccine-safety-training.org
+  - grida.no
+  - hdr.undp.org
+  - su.se
+  - lbl.gov
+
+media:
+  - tvn24.pl
+  - wyborcza.pl
+  - nytimes.com
+  - sciencedaily.com
+  - bbc.com
+  - bbc.co.uk
+  - wprost.pl
+  - businessinsider.com
+  - thespinoff.co.nz
+  - medonet.pl
+  - newsweek.pl
+  - xinhuanet.com
+  - scmp.com
+  - dziennikzachodni.pl
+  - onet.pl
+  - dziennikwschodni.pl
+  - time.com
+  - vox.com
+  - mp.pl
+  - polskieradio24.pl
+  - polskieradio.pl
+  - channelnewsasia.com
+  - statnews.com
+  - interia.pl
+  - interia.tv
+  - tvp.info
+  - theconversation.com
+  - sbs.com.au
+  - forbes.com
+  - termedia.pl
+  - reuters.com
+  - cyberdefence24.pl
+  - dtnext.in
+  - washingtonpost.com
+  - euractiv.com
+  - economist.com
+  - pap.pl
+  - pulsmedycyny.pl
+  - gk24.pl
+  - dailymail.co.uk
+  - cbc.ca
+  - hackaday.com
+  - techcrunch.com
+  - svpressa.ru
+  - dw.com
+  - dziennik.pl
+  - gazeta.pl
+  - forsal.pl
+  - radiokp.ru
+  - mgzt.ru
+  - business-gazeta.ru
+  - scientificamerican.com
+  - thetimes.co.uk
+  - spiegel.de
+  - usatoday.com
+  - aljazeera.com
+  - rp.pl
+  - tygodnikprzeglad.pl
+  - livescience.com
+  - gazetalekarska.pl
+  - aidsmap.com
+  - naukaoklimacie.pl
+  - plejada.pl
+  - cnn.com
+  - theguardian.com
+  - abc.net.au
+  - newscientist.com
+  - livemint.com
+  - theage.com.au
+  - oregonlive.com
+  - wyborcza.biz
+
+social_blog:
+  - twitter.com
+  - x.com
+  - pscp.tv
+  - facebook.com
+  - instagram.com
+  - tiktok.com
+  - youtube.com
+  - youtu.be
+  - reddit.com
+  - wykop.pl
+  - t.me
+  - telegram.org
+  - vimeo.com
+  - linkedin.com
+  - blogspot.com
+  - wordpress.com
+  - medium.com
+  - substack.com
+  - tumblr.com
+  - monbiot.com
+  - video.google.com
+
+encyclopedia:
+  - sjp.pwn.pl
+  - encyklopedia.pwn.pl
+  - wikipedia.org
+  - wikidata.org
+  - britannica.com
+
+other:
+  - gov.pl
+  - mz.gov.pl
+  - sejm.gov.pl
+  - cbr.gov.pl
+  - wiw.gov.pl
+  - zus.pl
+  - policja.pl
+  - health.gov.au
+  - moh.gov.sg
+  - nhc.gov.cn
+  - hc-sc.gc.ca
+  - euvsdisinfo.eu
+  - worldometers.info
+  - github.com
+  - gitlab.com
+  - translate.google.pl
+  - pl.search.yahoo.com
+  - yandex.ru
+  - thedoctormedicines.com
+  - vetpol.org.pl
+  - bialykruk.pl
+  - listlekarzy.pl
+  - lpj.pl
+  - gbdeclaration.org
+  - footprintnetwork.org
+  - optimumpopulation.org
+  - ecofys.com
+  - rsb.org.uk
+  - nil.org.pl
+  - izba-lekarska.pl
+  - otouczelnie.pl
+  - studia.net
+  - pulsar.olsztyn.pl
+  - lancet.waw.pl
+  - neovetwroc.pl
+  - sp12.miasto.zgierz.pl
+  - crolove.pl
+  - papierowe.slomki.biz
+  - merwinski.pl
+  - oilgdansk.pl
+  - dbc.wroc.pl
+  - am-online.org
+  - pdsnpsr.ru
+  - prep.edu.pl
+  - europarl.europa.eu
+  - img.en25.com
+  - rff.org
+  - rggi.org
+  - unfccc.int
+
+# Archives whose original address cannot be recovered from the link.
+unclassified:
+  - archive.org
+  - archive.is

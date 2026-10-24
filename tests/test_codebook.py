@@ -23,8 +23,9 @@ def test_codebook_loads_and_validates():
         "cites_source", "source_types", "edit_about_sources",
     }
     assert {variable.code for variable in codebook.variables_for("reddit")} == {
-        "cites_source", "source_types",
+        "cites_source", "source_types", "consensus_stance",
     }
+    assert codebook.variable("consensus_stance").type == "nominal"
 
 
 def test_markdown_render_is_up_to_date():
@@ -79,6 +80,16 @@ def test_non_english_code_is_rejected(raw_codebook):
 def test_codebook_without_none_is_rejected(raw_codebook):
     raw_codebook["categories"] = [category for category in raw_codebook["categories"] if category["code"] != "none"]
     with pytest.raises(ValidationError, match="'none'"):
+        Codebook.model_validate(raw_codebook)
+
+
+def test_nominal_variable_needs_english_values(raw_codebook):
+    stance = next(variable for variable in raw_codebook["variables"] if variable["code"] == "consensus_stance")
+    stance["values"] = {"popiera": "x", "podważa": "y"}
+    with pytest.raises(ValidationError, match="English identifiers"):
+        Codebook.model_validate(raw_codebook)
+    stance["values"] = {"supports": "x"}
+    with pytest.raises(ValidationError, match="at least two values"):
         Codebook.model_validate(raw_codebook)
 
 

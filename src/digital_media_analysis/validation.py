@@ -178,3 +178,21 @@ def objective(reference: pd.DataFrame, predictions: pd.DataFrame, manifest: pd.D
         "cites_f1": values.get(("cites_source", "f1"), np.nan),
         "edit_f1": values.get(("edit_about_sources", "f1"), np.nan),
     }
+
+
+def nominal_metrics(truth: pd.Series, predicted: pd.Series, weights: pd.Series, classes: Sequence[str]) -> dict[str, float]:
+    """Weighted accuracy, per-class precision, recall and F1, macro-F1 and Cohen's kappa of a nominal variable."""
+    y, p, w = truth.astype(str).to_numpy(), predicted.astype(str).to_numpy(), weights.to_numpy(float)
+    results = {"accuracy": (w * (y == p)).sum() / w.sum()}
+    f1s = []
+    for name in classes:
+        for metric, value in _binary(y == name, p == name, w).items():
+            results[f"{name}:{metric}"] = value
+        if (y == name).any():
+            f1s.append(results[f"{name}:f1"])
+    results["macro_f1"] = float(np.nanmean(f1s)) if f1s else np.nan
+    observed = np.mean(y == p)
+    expected = sum(np.mean(y == name) * np.mean(p == name) for name in classes)
+    results["kappa"] = (observed - expected) / (1 - expected) if expected < 1 else np.nan
+    return results
+

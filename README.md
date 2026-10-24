@@ -117,3 +117,24 @@ make validate SPLIT=test FROZEN=1
 
 The test split refuses to run without `FROZEN=1` or with uncommitted instrument or validation code. Metrics are weighted by the design weights of the coded units in each stratum, with stratified bootstrap intervals: precision, recall, F1 and kappa for `cites_source` and `edit_about_sources`, one-vs-rest F1 for every category (judged only with at least 10 gold positives), and the weighted MASI similarity and macro-F1 for the label set. They are reported per platform, split and annotator. Results go to `annotations/validation/` (metrics, confusion counts, run settings with the commit), instrument labels to `annotations/predictions/`, and raw model output is cached in `data/model_cache/`.
 
+# Hypotheses
+
+Two research hypotheses are tested on the data, as preregistered in [`docs/hipotezy.md`](docs/hipotezy.md) (settings in the `hypotheses` section of `config.yaml`):
+
+- **H1**, Reddit 2005–2018: online trust in the scientific consensus declines. The primary measure (H1-A) is the share of posts about science that challenge the consensus, from the codebook 2.1 variable `consensus_stance` and the zero-shot instrument `stance_v1`; secondary measures (H1-B) are the shares of citing posts that cite consensus sources (scientific, institutional) or alternative sources (social_blog, unknown, personal), from `gliner_v1`. The posts come from an analysis sample of the frame (at most 150 per subreddit and year) with weights back to the frame.
+- **H2**, Wikipedia 2020–2026: users refer more often to alternative sources. The measure is the share of links added to article references whose domain is a blog, social medium or video platform (`codebook/domains.yaml`, `src/digital_media_analysis/wikipedia_refs.py`).
+
+Each trend is the year coefficient of a weighted logistic regression with subreddit or page fixed effects and clustered errors, tested one-sided. Steps:
+
+```bash
+uv run scripts/03b_export_stance_sheets.py --phase pilot --splits pilot2 --annotators IS JP
+make import-stance PHASE=pilot
+make validate-stance SPLIT=dev STANCE_TUNE=1
+make validate-stance SPLIT=test FROZEN=1
+make label-h1
+make domain-review
+make hypotheses CONFIRMATORY=1
+```
+
+Stance workbooks (`annotations/sheets/stance_<phase>_<annotator>.xlsx`) hold only the Reddit posts and the `consensus_stance` column; gold stance sheets for each annotator's own posts come from `--units-from annotations/sheets/gold_<annotator>.xlsx`. `scripts/08_label_h1_sample.py --audit-annotators ...` also exports audit workbooks for the rare source categories. The confirmatory run refuses while the preregistration files are uncommitted; H1-A additionally waits for a tuned `stance_v1` that has run on the test split. Results go to `annotations/hypotheses/`.
+

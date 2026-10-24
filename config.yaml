@@ -56,3 +56,26 @@ wikipedia_pages:
   - "https://pl.wikipedia.org/wiki/COVID-19"
   - "https://pl.wikipedia.org/wiki/Zesp%C3%B3%C5%82_nabytego_niedoboru_odporno%C5%9Bci"
   - "https://pl.wikipedia.org/wiki/Kwas_askorbinowy"
+
+# Research hypotheses, preregistered in docs/hipotezy.md. The scripts that test
+# them (08_label_h1_sample.py, 09_test_hypotheses.py) read everything from here.
+# Years are calendar years, both ends included.
+hypotheses:
+  alpha: 0.05
+  # H1: in 2005-2018 online trust in the scientific consensus declines (Reddit).
+  h1:
+    period: [2005, 2018]
+    sensitivity_period: [2005, 2020]
+    # Subreddits about science, a subset of reddit_subreddits.
+    subreddits: [reddit.com, science, skeptic, conspiracy]
+    # Analysis sample drawn from the frame: at most this many posts per subreddit and year.
+    posts_per_subreddit_year: 150
+    consensus_sources: [scientific, institutional]
+    alternative_sources: [social_blog, unknown, personal]
+  # H2: in 2020-2026 users refer more often to alternative sources of knowledge
+  # (blogs, influencers, "independent experts"); measured on links added to
+  # Wikipedia references, by the codebook category of their domain.
+  h2:
+    period: [2020, 2026]
+    alternative_categories: [social_blog]
+
