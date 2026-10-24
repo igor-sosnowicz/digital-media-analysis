@@ -52,7 +52,47 @@ Trend to iloraz szans (OR) na rok z ważonej regresji logistycznej z efektami st
   - analizy wrażliwości (bez 2020, bez COVID-19) i eksploracyjny test permutacyjny nie są istotne;
   - przy tak rzadkich zdarzeniach błędy z regresji logistycznej mogą być zaniżone.
 
-  Uczciwie: wynik zgodny z H2, ale niekonkluzywny. Listę domen trzeba jeszcze przejrzeć ręcznie (odstępstwo 1).
+  Uczciwie: wynik zgodny z H2, ale niekonkluzywny. Listę domen trzeba jeszcze przejrzeć ręcznie (odstępstwo 1). Sprawdzenie pomiaru w następnej sekcji pokazuje, że po przypisaniu wpisów do ich właścicieli dane nie wspierają H2.
+
+## H2: analizy odporności i sprawdzenie pomiaru (eksploracyjne, 24.10.2026)
+
+Analizy spoza preregistracji, na tych samych danych: `scripts/10_h2_robustness.py`, `src/digital_media_analysis/robustness.py`. Tabele: `annotations/hypotheses/exploratory_h2_robustness.csv` i `exploratory_h2_leave_one_out.csv`; dokładny test: `exploratory_h2_exact_by_owner.json`. Regresja Firtha (logit z karą, odporny na rzadkie zdarzenia, zostawia też strony bez linków alternatywnych) ma test ilorazu wiarygodności z karą; implementację sprawdza wynik dokładny dla tabeli 2×2.
+
+| Analiza | Efekt / rok [95% CI] | p jednostronne | zdarzenia |
+|---|---|---|---|
+| model z preregistracji (dla porównania) | OR 1,47 [1,09; 1,99] | 0,006 | 10 |
+| Firth, wszystkie strony | OR 1,43 [1,01; 2,02] | 0,006 | 10 |
+| Firth, bez efektów stałych | OR 1,32 [0,96; 1,83] | 0,010 | 10 |
+| Firth, bez 2026 (rok niepełny) | OR 1,46 [1,00; 2,13] | 0,006 | 10 |
+| Firth, bez 2020 | OR 1,27 [0,81; 2,00] | 0,029 | 6 |
+| Firth, bez COVID-19 | OR 1,31 [0,84; 2,05] | 0,028 | 2 |
+| poziom rewizji: czy dodała link alternatywny (Firth) | OR 2,25 [1,32; 3,81] | 0,001 | 9 |
+| poziom rewizji: liczba linków alternatywnych (Poisson) | RR 1,46 [1,09; 1,97] | 0,006 | 10 |
+| tylko media społecznościowe i wideo (bez blogów) | OR 1,31 [0,91; 1,89] | 0,017 | 9 |
+| szeroka definicja (social_blog, other, niesklasyfikowane) | OR 1,10 [0,96; 1,27] | 0,091 | 186 |
+| źródła ustalone (scientific, institutional) maleją | OR 0,98 [0,82; 1,17] | 0,42 | 738 |
+| bez jednego linku alternatywnego (10 przeliczeń) | OR 1,33–1,67 | p < 0,05 w 7 z 10; największe 0,055 | 9 |
+| permutacja lat między rewizjami (już w wynikach) | OR 1,47 | 0,07 | 10 |
+
+**Sprawdzenie pomiaru: co jest „źródłem alternatywnym”.** Przeczytaliśmy wszystkie 10 linków.
+
+- **8 z 10 to oficjalne źródła instytucjonalne udostępnione na platformach społecznościowych:**
+  - transmisja konferencji WHO na Periscope (`pscp.tv/WHO/…`): jeden i ten sam link dodany 6 razy (2020 ×4, 2021, 2023), najpewniej przy cofaniu i przywracaniu edycji;
+  - wpis Głównego Inspektoratu Sanitarnego na Twitterze (`twitter.com/GIS_gov/…`): dodany 2 razy w 2023 r.
+- **Prawdziwie alternatywne są tylko 2 linki**, oba na stronie Globalne ocieplenie: film z video.google.com (2021) i wpis z bloga George'a Monbiota (2025).
+- **Wniosek o mierze:** klasyfikacja po domenie nie odróżnia konta instytucji od blogera czy influencera, a miara „dodanych linków” liczy wielokrotnie link przywracany po rewertach.
+
+| Sprawdzenie pomiaru | Efekt / rok [95% CI] | p jednostronne | zdarzenia |
+|---|---|---|---|
+| tylko pierwsze dodanie każdego linku na stronie (Firth) | OR 1,59 [0,99; 2,55] | 0,009 | 4 |
+| właściciel posta: wpisy WHO i GIS jako instytucjonalne (Firth) | OR 1,31 [0,85; 2,04] | 0,027 | 2 |
+| właściciel posta, dokładny test warunkowy (2 linki wśród 105 linków strony) | lata 2021 i 2025 | 0,21 | 2 |
+
+Test ilorazu wiarygodności przy 2 zdarzeniach jest niewiarygodny, bo asymptotyka nie działa. Rozstrzyga test dokładny: p = 0,21.
+
+**Wniosek dla H2.** Formalne potwierdzenie z testu preregistrowanego (p = 0,006) jest artefaktem pomiaru. Wzrost tworzą głównie oficjalne wpisy WHO i GIS na platformach społecznościowych, policzone wielokrotnie. Po przypisaniu ich do instytucji zostają 2 linki alternatywne w siedmiu latach i dane nie wspierają H2 (test dokładny p = 0,21).
+
+Osiem stron Wikipedii daje zbyt mało powołań na źródła alternatywne, by tę hipotezę rozstrzygnąć. Przyszły test potwierdzający H2 powinien klasyfikować źródło według właściciela konta, a nie domeny, i liczyć każdy link raz (pierwsze dodanie). Trzeba to zapisać w nowej preregistracji, przed zobaczeniem nowych danych.
 
 ## Co dalej
 
