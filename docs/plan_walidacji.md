@@ -196,6 +196,10 @@ Preregistracja: [`docs/hipotezy.md`](hipotezy.md); ustawienia w sekcji `hypothes
   - uruchomienie potwierdzające `make hypotheses CONFIRMATORY=1`.
 
   Wyników hipotez jeszcze nie liczyliśmy.
+- **Przebieg potwierdzający 24.10.2026** (preregistracja `440b5fb`; odstępstwa: brak przeglądu domen przez człowieka, brak audytu, H1-A odłożone). Szczegóły w [`docs/wyniki_hipotez.md`](wyniki_hipotez.md).
+  - **H1-A:** czeka na etykiety stanowiska.
+  - **H1-B:** brak trendu w obrębie subredditów (źródła konsensusu OR 1,03 na rok, p = 0,93; źródła alternatywne OR 0,99, p = 0,85). Surowe zmiany udziałów wynikają ze zmiany składu (rosnący r/conspiracy).
+  - **H2:** test główny OR 1,47 na rok [1,09; 1,99], p = 0,006, ale tylko 10 linków alternatywnych. Wynik nie jest istotny bez 2020 r. ani bez strony COVID-19, a w eksploracyjnym teście permutacyjnym p = 0,07, więc jest zgodny z H2, ale niekonkluzywny.
 
 ## Kolejność prac
 
