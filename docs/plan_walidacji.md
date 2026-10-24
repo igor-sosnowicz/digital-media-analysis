@@ -150,7 +150,24 @@ Cel: wybrać instrument do bloku 4 albo uczciwie stwierdzić, że czegoś nie da
     | Wikipedia, MASI | 0,77 | 0,66 | 0,88 |
 
   - Wnioski z `dev`: v1 nie widzi linku posta, więc na Reddicie (442 z 500 postów to linki) nie znajduje prawie nic. Oba modele dobrze wykrywają powołanie na Reddicie, a GLiNER lepiej rozpoznaje typ. Na Wikipedii żaden instrument nie jest dobry: powołań jest mało (23 z 147), a wysokie MASI GLiNER-a wynika głównie z trafnych `none`. Wyniki na Wikipedii zależą od annotatora (GLiNER: F1 `cites_source` 0,00 na części IS i 0,38 na JP), co potwierdza, że etykiety IS i JP różnią się systematycznie. Żadna kategoria Wikipedii nie ma na `dev` co najmniej 10 przypadków, więc macro-F1 jest tam nieokreślone.
-  - Test (`make validate SPLIT=test FROZEN=1`) uruchamiamy raz, po zamrożeniu instrumentów commitem; skrypt odmawia, gdy kod instrumentów lub walidacji nie jest zacommitowany.
+  - **Wyniki na zbiorze testowym (24.10.2026).** Test uruchomiony raz (`make validate SPLIT=test FROZEN=1`) na instrumentach zamrożonych commitem `33ff729`; ustawienia i commit są zapisane w `annotations/validation/test_run.json`. Test ma 225 jednostek: Reddit 78 (68 z powołaniem), Wikipedia 147 (20 z powołaniem). Metryki są ważone, z 95% przedziałami bootstrap:
+
+    | | v1 | zero-shot | GLiNER |
+    |---|---|---|---|
+    | Reddit, F1 `cites_source` | 0,10 [0,00; 0,20] | 0,90 [0,83; 0,95] | 0,96 [0,92; 0,99] |
+    | Reddit, κ `cites_source` | −0,02 | 0,15 | 0,54 |
+    | Reddit, MASI | 0,18 [0,09; 0,27] | 0,32 [0,22; 0,42] | 0,46 [0,35; 0,57] |
+    | Reddit, macro-F1 (`media`, `social_blog`) | 0,08 | 0,42 [0,26; 0,54] | 0,68 [0,43; 0,78] |
+    | Reddit, F1 `media` / `social_blog` | 0,00 / 0,16 | 0,34 / 0,49 | 0,66 / 0,70 |
+    | Wikipedia, F1 `cites_source` | 0,09 [0,03; 0,19] | 0,17 [0,05; 0,31] | 0,26 [0,06; 0,51] |
+    | Wikipedia, F1 `edit_about_sources` | nie mierzy | 0,37 [0,26; 0,48] | nie mierzy |
+    | Wikipedia, MASI | 0,70 | 0,61 | 0,85 |
+
+  - Wnioski z testu:
+    - **Reddit:** najlepszy jest GLiNER, stabilny między `dev` a `test` (F1 `cites_source` 0,94 → 0,96, MASI 0,50 → 0,46). Znajduje wszystkie powołania (czułość 1,00, precyzja 0,93). Zero-shot wypada na teście gorzej niż na `dev` (MASI 0,43 → 0,32, macro-F1 0,55 → 0,42). κ dla `cites_source` jest umiarkowane mimo wysokiego F1, bo powołanie ma 87% postów. v1 nie widzi linku posta, więc praktycznie nie działa.
+    - **Wikipedia:** żaden instrument nie jest wiarygodny. F1 `cites_source` wynosi najwyżej 0,26 przy szerokim przedziale (tylko 20 powołań), a wysokie MASI wynika z trafnych `none`. Zero-shot dla `edit_about_sources` ma F1 0,37: znajduje prawie wszystkie edycje dotyczące przypisów (czułość 0,88), ale z wieloma fałszywymi trafieniami (precyzja 0,24). Według reguły wyboru to wynik negatywny dla typów źródeł na Wikipedii przy tych instrumentach. Kolejny krok to reguły v2 (I2) dla R9 i R10 (skróty `WP:`, znacznik „źródła/przypisy”) albo więcej etykiet gold.
+    - **Zależność od annotatora:** instrumenty zgadzają się wyraźnie bardziej z częścią JP. GLiNER na Reddicie ma MASI 0,29 na części IS i 0,61 na JP; na Wikipedii F1 `cites_source` 0,11 na IS i 0,56 na JP. To zgodne z systematycznymi różnicami etykiet IS i JP oraz z tym, że etykiety JP powstały z etykiet wstępnych AI (zob. etap 2). Wyniki trzeba raportować dla obu części, a podwójne zakodowanie części gold pozwoliłoby rozstrzygnąć, które etykiety są bliższe codebookowi.
+    - **Propozycja do bloku 4:** GLiNER (`gliner_v1`) na Reddicie dla `cites_source` oraz kategorii `media` i `social_blog`. Na Wikipedii typów źródeł nie liczymy automatycznie, dopóki nie powstanie lepszy instrument.
 - Procedura: I2 i I3 zamrażamy commitem **przed** otwarciem zbioru testowego. Test uruchamiamy raz.
 - Porównanie na teście: ważone macro-F1 z przedziałem; κ(instrument, gold) na tle κ(człowiek, człowiek); test McNemara I2 vs I3 dla `cites_source`; koszt i czas; powtarzalność I3 (dwa przebiegi i κ między nimi).
 - Odporność wniosków: przeliczamy tabele z EDA każdym instrumentem i sprawdzamy, czy ranking kategorii (τ Kendalla) i kierunek różnic między subredditami i stronami się utrzymują.
