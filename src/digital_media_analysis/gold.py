@@ -52,8 +52,13 @@ WIKIPEDIA_GOLD_CUE_SHARE = 1 / 3
 WIKIPEDIA_SIGNALS = ["link", "cue", "other"]
 DEV_FRACTION = 1 / 3
 # Splits annotated together in one workbook; the gold phase mixes dev and test
-# so annotators cannot tell them apart.
+# so annotators cannot tell them apart. Later pilot rounds (`pilot2`, ...) drawn
+# by `draw_pilot_round` also belong to the pilot phase (`phase_mask`).
 PHASE_SPLITS = {"pilot": ["pilot"], "gold": ["dev", "test"]}
+PILOT_ROUND = re.compile(r"pilot(\d*)")
+# Row order in a phase workbook: pilot rounds follow one another, while dev and
+# test are interleaved by their random `order`.
+PRESENTATION_ORDER = {"pilot": ["split", "order"], "gold": ["order", "split"]}
 
 # Text left in place of a post its author deleted or a moderator removed.
 REDDIT_REMOVED_MARKERS = {"[removed]", "[deleted]"}
@@ -378,6 +383,73 @@ def draw_sample(
     return manifest, design
 
 
+def phase_mask(manifest: pd.DataFrame, phase: str) -> pd.Series:
+    """Manifest rows of a phase; every pilot round (`pilot`, `pilot2`, ...) belongs to the pilot."""
+    split = manifest["split"].astype(str)
+    if phase == "pilot":
+        return split.str.fullmatch(PILOT_ROUND.pattern)
+    return split.isin(PHASE_SPLITS[phase])
+
+
+def next_pilot_round(manifest: pd.DataFrame) -> str:
+    """Split name of the next pilot round: `pilot2` after the first pilot, then `pilot3`, ..."""
+    rounds = [int(match.group(1) or 1) for split in manifest["split"].astype(str) if (match := PILOT_ROUND.fullmatch(split))]
+    return f"pilot{max(rounds, default=1) + 1}"
+
+
+def draw_pilot_round(
+    manifest: pd.DataFrame,
+    units: dict[str, pd.DataFrame],
+    counts: dict[str, int],
+    split: str,
+    seed: int = SEED,
+    periods: dict[str, tuple[datetime, datetime]] | None = None,
+) -> pd.DataFrame:
+    """Manifest rows of another pilot round: `counts[platform]` fresh units from outside the sample.
+
+    The units come from the same frame as the sample but from none of its splits,
+    so calibrating the codebook on them never touches dev or test. Each platform's
+    count is spread over its study years as evenly as the remaining units allow
+    (`year_targets`); within a Wikipedia year a third goes to `cue` and the rest
+    to `other`, as `split_year` does without links (all links are in the gold
+    sample). Weights N_h / n_h refer to the units left outside the sample.
+    """
+    periods = periods or {platform: get_study_period(platform) for platform in counts}
+    round_number = int(PILOT_ROUND.fullmatch(split).group(1) or 1)
+    # A stream per round and platform, independent of the main draw.
+    streams = np.random.SeedSequence([seed, round_number]).spawn(len(SAMPLE_TOTALS))
+    rngs = {platform: np.random.default_rng(stream) for platform, stream in zip(SAMPLE_TOTALS, streams)}
+    taken = set(manifest["unit_id"].astype(str))
+    parts = []
+    for platform, count in counts.items():
+        if count <= 0:
+            continue
+        years = study_years(*periods[platform])
+        remaining = in_study_period(units[platform], *periods[platform])
+        remaining = remaining[~remaining["unit_id"].astype(str).isin(taken)]
+        targets = year_targets(remaining.groupby("year").size().reindex(years, fill_value=0), count)
+        if platform == "wikipedia":
+            remaining = remaining.assign(stratum=remaining["year"].astype(str) + "|" + remaining["signal"])
+            allocation = {}
+            for year, total in targets.items():
+                available = remaining.loc[remaining["year"].eq(year) & remaining["signal"].ne("link"), "signal"].value_counts()
+                for signal, n in split_year(int(total), available).items():
+                    allocation[f"{year}|{signal}"] = n
+            allocation = pd.Series(allocation)
+        else:
+            remaining = remaining.assign(stratum=remaining["year"].astype(str))
+            allocation = targets.set_axis([str(year) for year in targets.index])
+        rng = rngs[platform]
+        drawn = _draw(remaining, allocation, rng)
+        weight = drawn["N_h"] / drawn["n_h"] * (drawn["day_weight"] if "day_weight" in drawn else 1.0)
+        drawn = drawn.assign(phase="pilot", split=split, weight=weight, order=rng.permutation(len(drawn)) + 1)
+        parts.append(drawn)
+    if not parts:
+        return pd.DataFrame(columns=MANIFEST_COLUMNS)
+    rows = pd.concat(parts, ignore_index=True)[MANIFEST_COLUMNS]
+    return rows.astype({"year": int}).sort_values(["platform", "order"], ignore_index=True)
+
+
 def population_fingerprint(units: pd.DataFrame) -> dict:
     """Size and hash of the sampled population, to detect a changed data snapshot."""
     keys = "\n".join(sorted(units["unit_id"] + "@" + units["introduced"]))
@@ -445,8 +517,10 @@ def year_summary(manifest: pd.DataFrame, platform: str) -> pd.DataFrame:
     """Units in the frame and draws per split for every year: the check that years are balanced."""
     rows = manifest[manifest["platform"].eq(platform)]
     gold = rows[rows["phase"].eq("gold")]
-    # The gold frame of a stratum is what the pilot left, so add the pilot back.
+    # The gold frame of a stratum is what the first pilot left, so add that pilot
+    # back; later pilot rounds come from inside the gold frame and are not added.
     frame = gold.groupby("stratum").first().groupby("year")["N_h"].sum()
-    draws = pd.crosstab(rows["year"], rows["split"]).reindex(columns=["pilot", "dev", "test"], fill_value=0)
+    pilots = sorted({"pilot", *(split for split in rows["split"].unique() if PILOT_ROUND.fullmatch(str(split)))})
+    draws = pd.crosstab(rows["year"], rows["split"]).reindex(columns=[*pilots, "dev", "test"], fill_value=0)
     summary = pd.concat([(frame.add(draws["pilot"], fill_value=0)).rename("N (rama)"), draws], axis=1)
     return summary.fillna(0).astype(int).rename_axis("year")

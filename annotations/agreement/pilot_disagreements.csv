@@ -1,0 +1,28 @@
+unit_id,platform,variable,IS,JP,uncertain
+1yeyr8,reddit,cites_source,1.0,0.0,
+2dfyeb,reddit,cites_source,1.0,0.0,"IS, JP"
+ntj9v,reddit,cites_source,1.0,0.0,
+155rje,reddit,source_types,media,social_blog,JP
+1b6ytt,reddit,source_types,media,social_blog,
+1yeyr8,reddit,source_types,social_blog,none,
+20385,reddit,source_types,scientific,institutional,JP
+2dfyeb,reddit,source_types,media,none,"IS, JP"
+5zf0c,reddit,source_types,social_blog,media,
+6f5xev,reddit,source_types,media,social_blog,JP
+8hrqy8,reddit,source_types,scientific,media,JP
+9jsar,reddit,source_types,social_blog,unknown,JP
+b0igw,reddit,source_types,media,other,"IS, JP"
+dw2voc,reddit,source_types,other,media,JP
+dwc8u8,reddit,source_types,media,institutional,JP
+fn86ht,reddit,source_types,personal;social_blog;unknown,social_blog;unknown,
+hj6vz,reddit,source_types,media,social_blog,JP
+ntj9v,reddit,source_types,other,none,
+qtcj,reddit,source_types,scientific,other,IS
+COVID-19#653,wikipedia,cites_source,1.0,0.0,
+Globalne ocieplenie#257,wikipedia,cites_source,1.0,0.0,
+Lekarz#194,wikipedia,cites_source,1.0,0.0,
+COVID-19#653,wikipedia,source_types,personal,none,
+Globalne ocieplenie#257,wikipedia,source_types,personal,none,
+Lekarz#194,wikipedia,source_types,other,none,
+Globalne ocieplenie#181,wikipedia,edit_about_sources,0.0,1.0,JP
+Globalne ocieplenie#257,wikipedia,edit_about_sources,1.0,0.0,

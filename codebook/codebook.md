@@ -1,6 +1,6 @@
-# Powoływanie się na źródła informacji: codebook v2.0
+# Powoływanie się na źródła informacji: codebook v2.2
 
-*2026-10-18 · wersja robocza przed pilotażem annotacji.*
+*2026-10-25 · wersja robocza przed pilotażem annotacji.*
 Ten plik jest generowany z `codebook/codebook.yaml` (`make codebook`); nie edytuj go ręcznie.
 
 ## Konstrukt
@@ -41,6 +41,30 @@ Platformy: wikipedia. Typ: binary.
 
 - `1`: opis deklaruje pracę nad źródłami lub przypisami (w tym znacznik „źródła/przypisy”)
 - `0`: brak takiej deklaracji; sam prefiks sekcji `/* Przypisy */` się nie liczy (R9)
+
+### `consensus_stance`: Stanowisko wobec konsensusu naukowego
+
+Platformy: reddit. Typ: nominal.
+
+**Pytanie:** Jaki stosunek do nauki, naukowców lub konsensusu naukowego wyraża autor posta (tytułem, treścią albo sposobem przedstawienia linkowanego materiału)?
+
+- `supports`: autor ufa nauce lub naukowcom, broni ustaleń naukowych albo przedstawia je jako wiarygodne, także kpiąc z pseudonauki (R14)
+- `challenges`: autor podważa konsensus naukowy, wyraża nieufność wobec naukowców lub instytucji naukowych albo promuje twierdzenie sprzeczne z ustaleniami nauki (np. „szczepionki powodują autyzm”, „ocieplenie to oszustwo”)
+- `neutral`: post dotyczy nauki, naukowców lub twierdzenia naukowego, ale autor nie zajmuje stanowiska (samo przekazanie wiadomości, pytanie)
+- `not_applicable`: post nie dotyczy nauki, naukowców ani twierdzeń naukowych
+
+### `consensus_topic`: Temat konsensusu naukowego
+
+Platformy: reddit. Typ: nominal.
+
+**Pytanie:** Którego z tematów konsensusu naukowego dotyczy post albo komentarz (wybierz główny, gdy jest kilka)?
+
+- `climate`: zmiana klimatu: ocieplenie i jego przyczyny, gazy cieplarniane, IPCC
+- `vaccines`: szczepionki: bezpieczeństwo, skuteczność, autyzm, ruch antyszczepionkowy
+- `evolution`: ewolucja: dobór naturalny, pochodzenie człowieka, kreacjonizm
+- `gmo`: żywność modyfikowana genetycznie: bezpieczeństwo, uprawy GM, Monsanto
+- `fluoride`: fluoryzacja wody pitnej
+- `none`: jednostka nie dotyczy żadnego z tych tematów, także gdy dotyczy innej nauki
 
 ## Kategorie `source_types`
 
@@ -254,6 +278,8 @@ Brak odwołania do źródła: jednostka nie zawiera żadnego powołania zgodnego
 - **R11.** Wpisy po angielsku i w innych językach kodujemy według tych samych reguł.
 - **R12.** W razie wątpliwości wybierz najlepszą etykietę, ustaw `uncertain = 1` i opisz problem w `notes`. Takie przypadki omawiamy przy uzgadnianiu etykiet i mogą one zmienić codebook.
 - **R13.** `source_types` wypełniamy zawsze. `none` wpisujemy wtedy i tylko wtedy, gdy jednostka nie zawiera żadnego powołania, i nie łączymy go z innymi kodami. `cites_source` nie jest kodowane w arkuszu: wynosi 0 przy `none` i 1 przy każdej innej etykiecie.
+- **R14.** `consensus_stance` kodujemy tylko na Reddicie, w osobnym arkuszu stanowiska (`stance_*.xlsx`). Podstawą jest to, co autor pisze sam albo jak przedstawia linkowany materiał w tytule; nie otwieramy linków i nie oceniamy, kto ma rację (R6). Artykuł o badaniu udostępniony bez komentarza to `neutral`. Ironia lub kpina wobec naukowców albo nauki to `challenges`, a kpina z pseudonauki (typowa dla r/skeptic) to `supports`. Post bez związku z nauką (polityka, technologia, rozrywka bez twierdzeń naukowych) to `not_applicable`.
+- **R15.** `consensus_topic` kodujemy w arkuszu walidacyjnym H1 v2 razem z `consensus_stance`, dla postów i komentarzy. Temat to ten, którego dotyczy twierdzenie jednostki, a nie samo użyte słowo: „evolution of smartphones” to `none`. Stanowisko oceniamy wtedy względem konsensusu tego tematu (codebook/topics.yaml): komentarz „vaccines cause autism” to `vaccines` i `challenges`, nawet bez słowa o naukowcach.
 
 ## Arkusz annotacji
 
@@ -263,6 +289,8 @@ Brak odwołania do źródła: jednostka nie zawiera żadnego powołania zgodnego
 | `annotator` | inicjały osoby annotującej |
 | `source_types` | kody kategorii rozdzielone średnikiem, np. `media;scientific`; `none`, gdy nie ma powołania (R13) |
 | `edit_about_sources` | 0 lub 1 (tylko Wikipedia; dla Reddita puste) |
+| `consensus_stance` | supports, challenges, neutral albo not_applicable (tylko Reddit, w arkuszu stanowiska `stance_*.xlsx`; R14) |
+| `consensus_topic` | climate, vaccines, evolution, gmo, fluoride albo none (tylko Reddit, w arkuszu walidacyjnym H1 v2; R15) |
 | `uncertain` | 1, jeśli etykieta budzi wątpliwości (R12); w przeciwnym razie 0 |
 | `notes` | uzasadnienie wątpliwości, numer reguły, propozycja zmiany codebooka |
 
@@ -270,3 +298,5 @@ Brak odwołania do źródła: jednostka nie zawiera żadnego powołania zgodnego
 
 - **1.0** (2026-10-16): Pierwsza wersja. Zastępuje dwa niezgodne schematy instrumentu v1 (Reddit: 7 kategorii plus „link/domena” i „sygnał powołania”; Wikipedia: 6 kategorii plus 3 kategorie pomocnicze) jednym zestawem 10 kategorii. Dodaje definicje, kryteria wykluczenia, przykłady z danych i reguły rozstrzygania. Wydziela zmienną `edit_about_sources` dla Wikipedii.
 - **2.0** (2026-10-18): Kategorie i kody zgodne ze slajdem „Codebook”: dziewięć angielskich kodów (`scientific`, `institutional`, `media`, `personal`, `social_blog`, `encyclopedia`, `other`, `unknown`, `none`) zamiast dziesięciu polskich. `nauka` dzieli się na `scientific` (publikacje) i `institutional` (uczelnie, instytuty, sondażownie); `oficjalne` na `institutional` (instytucje statystyczne i zdrowia publicznego) i `other` (urzędy, administracja, prawo). `komercyjne`, `organizacje` i `inne` łączą się w `other`, z wyjątkiem blogów, które trafiają do `social_blog`. Nowy kod `none` zastępuje puste `source_types`, a `cites_source` jest wyliczane z `source_types` (R13).
+- **2.1** (2026-10-24): Nowa zmienna `consensus_stance` (stanowisko wobec konsensusu naukowego: `supports`, `challenges`, `neutral`, `not_applicable`) dla postów z Reddita, kodowana w osobnym arkuszu stanowiska, do weryfikacji hipotezy o spadku zaufania do konsensusu naukowego w latach 2005–2018 (R14). Kategorie i zmienne z wersji 2.0 bez zmian.
+- **2.2** (2026-10-25): Nowa zmienna `consensus_topic` (temat konsensusu naukowego: `climate`, `vaccines`, `evolution`, `gmo`, `fluoride`, `none`) dla postów i komentarzy z Reddita, kodowana razem z `consensus_stance` w arkuszu walidacyjnym rozszerzonego testu H1 (R15). Stanowisko oceniamy względem konsensusu danego tematu. Pozostałe zmienne bez zmian.

@@ -1,0 +1,8 @@
+{
+  "analysis": "exploratory, not preregistered",
+  "hypothesis": "H2",
+  "test": "permutation of years between revisions within page, 2000 permutations, seed 20261024, statistic: FE logistic year coefficient on pages with any alternative link",
+  "observed_beta": 0.386,
+  "observed_odds_ratio": 1.47,
+  "p_one_sided": 0.0705
+}

@@ -1,0 +1,53 @@
+{
+  "mode": "confirmatory",
+  "created_utc": "2026-10-24T11:44:51+00:00",
+  "commit": "440b5fb67d92ca683bf86bab19b279a4f4261faf",
+  "uncommitted_preregistration": false,
+  "hypotheses": [
+    "h1a",
+    "h1b",
+    "h2"
+  ],
+  "settings": {
+    "alpha": 0.05,
+    "h1": {
+      "period": [
+        2005,
+        2018
+      ],
+      "sensitivity_period": [
+        2005,
+        2020
+      ],
+      "subreddits": [
+        "reddit.com",
+        "science",
+        "skeptic",
+        "conspiracy"
+      ],
+      "posts_per_subreddit_year": 150,
+      "consensus_sources": [
+        "scientific",
+        "institutional"
+      ],
+      "alternative_sources": [
+        "social_blog",
+        "unknown",
+        "personal"
+      ]
+    },
+    "h2": {
+      "period": [
+        2020,
+        2026
+      ],
+      "alternative_categories": [
+        "social_blog"
+      ]
+    }
+  },
+  "notes": {
+    "H1-A": "czeka na etykiety stanowiska: strojenie stance_v1 na dev, test (07b) i etykiety próby (08)",
+    "H2 unclassified links": 10
+  }
+}

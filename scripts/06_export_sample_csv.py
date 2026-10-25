@@ -24,7 +24,9 @@ def main() -> None:
         "wikipedia": sample_export.wikipedia_sample(manifest, revisions),
     }
     for platform, sample in samples.items():
-        expected = design["allocation"][platform]["total"]
+        # The sample itself plus every later pilot round drawn from outside it.
+        rounds = design.get("pilot_rounds", {}).values()
+        expected = design["allocation"][platform]["total"] + sum(round_["counts"][platform] for round_ in rounds)
         if len(sample) != expected:
             raise SystemExit(f"{platform}: {len(sample)} units in the manifest, the design asks for {expected}.")
 

@@ -259,3 +259,52 @@ def test_day_weights_scale_reddit_weights_up_to_the_month():
     reddit = manifest[manifest["platform"].eq("reddit")]
     pd.testing.assert_series_equal(reddit["weight"], reddit["N_h"] / reddit["n_h"] * 31, check_names=False)
     assert design["reddit"]["estimated_posts_per_year"] == {str(year): 31 * n for year, n in REDDIT_VISIBLE.items()}
+
+
+@pytest.fixture(scope="module")
+def pilot_round(sample) -> pd.DataFrame:
+    manifest, _, reddit, wikipedia = sample
+    units = {"reddit": reddit, "wikipedia": wikipedia}
+    return gold.draw_pilot_round(manifest, units, {"reddit": 6, "wikipedia": 9}, "pilot2", seed=1, periods=PERIODS)
+
+
+def test_pilot_round_takes_fresh_units_into_the_pilot_phase(sample, pilot_round):
+    manifest = sample[0]
+    assert pilot_round.groupby("platform").size().to_dict() == {"reddit": 6, "wikipedia": 9}
+    assert set(pilot_round["phase"]) == {"pilot"} and set(pilot_round["split"]) == {"pilot2"}
+    assert not set(pilot_round["unit_id"]) & set(manifest["unit_id"])
+    for platform, part in pilot_round.groupby("platform"):
+        assert sorted(part["order"]) == list(range(1, len(part) + 1))
+    assert list(pilot_round.columns) == gold.MANIFEST_COLUMNS
+
+
+def test_pilot_round_spreads_years_and_skips_links(pilot_round):
+    reddit = pilot_round[pilot_round["platform"].eq("reddit")]
+    # 2016 went into the sample whole, so the round shares its posts between the other years.
+    assert reddit.groupby("year").size().to_dict() == {2017: 3, 2018: 3}
+    wikipedia = pilot_round[pilot_round["platform"].eq("wikipedia")]
+    assert "link" not in set(wikipedia["signal"])
+    assert wikipedia.groupby("year").size().to_dict() == {2016: 3, 2017: 3, 2018: 3}
+    # A third of each year goes to `cue`, as in the first pilot; the sample already holds every 2016 `cue`.
+    assert wikipedia.groupby("year")["signal"].apply(lambda signals: signals.eq("cue").sum()).tolist() == [0, 1, 1]
+
+
+def test_pilot_round_is_deterministic_and_named_in_sequence(sample, pilot_round):
+    manifest, _, reddit, wikipedia = sample
+    units = {"reddit": reddit, "wikipedia": wikipedia}
+    again = gold.draw_pilot_round(manifest, units, {"reddit": 6, "wikipedia": 9}, "pilot2", seed=1, periods=PERIODS)
+    pd.testing.assert_frame_equal(pilot_round, again)
+    assert gold.next_pilot_round(manifest) == "pilot2"
+    assert gold.next_pilot_round(pd.concat([manifest, pilot_round])) == "pilot3"
+
+
+def test_pilot_rounds_join_the_pilot_phase_and_year_summary(sample, pilot_round):
+    manifest = pd.concat([sample[0], pilot_round], ignore_index=True)
+    pilot = manifest[gold.phase_mask(manifest, "pilot")]
+    assert set(pilot["split"]) == {"pilot", "pilot2"}
+    assert set(manifest.loc[gold.phase_mask(manifest, "gold"), "split"]) == {"dev", "test"}
+    summary = gold.year_summary(manifest, "reddit")
+    assert list(summary.columns) == ["N (rama)", "pilot", "pilot2", "dev", "test"]
+    # The frame count is unchanged: later rounds come from inside the gold frame.
+    pd.testing.assert_series_equal(summary["N (rama)"], gold.year_summary(sample[0], "reddit")["N (rama)"])
+

@@ -1,0 +1,38 @@
+# Owner types of accounts on social platforms (hypothesis H2 v2, docs/hipotezy_v2.md).
+# A link to a post, video or blog is classified by who runs the account, not by
+# the platform's domain: the WHO's Periscope channel is an institution, a
+# health influencer's YouTube channel is not. People code every account that
+# appears among the added links (annotations/hypotheses_v2/owner_review.csv) by
+# the definitions below, from the account's own description, without judging
+# whether its content is true (codebook R6).
+# Keys of `accounts` are "<platform>/<account>", lower case, as owners.account_of
+# extracts them. An account not listed is `uncoded`.
+
+version: "1.0"
+
+owner_types:
+  institution: >-
+    Instytucja publiczna, naukowa, zdrowotna, statystyczna albo organizacja
+    międzynarodowa i jej oficjalne konto (WHO, GIS, uczelnia, ministerstwo).
+  media: >-
+    Redakcja z kontrolą redakcyjną albo jej oficjalne konto (stacja, gazeta,
+    portal informacyjny), także dziennikarz piszący w jej imieniu.
+  scientist: >-
+    Osoba z afiliacją naukową lub zawodem medycznym podaną na koncie,
+    wypowiadająca się w swojej dziedzinie (np. profil lekarza, naukowca).
+  independent_expert: >-
+    Osoba przedstawiająca się jako ekspert bez afiliacji i bez kontroli
+    redakcyjnej (samodzielny blog, kanał, newsletter), także w dziedzinie
+    innej niż jej wykształcenie.
+  influencer: >-
+    Osoba lub marka zarabiająca na zasięgu (kanał lifestylowy, zdrowotny,
+    dietetyczny), bez deklarowanej ekspertyzy w temacie.
+  anonymous: >-
+    Konto bez możliwego do ustalenia właściciela albo pseudonimowe.
+  other: >-
+    Firma, organizacja pozarządowa, partia lub inny właściciel spoza powyższych.
+
+accounts:
+  # Read by hand in the exploratory check of hypothesis H2 (24.10.2026).
+  pscp.tv/who: institution
+  twitter.com/gis_gov: institution

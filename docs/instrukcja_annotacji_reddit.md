@@ -1,6 +1,6 @@
 # Instrukcja annotacji: Reddit (`reddit_sample.csv`)
 
-*Codebook v2.0 z 18.10.2026.* Ta instrukcja prowadzi krok po kroku przez kodowanie postów z Reddita. Pełne definicje kategorii i reguły R1–R13 są w [`codebook/codebook.md`](../codebook/codebook.md); gdy instrukcja i codebook się różnią, rozstrzyga codebook. Opisy zmian z Wikipedii kodujemy według osobnej instrukcji: [`instrukcja_annotacji_wikipedia.md`](instrukcja_annotacji_wikipedia.md).
+*Codebook v2.1 z 24.10.2026* (kategorie źródeł bez zmian od v2.0; stanowisko wobec konsensusu w punkcie 11). Ta instrukcja prowadzi krok po kroku przez kodowanie postów z Reddita. Pełne definicje kategorii i reguły R1–R14 są w [`codebook/codebook.md`](../codebook/codebook.md); gdy instrukcja i codebook się różnią, rozstrzyga codebook. Opisy zmian z Wikipedii kodujemy według osobnej instrukcji: [`instrukcja_annotacji_wikipedia.md`](instrukcja_annotacji_wikipedia.md).
 
 ## W skrócie
 
@@ -14,7 +14,7 @@
 
 `data_samples/reddit_sample.csv` zawiera 500 postów wylosowanych do gold standardu: lata 2005–2020, po 31–32 posty na rok, z subredditów wymienionych w `config.yaml` (`reddit_subreddits`). To plik referencyjny z pełnymi danymi. Etykiety wpisujemy w arkuszu XLSX, który koordynator generuje z tej samej próby. Zakładka Reddit zawiera posty jednej fazy:
 
-- **pilotaż:** 32 posty (`phase = pilot`), na kalibrację codebooka;
+- **pilotaż:** 62 posty (`phase = pilot`), na kalibrację codebooka: najpierw 32 z pierwszej rundy (`split = pilot`), potem 30 z drugiej (`split = pilot2`). Druga runda pochodzi spoza 500 postów próby, więc plik CSV ma 530 wierszy;
 - **próba główna:** 468 postów (`phase = gold`). Posty `dev` i `test` są wymieszane, więc nie wiadomo, które są testowe.
 
 Dlaczego arkusz, a nie CSV:
@@ -47,6 +47,7 @@ Czego się spodziewać w tej próbie:
 1. Generuje arkusze pilotażu: `make pilot-sheets ANNOTATORS="JP IS"`. Bez `make`: `uv run scripts/03_export_annotation_sheets.py --phase pilot --annotators JP IS`. Powstają pliki `annotations/sheets/pilot_JP.xlsx` i `pilot_IS.xlsx`; jeden plik zawiera zakładki Reddit i Wikipedia.
 2. Przekazuje każdej osobie jej plik poza gitem, np. na dysku zespołu. Arkusze zawierają treść postów, więc są w `.gitignore` i nie trafiają do repozytorium.
 3. Po pilotażu i poprawkach codebooka (v2.1) generuje arkusze próby głównej: `uv run scripts/03_export_annotation_sheets.py --phase gold --annotators JP IS`.
+4. Gdy próbę główną dzielicie między osoby, eksportuje tylko kolejne jednostki za ostatnim wierszem zakodowanym przez kogoś innego, np. `uv run scripts/03_export_annotation_sheets.py --phase gold --annotators JP --after annotations/sheets/gold_IS.xlsx --reddit 60 --wikipedia 130`. Arkusz ma te same zakładki i kolumny, ale tylko wybrane wiersze. Zgodność liczymy wtedy tylko na pilotażu, który obie osoby kodują w całości.
 
 **Annotator:**
 
@@ -170,7 +171,7 @@ Etykietę wybierasz zawsze, także przy wątpliwościach; `source_types` nigdy n
 
 1. Sprawdź, czy każdy wiersz ma `source_types` i czy `none` nie występuje razem z innymi kodami.
 2. Zapisz plik jako `.xlsx` pod tą samą nazwą (np. `pilot_JP.xlsx`) i oddaj go koordynatorowi poza gitem.
-3. Koordynator kopiuje plik do `annotations/sheets/` i uruchamia `make import-labels`. Bez `make`: `uv run scripts/04_import_annotations.py --phase pilot`; z opcją `--check` skrypt tylko sprawdza arkusze. Arkusz z błędami nie jest importowany. Typowe komunikaty:
+3. Koordynator kopiuje plik do `annotations/sheets/` i uruchamia `make import-labels`. Bez `make`: `uv run scripts/04_import_annotations.py --phase pilot`; z opcją `--check` skrypt tylko sprawdza arkusze. Gdy próba główna jest podzielona między osoby albo zakodowana tylko w części, import uruchamia z `--partial` (`make import-labels PHASE=gold PARTIAL=1`). Wiersze bez żadnej etykiety są wtedy pomijane, a brakujące jednostki nie są błędem. Wiersze częściowo wypełnione nadal są sprawdzane. Arkusz z błędami nie jest importowany. Typowe komunikaty:
 
    | Komunikat | Co poprawić |
    |---|---|
@@ -194,3 +195,31 @@ Etykietę wybierasz zawsze, także przy wątpliwościach; `source_types` nigdy n
 - Nie zostawiaj pustego `source_types` i nie łącz `none` z innymi kodami.
 - Nie oceniaj wiarygodności źródła ani tego, czy autor ma rację (R6).
 - Nie wpisuj etykiet do `data_samples/reddit_sample.csv`.
+
+## 11. Arkusz stanowiska: `consensus_stance` (codebook 2.1)
+
+Stanowisko wobec konsensusu naukowego kodujemy w osobnym przebiegu, w arkuszu `annotations/sheets/stance_<faza>_<inicjały>.xlsx`. Arkusz ma te same posty i kolumny z treścią co zakładka Reddit, a do wypełnienia są w nim tylko `consensus_stance`, `uncertain` i `notes`. Źródeł w tym arkuszu nie kodujesz.
+
+| Wartość | Kiedy |
+|---|---|
+| `supports` | autor ufa nauce lub naukowcom, broni ustaleń naukowych albo przedstawia je jako wiarygodne; także kpina z pseudonauki (typowa dla r/skeptic) |
+| `challenges` | autor podważa konsensus naukowy, wyraża nieufność wobec naukowców lub instytucji naukowych albo promuje twierdzenie sprzeczne z ustaleniami nauki („szczepionki powodują autyzm”, „ocieplenie to oszustwo”); także ironia lub kpina wobec naukowców |
+| `neutral` | post dotyczy nauki, naukowców lub twierdzenia naukowego, ale autor nie zajmuje stanowiska: samo przekazanie wiadomości o badaniu, pytanie |
+| `not_applicable` | post nie dotyczy nauki, naukowców ani twierdzeń naukowych: polityka, technologia, rozrywka bez twierdzeń naukowych |
+
+Krok po kroku (reguła R14):
+
+1. **Czy post dotyczy nauki?** Chodzi o naukę, naukowców, badania albo twierdzenie, które nauka rozstrzyga (zdrowie, klimat, szczepionki, ewolucja). Jeśli nie, wpisz `not_applicable`.
+2. **Czy autor zajmuje stanowisko?** Decyduje to, co pisze sam, albo jak przedstawia linkowany materiał w tytule. Tytuł artykułu przepisany bez komentarza to `neutral`.
+3. **Jakie stanowisko?** Zaufanie lub obrona nauki to `supports`; podważanie, nieufność albo twierdzenia sprzeczne z nauką to `challenges`.
+4. **Nie oceniamy, kto ma rację** (R6). Nie otwieramy linków.
+5. Przy wątpliwościach: najlepsza wartość, `uncertain = 1` i krótki opis w `notes` (R12).
+
+Przykłady (uproszczone):
+- r/science, „New study finds bees can count”, link do phys.org → `neutral`;
+- r/conspiracy, „They lied about vaccines from the start, wake up” → `challenges`;
+- r/skeptic, „Homeopathy is just expensive water — again shown in a large trial” → `supports`;
+- r/conspiracy, „The Fed is printing money again” → `not_applicable` (gospodarka, bez twierdzenia naukowego).
+
+Import: `make import-stance PHASE=pilot` (albo `PHASE=gold`, z `PARTIAL=1` dla arkusza wypełnionego w części). Etykiety trafiają do `annotations/labels/<faza>/stance_<inicjały>.csv`. Po imporcie obu osób skrypt wypisuje zgodność (α Krippendorffa, κ Cohena) na wspólnych postach rundy `pilot2`.
+

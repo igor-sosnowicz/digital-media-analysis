@@ -1,0 +1,7 @@
+platform,source,reference,categories,kendall_tau,p_value,same_top_category
+reddit,gliner_v1,gold,8,0.5455447255899809,0.06146490960741321,False
+reddit,rules_v1,gold,8,-0.0890870806374748,0.7743488608474193,False
+reddit,zeroshot_v1,gold,8,0.22237479499833038,0.45088703102517036,False
+wikipedia,gliner_v1,gold,8,0.1814436846506058,0.5637995408200006,False
+wikipedia,rules_v1,gold,8,0.12309149097933272,0.688185525836527,False
+wikipedia,zeroshot_v1,gold,8,-0.5388602512436507,0.0725185430117986,False

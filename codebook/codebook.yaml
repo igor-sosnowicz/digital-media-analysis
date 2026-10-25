@@ -4,8 +4,8 @@
 # Kody (zmienne, kategorie, kolumny) są po angielsku; nazwy i definicje po polsku.
 
 title: Powoływanie się na źródła informacji
-version: "2.0"
-date: 2026-10-18
+version: "2.2"
+date: 2026-10-25
 status: wersja robocza przed pilotażem annotacji
 
 construct: >-
@@ -55,6 +55,48 @@ variables:
     values:
       "1": opis deklaruje pracę nad źródłami lub przypisami (w tym znacznik „źródła/przypisy”)
       "0": brak takiej deklaracji; sam prefiks sekcji `/* Przypisy */` się nie liczy (R9)
+  - code: consensus_stance
+    name: Stanowisko wobec konsensusu naukowego
+    type: nominal
+    platforms: [reddit]
+    question: >-
+      Jaki stosunek do nauki, naukowców lub konsensusu naukowego wyraża autor
+      posta (tytułem, treścią albo sposobem przedstawienia linkowanego materiału)?
+    values:
+      supports: >-
+        autor ufa nauce lub naukowcom, broni ustaleń naukowych albo przedstawia
+        je jako wiarygodne, także kpiąc z pseudonauki (R14)
+      challenges: >-
+        autor podważa konsensus naukowy, wyraża nieufność wobec naukowców lub
+        instytucji naukowych albo promuje twierdzenie sprzeczne z ustaleniami
+        nauki (np. „szczepionki powodują autyzm”, „ocieplenie to oszustwo”)
+      neutral: >-
+        post dotyczy nauki, naukowców lub twierdzenia naukowego, ale autor nie
+        zajmuje stanowiska (samo przekazanie wiadomości, pytanie)
+      not_applicable: >-
+        post nie dotyczy nauki, naukowców ani twierdzeń naukowych
+
+  - code: consensus_topic
+    name: Temat konsensusu naukowego
+    type: nominal
+    platforms: [reddit]
+    question: >-
+      Którego z tematów konsensusu naukowego dotyczy post albo komentarz
+      (wybierz główny, gdy jest kilka)?
+    values:
+      climate: >-
+        zmiana klimatu: ocieplenie i jego przyczyny, gazy cieplarniane, IPCC
+      vaccines: >-
+        szczepionki: bezpieczeństwo, skuteczność, autyzm, ruch antyszczepionkowy
+      evolution: >-
+        ewolucja: dobór naturalny, pochodzenie człowieka, kreacjonizm
+      gmo: >-
+        żywność modyfikowana genetycznie: bezpieczeństwo, uprawy GM, Monsanto
+      fluoride: >-
+        fluoryzacja wody pitnej
+      none: >-
+        jednostka nie dotyczy żadnego z tych tematów, także gdy dotyczy innej
+        nauki
 
 categories:
   - code: scientific
@@ -368,6 +410,24 @@ rules:
       gdy jednostka nie zawiera żadnego powołania, i nie łączymy go z innymi
       kodami. `cites_source` nie jest kodowane w arkuszu: wynosi 0 przy
       `none` i 1 przy każdej innej etykiecie.
+  - code: R14
+    text: >-
+      `consensus_stance` kodujemy tylko na Reddicie, w osobnym arkuszu
+      stanowiska (`stance_*.xlsx`). Podstawą jest to, co autor pisze sam albo
+      jak przedstawia linkowany materiał w tytule; nie otwieramy linków i nie
+      oceniamy, kto ma rację (R6). Artykuł o badaniu udostępniony bez
+      komentarza to `neutral`. Ironia lub kpina wobec naukowców albo nauki to
+      `challenges`, a kpina z pseudonauki (typowa dla r/skeptic) to `supports`.
+      Post bez związku z nauką (polityka, technologia, rozrywka bez twierdzeń
+      naukowych) to `not_applicable`.
+  - code: R15
+    text: >-
+      `consensus_topic` kodujemy w arkuszu walidacyjnym H1 v2 razem z
+      `consensus_stance`, dla postów i komentarzy. Temat to ten, którego
+      dotyczy twierdzenie jednostki, a nie samo użyte słowo: „evolution of
+      smartphones” to `none`. Stanowisko oceniamy wtedy względem konsensusu
+      tego tematu (codebook/topics.yaml): komentarz „vaccines cause autism” to
+      `vaccines` i `challenges`, nawet bez słowa o naukowcach.
 
 annotation_columns:
   - name: unit_id
@@ -378,6 +438,10 @@ annotation_columns:
     description: kody kategorii rozdzielone średnikiem, np. `media;scientific`; `none`, gdy nie ma powołania (R13)
   - name: edit_about_sources
     description: 0 lub 1 (tylko Wikipedia; dla Reddita puste)
+  - name: consensus_stance
+    description: supports, challenges, neutral albo not_applicable (tylko Reddit, w arkuszu stanowiska `stance_*.xlsx`; R14)
+  - name: consensus_topic
+    description: climate, vaccines, evolution, gmo, fluoride albo none (tylko Reddit, w arkuszu walidacyjnym H1 v2; R15)
   - name: uncertain
     description: 1, jeśli etykieta budzi wątpliwości (R12); w przeciwnym razie 0
   - name: notes
@@ -406,3 +470,19 @@ changelog:
       `inne` łączą się w `other`, z wyjątkiem blogów, które trafiają do
       `social_blog`. Nowy kod `none` zastępuje puste `source_types`, a
       `cites_source` jest wyliczane z `source_types` (R13).
+  - version: "2.1"
+    date: 2026-10-24
+    changes: >-
+      Nowa zmienna `consensus_stance` (stanowisko wobec konsensusu naukowego:
+      `supports`, `challenges`, `neutral`, `not_applicable`) dla postów z
+      Reddita, kodowana w osobnym arkuszu stanowiska, do weryfikacji hipotezy
+      o spadku zaufania do konsensusu naukowego w latach 2005–2018 (R14).
+      Kategorie i zmienne z wersji 2.0 bez zmian.
+  - version: "2.2"
+    date: 2026-10-25
+    changes: >-
+      Nowa zmienna `consensus_topic` (temat konsensusu naukowego: `climate`,
+      `vaccines`, `evolution`, `gmo`, `fluoride`, `none`) dla postów i
+      komentarzy z Reddita, kodowana razem z `consensus_stance` w arkuszu
+      walidacyjnym rozszerzonego testu H1 (R15). Stanowisko oceniamy względem
+      konsensusu danego tematu. Pozostałe zmienne bez zmian.

@@ -61,6 +61,36 @@ def get_wikipedia_pages() -> list[str]:
     return pages
 
 
+def get_hypotheses() -> dict[str, Any]:
+    """The `hypotheses` section, checked: H1 subreddits must be listed in `reddit_subreddits`."""
+    settings = get_config("hypotheses")
+    known = {name.casefold() for name in get_reddit_subreddits()}
+    if unknown := sorted(name for name in settings["h1"]["subreddits"] if name.casefold() not in known):
+        raise ValueError(f"hypotheses.h1.subreddits {unknown} are not in reddit_subreddits in {CONFIG_PATH}.")
+    for key in ("h1", "h2"):
+        first, last = settings[key]["period"]
+        if first > last:
+            raise ValueError(f"hypotheses.{key}.period must start before it ends in {CONFIG_PATH}.")
+    return settings
+
+
+def get_hypotheses_v2() -> dict[str, Any]:
+    """The `hypotheses_v2` section (docs/hipotezy_v2.md), checked for periods, groups and namespaces."""
+    settings = get_config("hypotheses_v2")
+    for key in ("h1", "h2"):
+        first, last = settings[key]["period"]
+        if first > last:
+            raise ValueError(f"hypotheses_v2.{key}.period must start before it ends in {CONFIG_PATH}.")
+    h2 = settings["h2"]
+    if h2["baseline_period"][1] >= h2["period"][0]:
+        raise ValueError(f"hypotheses_v2.h2.baseline_period must end before the period starts in {CONFIG_PATH}.")
+    if set(h2["groups"]) != {"health", "control"}:
+        raise ValueError(f"hypotheses_v2.h2.groups must be health and control in {CONFIG_PATH}.")
+    if not set(h2["namespaces"]) <= {0, 1}:
+        raise ValueError(f"hypotheses_v2.h2.namespaces may hold 0 (articles) and 1 (talk pages) in {CONFIG_PATH}.")
+    return settings
+
+
 def get_study_period(platform: str) -> tuple[datetime, datetime]:
     """Return a platform's study period from `study_periods` as timezone-aware UTC datetimes (end exclusive)."""
     periods = get_config("study_periods")

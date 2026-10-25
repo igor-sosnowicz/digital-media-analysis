@@ -56,3 +56,81 @@ wikipedia_pages:
   - "https://pl.wikipedia.org/wiki/COVID-19"
   - "https://pl.wikipedia.org/wiki/Zesp%C3%B3%C5%82_nabytego_niedoboru_odporno%C5%9Bci"
   - "https://pl.wikipedia.org/wiki/Kwas_askorbinowy"
+
+# Research hypotheses, preregistered in docs/hipotezy.md. The scripts that test
+# them (08_label_h1_sample.py, 09_test_hypotheses.py) read everything from here.
+# Years are calendar years, both ends included.
+hypotheses:
+  alpha: 0.05
+  # H1: in 2005-2018 online trust in the scientific consensus declines (Reddit).
+  h1:
+    period: [2005, 2018]
+    sensitivity_period: [2005, 2020]
+    # Subreddits about science, a subset of reddit_subreddits.
+    subreddits: [reddit.com, science, skeptic, conspiracy]
+    # Analysis sample drawn from the frame: at most this many posts per subreddit and year.
+    posts_per_subreddit_year: 150
+    consensus_sources: [scientific, institutional]
+    alternative_sources: [social_blog, unknown, personal]
+  # H2: in 2020-2026 users refer more often to alternative sources of knowledge
+  # (blogs, influencers, "independent experts"); measured on links added to
+  # Wikipedia references, by the codebook category of their domain.
+  h2:
+    period: [2020, 2026]
+    alternative_categories: [social_blog]
+
+# Extended tests of H1 and H2 (v2), preregistered in docs/hipotezy_v2.md and
+# committed before any v2 data is downloaded. The v1 settings above stay as
+# they were preregistered. The v2 scripts (01c, 00b, 00c, 14-17) read only this
+# section; its subreddits and Wikipedia categories are the only v2 sources.
+hypotheses_v2:
+  alpha: 0.05
+  # H1: in 2005-2018 online trust in the scientific consensus declines (Reddit).
+  h1:
+    period: [2005, 2018]
+    # Smallest effect of interest: an odds ratio of the main outcome between the
+    # first and the last year of the period; below it in both directions = no trend (TOST).
+    sesoi_period_odds_ratio: 1.25
+    # Frame: posts and top-level comments about a consensus topic (codebook/topics.yaml)
+    # in these subreddits, on random days (`days_per_month`) of each month; a
+    # subreddit-year with fewer than `census_below` posts on those days is taken whole.
+    subreddits: [science, askscience, skeptic, conspiracy, health, vaccines, climate, climateskeptics,
+                 news, worldnews, politics, todayilearned, AskReddit]
+    days_per_month: 2
+    census_below: 100
+    comments_scanned_per_post: 100
+    comments_per_post: 20
+    # Analysis sample: at most this many units of each kind (post, comment) per subreddit and year.
+    units_per_cell: 200
+    # Within-author analysis: authors with units in at least this many years.
+    panel_min_years: 3
+    # Human validation sample, the same number of units in every period, so
+    # instrument error can be compared over time.
+    validation_periods: [[2005, 2010], [2011, 2014], [2015, 2018]]
+    validation_units_per_period: 120
+    # Validity gate of the main instrument on the validation sample.
+    gate: {challenges_f1: 0.5, kappa: 0.4}
+  # H2: in 2020-2026 users refer more often to alternative sources of knowledge
+  # (blogs, influencers, "independent experts") (Wikipedia).
+  h2:
+    period: [2020, 2026]
+    baseline_period: [2015, 2019]
+    break_month: "2020-03"
+    sesoi_period_odds_ratio: 1.5
+    wiki: pl.wikipedia.org
+    # Frame: articles (and their talk pages) in these category trees, up to
+    # `category_depth` levels below each category, at most `pages_per_group`
+    # pages per group drawn at random (seed in docs/hipotezy_v2.md).
+    category_depth: 2
+    pages_per_group: 400
+    groups:
+      health: [Medycyna, Choroby, Szczepionki, Dietetyka, Medycyna niekonwencjonalna, Globalne ocieplenie, Klimatologia]
+      control: [Matematyka, Fizyka, Architektura]
+    namespaces: [0, 1]
+    # Alternative sources: links to accounts of these owner types (codebook/owners.yaml);
+    # the v1 definition by domain category (codebook/domains.yaml) is kept as a second one;
+    # the third is a domain listed by English Wikipedia as generally unreliable,
+    # deprecated or blacklisted (perennial sources list).
+    alternative_owner_types: [independent_expert, influencer, anonymous]
+    alternative_categories: [social_blog]
+    unreliable_rsp_statuses: [gu, d, b]

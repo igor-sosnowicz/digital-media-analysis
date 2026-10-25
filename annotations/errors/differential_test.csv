@@ -1,0 +1,105 @@
+platform,variable,grouping,group,rate,value,low,high,errors,units,p_permutation,instrument,splits
+reddit,cites_source,period,2005–2012,false_positive_rate,0.0,0.0,0.0,0.0,5.0,1.0,rules_v1,test
+reddit,cites_source,period,2013–2020,false_positive_rate,0.1560194511092008,0.1560194511092008,0.1560194511092008,1.0,5.0,1.0,rules_v1,test
+reddit,cites_source,period,2005–2012,false_negative_rate,0.9200820308584101,0.8027342946106231,1.0,36.0,38.0,1.0,rules_v1,test
+reddit,cites_source,period,2013–2020,false_negative_rate,0.962528793235137,0.8875863797054109,1.0,29.0,30.0,1.0,rules_v1,test
+wikipedia,cites_source,period,2020–2022,false_positive_rate,0.1720913317410236,0.12632127306146118,0.21510138688211994,11.0,57.0,0.3843078460769615,rules_v1,test
+wikipedia,cites_source,period,2023–2026,false_positive_rate,0.24086724435926676,0.1630271836897861,0.3328779203066395,19.0,70.0,0.3843078460769615,rules_v1,test
+wikipedia,cites_source,period,2020–2022,false_negative_rate,0.8879122109624321,0.7569005094899501,0.953418061698673,9.0,12.0,0.6101949025487257,rules_v1,test
+wikipedia,cites_source,period,2023–2026,false_negative_rate,0.9641217298451682,0.9641217298451682,0.9641217298451682,7.0,8.0,0.6101949025487257,rules_v1,test
+reddit,cites_source,source,conspiracy,false_positive_rate,0.18557235948540296,0.18557235948540296,0.18557235948540296,1.0,4.0,0.41379310344827586,rules_v1,test
+reddit,cites_source,source,science,false_positive_rate,0.0,0.0,0.0,0.0,6.0,0.41379310344827586,rules_v1,test
+reddit,cites_source,source,conspiracy,false_negative_rate,0.9383140299420194,0.8766280598840388,1.0,18.0,19.0,0.01899050474762619,rules_v1,test
+reddit,cites_source,source,reddit.com,false_negative_rate,1.0,1.0,1.0,4.0,4.0,0.01899050474762619,rules_v1,test
+reddit,cites_source,source,science,false_negative_rate,1.0,1.0,1.0,38.0,38.0,0.01899050474762619,rules_v1,test
+reddit,cites_source,source,skeptic,false_negative_rate,0.7414866219219638,0.6040485869642458,0.8789246568796818,5.0,7.0,0.01899050474762619,rules_v1,test
+wikipedia,cites_source,source,COVID-19,false_positive_rate,0.2506374936692511,0.19421853915207055,0.28376507058147715,11.0,33.0,0.015492253873063468,rules_v1,test
+wikipedia,cites_source,source,Globalne ocieplenie,false_positive_rate,0.13320296996156863,0.13320296996156863,0.13320296996156863,3.0,14.0,0.015492253873063468,rules_v1,test
+wikipedia,cites_source,source,Kwas askorbinowy,false_positive_rate,0.548260381593715,0.3439955106621773,0.7525252525252525,7.0,13.0,0.015492253873063468,rules_v1,test
+wikipedia,cites_source,source,Lekarz,false_positive_rate,0.1925922917047478,0.10084557006587187,0.28433901334362366,6.0,22.0,0.015492253873063468,rules_v1,test
+wikipedia,cites_source,source,Medycyna,false_positive_rate,0.21476510067114093,0.21476510067114093,0.21476510067114093,1.0,3.0,0.015492253873063468,rules_v1,test
+wikipedia,cites_source,source,Szczepionka,false_positive_rate,0.0,0.0,0.0,0.0,11.0,0.015492253873063468,rules_v1,test
+wikipedia,cites_source,source,Zespół nabytego niedoboru odporności,false_positive_rate,0.035120375787425676,0.0,0.08254449040122995,2.0,23.0,0.015492253873063468,rules_v1,test
+wikipedia,cites_source,source,Zmiana klimatu,false_positive_rate,0.0,0.0,0.0,0.0,8.0,0.015492253873063468,rules_v1,test
+wikipedia,cites_source,source,COVID-19,false_negative_rate,1.0,1.0,1.0,4.0,4.0,0.06846576711644178,rules_v1,test
+wikipedia,cites_source,source,Globalne ocieplenie,false_negative_rate,0.9415347137637028,0.9415347137637028,0.9415347137637028,5.0,6.0,0.06846576711644178,rules_v1,test
+wikipedia,cites_source,source,Lekarz,false_negative_rate,1.0,1.0,1.0,4.0,4.0,0.06846576711644178,rules_v1,test
+wikipedia,cites_source,source,Szczepionka,false_negative_rate,1.0,1.0,1.0,2.0,2.0,0.06846576711644178,rules_v1,test
+wikipedia,cites_source,source,Zespół nabytego niedoboru odporności,false_negative_rate,0.6521739130434783,0.6521739130434783,0.6521739130434783,1.0,3.0,0.06846576711644178,rules_v1,test
+wikipedia,cites_source,source,Zmiana klimatu,false_negative_rate,0.0,0.0,0.0,0.0,1.0,0.06846576711644178,rules_v1,test
+reddit,cites_source,period,2005–2012,false_positive_rate,1.0,1.0,1.0,5.0,5.0,0.4577711144427786,zeroshot_v1,test
+reddit,cites_source,period,2013–2020,false_positive_rate,0.47452494899857584,0.47452494899857584,0.47452494899857584,3.0,5.0,0.4577711144427786,zeroshot_v1,test
+reddit,cites_source,period,2005–2012,false_negative_rate,0.018718671224329377,0.0,0.056156013672988093,1.0,38.0,0.15942028985507245,zeroshot_v1,test
+reddit,cites_source,period,2013–2020,false_negative_rate,0.12580898873658525,0.024186101875759855,0.24147933722835374,4.0,30.0,0.15942028985507245,zeroshot_v1,test
+wikipedia,cites_source,period,2020–2022,false_positive_rate,0.2825160459607427,0.1370974994839737,0.46955346523948527,16.0,57.0,0.5592203898050975,zeroshot_v1,test
+wikipedia,cites_source,period,2023–2026,false_positive_rate,0.3437584508118658,0.24223583496960646,0.45457549000011754,24.0,70.0,0.5592203898050975,zeroshot_v1,test
+wikipedia,cites_source,period,2020–2022,false_negative_rate,0.7292424836235373,0.5327249314148144,0.8602541850960193,8.0,12.0,1.0,zeroshot_v1,test
+wikipedia,cites_source,period,2023–2026,false_negative_rate,0.7437266417512013,0.5233315536572344,0.9641217298451682,6.0,8.0,1.0,zeroshot_v1,test
+wikipedia,edit_about_sources,period,2020–2022,false_positive_rate,0.5731422094041008,0.3951871063090984,0.7459100473300248,32.0,51.0,0.4097951024487756,zeroshot_v1,test
+wikipedia,edit_about_sources,period,2023–2026,false_positive_rate,0.7374537508380721,0.6296596806635049,0.8442604479650369,47.0,66.0,0.4097951024487756,zeroshot_v1,test
+wikipedia,edit_about_sources,period,2020–2022,false_negative_rate,0.14929776938510564,0.0,0.3517054172076006,2.0,18.0,0.4962518740629685,zeroshot_v1,test
+wikipedia,edit_about_sources,period,2023–2026,false_negative_rate,0.0,0.0,0.0,0.0,12.0,0.4962518740629685,zeroshot_v1,test
+reddit,cites_source,source,conspiracy,false_positive_rate,0.37499046194698366,0.37499046194698366,0.37499046194698366,2.0,4.0,0.1329335332333833,zeroshot_v1,test
+reddit,cites_source,source,science,false_positive_rate,1.0,1.0,1.0,6.0,6.0,0.1329335332333833,zeroshot_v1,test
+reddit,cites_source,source,conspiracy,false_negative_rate,0.10024928608474354,0.0,0.20049857216948708,2.0,19.0,0.896551724137931,zeroshot_v1,test
+reddit,cites_source,source,reddit.com,false_negative_rate,0.0,0.0,0.0,0.0,4.0,0.896551724137931,zeroshot_v1,test
+reddit,cites_source,source,science,false_negative_rate,0.09875162088274647,0.04903719212620835,0.17032830008439626,3.0,38.0,0.896551724137931,zeroshot_v1,test
+reddit,cites_source,source,skeptic,false_negative_rate,0.0,0.0,0.0,0.0,7.0,0.896551724137931,zeroshot_v1,test
+wikipedia,cites_source,source,COVID-19,false_positive_rate,0.30475120581647114,0.12258537588503031,0.5148003817144179,13.0,33.0,0.6691654172913544,zeroshot_v1,test
+wikipedia,cites_source,source,Globalne ocieplenie,false_positive_rate,0.30929032632791553,0.0999022274711765,0.5186784251846547,3.0,14.0,0.6691654172913544,zeroshot_v1,test
+wikipedia,cites_source,source,Kwas askorbinowy,false_positive_rate,0.28395061728395066,0.07463524130190796,0.4259259259259259,4.0,13.0,0.6691654172913544,zeroshot_v1,test
+wikipedia,cites_source,source,Lekarz,false_positive_rate,0.453676435742768,0.31708538971369765,0.5849598201894239,9.0,22.0,0.6691654172913544,zeroshot_v1,test
+wikipedia,cites_source,source,Medycyna,false_positive_rate,0.0,0.0,0.0,0.0,3.0,0.6691654172913544,zeroshot_v1,test
+wikipedia,cites_source,source,Szczepionka,false_positive_rate,0.29086132482642146,0.07130793769938075,0.5817226496528429,3.0,11.0,0.6691654172913544,zeroshot_v1,test
+wikipedia,cites_source,source,Zespół nabytego niedoboru odporności,false_positive_rate,0.24076603083035142,0.035120375787425676,0.544507408264058,5.0,23.0,0.6691654172913544,zeroshot_v1,test
+wikipedia,cites_source,source,Zmiana klimatu,false_positive_rate,0.2361588989677823,0.17047231779793556,0.301845480137629,3.0,8.0,0.6691654172913544,zeroshot_v1,test
+wikipedia,cites_source,source,COVID-19,false_negative_rate,0.8600868975963646,0.8600868975963646,0.8600868975963646,3.0,4.0,0.21339330334832585,zeroshot_v1,test
+wikipedia,cites_source,source,Globalne ocieplenie,false_negative_rate,1.0,1.0,1.0,6.0,6.0,0.21339330334832585,zeroshot_v1,test
+wikipedia,cites_source,source,Lekarz,false_negative_rate,0.6542713567839195,0.3085427135678392,1.0,3.0,4.0,0.21339330334832585,zeroshot_v1,test
+wikipedia,cites_source,source,Szczepionka,false_negative_rate,0.12138728323699421,0.12138728323699421,0.12138728323699421,1.0,2.0,0.21339330334832585,zeroshot_v1,test
+wikipedia,cites_source,source,Zespół nabytego niedoboru odporności,false_negative_rate,0.6521739130434783,0.6521739130434783,0.6521739130434783,1.0,3.0,0.21339330334832585,zeroshot_v1,test
+wikipedia,cites_source,source,Zmiana klimatu,false_negative_rate,0.0,0.0,0.0,0.0,1.0,0.21339330334832585,zeroshot_v1,test
+wikipedia,edit_about_sources,source,COVID-19,false_positive_rate,0.5956026056281106,0.36197480939885235,0.8265250437350607,20.0,31.0,0.0734632683658171,zeroshot_v1,test
+wikipedia,edit_about_sources,source,Globalne ocieplenie,false_positive_rate,0.5554239735249744,0.33733047547977874,0.7719935759129178,9.0,15.0,0.0734632683658171,zeroshot_v1,test
+wikipedia,edit_about_sources,source,Kwas askorbinowy,false_positive_rate,1.0,1.0,1.0,11.0,11.0,0.0734632683658171,zeroshot_v1,test
+wikipedia,edit_about_sources,source,Lekarz,false_positive_rate,0.7154452437110219,0.5338895557215642,0.8813131101169241,10.0,16.0,0.0734632683658171,zeroshot_v1,test
+wikipedia,edit_about_sources,source,Medycyna,false_positive_rate,1.0,1.0,1.0,2.0,2.0,0.0734632683658171,zeroshot_v1,test
+wikipedia,edit_about_sources,source,Szczepionka,false_positive_rate,0.46403596403596403,0.15534465534465536,0.7737262737262737,4.0,10.0,0.0734632683658171,zeroshot_v1,test
+wikipedia,edit_about_sources,source,Zespół nabytego niedoboru odporności,false_positive_rate,0.5783123165965149,0.3406369444353288,0.8761034434517075,19.0,24.0,0.0734632683658171,zeroshot_v1,test
+wikipedia,edit_about_sources,source,Zmiana klimatu,false_positive_rate,0.5900541097655243,0.12625611955681523,0.8760628703942283,4.0,8.0,0.0734632683658171,zeroshot_v1,test
+wikipedia,edit_about_sources,source,COVID-19,false_negative_rate,0.1705020920502092,0.0,0.5115062761506276,1.0,6.0,0.760119940029985,zeroshot_v1,test
+wikipedia,edit_about_sources,source,Globalne ocieplenie,false_negative_rate,0.2854122621564482,0.0,0.8562367864693446,1.0,5.0,0.760119940029985,zeroshot_v1,test
+wikipedia,edit_about_sources,source,Kwas askorbinowy,false_negative_rate,0.0,0.0,0.0,0.0,2.0,0.760119940029985,zeroshot_v1,test
+wikipedia,edit_about_sources,source,Lekarz,false_negative_rate,0.0,0.0,0.0,0.0,10.0,0.760119940029985,zeroshot_v1,test
+wikipedia,edit_about_sources,source,Medycyna,false_negative_rate,0.0,0.0,0.0,0.0,1.0,0.760119940029985,zeroshot_v1,test
+wikipedia,edit_about_sources,source,Szczepionka,false_negative_rate,0.0,0.0,0.0,0.0,3.0,0.760119940029985,zeroshot_v1,test
+wikipedia,edit_about_sources,source,Zespół nabytego niedoboru odporności,false_negative_rate,0.0,0.0,0.0,0.0,2.0,0.760119940029985,zeroshot_v1,test
+wikipedia,edit_about_sources,source,Zmiana klimatu,false_negative_rate,0.0,0.0,0.0,0.0,1.0,0.760119940029985,zeroshot_v1,test
+reddit,cites_source,period,2005–2012,false_positive_rate,1.0,1.0,1.0,5.0,5.0,0.05647176411794103,gliner_v1,test
+reddit,cites_source,period,2013–2020,false_positive_rate,0.15925274894468752,0.0,0.31850549788937504,1.0,5.0,0.05647176411794103,gliner_v1,test
+reddit,cites_source,period,2005–2012,false_negative_rate,0.0,0.0,0.0,0.0,38.0,,gliner_v1,test
+reddit,cites_source,period,2013–2020,false_negative_rate,0.0,0.0,0.0,0.0,30.0,,gliner_v1,test
+wikipedia,cites_source,period,2020–2022,false_positive_rate,0.027408368472267273,0.0,0.0690639774324497,2.0,57.0,1.0,gliner_v1,test
+wikipedia,cites_source,period,2023–2026,false_positive_rate,0.04714818167922775,0.0,0.1046666117976273,3.0,70.0,1.0,gliner_v1,test
+wikipedia,cites_source,period,2020–2022,false_negative_rate,0.8347796875874811,0.8347796875874811,0.8347796875874811,9.0,12.0,1.0,gliner_v1,test
+wikipedia,cites_source,period,2023–2026,false_negative_rate,0.7437266417512013,0.5233315536572344,0.9641217298451682,6.0,8.0,1.0,gliner_v1,test
+reddit,cites_source,source,conspiracy,false_positive_rate,0.0,0.0,0.0,0.0,4.0,0.006496751624187906,gliner_v1,test
+reddit,cites_source,source,science,false_positive_rate,1.0,1.0,1.0,6.0,6.0,0.006496751624187906,gliner_v1,test
+reddit,cites_source,source,conspiracy,false_negative_rate,0.0,0.0,0.0,0.0,19.0,,gliner_v1,test
+reddit,cites_source,source,reddit.com,false_negative_rate,0.0,0.0,0.0,0.0,4.0,,gliner_v1,test
+reddit,cites_source,source,science,false_negative_rate,0.0,0.0,0.0,0.0,38.0,,gliner_v1,test
+reddit,cites_source,source,skeptic,false_negative_rate,0.0,0.0,0.0,0.0,7.0,,gliner_v1,test
+wikipedia,cites_source,source,COVID-19,false_positive_rate,0.03025095258651457,0.0,0.09075285775954371,1.0,33.0,0.8225887056471765,gliner_v1,test
+wikipedia,cites_source,source,Globalne ocieplenie,false_positive_rate,0.0,0.0,0.0,0.0,14.0,0.8225887056471765,gliner_v1,test
+wikipedia,cites_source,source,Kwas askorbinowy,false_positive_rate,0.06186868686868688,0.0,0.1856060606060606,1.0,13.0,0.8225887056471765,gliner_v1,test
+wikipedia,cites_source,source,Lekarz,false_positive_rate,0.10923357095950877,0.0,0.2556681628314749,2.0,22.0,0.8225887056471765,gliner_v1,test
+wikipedia,cites_source,source,Medycyna,false_positive_rate,0.0,0.0,0.0,0.0,3.0,0.8225887056471765,gliner_v1,test
+wikipedia,cites_source,source,Szczepionka,false_positive_rate,0.0,0.0,0.0,0.0,11.0,0.8225887056471765,gliner_v1,test
+wikipedia,cites_source,source,Zespół nabytego niedoboru odporności,false_positive_rate,0.02281663696104709,0.0,0.06844991088314127,1.0,23.0,0.8225887056471765,gliner_v1,test
+wikipedia,cites_source,source,Zmiana klimatu,false_positive_rate,0.0,0.0,0.0,0.0,8.0,0.8225887056471765,gliner_v1,test
+wikipedia,cites_source,source,COVID-19,false_negative_rate,0.7466018256467494,0.7466018256467494,0.7466018256467494,3.0,4.0,0.7066466766616691,gliner_v1,test
+wikipedia,cites_source,source,Globalne ocieplenie,false_negative_rate,0.9415347137637028,0.9415347137637028,0.9415347137637028,5.0,6.0,0.7066466766616691,gliner_v1,test
+wikipedia,cites_source,source,Lekarz,false_negative_rate,0.6542713567839195,0.3085427135678392,1.0,3.0,4.0,0.7066466766616691,gliner_v1,test
+wikipedia,cites_source,source,Szczepionka,false_negative_rate,1.0,1.0,1.0,2.0,2.0,0.7066466766616691,gliner_v1,test
+wikipedia,cites_source,source,Zespół nabytego niedoboru odporności,false_negative_rate,0.6521739130434783,0.6521739130434783,0.6521739130434783,1.0,3.0,0.7066466766616691,gliner_v1,test
+wikipedia,cites_source,source,Zmiana klimatu,false_negative_rate,1.0,1.0,1.0,1.0,1.0,0.7066466766616691,gliner_v1,test
