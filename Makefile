@@ -1,4 +1,4 @@
-.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets append-sheets sample-csv import-labels agreement adjudication-sheet import-adjudication tune validate audit-metrics errors compare import-stance validate-stance label-h1 domain-review hypotheses
+.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets append-sheets sample-csv import-labels agreement adjudication-sheet import-adjudication tune validate audit-metrics errors compare report-tables import-stance validate-stance label-h1 domain-review hypotheses
 
 ANNOTATORS ?= A B
 PHASE ?= pilot
@@ -72,6 +72,10 @@ errors:
 # Slide 4: kappa of instruments and annotators, McNemar, category rankings; gold shares.
 compare:
 	uv run scripts/12_compare_instruments.py
+
+# Tables and figures of the LaTeX report (report/raport.tex) from the saved results; compile with pdflatex or Overleaf.
+report-tables:
+	uv run scripts/13_report_tables.py
 
 # Hypotheses (docs/hipotezy.md). Stance sheets: scripts/03b_export_stance_sheets.py; then import them.
 import-stance:

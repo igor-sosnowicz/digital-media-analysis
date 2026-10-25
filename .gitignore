@@ -4,3 +4,9 @@ __pycache__
 .python-version
 # Annotation workbooks contain post text; commit only labels and the manifest.
 annotations/sheets/
+# LaTeX build files of the report.
+report/*.aux
+report/*.log
+report/*.out
+report/*.toc
+report/*.synctex.gz

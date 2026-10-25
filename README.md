@@ -142,6 +142,16 @@ make compare
 
 `make errors` lists every error on the dev split with a cause suggested from a closed list (`annotations/errors/dev_errors.csv`) and writes the review workbook `annotations/sheets/errors_dev.xlsx`, where a person confirms or corrects each cause; `IMPORT=1` reads it back. It also draws the Pareto chart of causes and computes differential error: false positive and false negative rates of `cites_source` by period and by subreddit or page on the test split, with a permutation test. `make compare` writes the kappa of each instrument next to the annotators' kappa in the pilot, exact McNemar tests between instruments, Kendall's tau between category rankings, and the weighted category shares from the gold labels alone (`annotations/validation/gold_shares.csv`).
 
+# Report
+
+`report/raport.tex` is the draft report (in Polish) of the codebook, the gold standard, the instrument validation and the hypothesis tests. Its tables (`report/tables/`) and figures (`report/figures/`) are generated from the saved results, so no number in a table is copied by hand; regenerate them after any analysis changes:
+
+```bash
+make report-tables
+```
+
+Compile with `pdflatex raport.tex` (twice) in `report/`, or upload the whole `report/` folder to Overleaf. Numbers quoted in the running text still have to be checked against the tables after a rerun.
+
 # Hypotheses
 
 Two research hypotheses are tested on the data, as preregistered in [`docs/hipotezy.md`](docs/hipotezy.md) (settings in the `hypotheses` section of `config.yaml`):
