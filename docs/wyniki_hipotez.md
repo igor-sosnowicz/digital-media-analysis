@@ -99,4 +99,4 @@ Osiem stron Wikipedii daje zbyt mało powołań na źródła alternatywne, by t�
 1. **Kodowanie stanowiska:** `stance_pilot_*` (zgodność), `stance_gold_*`, import (`make import-stance`).
 2. **Strojenie i test `stance_v1`:** `make validate-stance SPLIT=dev STANCE_TUNE=1`, ustawienie `TUNED = True`, commit, `make validate-stance SPLIT=test FROZEN=1`.
 3. **Etykiety stanowiska próby i test H1-A:** `make label-h1`, potem `make hypotheses CONFIRMATORY=1`.
-4. **Audyt i przegląd domen:** audyt kategorii (`audit_IS/JP.xlsx`) i ręczny przegląd domen (`domain_review.csv`). Jeśli przegląd zmieni klasyfikację domen alternatywnych, powtarzamy H2 i raportujemy obie wersje.
+4. **Audyt i przegląd domen:** audyt kategorii (`audit_IS/JP.xlsx`, potem `make audit-metrics`: czułość i swoistość `gliner_v1` z audytu i gold, warunek trafności i udziały skorygowane, według poprawki z 25.10.2026 w preregistracji) i ręczny przegląd domen (`domain_review.csv`). Jeśli przegląd zmieni klasyfikację domen alternatywnych, powtarzamy H2 i raportujemy obie wersje.

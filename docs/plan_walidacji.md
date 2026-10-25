@@ -4,11 +4,16 @@
 
 **Instrument.** Ekstraktor odniesień do źródeł oparty na wyrażeniach regularnych i słownikach, który do 16.10.2026 był wklejony w `notebooks/Reditt_EDA.ipynb` i `notebooks/Wikipedia_EDA.ipynb`. Od teraz to zamrożony instrument v1 w `src/digital_media_analysis/instruments/rules_v1.py`.
 
-## Stan na 18.10.2026
+## Stan na 25.10.2026
 
-- **Zrobione:** codebook v2.0 (kategorie i angielskie kody ze slajdu „Codebook”), próba 500 postów z Reddita (lata 2005–2020) i 500 opisów zmian z Wikipedii (lata 2020–2026), możliwie po równo z każdego roku i tylko ze źródeł z `config.yaml` (Reddit 32 pilot / 148 dev / 320 test, Wikipedia 21 / 152 / 327), oba pliki CSV z pełnymi danymi próby, arkusze pilotażu, import etykiet, κ i α z bootstrapem. 90 testów przechodzi.
-- **Brak:** etykiet ludzkich (`pilot_A.xlsx` i `pilot_B.xlsx` są puste), modułu walidacji, instrumentów v2 i AI.
-- **Ścieżka krytyczna to ręczna annotacja.** Slajdy 2–4 nie będą miały liczb, dopóki ludzie nie zakodują pilotażu i próby głównej. Resztę da się robić równolegle (zob. [Kolejność prac](#kolejność-prac)).
+- **Zrobione:**
+  - codebook v2.1, próba gold (Reddit 500, Wikipedia 500, plus runda `pilot2`), pliki CSV próby, arkusze;
+  - etykiety: gold IS (200) i JP (250), pilotaż IS (52) i JP (113), zgodność w pilotażu;
+  - instrumenty v1, zero-shot i GLiNER zwalidowane i raz przetestowane (commit `33ff729`), reguły v2 i I4 zbudowane i ocenione na `dev`;
+  - kod uzgadniania (arbiter), dopisywania jednostek do arkuszy, metryk audytu, analizy błędów, błędu różnicowego i porównania instrumentów;
+  - hipotezy H1 i H2: preregistracja, przebieg potwierdzający, odporność H2 (zob. etap 5).
+- **Testy:** 189 przechodzi.
+- **Czeka na ludzi:** arbiter dla 20 spornych jednostek pilotażu, `pilot2` u IS, kodowanie stanowiska, audyt, przegląd domen, potwierdzenie przyczyn błędów. Szczegóły w [Kolejność prac](#kolejność-prac).
 
 ## Diagnoza (przed zmianami)
 
@@ -23,7 +28,7 @@
 | 7 | Wikipedia: pominięty sygnał w treści rewizji | 378 rewizji zmienia liczbę `<ref>` w artykule, ale tylko 61 z nich ma znacznik „źródła/przypisy” | Analiza instrumentów |
 | 8 | `confidence` to stałe (1,0 / 0,9 / 0,85 / 0,8 / 0,55), a notebook raportuje ich średnią jak metrykę | kod v1 | Walidacja |
 | 9 | Brak gold standardu i jakichkolwiek metryk jakości | – | Gold, Walidacja |
-| 10 | Tabela kategorii Wikipedii liczy „komentarze” jako unikalne `revision_number` z wszystkich stron, co zaniża wynik | `źródła encyklopedyczne`: 136 w tabeli, 156 po poprawnym liczeniu (strona + rewizja); błąd nadal jest w komórce 25 `Wikipedia_EDA.ipynb` | Walidacja (do naprawy w etapie 3) |
+| 10 | Tabela kategorii Wikipedii liczy „komentarze” jako unikalne `revision_number` z wszystkich stron, co zaniża wynik | `źródła encyklopedyczne`: 136 w tabeli, 156 po poprawnym liczeniu (strona + rewizja); naprawione 25.10.2026 w komórce 25 `Wikipedia_EDA.ipynb` | Walidacja (naprawione) |
 | 11 | Techniczne: po przeniesieniu do `notebooks/` notebooki nie startowały, nazwy stron były zakodowane w URL, regexy zduplikowane, a `ipykernel` niezadeklarowany (`uv sync` go usuwał) | – | naprawione w etapie 0 |
 
 ## Etap 0: wspólny kod (zrobione)
@@ -89,6 +94,21 @@ Cel: etykiety referencyjne i pierwsza estymata zjawiska niezależna od instrumen
 - W obu notebookach sekcja „Zgodność annotatorów w pilotażu” pokazuje te same wyniki, a niezgodności z tekstem z lokalnych danych są materiałem na sesję uzgadniania.
 - Sprawdzone end-to-end na symulowanych etykietach poza repo. Prawdziwych etykiet jeszcze nie ma.
 
+**Wynik pilotażu (25.10.2026, `annotations/agreement/pilot_*`).** Obie osoby kodowały 32 posty i 20 opisów (pierwsza runda):
+
+| | jednostki | zgodność | α [95% CI] | ocena |
+|---|---|---|---|---|
+| Reddit, `cites_source` | 32 | 0,91 | −0,03 [−0,09; 0,00] | niewystarczające |
+| Reddit, `source_types` (MASI) | 32 | 0,50 | 0,34 [0,11; 0,54] | niewystarczające |
+| Wikipedia, `cites_source` | 20 | 0,85 | −0,05 [−0,15; 0,00] | za mało przypadków |
+| Wikipedia, `edit_about_sources` | 20 | 0,90 | 0,70 [−0,03; 1,00] | tylko wstępne wnioski |
+
+- Na Reddicie IS uznał wszystkie 32 posty za powołujące się na źródło, a JP 29. Przy takim rozpowszechnieniu α i κ są bliskie zera mimo 91% zgodności (paradoks rozpowszechnienia). Zgodności co do samego powołania na tej próbie nie da się więc ocenić.
+- Typy źródeł na Reddicie to główny problem: α (MASI) 0,34.
+- Na Wikipedii powołanie zaznaczył IS w 3 opisach, a JP w żadnym.
+- Etykiety JP powstały z etykiet wstępnych AI, które JP zatwierdził, więc to zgodność IS z etykietami wspomaganymi przez AI.
+- Według reguły decyzyjnej (α `cites_source` < 0,667) potrzebna jest druga runda. Runda `pilot2` jest gotowa: JP ją zakodował, a IS potrzebuje dopisania jej do swojego arkusza (`make append-sheets`).
+
 **Do zrobienia:**
 
 - Pilotaż i codebook v2.1 (etap 1). W pilotażu większość kategorii będzie miała za mało przypadków, więc pilotaż ocenia głównie `cites_source`, `edit_about_sources` i α MASI dla całego zbioru typów. Zgodność per kategoria rozstrzyga dopiero próba główna.
@@ -98,10 +118,14 @@ Cel: etykiety referencyjne i pierwsza estymata zjawiska niezależna od instrumen
   - JP dostał `gold_JP.xlsx` z kolejnymi jednostkami gold: Reddit wiersze 70–159 (90), Wikipedia wiersze 138–297 (160). To eksport `--after annotations/sheets/gold_IS.xlsx --reddit 90 --wikipedia 160`.
   - JP dostał też `pilot_JP.xlsx`: najpierw te same 53 jednostki pilotażu co IS (do zgodności), potem drugą rundę `pilot2` (30 postów z 16 lat, 30 opisów z lat 2020–2022 i 2024, w tym 8 `cue`). Żeby `pilot2` dał zgodność, IS musi zakodować te same jednostki; do tego czasu pilotaż IS importujemy z `--partial`.
   - W gold każda jednostka ma jedną osobę, więc zgodność liczymy tylko na pilotażu, a etykieta gold to etykieta tej osoby. Import idzie z `--partial`.
-  - **Etykiety wstępne AI w plikach JP (23.10.2026).** Na prośbę JP oba arkusze JP (`pilot_JP`: 113 jednostek, `gold_JP`: 250) wypełnił model AI (Claude), kodując według codebooka v2.0 bez wglądu w etykiety IS. Każdy wiersz ma w `notes` dopisek „etykieta wstępna AI (Claude) – do weryfikacji”, a przypadki graniczne `uncertain = 1` z uzasadnieniem. JP musi przejrzeć i poprawić każdy wiersz przed importem. W raporcie trzeba to ujawnić: zgodność IS–JP w pilotażu to zgodność IS z etykietami wspomaganymi przez AI, a jeśli JP zostawi etykiety bez zmian, część gold pochodzi od AI i nie nadaje się do oceny instrumentu AI (I3).
+  - **Etykiety wstępne AI w plikach JP (23.10.2026).** Na prośbę JP oba arkusze JP (`pilot_JP`: 113 jednostek, `gold_JP`: 250) wypełnił model AI (Claude), kodując według codebooka v2.0 bez wglądu w etykiety IS. Każdy wiersz miał w `notes` dopisek „etykieta wstępna AI (Claude) – do weryfikacji”, a przypadki graniczne `uncertain = 1` z uzasadnieniem. JP przejrzał wszystkie wiersze, zatwierdził etykiety, a dopiski usunięto z arkuszy (23.10.2026). W raporcie trzeba to ujawnić: zgodność IS–JP w pilotażu to zgodność IS z etykietami wspomaganymi przez AI, a jeśli JP zostawi etykiety bez zmian, część gold pochodzi od AI i nie nadaje się do oceny instrumentu AI (I3).
   - Wagi z manifestu zakładają zakodowanie całej próby gold. Do metryk trzeba je przeliczyć dla jednostek faktycznie zakodowanych w każdej warstwie.
   - Do poprawienia przez IS przed importem: puste wiersze `pilot_IS` Wikipedia 8 (`COVID-19#137`), `gold_IS` Reddit 37 (`84pt0`), `gold_IS` Wikipedia 89–90 (`COVID-19#425`, `COVID-19#635`: jest `edit_about_sources`, brak `source_types`) oraz kod `blog` zamiast `social_blog` w `gold_IS` Reddit 18 (`8qs04`).
-- Brakujący kod: scalenie dwóch annotacji i decyzji arbitra w etykietę ostateczną (`annotations/labels/gold/adjudicated.csv`). Dziś `agreement.disagreements` tylko listuje niezgodności, a `annotations.py` nie ma kroku uzgadniania.
+- **Uzgadnianie (kod zrobiony 25.10.2026):** `src/digital_media_analysis/adjudication.py` i `scripts/05b_adjudicate.py` (`make adjudication-sheet PHASE=… ARBITER=…`, potem `make import-adjudication`).
+  - Arkusz arbitra `annotations/sheets/adjudication_<faza>.xlsx` ma sporne jednostki, a obok żółtych kolumn etykiety i notatki obu osób. Arbiter nie koduje w ciemno i może wybrać etykietę inną niż obie.
+  - Decyzje trafiają bez tekstu do `annotations/adjudication/<faza>.csv`. `annotations.gold_reference` używa ich dla rozstrzygniętych jednostek, więc walidacja (skrypty 07, 11, 12) korzysta z etykiet ostatecznych. Działa też dla audytu (`--phase audit`).
+  - W pilotażu czeka 20 spornych jednostek (16 z Reddita, 4 z Wikipedii); arbitra trzeba jeszcze wyznaczyć.
+- **Dopisywanie jednostek do arkusza (25.10.2026):** `make append-sheets PHASE=pilot ANNOTATORS=IS` (`03 --append`) dodaje pod ostatnim wierszem jednostki fazy, których arkusz nie ma, bez ruszania istniejących etykiet. Sprawdzone na kopii `pilot_IS.xlsx`: przybywa 30 postów i 30 opisów `pilot2`, a 52 etykiety zostają bez zmian. Samego `pilot_IS.xlsx` nie zmienialiśmy.
 - Notatniki, nowa sekcja „Gold standard: etykiety uzgodnione”:
   - α i κ na próbie głównej. To „sufit ludzki”, do którego porównujemy instrumenty w etapie 4.
   - Ważone (N_h / n_h) udziały jednostek z powołaniem i typów źródeł, z przedziałami. To pierwszy wynik merytoryczny, który nie zależy od żadnego instrumentu.
@@ -116,8 +140,25 @@ Cel: ile v1 się myli, dlaczego i czy to zmienia wnioski z EDA.
 - Metryki: precyzja, czułość i F1 dla `cites_source` i `edit_about_sources`, dla każdej kategorii (jedna przeciw reszcie), Jaccard dla całego zbioru typów, macro-F1, macierz pomyłek.
 - **Ważenie wagami próby.** Warstwy `link` i `cue` są nadreprezentowane, więc nieważona precyzja na Wikipedii będzie zawyżona względem populacji. Równy przydział lat nadreprezentuje też lata z małą liczbą jednostek: na Reddicie wczesne lata (w 2006 r. wszystkie posty mają łącznie około 2,5 tys., w 2017 r. około 187 tys.), na Wikipedii wszystkie lata poza 2020. Na Reddicie waga zawiera też `day_weight`. Metryki liczymy z wagami, a bootstrap losuje jednostki w obrębie warstw.
 - **v1 oceniamy na dev i test razem**, z wagami przeliczonymi dla połączonej próby. v1 nigdy nie był strojony, więc to uczciwe i daje około dwa razy więcej jednostek, co przydaje się przy błędzie różnicowym. Zbiór testowy pozostaje nietknięty dla v2 i instrumentu AI (etap 4).
-- Analiza błędów: każda pomyłka v1 na dev dostaje przyczynę z zamkniętej listy: podciąg, brak kontekstu, link niebędący źródłem, skrót `WP:`, znacznik edycji, wyciek kontekstu komentarza, brak w słowniku, pominięte pole `url`, inne. Zapis w `annotations/errors/v1_dev.csv`, druga osoba sprawdza około 20% przypisań. Wynik pokazujemy na wykresie Pareto.
-- Błąd różnicowy: odsetek fałszywych trafień i pominięć per rok, subreddit i strona, z przedziałami. Jeśli się różnią, porównania grup lub trend w czasie są obciążone. Na rok przypada 20 postów testowych z Reddita i 35–52 opisy z Wikipedii, więc wynik raczej pozwoli „nie wykluczyć różnic” niż je wykazać. Lepiej porównywać okresy, np. 2005–2012 i 2013–2020 na Reddicie.
+- **Analiza błędów (kod zrobiony 25.10.2026):** `src/digital_media_analysis/errors.py`, `scripts/11_error_analysis.py` (`make errors`).
+  - Każdy błąd instrumentu na `dev` dostaje przyczynę z zamkniętej listy: podciąg, brak kontekstu, link niebędący źródłem, skrót `WP:`, znacznik edycji, wyciek kontekstu komentarza, brak w słowniku, pominięte pole `url`, inne.
+  - Przyczynę proponuje heurystyka z cech powierzchniowych jednostki. Człowiek potwierdza ją albo poprawia w `annotations/sheets/errors_dev.xlsx` (z tekstem), a `make errors IMPORT=1` wczytuje decyzje do `annotations/errors/dev_errors.csv` (bez tekstu). Druga osoba sprawdza około 20% przypisań.
+  - Błędy wykrycia (`cites_source`, `edit_about_sources`) liczymy osobno od błędów typu, które liczymy tylko tam, gdzie gold i instrument widzą powołanie. Dzięki temu pominięte powołanie jest jednym błędem, a nie kilkoma.
+  - Pareto z przyczyn proponowanych, jeszcze niepotwierdzonych (`annotations/errors/dev_pareto.png`):
+
+    | Instrument | Błędy na `dev` | Najczęstsze przyczyny |
+    |---|---|---|
+    | v1 | 127 | pominięte pole `url` 71 (56%), brak w słowniku 22, skrót `WP:` 18, znacznik edycji 8 |
+    | GLiNER | 88 | brak w słowniku 47, brak kontekstu 40 |
+    | reguły v2 | 97 | brak w słowniku 59, brak kontekstu 35 |
+    | I4 (`refs_v1`) | 33 | inne: instrument czyta zmianę przypisów w artykule, a codebook deklarację w opisie |
+
+  - Wniosek: ponad połowa błędów v1 to post z linkiem, którego v1 nie czyta (błąd #4). Skróty `WP:` i znaczniki edycji (błędy #5 i #6) są drugą grupą. W regułach v2 te przyczyny prawie znikają.
+- **Do zrobienia:** potwierdzenie przyczyn przez człowieka.
+- **Błąd różnicowy (zrobione 25.10.2026, `annotations/errors/differential_test.csv`):** odsetek fałszywych trafień (wśród jednostek bez powołania w gold) i pominięć (wśród jednostek z powołaniem) dla połówek okresu (Reddit 2005–2012 i 2013–2020, Wikipedia 2020–2022 i 2023–2026) oraz dla subredditów i stron, na zbiorze testowym. Przedziały to bootstrap w warstwach, a test permutacyjny sprawdza, czy liczby błędów różnią się między grupami.
+  - Między połówkami okresu żaden instrument nie ma istotnie różnych błędów `cites_source`. Najbliżej jest GLiNER na Reddicie (fałszywe trafienia, p = 0,056).
+  - Między grupami: v1 na Reddicie pomija powołania w różnym stopniu zależnie od subredditu (p = 0,02), a na Wikipedii daje najwięcej fałszywych trafień na stronie Kwas askorbinowy (p = 0,02). GLiNER na Reddicie ma różne odsetki fałszywych trafień w subredditach (p = 0,006), ale zbiór testowy ma tylko kilkanaście postów bez powołania, więc to wynik na pojedynczych przypadkach.
+  - Wniosek: test nie wykazuje błędu zależnego od czasu, ale przy tej liczbie jednostek pozwala raczej „nie wykluczyć różnic” niż je wykluczyć. Trend H1-B z efektami stałymi subredditu nie zależy od różnic poziomu błędu między subredditami, ale zależałby od ich zmiany w czasie.
 - Kalibracja `confidence`: empiryczna precyzja dokumentu w grupach o stałych wartościach 1,0 / 0,9 / 0,85 / 0,8 / 0,55.
 - Propagacja błędu, czyli rozbudowa eksperymentów z EDA. Tabele „na jakie źródła powołują się użytkownicy” (Reddit) i „kategorie źródeł w komentarzach” (Wikipedia) dostają trzy kolumny obok siebie: zliczenie v1 (jak dziś), częstość skorygowaną metodą Rogana–Gladena z przedziałem i estymatę z gold. Przy okazji naprawiamy błąd #10.
 - Na slajd: tabela metryk z przedziałami, macierz pomyłek `cites_source`, Pareto przyczyn, błąd różnicowy, porównanie liczb z v1 i skorygowanych.
@@ -168,9 +209,36 @@ Cel: wybrać instrument do bloku 4 albo uczciwie stwierdzić, że czegoś nie da
     - **Wikipedia:** żaden instrument nie jest wiarygodny. F1 `cites_source` wynosi najwyżej 0,26 przy szerokim przedziale (tylko 20 powołań), a wysokie MASI wynika z trafnych `none`. Zero-shot dla `edit_about_sources` ma F1 0,37: znajduje prawie wszystkie edycje dotyczące przypisów (czułość 0,88), ale z wieloma fałszywymi trafieniami (precyzja 0,24). Według reguły wyboru to wynik negatywny dla typów źródeł na Wikipedii przy tych instrumentach. Kolejny krok to reguły v2 (I2) dla R9 i R10 (skróty `WP:`, znacznik „źródła/przypisy”) albo więcej etykiet gold.
     - **Zależność od annotatora:** instrumenty zgadzają się wyraźnie bardziej z częścią JP. GLiNER na Reddicie ma MASI 0,29 na części IS i 0,61 na JP; na Wikipedii F1 `cites_source` 0,11 na IS i 0,56 na JP. To zgodne z systematycznymi różnicami etykiet IS i JP oraz z tym, że etykiety JP powstały z etykiet wstępnych AI (zob. etap 2). Wyniki trzeba raportować dla obu części, a podwójne zakodowanie części gold pozwoliłoby rozstrzygnąć, które etykiety są bliższe codebookowi.
     - **Propozycja do bloku 4:** GLiNER (`gliner_v1`) na Reddicie dla `cites_source` oraz kategorii `media` i `social_blog`. Na Wikipedii typów źródeł nie liczymy automatycznie, dopóki nie powstanie lepszy instrument.
+- **Reguły v2 i I4 (zbudowane 25.10.2026, tylko `dev`):**
+  - `rules_v2` (`instruments/rules_v2.py`) wprowadza reguły z codebooka zamiast słów kluczowych v1:
+    - całe słowa;
+    - link posta i jego domena (`codebook/domains.yaml` i lista częstych domen Reddita, potem wzorce blogów i serwisów informacyjnych, a nieznana domena to `other`, R7);
+    - bez skrótów `WP:` i rewertów (R9);
+    - znacznik „źródła/przypisy” tylko jako `edit_about_sources` (R10);
+    - kategoria z nazwy tuż po sygnale powołania („wg”, „na podstawie”, „according to”), a sam sygnał to `unknown` (R5);
+    - bez opinii i próśb o źródło (R8).
+  - `refs_v1` (I4, `instruments/refs_v1.py`) daje `edit_about_sources` = 1, gdy rewizja dodała albo usunęła choć jeden przypis (treść `<ref>` lub szablon `{{Cytuj}}`) względem poprzedniej rewizji strony. Próg 1 wybrany na `dev` z siatki 1, 2, 3, 5, 10.
+  - Wyniki na `dev`, ważone (reguły budowane na tym zbiorze, więc to górna granica):
+
+    | | v1 | zero-shot | GLiNER | reguły v2 | I4 |
+    |---|---|---|---|---|---|
+    | Reddit, F1 `cites_source` | 0,00 | 0,94 | 0,94 | 0,95 [0,92; 0,98] | – |
+    | Reddit, MASI | 0,07 | 0,43 | 0,50 | 0,60 [0,50; 0,69] | – |
+    | Reddit, macro-F1 | 0,00 | 0,55 | 0,76 | 0,74 | – |
+    | Wikipedia, F1 `cites_source` | 0,22 | 0,31 | 0,12 | 0,31 [0,10; 0,59] | – |
+    | Wikipedia, F1 `edit_about_sources` | – | 0,27 | – | 0,80 | 0,57 |
+    | Wikipedia, MASI | 0,77 | 0,66 | 0,88 | 0,89 | – |
+
+  - Reguły v2 dają na Reddicie lepsze MASI niż GLiNER, bo domena linku dobrze wyznacza typ źródła. Na Wikipedii wyraźnie lepiej mierzą `edit_about_sources` niż zero-shot. I4 ma czułość 0,82 przy precyzji 0,44: wiele edycji zmienia przypisy bez słowa w opisie, a codebook mierzy deklarację.
+  - Oba instrumenty czekają na commit zamrażający i jeden przebieg testu: `make validate SPLIT=test FROZEN=1 INSTRUMENTS="rules_v2 refs_v1"`. Skrypt 07 nie pozwala drugi raz uruchomić testu dla instrumentu, który już go przeszedł, a dopisuje nowe wiersze do istniejących tabel.
 - Procedura: I2 i I3 zamrażamy commitem **przed** otwarciem zbioru testowego. Test uruchamiamy raz.
-- Porównanie na teście: ważone macro-F1 z przedziałem; κ(instrument, gold) na tle κ(człowiek, człowiek); test McNemara I2 vs I3 dla `cites_source`; koszt i czas; powtarzalność I3 (dwa przebiegi i κ między nimi).
-- Odporność wniosków: przeliczamy tabele z EDA każdym instrumentem i sprawdzamy, czy ranking kategorii (τ Kendalla) i kierunek różnic między subredditami i stronami się utrzymują.
+- **Porównanie na teście (zrobione 25.10.2026, `make compare`, pliki `annotations/validation/comparison_*.csv`)** z zapisanych predykcji, bez ponownego uruchamiania testu:
+  - **κ dla `cites_source`:** GLiNER 0,54 [0,20; 0,82] na Reddicie i 0,27 [0,12; 0,45] na Wikipedii, zero-shot 0,15 i −0,01, v1 około 0. κ annotatorów w pilotażu wynosi 0,00 na obu platformach, ale przy 91% i 85% zgodności (paradoks rozpowszechnienia). Ten próg nie jest więc dobrym punktem odniesienia. Dla `edit_about_sources`: annotatorzy 0,69, zero-shot 0,13.
+  - **McNemar dla `cites_source`:** na Reddicie GLiNER ma rację tam, gdzie zero-shot się myli, w 7 jednostkach, a odwrotnie w żadnej (p = 0,016); wobec v1 66 do 6 (p < 0,001). Na Wikipedii GLiNER wobec zero-shot 39 do 5, wobec v1 31 do 5 (oba p < 0,001).
+  - **Ranking kategorii (τ Kendalla względem gold, ważone udziały na teście):** Reddit GLiNER 0,55 (p = 0,06), zero-shot 0,22, v1 −0,09; Wikipedia GLiNER 0,18, v1 0,12, zero-shot −0,54. Żaden instrument nie wskazuje tej samej najczęstszej kategorii co gold. Na Reddicie gold ma `media` (0,36), a GLiNER `social_blog` (0,46). Wniosek o tym, na co powołują się użytkownicy, zależy więc od instrumentu.
+  - **Udziały z samego gold** (`annotations/validation/gold_shares.csv`, `dev` i `test` razem, ważone): Reddit: powołanie 0,88 [0,81; 0,93], `media` 0,41 [0,33; 0,49], `social_blog` 0,33 [0,25; 0,41], pozostałe kategorie po 0,05 lub mniej. Wikipedia: powołanie 0,13 [0,09; 0,19], najczęściej `personal` 0,05, `encyclopedia` 0,03, `institutional` 0,02.
+  - Reguły v2 i I4 dojdą do tych tabel po swoim jednorazowym teście.
+- Koszt, czas i powtarzalność: modele lokalne są deterministyczne (te same wyniki z cache), więc powtarzalność jest pełna; instrumentu LLM przez API (I3) nie budowaliśmy.
 - Reguła wyboru, zapisana z góry: najprostszy instrument, którego κ z gold nie jest wyraźnie niższe od κ między annotatorami; przy remisie tańszy i deterministyczny. Jeśli dla danej kategorii nie przechodzi żaden instrument, to wynik negatywny, który zasady kursu wprost uznają.
 - Na slajd: tabela I1–I4, wykres κ instrumentów na tle pasma zgodności ludzi, odporność rankingu, decyzja, którym instrumentem liczymy pełne dane w bloku 4.
 
@@ -203,23 +271,29 @@ Preregistracja: [`docs/hipotezy.md`](hipotezy.md); ustawienia w sekcji `hypothes
 
 ## Kolejność prac
 
-1. **Teraz, równolegle z pilotażem (bez etykiet):** pilotaż (dwie osoby kodują); `validation.py` z testami; poprawka błędu #10; I4; szkielet I3 (prompt z codebooka, cache, parser JSON).
-2. **Po pilotażu:** codebook v2.1, potem arkusze próby głównej. Plan analizy (progi, reguła wyboru instrumentu) commitujemy, zanim ktokolwiek zobaczy wyniki na teście. To dobra obrona w turnieju red teamingu (M2).
-3. **Po etykietach dev:** analiza błędów v1, budowa I2, przykłady few-shot dla I3.
-4. **Po etykietach test:** zamrożenie I2 i I3, jedno uruchomienie na teście, liczby na slajdy 3–4.
-5. **Blok 4:** wybrany instrument na pełnych danych, z częstościami skorygowanymi o błąd.
+Stan na 25.10.2026.
+
+1. **Zrobione bez nowych etykiet:** walidacja trzech instrumentów z jednym testem, reguły v2 i I4 na `dev`, analiza błędów z proponowanymi przyczynami, błąd różnicowy, porównanie instrumentów, udziały z gold, kod uzgadniania, dopisywania arkuszy i audytu, poprawka błędu #10.
+2. **Następny krok w kodzie (wymaga zgody na commit):** commit zamrażający `rules_v2` i `refs_v1`, potem jednorazowo `make validate SPLIT=test FROZEN=1 INSTRUMENTS="rules_v2 refs_v1"` i `make compare`.
+3. **Praca ludzi:**
+   - arbiter dla 20 spornych jednostek pilotażu (`make adjudication-sheet`), potem codebook v2.2, jeśli spory pokażą luki;
+   - IS: dopisanie `pilot2` (`make append-sheets PHASE=pilot ANNOTATORS=IS`) i kodowanie, potem `make import-labels PARTIAL=1` i `make agreement`;
+   - kodowanie stanowiska (`stance_*`), audyt (`audit_*`), przegląd domen (`domain_review.csv`);
+   - potwierdzenie przyczyn błędów w `errors_dev.xlsx` (druga osoba sprawdza około 20%).
+4. **Po etykietach:** `make agreement` dla `pilot2`, `make audit-metrics`, strojenie i test `stance_v1`, `make label-h1`, `make hypotheses CONFIRMATORY=1`.
+5. **Blok 4:** wybrany instrument na pełnych danych, z udziałami skorygowanymi o błąd.
 
 ## Mapa slajdów
 
 | Slajd | Co pokazać | Skąd |
 |---|---|---|
-| Codebook | konstrukt, jednostki, 3 zmienne, 9 kategorii ze slajdu, kluczowe reguły; przed i po (2 schematy → 1); konflikty v1 z regułami: 274 skróty `WP:`, 88 znaczników, 124 niewidziane linki; zmiany v2.0 → v2.1 po pilotażu | `codebook/codebook.md`, sekcje „Codebook v2.0” i „Instrument v1 w kategoriach codebooka” w obu notebookach, etap 1 |
-| Gold Standard | schemat losowania, liczności, κ i α z przedziałami, przykłady niezgodności i ich rozstrzygnięcie, ważone udziały z gold | etap 2 |
-| Walidacja Błędu | ważone metryki v1 z przedziałami, macierz pomyłek, Pareto przyczyn błędów, błąd różnicowy, liczby z v1 obok skorygowanych | etap 3 |
-| Analiza Instrumentów | tabela I1–I4, κ instrumentów na tle κ ludzi, odporność wniosku, wybór instrumentu | etap 4 |
+| Codebook | konstrukt, jednostki, zmienne, 9 kategorii ze slajdu, kluczowe reguły (R3, R9, R10); przed i po (2 schematy v1 → 1 codebook); konflikty v1 z regułami: 274 skróty `WP:`, 88 znaczników, 124 niewidziane linki; zmiany v2.0 → v2.1 | `codebook/codebook.md`, sekcje „Codebook v2.0” i „Instrument v1 w kategoriach codebooka” w obu notatnikach, etap 1 |
+| Gold Standard | schemat losowania i liczności; zgodność w pilotażu (tabela α i paradoks rozpowszechnienia przy `cites_source`); spory i ich rozstrzygnięcie przez arbitra; ważone udziały z samego gold | etap 2; `annotations/agreement/pilot_alpha.png`, `pilot_disagreements.csv`; `annotations/validation/gold_shares.csv`; sekcje „Gold standard” w notatnikach |
+| Walidacja Błędu | ważone metryki z przedziałami (`dev` i `test`), macierz pomyłek, Pareto przyczyn błędów, błąd różnicowy, zależność od annotatora | etap 3; `annotations/validation/test_metrics.csv`, `test_confusion.csv`; `annotations/errors/dev_pareto.png`, `differential_test.csv` |
+| Analiza Instrumentów | tabela instrumentów (v1, zero-shot, GLiNER, reguły v2, I4); κ instrumentów na tle κ ludzi; McNemar; τ Kendalla rankingu kategorii; wybór instrumentu do bloku 4 | etap 4; `annotations/validation/comparison_kappa.csv`, `comparison_mcnemar.csv`, `comparison_rankings.csv` |
 
 ## Decyzje do podjęcia
 
 - Instrument AI: LLM przez API czy model lokalny, np. polski Bielik. Model lokalny nie wysyła danych na zewnątrz, co upraszcza część o RODO. Koszt API do sprawdzenia w aktualnym cenniku. W obu przypadkach użycie AI ujawniamy w preprincie.
-- Kto annotuje (dwie osoby i arbiter) i kiedy robimy pilotaż. Arkusze nazywają się dziś `pilot_A` i `pilot_B`, więc trzeba je wyeksportować ponownie z inicjałami (`make pilot-sheets ANNOTATORS="JP IS"`) albo przemianować.
+- Kto jest arbitrem (`make adjudication-sheet PHASE=pilot ARBITER=…`). Czekają spory z pilotażu (20 jednostek), a po kodowaniu także z audytu.
 - Skład próby Reddita zmienia się w czasie i to jest główne zagrożenie dla hipotezy o spadku zaufania: w 2005 r. to ogólny r/reddit.com, w latach 2006–2007 tylko r/science, a potem rośnie udział r/conspiracy (5 z 31 postów w 2008 r., 22 z 32 w 2017 r., 21 z 32 w 2020 r.). Spadek zaufania w próbie może więc wynikać po prostu ze wzrostu r/conspiracy. Polskie subreddity dają tylko 11 z 500 postów (od 2013 r., najwięcej r/PolskaPolityka w 2020 r.), bo przed 2020 r. mają po kilkadziesiąt postów rocznie wobec tysięcy w subredditach angielskich. Do decyzji: czy raportujemy trend łącznie z wagami, czy osobno dla każdego subredditu (r/science i r/conspiracy mają posty w latach 2008–2020). Dodatkowo posty są głównie po angielsku, a Wikipedia po polsku, więc codebook i instrument muszą działać w obu językach. Losowania to nie zmienia, bo subreddit jest zapisany przy każdym poście.

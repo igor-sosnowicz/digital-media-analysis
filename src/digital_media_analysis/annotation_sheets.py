@@ -7,6 +7,7 @@ the sheet: reading derives it from `source_types` (codebook rule R13).
 """
 
 import json
+from collections.abc import Sequence
 from pathlib import Path
 
 import pandas as pd
@@ -44,33 +45,45 @@ def write_workbook(
     phase: str,
     units_by_platform: dict[str, pd.DataFrame],
     codebook: Codebook,
+    context_columns: Sequence[str] = (),
+    extra_rules: Sequence[str] = (),
 ) -> None:
-    """Write one annotator's workbook; units must already be in presentation order."""
+    """Write one annotator's workbook; units must already be in presentation order.
+
+    `context_columns` are unit columns shown read-only to the right of the label
+    columns (an arbiter sees the annotators' labels there); `extra_rules` are
+    added to the working rules on the instruction sheet.
+    """
     workbook = Workbook()
     workbook.properties.title = f"{phase}_{annotator}"
     workbook.properties.description = json.dumps(
         {"phase": phase, "annotator": annotator, "codebook_version": codebook.version}
     )
-    _write_instructions(workbook.active, annotator, phase, codebook)
+    _write_instructions(workbook.active, annotator, phase, codebook, extra_rules)
     for platform, units in units_by_platform.items():
-        _write_platform_sheet(workbook.create_sheet(SHEET_NAMES[platform]), platform, units, annotator, codebook)
+        sheet = workbook.create_sheet(SHEET_NAMES[platform])
+        _write_platform_sheet(sheet, platform, units, annotator, codebook, context_columns)
     path.parent.mkdir(parents=True, exist_ok=True)
     workbook.save(path)
 
 
-def _write_instructions(sheet, annotator: str, phase: str, codebook: Codebook) -> None:
+def _write_instructions(sheet, annotator: str, phase: str, codebook: Codebook, extra_rules: Sequence[str] = ()) -> None:
     sheet.title = "Instrukcja"
+    rules = [
+        "Koduj samodzielnie. Nie porównuj etykiet z innymi przed zakończeniem całego arkusza.",
+        "Opieraj się tylko na codebooku i tekście w wierszu. Nie otwieraj linków.",
+        "Wypełnij żółte kolumny w każdym wierszu. Zmienne binarne: 0 lub 1 (lista rozwijana).",
+        f"source_types: kody z tabeli poniżej rozdzielone znakiem „{LABEL_SEPARATOR}”; {NO_SOURCE}, gdy nie ma powołania (sam, bez innych kodów; R13).",
+        "W razie wątpliwości wybierz najlepszą etykietę, ustaw uncertain = 1 i opisz problem w notes (R12).",
+        "Nie zmieniaj kolumn unit_id ani kolejności wierszy.",
+        *extra_rules,
+    ]
     rows = [
         [f"Arkusz annotacji: {phase}, annotator {annotator}"],
         [f"Codebook v{codebook.version} z {codebook.date.isoformat()}. Pełna instrukcja: codebook/codebook.md"],
         [],
         ["Zasady pracy"],
-        ["1. Koduj samodzielnie. Nie porównuj etykiet z innymi przed zakończeniem całego arkusza."],
-        ["2. Opieraj się tylko na codebooku i tekście w wierszu. Nie otwieraj linków."],
-        ["3. Wypełnij żółte kolumny w każdym wierszu. Zmienne binarne: 0 lub 1 (lista rozwijana)."],
-        [f"4. source_types: kody z tabeli poniżej rozdzielone znakiem „{LABEL_SEPARATOR}”; {NO_SOURCE}, gdy nie ma powołania (sam, bez innych kodów; R13)."],
-        ["5. W razie wątpliwości wybierz najlepszą etykietę, ustaw uncertain = 1 i opisz problem w notes (R12)."],
-        ["6. Nie zmieniaj kolumn unit_id ani kolejności wierszy."],
+        *([f"{number}. {rule}"] for number, rule in enumerate(rules, start=1)),
         [],
         ["Kod", "Kategoria", "Definicja"],
         *([category.code, category.name, category.definition] for category in codebook.categories),
@@ -92,41 +105,107 @@ def _write_instructions(sheet, annotator: str, phase: str, codebook: Codebook) -
     sheet.column_dimensions["C"].width = 90
 
 
-def _write_platform_sheet(sheet, platform: str, units: pd.DataFrame, annotator: str, codebook: Codebook) -> None:
+def _write_platform_sheet(
+    sheet, platform: str, units: pd.DataFrame, annotator: str, codebook: Codebook, context_columns: Sequence[str] = ()
+) -> None:
     content = CONTENT_COLUMNS[platform]
     labels = LABEL_COLUMNS[platform]
-    sheet.append([header for _, header, _ in content] + labels)
-    for unit in units.itertuples(index=False):
-        values = [str(getattr(unit, column))[:EXCEL_CELL_LIMIT] for column, _, _ in content]
-        sheet.append(values + [None] * (len(labels) - 1) + [annotator])
-
-    last_row = len(units) + 1
+    sheet.append([header for _, header, _ in content] + labels + list(context_columns))
+    _append_rows(sheet, platform, units, annotator, context_columns, start_row=2)
     for index, (_, _, width) in enumerate(content, start=1):
         sheet.column_dimensions[get_column_letter(index)].width = width
     for offset, name in enumerate(labels, start=len(content) + 1):
-        letter = get_column_letter(offset)
-        sheet.column_dimensions[letter].width = 30 if name in {"source_types", "notes"} else 14
-        for row in range(2, last_row + 1):
-            sheet.cell(row, offset).fill = LABEL_FILL
-        cell_range = f"{letter}2:{letter}{max(last_row, 2)}"
-        if name in BINARY_COLUMNS:
-            validation = DataValidation(type="list", formula1='"0,1"', allow_blank=True, showErrorMessage=True)
-        elif name == "source_types":
-            validation = DataValidation(allow_blank=True, showInputMessage=True)
-            validation.promptTitle = "Kody kategorii"
-            validation.prompt = LABEL_SEPARATOR.join(codebook.category_codes)
-        else:
-            continue
-        sheet.add_data_validation(validation)
-        validation.add(cell_range)
-
-    for row in sheet.iter_rows(min_row=2):
-        for cell in row:
-            cell.alignment = Alignment(wrap_text=True, vertical="top")
+        sheet.column_dimensions[get_column_letter(offset)].width = 30 if name in {"source_types", "notes"} else 14
+    for offset in range(len(content) + len(labels) + 1, len(content) + len(labels) + len(context_columns) + 1):
+        sheet.column_dimensions[get_column_letter(offset)].width = 24
+    _format_label_cells(sheet, platform, 2, len(units) + 1, codebook)
     for cell in sheet[1]:
         cell.font = HEADER_FONT
     sheet.freeze_panes = "B2"
-    sheet.auto_filter.ref = f"A1:{get_column_letter(len(content) + len(labels))}{last_row}"
+
+
+def _append_rows(
+    sheet, platform: str, units: pd.DataFrame, annotator: str, context_columns: Sequence[str] = (), start_row: int = 2
+) -> None:
+    """Write unit rows from `start_row` on, with empty labels, the annotator and any context columns."""
+    content = CONTENT_COLUMNS[platform]
+    labels = LABEL_COLUMNS[platform]
+    for row_number, unit in enumerate(units.to_dict("records"), start=start_row):
+        values = [str(unit[column])[:EXCEL_CELL_LIMIT] for column, _, _ in content]
+        values += [None] * (len(labels) - 1) + [annotator]
+        values += [_shown(unit[column]) for column in context_columns]
+        for column_number, value in enumerate(values, start=1):
+            sheet.cell(row_number, column_number, value)
+
+
+def _shown(value) -> str | None:
+    return None if value is None or (not isinstance(value, str) and pd.isna(value)) else str(value)
+
+
+def _format_label_cells(sheet, platform: str, first_row: int, last_row: int, codebook: Codebook) -> None:
+    """Fill, wrapping and data validation (0/1 lists, code prompt) of the label cells in rows first_row..last_row."""
+    content = CONTENT_COLUMNS[platform]
+    if last_row >= first_row:
+        for offset, name in enumerate(LABEL_COLUMNS[platform], start=len(content) + 1):
+            letter = get_column_letter(offset)
+            for row in range(first_row, last_row + 1):
+                sheet.cell(row, offset).fill = LABEL_FILL
+            if name in BINARY_COLUMNS:
+                validation = DataValidation(type="list", formula1='"0,1"', allow_blank=True, showErrorMessage=True)
+            elif name == "source_types":
+                validation = DataValidation(allow_blank=True, showInputMessage=True)
+                validation.promptTitle = "Kody kategorii"
+                validation.prompt = LABEL_SEPARATOR.join(codebook.category_codes)
+            else:
+                continue
+            sheet.add_data_validation(validation)
+            validation.add(f"{letter}{first_row}:{letter}{last_row}")
+        for row in sheet.iter_rows(min_row=first_row, max_row=last_row):
+            for cell in row:
+                cell.alignment = Alignment(wrap_text=True, vertical="top")
+    sheet.auto_filter.ref = f"A1:{get_column_letter(sheet.max_column)}{max(last_row, 2)}"
+
+
+def append_units(
+    path: Path, units_by_platform: dict[str, pd.DataFrame], codebook: Codebook, counts: dict[str, int | None] | None = None
+) -> dict[str, int]:
+    """Add the units a workbook lacks below its last unit row; the rows already there, and their labels, stay.
+
+    `units_by_platform` are the candidate units in presentation order; those
+    already in the sheet are skipped and `counts` caps how many are added per
+    platform. A platform sheet the workbook does not have yet is created.
+    Returns the number of rows added per platform.
+    """
+    lock = path.with_name(f"~${path.name}")
+    if lock.exists():
+        raise RuntimeError(f"{path.name} is open in Excel ({lock.name} exists); close it and try again.")
+    workbook = load_workbook(path)
+    annotator = _metadata(workbook).get("annotator") or path.stem.split("_", 1)[-1]
+    added = {}
+    for platform, units in units_by_platform.items():
+        count = (counts or {}).get(platform)
+        sheet_name = SHEET_NAMES[platform]
+        if sheet_name not in workbook.sheetnames:
+            chosen = units if count is None else units.head(count)
+            _write_platform_sheet(workbook.create_sheet(sheet_name), platform, chosen, annotator, codebook)
+            added[platform] = len(chosen)
+            continue
+        sheet = workbook[sheet_name]
+        header = [cell.value for cell in sheet[1]]
+        expected = [name for _, name, _ in CONTENT_COLUMNS[platform]] + LABEL_COLUMNS[platform]
+        if header[: len(expected)] != expected:
+            raise ValueError(f"{path.name}, {sheet_name}: headers {header} differ from the expected {expected}.")
+        ids = [row[0] for row in sheet.iter_rows(min_row=2, max_col=1, values_only=True)]
+        present = {str(unit_id) for unit_id in ids if unit_id is not None}
+        # The last row holding a unit; formatting Excel added below it does not count.
+        last_row = 1 + max((number for number, unit_id in enumerate(ids, start=1) if unit_id is not None), default=0)
+        missing = units[~units["unit_id"].astype(str).isin(present)]
+        chosen = missing if count is None else missing.head(count)
+        _append_rows(sheet, platform, chosen, annotator, start_row=last_row + 1)
+        _format_label_cells(sheet, platform, last_row + 1, last_row + len(chosen), codebook)
+        added[platform] = len(chosen)
+    workbook.save(path)
+    return added
 
 
 def units_after(units: pd.DataFrame, coded: list[str], count: int | None = None) -> pd.DataFrame:

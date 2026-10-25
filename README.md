@@ -97,13 +97,28 @@ make pilot-round REDDIT=30 WIKIPEDIA=30
 make sample-csv
 ```
 
+A workbook someone already started gets the units of the phase it lacks (e.g. the new pilot round) appended below its last row, with the rows and labels already there left as they are. Close the workbook in Excel first:
+
+```bash
+make append-sheets PHASE=pilot ANNOTATORS=IS
+```
+
+Units that annotators coded differently go to an arbiter. The arbiter workbook (`annotations/sheets/adjudication_<phase>.xlsx`) is not blind: next to the label columns it shows every annotator's labels and notes. The imported decisions (`annotations/adjudication/<phase>.csv`, text-free) settle those units in the gold reference that validation uses:
+
+```bash
+make adjudication-sheet PHASE=pilot ARBITER=XY
+make import-adjudication PHASE=pilot
+```
+
 # Instrument validation
 
-Three instruments label the gold units in codebook space (`cites_source`, `source_types`, `edit_about_sources`), and `scripts/07_validate_instruments.py` compares them with the imported gold labels:
+Five instruments label the gold units in codebook space (`cites_source`, `source_types`, `edit_about_sources`), and `scripts/07_validate_instruments.py` compares them with the imported gold labels (and the arbiter's decisions for disputed units):
 
 - `rules_v1`: the frozen keyword and regex extractor from the EDA notebooks (`instruments/rules_v1.py`); it reads only the Reddit post body and does not measure `edit_about_sources`;
 - `zeroshot_v1`: a multilingual NLI model ([`MoritzLaurer/mDeBERTa-v3-base-xnli-multilingual-nli-2mil7`](https://huggingface.co/MoritzLaurer/mDeBERTa-v3-base-xnli-multilingual-nli-2mil7), MIT) scores one hypothesis per category and one for `edit_about_sources` (`instruments/zeroshot_v1.py`);
-- `gliner_v1`: zero-shot entity extraction ([`urchade/gliner_multi-v2.1`](https://huggingface.co/urchade/gliner_multi-v2.1), Apache-2.0) finds source mentions and maps their labels onto the categories (`instruments/gliner_v1.py`).
+- `gliner_v1`: zero-shot entity extraction ([`urchade/gliner_multi-v2.1`](https://huggingface.co/urchade/gliner_multi-v2.1), Apache-2.0) finds source mentions and maps their labels onto the categories (`instruments/gliner_v1.py`);
+- `rules_v2`: rules written from the codebook and built on the dev split only (`instruments/rules_v2.py`): whole words, the Reddit post link and its domain (`codebook/domains.yaml` and a list of frequent Reddit domains), Wikipedia shortcuts and reverts left out (R9), the "źródła/przypisy" tag only as `edit_about_sources` (R10), and categories from a name right after a citation cue;
+- `refs_v1`: Wikipedia only, `edit_about_sources` = 1 when the edit added or removed at least one reference in the article text (`<ref>` bodies and `{{Cytuj}}` templates) compared with the previous revision (`instruments/refs_v1.py`).
 
 Both models are pinned to a Hugging Face commit and run locally, so no text leaves the machine; a CPU is enough. Install their dependencies with `uv sync --group ml`; the models (about 2.5 GB each) download on first use. The instruments read each unit as the codebook defines it: Reddit title, body and post link (without the author's own image and video hosts, R3), Wikipedia edit summary without the automatic section prefix (R9).
 
@@ -115,7 +130,17 @@ make tune
 make validate SPLIT=test FROZEN=1
 ```
 
-The test split refuses to run without `FROZEN=1` or with uncommitted instrument or validation code. Metrics are weighted by the design weights of the coded units in each stratum, with stratified bootstrap intervals: precision, recall, F1 and kappa for `cites_source` and `edit_about_sources`, one-vs-rest F1 for every category (judged only with at least 10 gold positives), and the weighted MASI similarity and macro-F1 for the label set. They are reported per platform, split and annotator. Results go to `annotations/validation/` (metrics, confusion counts, run settings with the commit), instrument labels to `annotations/predictions/`, and raw model output is cached in `data/model_cache/`.
+The test split refuses to run without `FROZEN=1` or with uncommitted instrument or validation code, and runs once per instrument: an instrument already in `annotations/validation/test_metrics.csv` is refused, so later instruments run alone (`make validate SPLIT=test FROZEN=1 INSTRUMENTS="rules_v2 refs_v1"`), and their rows join the existing tables. Metrics are weighted by the design weights of the coded units in each stratum, with stratified bootstrap intervals: precision, recall, F1 and kappa for `cites_source` and `edit_about_sources`, one-vs-rest F1 for every category (judged only with at least 10 gold positives), and the weighted MASI similarity and macro-F1 for the label set. They are reported per platform, split and annotator. Results go to `annotations/validation/` (metrics, confusion counts, run settings with the commit), instrument labels to `annotations/predictions/`, and raw model output is cached in `data/model_cache/`.
+
+Error analysis and the comparison of instruments use the saved predictions only:
+
+```bash
+make errors
+make errors IMPORT=1
+make compare
+```
+
+`make errors` lists every error on the dev split with a cause suggested from a closed list (`annotations/errors/dev_errors.csv`) and writes the review workbook `annotations/sheets/errors_dev.xlsx`, where a person confirms or corrects each cause; `IMPORT=1` reads it back. It also draws the Pareto chart of causes and computes differential error: false positive and false negative rates of `cites_source` by period and by subreddit or page on the test split, with a permutation test. `make compare` writes the kappa of each instrument next to the annotators' kappa in the pilot, exact McNemar tests between instruments, Kendall's tau between category rankings, and the weighted category shares from the gold labels alone (`annotations/validation/gold_shares.csv`).
 
 # Hypotheses
 
@@ -136,5 +161,5 @@ make domain-review
 make hypotheses CONFIRMATORY=1
 ```
 
-Stance workbooks (`annotations/sheets/stance_<phase>_<annotator>.xlsx`) hold only the Reddit posts and the `consensus_stance` column; gold stance sheets for each annotator's own posts come from `--units-from annotations/sheets/gold_<annotator>.xlsx`. `scripts/08_label_h1_sample.py --audit-annotators ...` also exports audit workbooks for the rare source categories. The confirmatory run refuses while the preregistration files are uncommitted; H1-A additionally waits for a tuned `stance_v1` that has run on the test split. Results go to `annotations/hypotheses/`.
+Stance workbooks (`annotations/sheets/stance_<phase>_<annotator>.xlsx`) hold only the Reddit posts and the `consensus_stance` column; gold stance sheets for each annotator's own posts come from `--units-from annotations/sheets/gold_<annotator>.xlsx`. `scripts/08_label_h1_sample.py --audit-annotators ...` also exports audit workbooks for the rare source categories; once they are coded, `make audit-metrics` estimates `gliner_v1`'s sensitivity and specificity for the H1-B indicators (weighted by inverse inclusion probability, also pooled with the gold test split), checks the validity gate and corrects the yearly shares (amendment of 25.10.2026 in the preregistration). The confirmatory run refuses while the preregistration files are uncommitted; H1-A additionally waits for a tuned `stance_v1` that has run on the test split. Results go to `annotations/hypotheses/`.
 

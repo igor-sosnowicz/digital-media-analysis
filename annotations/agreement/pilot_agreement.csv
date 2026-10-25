@@ -1,0 +1,22 @@
+platform,variable,units,annotators,positive_units,observed_agreement,prevalence,kappa,kappa_low,kappa_high,alpha,alpha_low,alpha_high,distance,verdict
+reddit,cites_source,32,2,32,0.90625,0.953125,0.0,0.0,0.0,-0.032786885245901676,-0.0862068965517242,0.0,nominal,niewystarczające
+reddit,source_types,32,2,32,0.5,,,,,0.3396720820543534,0.11020483822518985,0.5429737168935368,MASI,niewystarczające
+reddit,source_types:scientific,32,2,3,0.90625,0.046875,0.0,0.0,0.0,-0.032786885245901676,-0.10526315789473695,0.0,nominal,za mało przypadków
+reddit,source_types:institutional,32,2,3,0.9375,0.0625,0.47540983606557374,0.0,1.0,0.475,-0.050000000000000044,1.0,nominal,za mało przypadków
+reddit,source_types:media,32,2,15,0.6875,0.3125,0.2857142857142857,-0.06666666666666667,0.625,0.28409090909090906,-0.11428571428571432,0.6174089068825911,nominal,niewystarczające
+reddit,source_types:personal,32,2,1,0.96875,0.015625,0.0,0.0,0.0,0.0,-0.050000000000000044,0.0,nominal,za mało przypadków
+reddit,source_types:social_blog,32,2,17,0.78125,0.421875,0.552,0.23801935116676165,0.8125363372093021,0.5585585585585586,0.23902261925717316,0.81524926686217,nominal,niewystarczające
+reddit,source_types:encyclopedia,32,2,0,1.0,0.0,,,,,,,nominal,za mało przypadków
+reddit,source_types:other,32,2,5,0.875,0.09375,0.26436781609195403,-0.12,0.7837837837837838,0.27586206896551724,-0.10526315789473695,0.7864406779661017,nominal,niewystarczające
+reddit,source_types:unknown,32,2,2,0.96875,0.046875,0.6521739130434783,0.0,1.0,0.6557377049180328,-0.032786885245901676,1.0,nominal,za mało przypadków
+wikipedia,cites_source,20,2,3,0.85,0.075,0.0,0.0,0.0,-0.054054054054053946,-0.1470588235294117,0.0,nominal,za mało przypadków
+wikipedia,edit_about_sources,20,2,5,0.9,0.2,0.6875,0.0,1.0,0.6953125,-0.026315789473684292,1.0,nominal,tylko wstępne wnioski
+wikipedia,source_types,20,2,3,0.85,,,,,-0.03539823008849563,-0.12067310532222804,0.0,MASI,za mało przypadków
+wikipedia,source_types:scientific,20,2,0,1.0,0.0,,,,,,,nominal,za mało przypadków
+wikipedia,source_types:institutional,20,2,0,1.0,0.0,,,,,,,nominal,za mało przypadków
+wikipedia,source_types:media,20,2,0,1.0,0.0,,,,,,,nominal,za mało przypadków
+wikipedia,source_types:personal,20,2,2,0.9,0.05,0.0,0.0,0.0,-0.026315789473684292,-0.11428571428571432,0.0,nominal,za mało przypadków
+wikipedia,source_types:social_blog,20,2,0,1.0,0.0,,,,,,,nominal,za mało przypadków
+wikipedia,source_types:encyclopedia,20,2,0,1.0,0.0,,,,,,,nominal,za mało przypadków
+wikipedia,source_types:other,20,2,1,0.95,0.025,0.0,0.0,0.0,0.0,-0.054054054054053946,0.0,nominal,za mało przypadków
+wikipedia,source_types:unknown,20,2,0,1.0,0.0,,,,,,,nominal,za mało przypadków

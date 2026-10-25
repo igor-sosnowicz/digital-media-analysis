@@ -1,0 +1,114 @@
+unit_id,platform,annotator,codebook_version,cites_source,source_types,edit_about_sources,uncertain,notes
+5ld507,reddit,JP,2.0,1,media,,0,
+7sb0as,reddit,JP,2.0,1,social_blog,,0,
+8hrqy8,reddit,JP,2.0,1,media,,1,nature.com/articles/d41586-… to dział News/Comment Nature (R4); może scientific
+b0igw,reddit,JP,2.0,1,other,,1,TED (ted.com) to platforma wykładów organizacji TED; other czy social_blog?
+6f5xev,reddit,JP,2.0,1,social_blog,,1,weandtheworld.org/single-post – wpis blogowy na stronie organizacji?
+94aix,reddit,JP,2.0,1,social_blog,,0,
+qtcj,reddit,JP,2.0,1,other,,0,
+8461,reddit,JP,2.0,1,media,,0,
+hj6vz,reddit,JP,2.0,1,social_blog,,1,"tytuł wskazuje materiał Jamesa Corbetta (Corbett Report, niezależny kanał) bez linku"
+ql5d,reddit,JP,2.0,1,social_blog,,0,
+155v43,reddit,JP,2.0,1,institutional,,1,nhs.uk/news (NHS Behind the Headlines): publiczna służba zdrowia jako institutional?
+4y25jg,reddit,JP,2.0,1,social_blog,,0,
+2dfyeb,reddit,JP,2.0,0,none,,1,strona firmy (wkładki Noene): reklama (R3) czy other?
+dwc8u8,reddit,JP,2.0,1,institutional,,1,norwegianscitechnews.com prowadzą NTNU i SINTEF (komunikaty uczelni): institutional czy media?
+1yeyr8,reddit,JP,2.0,0,none,,0,
+7ak4r,reddit,JP,2.0,1,social_blog,,1,Groklaw: blog o prawie (social_blog) czy media?
+1b6ytt,reddit,JP,2.0,1,social_blog,,0,
+fn86ht,reddit,JP,2.0,1,social_blog;unknown,,0,
+20385,reddit,JP,2.0,1,institutional,,1,strona prof. Kitaoki w domenie uczelni (ritsumei.ac.jp): institutional?
+3gxu91,reddit,JP,2.0,1,social_blog,,0,
+djtcd,reddit,JP,2.0,1,media,,0,
+dw2voc,reddit,JP,2.0,1,media,,1,Liveuamap: serwis mapujący doniesienia (media czy social_blog?)
+155rje,reddit,JP,2.0,1,social_blog,,1,socialeaf.com: serwis społecznościowy z newsami obrazkowymi?
+1kzs1t,reddit,JP,2.0,1,social_blog,,0,
+5k7t1a,reddit,JP,2.0,1,social_blog,,0,
+6jlp3,reddit,JP,2.0,1,media,,0,
+2w7jvw,reddit,JP,2.0,1,other,,1,strona grupy AA (organizacja): źródło treści czy temat kpiny (R2)?
+fmwxdq,reddit,JP,2.0,1,media,,0,
+ntj9v,reddit,JP,2.0,0,none,,0,
+5zf0c,reddit,JP,2.0,1,media,,0,
+16gs4,reddit,JP,2.0,1,social_blog,,0,
+9jsar,reddit,JP,2.0,1,unknown,,1,„per documentary”: film bez wskazania którego (unknown czy media?)
+7wzi6,reddit,JP,2.0,1,institutional;media,,0,
+d1t12,reddit,JP,2.0,1,social_blog,,0,
+cuvxf,reddit,JP,2.0,0,none,,0,
+f69xu,reddit,JP,2.0,1,media,,0,
+r02r,reddit,JP,2.0,1,media,,0,
+7wwyi,reddit,JP,2.0,1,social_blog,,0,
+14544,reddit,JP,2.0,1,media,,0,
+2fr43,reddit,JP,2.0,1,social_blog,,0,
+8syh2h,reddit,JP,2.0,1,media,,0,
+1b6qbj,reddit,JP,2.0,1,media,,0,
+3q0gjs,reddit,JP,2.0,1,unknown,,0,
+d16onr,reddit,JP,2.0,1,social_blog,,0,
+ssy8u,reddit,JP,2.0,1,media,,0,
+twj0z,reddit,JP,2.0,1,media,,1,listverse.com: serwis z listami (media czy social_blog?)
+cpnxdv,reddit,JP,2.0,1,social_blog,,0,
+7jkb7,reddit,JP,2.0,1,other,,1,WikiLeaks: organizacja publikująca dokumenty; other czy media?
+229wxn,reddit,JP,2.0,1,media;social_blog,,1,"b4in.info (Before It's News, treści użytkowników) i CNN w tytule (R4)"
+5k9j1p,reddit,JP,2.0,1,media,,0,
+83yh12,reddit,JP,2.0,1,media,,0,
+5tvxwu,reddit,JP,2.0,1,social_blog,,0,
+pouj,reddit,JP,2.0,1,social_blog,,0,
+21iy5u,reddit,JP,2.0,1,social_blog,,0,
+1pjnmk,reddit,JP,2.0,1,other;personal,,1,własna obserwacja i cytaty opisów uprawnień aplikacji (dokumentacja firmy)
+hjb96,reddit,JP,2.0,1,media,,1,examiner.com: portal autorów-amatorów (media czy social_blog?)
+3d8g2k,reddit,JP,2.0,1,media,,0,
+ilxtgf,reddit,JP,2.0,1,social_blog,,0,
+6f8eqo,reddit,JP,2.0,1,other,,1,scienceworld.in: strona z poradami (other czy social_blog?)
+eu6nvb,reddit,JP,2.0,0,none,,0,
+7hywg,reddit,JP,2.0,1,social_blog,,0,
+4bmoe3,reddit,JP,2.0,1,personal,,0,
+Lekarz#194,wikipedia,JP,2.0,0,none,1,0,
+Zespół nabytego niedoboru odporności#286,wikipedia,JP,2.0,0,none,0,0,
+Lekarz#143,wikipedia,JP,2.0,0,none,0,0,
+Lekarz#184,wikipedia,JP,2.0,0,none,0,0,
+COVID-19#763,wikipedia,JP,2.0,0,none,0,0,
+COVID-19#61,wikipedia,JP,2.0,0,none,0,0,
+COVID-19#137,wikipedia,JP,2.0,0,none,0,0,
+COVID-19#653,wikipedia,JP,2.0,0,none,0,0,
+Globalne ocieplenie#181,wikipedia,JP,2.0,0,none,1,1,ujednolicenie daty dostępu w szablonie cytowania: czy to „poprawa przypisów” (R10)?
+Zespół nabytego niedoboru odporności#297,wikipedia,JP,2.0,0,none,0,0,
+Zespół nabytego niedoboru odporności#215,wikipedia,JP,2.0,0,none,0,0,
+Kwas askorbinowy#130,wikipedia,JP,2.0,0,none,1,0,
+COVID-19#843,wikipedia,JP,2.0,0,none,0,1,bot zmienia nazwę szablonu „Potrzebny przypis”: bez pracy nad samymi przypisami?
+Zespół nabytego niedoboru odporności#256,wikipedia,JP,2.0,0,none,0,0,
+COVID-19#852,wikipedia,JP,2.0,0,none,0,0,
+Globalne ocieplenie#257,wikipedia,JP,2.0,0,none,0,0,
+Globalne ocieplenie#197,wikipedia,JP,2.0,0,none,0,0,
+Globalne ocieplenie#230,wikipedia,JP,2.0,0,none,0,0,
+COVID-19#699,wikipedia,JP,2.0,0,none,1,0,
+Zmiana klimatu#67,wikipedia,JP,2.0,0,none,0,0,
+COVID-19#734,wikipedia,JP,2.0,0,none,0,0,
+Szczepionka#247,wikipedia,JP,2.0,0,none,0,0,
+Zespół nabytego niedoboru odporności#231,wikipedia,JP,2.0,1,unknown,0,0,
+Lekarz#94,wikipedia,JP,2.0,0,none,0,0,
+Kwas askorbinowy#98,wikipedia,JP,2.0,1,other,1,1,daty w szablonie Sigma-Aldrich (katalog firmy chemicznej): źródło other i praca nad przypisem?
+COVID-19#231,wikipedia,JP,2.0,0,none,0,0,
+COVID-19#70,wikipedia,JP,2.0,0,none,0,0,
+Zespół nabytego niedoboru odporności#273,wikipedia,JP,2.0,0,none,0,0,
+COVID-19#804,wikipedia,JP,2.0,0,none,0,0,
+COVID-19#298,wikipedia,JP,2.0,0,none,0,0,
+COVID-19#644,wikipedia,JP,2.0,0,none,0,0,
+COVID-19#359,wikipedia,JP,2.0,0,none,0,1,„potrzebne wiarygodne źródło”: usunięcie nieuźródłowionej treści czy niewiarygodnego źródła (R10)?
+COVID-19#811,wikipedia,JP,2.0,0,none,0,0,
+Globalne ocieplenie#196,wikipedia,JP,2.0,0,none,0,0,
+COVID-19#785,wikipedia,JP,2.0,0,none,0,0,
+COVID-19#765,wikipedia,JP,2.0,0,none,0,0,
+Zmiana klimatu#55,wikipedia,JP,2.0,0,none,1,1,"samo słowo „źródło”: prawdopodobnie dodanie źródła, bez wskazania jakiego"
+Kwas askorbinowy#134,wikipedia,JP,2.0,0,none,0,0,
+Lekarz#117,wikipedia,JP,2.0,0,none,0,0,
+Lekarz#86,wikipedia,JP,2.0,0,none,0,0,
+Zespół nabytego niedoboru odporności#290,wikipedia,JP,2.0,0,none,0,0,
+Globalne ocieplenie#239,wikipedia,JP,2.0,0,none,0,0,
+COVID-19#200,wikipedia,JP,2.0,0,none,0,0,
+Zespół nabytego niedoboru odporności#269,wikipedia,JP,2.0,0,none,0,0,
+COVID-19#833,wikipedia,JP,2.0,0,none,0,0,
+Szczepionka#229,wikipedia,JP,2.0,0,none,0,0,
+Lekarz#110,wikipedia,JP,2.0,0,none,0,0,
+Szczepionka#283,wikipedia,JP,2.0,0,none,0,0,
+COVID-19#565,wikipedia,JP,2.0,0,none,1,0,
+COVID-19#683,wikipedia,JP,2.0,0,none,1,1,"bot dodaje tytuły linków w przypisach: poprawa przypisów (R10), ale to komunikat bota (R9)"
+COVID-19#559,wikipedia,JP,2.0,0,none,0,0,

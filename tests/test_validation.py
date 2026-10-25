@@ -98,3 +98,59 @@ def test_gold_reference_keeps_agreeing_units_and_sets_conflicts_aside():
     reference_labels, conflicts = annotations.gold_reference(labels)
     assert sorted(reference_labels["unit_id"]) == ["a", "b"]
     assert sorted(conflicts["unit_id"].unique()) == ["c"]
+
+
+def test_unmeasured_source_types_get_no_set_metrics():
+    edit_only = predictions().assign(cites_source=pd.NA, source_types=pd.NA, edit_about_sources=1)
+    frame = validation.paired(reference(), edit_only, MANIFEST)
+    values = validation.metrics(frame, ["media"])
+    assert ("source_types", "masi") not in values and ("cites_source", "f1") not in values
+    assert np.isnan(validation.objective(reference(), edit_only, MANIFEST, ["media"])["masi"])
+    assert validation.confusion(reference(), edit_only, MANIFEST, "x").empty
+
+
+def test_weighted_shares_pool_the_splits_of_each_stratum():
+    labels = pd.concat([reference(), pd.DataFrame({
+        "unit_id": ["e", "f"], "platform": "reddit", "annotator": "IS", "cites_source": [0, 0],
+        "source_types": ["none", "none"], "edit_about_sources": pd.array([pd.NA] * 2, dtype="Int64"),
+    })], ignore_index=True)
+    shares = validation.weighted_shares(labels, MANIFEST, ["media", "none"], samples=100).set_index("variable")
+    # Stratum 2010: a, b, e, f (100 / 4 each, two citing); 2011: c, d (40 / 2 each, one citing).
+    assert shares.loc["cites_source", "share"] == pytest.approx((25 + 25 + 20) / 140)
+    assert shares.loc["media", "share"] == pytest.approx(50 / 140)
+    assert "none" not in shares.index
+    assert shares.loc["media", "low"] <= shares.loc["media", "share"] <= shares.loc["media", "high"]
+
+
+def test_differential_errors_rate_per_group_with_a_permutation_test():
+    frame = pd.DataFrame({
+        "platform": "reddit", "stratum": "s", "weight": 1.0,
+        "cites_source": [0] * 20 + [1] * 20,
+        "cites_source_pred": [1] * 8 + [0] * 2 + [0] * 10 + [1] * 20,
+        "period": (["early"] * 10 + ["late"] * 10) + (["early"] * 10 + ["late"] * 10),
+    })
+    table = validation.differential_errors(frame, "period", samples=50, permutations=500)
+    fp = table[table["rate"].eq("false_positive_rate")].set_index("group")
+    assert fp.loc["early", "value"] == pytest.approx(0.8) and fp.loc["late", "value"] == 0.0
+    assert fp["p_permutation"].iloc[0] < 0.01
+    fn = table[table["rate"].eq("false_negative_rate")]
+    # No false negatives at all: nothing to compare.
+    assert fn["value"].eq(0).all() and fn["p_permutation"].isna().all()
+
+
+def test_mcnemar_counts_discordant_pairs():
+    frame = pd.DataFrame({"cites_source": [1] * 10, "a": [1] * 10, "b": [0] * 8 + [1] * 2})
+    result = validation.mcnemar(frame, "a", "b")
+    assert (result["only_first_right"], result["only_second_right"], result["both_right"]) == (8, 0, 2)
+    assert result["p_exact"] == pytest.approx(2 * 0.5**8)
+
+
+def test_ranking_agreement_compares_category_orders():
+    shares = pd.DataFrame({
+        "platform": "reddit", "variable": ["media", "scientific", "social_blog"] * 3,
+        "source": ["gold"] * 3 + ["same"] * 3 + ["reversed"] * 3,
+        "share": [0.5, 0.3, 0.1, 0.6, 0.2, 0.1, 0.1, 0.3, 0.5],
+    })
+    table = validation.ranking_agreement(shares).set_index("source")
+    assert table.loc["same", "kendall_tau"] == pytest.approx(1.0) and table.loc["same", "same_top_category"]
+    assert table.loc["reversed", "kendall_tau"] == pytest.approx(-1.0) and not table.loc["reversed", "same_top_category"]

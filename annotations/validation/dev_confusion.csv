@@ -5,3 +5,5 @@ reddit,dev,68,4,5,1,zeroshot_v1
 wikipedia,dev,9,44,14,80,zeroshot_v1
 reddit,dev,70,4,3,1,gliner_v1
 wikipedia,dev,3,1,20,123,gliner_v1
+reddit,dev,70,3,3,2,rules_v2
+wikipedia,dev,5,1,18,123,rules_v2

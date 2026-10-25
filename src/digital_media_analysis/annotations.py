@@ -87,34 +87,39 @@ def save_labels(labels: pd.DataFrame, path: Path) -> None:
     labels[LABEL_FILE_COLUMNS].to_csv(path, index=False, encoding="utf-8")
 
 
-def load_labels(phase: str, labels_dir: Path = LABELS_DIR) -> pd.DataFrame:
-    """All annotators' labels for a phase in one long table (empty if none imported yet)."""
-    paths = sorted((labels_dir / phase).glob("*.csv"))
-    if not paths:
-        return pd.DataFrame(columns=LABEL_FILE_COLUMNS)
-    labels = pd.concat(
-        [
-            pd.read_csv(
-                path,
-                dtype={"unit_id": str, "annotator": str, "codebook_version": str, "source_types": str, "notes": str},
-                keep_default_na=False,
-                na_values={"cites_source": [""], "edit_about_sources": [""], "uncertain": [""]},
-            )
-            for path in paths
-        ],
-        ignore_index=True,
+def read_label_file(path: Path) -> pd.DataFrame:
+    """One label file (`save_labels` format) with nullable integer binary columns."""
+    labels = pd.read_csv(
+        path,
+        dtype={"unit_id": str, "annotator": str, "codebook_version": str, "source_types": str, "notes": str},
+        keep_default_na=False,
+        na_values={"cites_source": [""], "edit_about_sources": [""], "uncertain": [""]},
     )
     for column in ["cites_source", "edit_about_sources", "uncertain"]:
         labels[column] = labels[column].astype("Int64")
     return labels
 
 
-def gold_reference(labels: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+def load_labels(phase: str, labels_dir: Path = LABELS_DIR) -> pd.DataFrame:
+    """All annotators' labels for a phase in one long table (empty if none imported yet)."""
+    paths = sorted((labels_dir / phase).glob("*.csv"))
+    if not paths:
+        return pd.DataFrame(columns=LABEL_FILE_COLUMNS)
+    return pd.concat([read_label_file(path) for path in paths], ignore_index=True)
+
+
+def _keys(frame: pd.DataFrame) -> pd.MultiIndex:
+    return pd.MultiIndex.from_frame(frame[["platform", "unit_id"]].astype(str))
+
+
+def gold_reference(labels: pd.DataFrame, decisions: pd.DataFrame | None = None) -> tuple[pd.DataFrame, pd.DataFrame]:
     """One reference label per unit from the imported labels of a phase, and the units left out.
 
     A unit coded by one person keeps that label. A unit several people coded keeps
     it only when they agree on `source_types` and `edit_about_sources`; otherwise
-    it waits for adjudication and is returned in the second table.
+    it waits for adjudication and is returned in the second table. `decisions`
+    (the arbiter's labels, `adjudication.load_decisions`) settle the disputed
+    units they cover; their `annotator` is the arbiter.
     """
     labels = labels[labels["cites_source"].notna()]
     columns = ["source_types", "edit_about_sources"]
@@ -122,6 +127,10 @@ def gold_reference(labels: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
         ["platform", "unit_id"]
     ).filter(lambda rows: rows[["source_types", "_edit"]].drop_duplicates().shape[0] == 1)
     reference = agreed.drop(columns="_edit").drop_duplicates(["platform", "unit_id"]).reset_index(drop=True)
-    conflicts = labels[~labels.set_index(["platform", "unit_id"]).index.isin(reference.set_index(["platform", "unit_id"]).index)]
+    conflicts = labels[~_keys(labels).isin(_keys(reference))]
+    if decisions is not None and len(decisions):
+        decided = decisions[decisions["cites_source"].notna()]
+        decided = decided[_keys(decided).isin(_keys(conflicts))].drop_duplicates(["platform", "unit_id"])
+        reference = pd.concat([reference, decided[reference.columns]], ignore_index=True)
+        conflicts = conflicts[~_keys(conflicts).isin(_keys(decided))]
     return reference, conflicts[["unit_id", "platform", "annotator", *columns]].reset_index(drop=True)
-

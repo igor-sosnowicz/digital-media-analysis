@@ -1,4 +1,4 @@
-.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets sample-csv import-labels agreement tune validate import-stance validate-stance label-h1 domain-review hypotheses
+.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets append-sheets sample-csv import-labels agreement adjudication-sheet import-adjudication tune validate audit-metrics errors compare import-stance validate-stance label-h1 domain-review hypotheses
 
 ANNOTATORS ?= A B
 PHASE ?= pilot
@@ -29,6 +29,10 @@ pilot-round:
 pilot-sheets:
 	uv run scripts/03_export_annotation_sheets.py --phase pilot --annotators $(ANNOTATORS)
 
+# Add the units of a phase that existing workbooks lack, labels kept, e.g. make append-sheets PHASE=pilot ANNOTATORS=IS.
+append-sheets:
+	uv run scripts/03_export_annotation_sheets.py --phase $(PHASE) --annotators $(ANNOTATORS) --append
+
 # The drawn sample with the full data of every unit, one CSV per platform, into data_samples/.
 sample-csv:
 	uv run scripts/06_export_sample_csv.py
@@ -41,13 +45,33 @@ import-labels:
 agreement:
 	uv run scripts/05_compute_agreement.py --phase $(PHASE)
 
+# Disputed units go to an arbiter (ARBITER=initials); the decisions settle them in the gold reference.
+adjudication-sheet:
+	uv run scripts/05b_adjudicate.py --phase $(PHASE) --export --arbiter $(ARBITER)
+
+import-adjudication:
+	uv run scripts/05b_adjudicate.py --phase $(PHASE) --import
+
 # Instrument validation on gold (needs `uv sync --group ml`). Tune on dev, freeze, then: make validate SPLIT=test FROZEN=1.
+# Each instrument runs on test once: name the ones not run yet, e.g. INSTRUMENTS="rules_v2 refs_v1".
 SPLIT ?= dev
 tune:
 	uv run --group ml scripts/07_validate_instruments.py --split dev --tune
 
 validate:
-	uv run --group ml scripts/07_validate_instruments.py --split $(SPLIT) $(if $(FROZEN),--frozen)
+	uv run --group ml scripts/07_validate_instruments.py --split $(SPLIT) $(if $(FROZEN),--frozen) $(if $(INSTRUMENTS),--instruments $(INSTRUMENTS))
+
+# Error rates of gliner_v1 for H1-B from the coded audit workbooks (audit_<annotator>.xlsx).
+audit-metrics:
+	uv run scripts/07c_audit_metrics.py
+
+# Errors with suggested causes on dev (review in annotations/sheets/errors_dev.xlsx, then IMPORT=1), Pareto chart, differential error.
+errors:
+	uv run scripts/11_error_analysis.py --split dev $(if $(INSTRUMENTS),--instruments $(INSTRUMENTS)) $(if $(IMPORT),--import)
+
+# Slide 4: kappa of instruments and annotators, McNemar, category rankings; gold shares.
+compare:
+	uv run scripts/12_compare_instruments.py
 
 # Hypotheses (docs/hipotezy.md). Stance sheets: scripts/03b_export_stance_sheets.py; then import them.
 import-stance:

@@ -14,6 +14,11 @@ Metrics, per platform, split and annotator subset:
 - the label set: weighted mean MASI similarity and exact-match share, and the
   macro-F1 over the categories with enough support.
 Intervals are percentile bootstrap intervals that resample units within strata.
+A variable an instrument does not measure (missing predictions) gets no metrics.
+
+For the slides: weighted shares of the categories in gold (an estimate that
+needs no instrument), differential error (error rates by group), McNemar's test
+of two instruments on the same units and Kendall's tau between category rankings.
 """
 
 from collections.abc import Sequence
@@ -86,7 +91,12 @@ def metrics(frame: pd.DataFrame, categories: Sequence[str]) -> dict[tuple[str, s
             results[(variable, name)] = value
         results[(variable, "accuracy")] = (weights * (y == p)).sum() / weights.sum()
         results[(variable, "kappa")] = _kappa(y, p)
-    gold, predicted = list(frame["gold_set"]), list(frame["pred_set"])
+    measured = frame["source_types_pred"].notna().to_numpy()
+    if not measured.any():
+        return results
+    w = w[measured]
+    gold = [labels for labels, keep in zip(frame["gold_set"], measured) if keep]
+    predicted = [labels for labels, keep in zip(frame["pred_set"], measured) if keep]
     for code in categories:
         y = np.array([code in labels for labels in gold])
         p = np.array([code in labels for labels in predicted])
@@ -108,6 +118,8 @@ def _support(frame: pd.DataFrame, variable: str) -> int:
 
 
 def _with_macro(values: dict, frame: pd.DataFrame, categories: Sequence[str]) -> dict:
+    if ("source_types", "masi") not in values:
+        return values
     judged = [code for code in categories if _support(frame, f"source_types:{code}") >= MIN_SUPPORT]
     scores = [values.get((f"source_types:{code}", "f1"), np.nan) for code in judged]
     values[("source_types", "macro_f1")] = float(np.nanmean(scores)) if judged and not np.all(np.isnan(scores)) else np.nan
@@ -161,8 +173,11 @@ def evaluate(
 
 
 def confusion(reference: pd.DataFrame, predictions: pd.DataFrame, manifest: pd.DataFrame, instrument: str) -> pd.DataFrame:
-    """Unweighted confusion counts of `cites_source` per platform and split."""
+    """Unweighted confusion counts of `cites_source` per platform and split (none when the instrument does not measure it)."""
     frame = paired(reference, predictions, manifest)
+    frame = frame[frame["cites_source_pred"].notna()]
+    if frame.empty:
+        return pd.DataFrame(columns=["platform", "split", "tp", "fp", "fn", "tn", "instrument"])
     y = frame["cites_source"].astype(int).astype(bool)
     p = frame["cites_source_pred"].astype(int).astype(bool)
     counts = frame.assign(tp=y & p, fp=~y & p, fn=y & ~p, tn=~y & ~p).groupby(["platform", "split"])[["tp", "fp", "fn", "tn"]].sum()
@@ -174,7 +189,7 @@ def objective(reference: pd.DataFrame, predictions: pd.DataFrame, manifest: pd.D
     frame = paired(reference, predictions, manifest)
     values = metrics(frame, [code for code in categories if code != NO_SOURCE])
     return {
-        "masi": values[("source_types", "masi")],
+        "masi": values.get(("source_types", "masi"), np.nan),
         "cites_f1": values.get(("cites_source", "f1"), np.nan),
         "edit_f1": values.get(("edit_about_sources", "f1"), np.nan),
     }
@@ -196,3 +211,137 @@ def nominal_metrics(truth: pd.Series, predicted: pd.Series, weights: pd.Series, 
     results["kappa"] = (observed - expected) / (1 - expected) if expected < 1 else np.nan
     return results
 
+
+
+def weighted_shares(
+    reference: pd.DataFrame, manifest: pd.DataFrame, categories: Sequence[str],
+    samples: int = BOOTSTRAP_SAMPLES, seed: int = SEED,
+) -> pd.DataFrame:
+    """Share of units citing a source and of each category in the frame, estimated from labels, per platform.
+
+    `reference` holds labels of gold units (people or an instrument) of any
+    splits; the weight of a unit is N_h over the labelled units of its stratum
+    in all those splits together. Intervals are bootstrap within strata.
+    """
+    categories = [code for code in categories if code != NO_SOURCE]
+    design = manifest[["unit_id", "platform", "stratum", "N_h"]].astype({"unit_id": str})
+    frame = reference[["unit_id", "platform", "cites_source", "source_types"]].astype({"unit_id": str}).merge(
+        design, on=["unit_id", "platform"]
+    ).reset_index(drop=True)
+    frame = frame.assign(weight=frame["N_h"] / frame.groupby(["platform", "stratum"])["unit_id"].transform("size"))
+    sets = label_sets(frame["source_types"])
+    indicators = pd.DataFrame({"cites_source": frame["cites_source"].astype(float).to_numpy(),
+                               **{code: [float(code in labels) for labels in sets] for code in categories}})
+    rng = np.random.default_rng(seed)
+    alpha = (1 - CONFIDENCE) / 2
+    rows = []
+    for platform, part in frame.groupby("platform"):
+        w = part["weight"].to_numpy(float)
+        values = indicators.loc[part.index].to_numpy()
+        point = (w[:, None] * values).sum(axis=0) / w.sum()
+        strata = [np.flatnonzero(part["stratum"].to_numpy() == name) for name in part["stratum"].unique()]
+        draws = []
+        for _ in range(samples):
+            drawn = np.concatenate([rng.choice(cell, size=len(cell), replace=True) for cell in strata])
+            draws.append((w[drawn, None] * values[drawn]).sum(axis=0) / w[drawn].sum())
+        bounds = np.quantile(np.array(draws), [alpha, 1 - alpha], axis=0) if draws else np.full((2, values.shape[1]), np.nan)
+        for position, variable in enumerate(indicators.columns):
+            rows.append({"platform": platform, "variable": variable, "share": point[position],
+                         "low": bounds[0, position], "high": bounds[1, position],
+                         "positives": int(values[:, position].sum()), "units": len(part)})
+    return pd.DataFrame(rows)
+
+
+def _chi_square(groups: np.ndarray, errors: np.ndarray, levels: int) -> float:
+    """Chi-square statistic of the groups x (error, no error) table, over cells with a positive expected count."""
+    totals = np.bincount(groups, minlength=levels).astype(float)
+    wrong = np.bincount(groups, weights=errors.astype(float), minlength=levels)
+    observed = np.stack([wrong, totals - wrong])
+    expected = np.outer([errors.sum(), len(errors) - errors.sum()], totals) / len(errors)
+    keep = expected > 0
+    return float((((observed - expected) ** 2)[keep] / expected[keep]).sum())
+
+
+def differential_errors(
+    frame: pd.DataFrame, group: str, variable: str = "cites_source",
+    samples: int = BOOTSTRAP_SAMPLES, permutations: int = 2000, seed: int = SEED,
+) -> pd.DataFrame:
+    """Error rates of a binary variable per group: false positives among gold negatives, false negatives among gold positives.
+
+    `frame` is `paired` output with a `group` column. Rates are weighted, with
+    bootstrap intervals within strata. `p_permutation` tests whether the error
+    counts differ between groups: the chi-square statistic of the unweighted
+    groups x error table against permutations of the errors among the units.
+    """
+    rng = np.random.default_rng(seed)
+    alpha = (1 - CONFIDENCE) / 2
+    rows = []
+    present = frame[frame[variable].notna() & frame[f"{variable}_pred"].notna()]
+    for platform, part in present.groupby("platform"):
+        y = part[variable].astype(int).to_numpy().astype(bool)
+        p = part[f"{variable}_pred"].astype(int).to_numpy().astype(bool)
+        for kind, among, wrong in [("false_positive_rate", ~y, p & ~y), ("false_negative_rate", y, ~p & y)]:
+            subset = part[among].reset_index(drop=True)
+            errors = wrong[among]
+            names = subset[group].astype(str).to_numpy()
+            levels = sorted(set(names))
+            codes = np.array([levels.index(name) for name in names], dtype=int)
+            p_value = np.nan
+            if len(levels) > 1 and 0 < errors.sum() < len(errors):
+                observed = _chi_square(codes, errors, len(levels))
+                exceed = sum(_chi_square(codes, rng.permutation(errors), len(levels)) >= observed - 1e-12
+                             for _ in range(permutations))
+                p_value = (exceed + 1) / (permutations + 1)
+            for name in levels:
+                chosen = names == name
+                cell, cell_errors = subset[chosen].reset_index(drop=True), errors[chosen]
+                w = cell["weight"].to_numpy(float)
+                rate = (w * cell_errors).sum() / w.sum() if w.sum() else np.nan
+                strata = [np.flatnonzero(cell["stratum"].to_numpy() == stratum) for stratum in cell["stratum"].unique()]
+                draws = []
+                for _ in range(samples if len(cell) else 0):
+                    drawn = np.concatenate([rng.choice(index, size=len(index), replace=True) for index in strata])
+                    draws.append((w[drawn] * cell_errors[drawn]).sum() / w[drawn].sum())
+                low, high = np.quantile(draws, [alpha, 1 - alpha]) if draws else (np.nan, np.nan)
+                rows.append({"platform": platform, "variable": variable, "grouping": group, "group": name, "rate": kind,
+                             "value": rate, "low": low, "high": high, "errors": int(cell_errors.sum()), "units": len(cell),
+                             "p_permutation": p_value})
+    return pd.DataFrame(rows)
+
+
+def mcnemar(frame: pd.DataFrame, first: str, second: str, variable: str = "cites_source") -> dict:
+    """Exact McNemar test of two instruments on the same gold units (`first` and `second` are prediction columns)."""
+    from scipy.stats import binomtest
+
+    present = frame[frame[variable].notna() & frame[first].notna() & frame[second].notna()]
+    truth = present[variable].astype(int).to_numpy()
+    right_first = present[first].astype(int).to_numpy() == truth
+    right_second = present[second].astype(int).to_numpy() == truth
+    only_first, only_second = int((right_first & ~right_second).sum()), int((~right_first & right_second).sum())
+    discordant = only_first + only_second
+    p_value = binomtest(min(only_first, only_second), discordant, 0.5).pvalue if discordant else 1.0
+    return {"units": len(present), "only_first_right": only_first, "only_second_right": only_second,
+            "both_right": int((right_first & right_second).sum()), "both_wrong": int((~right_first & ~right_second).sum()),
+            "p_exact": float(p_value)}
+
+
+def ranking_agreement(shares: pd.DataFrame, reference: str = "gold") -> pd.DataFrame:
+    """Kendall's tau-b between each source's category ranking and that of `reference`, per platform.
+
+    `shares` has the columns platform, source (gold or an instrument), variable
+    (a category) and share.
+    """
+    from scipy.stats import kendalltau
+
+    rows = []
+    for platform, part in shares.groupby("platform"):
+        table = part.pivot(index="variable", columns="source", values="share")
+        if reference not in table:
+            continue
+        for source in table.columns.drop(reference):
+            both = table[[reference, source]].dropna()
+            tau, p_value = kendalltau(both[reference], both[source]) if len(both) > 1 else (np.nan, np.nan)
+            rows.append({"platform": platform, "source": source, "reference": reference, "categories": len(both),
+                         "kendall_tau": float(tau), "p_value": float(p_value),
+                         "same_top_category": bool(len(both)) and both[reference].idxmax() == both[source].idxmax()})
+    return pd.DataFrame(rows)

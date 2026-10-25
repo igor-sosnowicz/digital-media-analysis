@@ -1,20 +1,23 @@
 """Run every instrument on the same units and return document labels in codebook space.
 
-Each instrument has a raw step (`score`: model output, slow, cached outside git
-in `data/model_cache/`) and a labelling step (thresholds and mapping, fast). The
-frozen rule-based v1 runs through an adapter that feeds it the columns its
-notebook code expected, without changing its rules.
+The model instruments and refs_v1 have a raw step (`score`: model output or
+reference counts, slow, cached outside git in `data/model_cache/`) and a
+labelling step (thresholds and mapping, fast), so tuning reuses the raw step.
+The rule instruments label directly. The frozen v1 runs through an adapter that
+feeds it the columns its notebook code expected, without changing its rules.
 """
 
 from pathlib import Path
 
 import pandas as pd
 
-from digital_media_analysis.instruments import gliner_v1, rules_v1, zeroshot_v1
+from digital_media_analysis.instruments import gliner_v1, refs_v1, rules_v1, rules_v2, zeroshot_v1
 from digital_media_analysis.instruments.labels import to_document_labels
 from digital_media_analysis.paths import MODEL_CACHE_DIR
 
-INSTRUMENTS = ["rules_v1", "zeroshot_v1", "gliner_v1"]
+INSTRUMENTS = ["rules_v1", "zeroshot_v1", "gliner_v1", "rules_v2", "refs_v1"]
+# Instruments with a raw step, by its function.
+RAW_STEP = {"zeroshot_v1": zeroshot_v1.score, "gliner_v1": gliner_v1.score, "refs_v1": refs_v1.score}
 LABEL_COLUMNS = ["unit_id", "platform", "cites_source", "source_types", "edit_about_sources"]
 
 
@@ -45,8 +48,8 @@ def rules_v1_labels(units: pd.DataFrame) -> pd.DataFrame:
 
 
 def raw_output(name: str, units: pd.DataFrame, tag: str, cache_dir: Path = MODEL_CACHE_DIR, refresh: bool = False) -> pd.DataFrame:
-    """Model output of an instrument for `units`, read from `<cache_dir>/<name>_<tag>.csv` when it covers them."""
-    module = {"zeroshot_v1": zeroshot_v1, "gliner_v1": gliner_v1}[name]
+    """Raw output of an instrument for `units`, read from `<cache_dir>/<name>_<tag>.csv` when it covers them."""
+    score = RAW_STEP[name]
     path = cache_dir / f"{name}_{tag}.csv"
     wanted = set(units["unit_id"].astype(str))
     if path.exists() and not refresh:
@@ -54,7 +57,7 @@ def raw_output(name: str, units: pd.DataFrame, tag: str, cache_dir: Path = MODEL
         meta = path.with_suffix(".units")
         if meta.exists() and set(meta.read_text(encoding="utf-8").split("\n")) - {""} == wanted:
             return cached
-    output = module.score(units)
+    output = score(units)
     path.parent.mkdir(parents=True, exist_ok=True)
     output.to_csv(path, index=False, encoding="utf-8")
     path.with_suffix(".units").write_text("\n".join(sorted(wanted)), encoding="utf-8")
@@ -69,4 +72,8 @@ def document_labels(name: str, units: pd.DataFrame, raw: pd.DataFrame | None = N
         return zeroshot_v1.labels(raw, **settings)[LABEL_COLUMNS]
     if name == "gliner_v1":
         return gliner_v1.labels(raw, units, **settings)[LABEL_COLUMNS]
+    if name == "rules_v2":
+        return rules_v2.labels(units)[LABEL_COLUMNS]
+    if name == "refs_v1":
+        return refs_v1.labels(raw, **settings)[LABEL_COLUMNS]
     raise ValueError(f"Unknown instrument {name!r}; choose from {INSTRUMENTS}.")

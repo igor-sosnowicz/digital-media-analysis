@@ -34,6 +34,9 @@ ANNOTATIONS_DIR = PROJECT_ROOT / "annotations"
 SHEETS_DIR = ANNOTATIONS_DIR / "sheets"
 LABELS_DIR = ANNOTATIONS_DIR / "labels"
 AGREEMENT_DIR = ANNOTATIONS_DIR / "agreement"
+# Arbiter decisions on disputed units, and instrument errors with their causes (IDs and labels only).
+ADJUDICATION_DIR = ANNOTATIONS_DIR / "adjudication"
+ERRORS_DIR = ANNOTATIONS_DIR / "errors"
 # Instrument labels for gold units (IDs and labels only) and validation results.
 PREDICTIONS_DIR = ANNOTATIONS_DIR / "predictions"
 VALIDATION_DIR = ANNOTATIONS_DIR / "validation"
