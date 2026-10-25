@@ -176,6 +176,13 @@ make report-tables
 
 Compile with `pdflatex raport.tex` (twice) in `report/`, or upload the whole `report/` folder to Overleaf. Numbers quoted in the running text still have to be checked against the tables after a rerun.
 
+The 7-page preprint is written by the team from a results package:
+
+- `make preprint-package` writes `report/numbers.tex` (one `\res...` macro per number the text cites), two compact tables and four figures;
+- `report/preprint.tex` is the skeleton with sections, page budget, tables and figures;
+- [`docs/preprint_szkic.md`](docs/preprint_szkic.md) is the outline (theses and evidence per section, who writes what);
+- [`docs/podsumowanie_wynikow.md`](docs/podsumowanie_wynikow.md) lists every result with its macro, source and caveat.
+
 # Hypotheses
 
 Two research hypotheses are tested on the data, as preregistered in [`docs/hipotezy.md`](docs/hipotezy.md) (settings in the `hypotheses` section of `config.yaml`):

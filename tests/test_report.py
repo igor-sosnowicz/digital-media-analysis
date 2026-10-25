@@ -24,3 +24,14 @@ def test_tabular_shows_a_repeated_first_column_once_and_separates_groups():
     lines = text.splitlines()
     assert lines[0] == r"\begin{tabular}{lr}" and lines[-1] == r"\end{tabular}"
     assert lines[4:8] == [r"Reddit & 1 \\", r" & 2 \\", r"\midrule", r"Wikipedia & 3 \\"]
+
+
+def test_macro_names_use_letters_only_and_the_file_defines_each_once():
+    assert report.macro_name("h1 b consensus or") == "resHOneBConsensusOr"
+    assert report.macro_name("test gliner reddit cites f") == "resTestGlinerRedditCitesF"
+    text = report.macro_file({"pilot disputes": "20", "h2 p": "0{,}006"}, "test")
+    assert "\\newcommand{\\resPilotDisputes}{20}" in text and "\\newcommand{\\resHTwoP}{0{,}006}" in text
+    import pytest
+
+    with pytest.raises(ValueError, match="same macro"):
+        report.macro_file({"h 2": "a", "h2": "b"}, "test")

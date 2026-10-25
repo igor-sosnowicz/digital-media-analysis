@@ -1,4 +1,4 @@
-.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets append-sheets sample-csv import-labels agreement kappa-consensus combine-labels adjudication-sheet import-adjudication tune validate audit-metrics errors compare report-tables h2-frame h2-history h1-frame label-h1-v2 h2-links hypotheses-v2 power import-stance validate-stance label-h1 domain-review hypotheses
+.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets append-sheets sample-csv import-labels agreement kappa-consensus combine-labels adjudication-sheet import-adjudication tune validate audit-metrics errors compare report-tables preprint-package h2-frame h2-history h1-frame label-h1-v2 h2-links hypotheses-v2 power import-stance validate-stance label-h1 domain-review hypotheses
 
 ANNOTATORS ?= A B
 PHASE ?= pilot
@@ -84,6 +84,10 @@ compare:
 # Tables and figures of the LaTeX report (report/raport.tex) from the saved results; compile with pdflatex or Overleaf.
 report-tables:
 	uv run scripts/13_report_tables.py
+
+# Preprint (v1): number macros report/numbers.tex, compact tables and four figures (docs/preprint_szkic.md).
+preprint-package:
+	uv run scripts/18_preprint_package.py
 
 # Hypotheses (docs/hipotezy.md). Stance sheets: scripts/03b_export_stance_sheets.py; then import them.
 import-stance:

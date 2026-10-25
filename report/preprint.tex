@@ -1,0 +1,168 @@
+% Szkielet preprintu (v1, 7 stron). Tekst piszą autorzy, każdy swoją sekcję według roli
+% (docs/preprint_szkic.md). Tu są tylko: struktura, budżet stron, wstawione tabele i rysunki,
+% makra liczb (report/numbers.tex, `make preprint-package`) i lista tez do uzasadnienia w komentarzach.
+% Kompilacja: pdflatex preprint.tex (dwa razy) albo Overleaf z całym katalogiem report/.
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[margin=2cm]{geometry}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{amsmath}
+\usepackage[hidelinks]{hyperref}
+
+\captionsetup{font=small,labelfont=bf}
+\graphicspath{{figures/}}
+\input{numbers}
+\newcommand{\kod}[1]{\texttt{#1}}
+\newcommand{\tabela}[1]{{\small\input{tables/#1}}}
+\newcommand{\szeroka}[1]{\resizebox{\linewidth}{!}{\input{tables/#1}}}
+% Miejsce na tekst autorów; usunąć przed oddaniem.
+\newcommand{\dopisania}[1]{\par\noindent\fbox{\parbox{\dimexpr\linewidth-2\fboxsep}{\small\textit{Do napisania: #1}}}\par}
+
+% Tytuł do ustalenia przez lead badawczego.
+\title{[Tytuł]}
+\author{Jan Poręba \and Igor Sosnowicz}
+\date{Analiza Mediów Cyfrowych, projekt \kod{digital-media-analysis}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+% 0,3 s., lead badawczy. Tezy: pytanie (H1, H2), dane (2 x 500 jednostek, gold), instrumenty AI
+% zwalidowane z jednym testem, odpowiedź (H1 nierozstrzygnięta, wskaźniki źródeł nie wspierają;
+% H2 formalnie potwierdzona, ale artefakt pomiaru, \resHtwoExactP), instrument AI działa tylko
+% dla wykrywania powołań na Reddicie (\resTestGlinerRedditCitesF).
+\dopisania{streszczenie, do 200 słów (lead badawczy)}
+\end{abstract}
+
+\section{Wprowadzenie}
+% 0,6 s., lead badawczy. Tezy: zjawisko; H1 i H2 jak w preregistracji (commit 440b5fb);
+% problem pomiaru automatycznego; wkład: walidacja na gold, preregistrowany test, sprawdzenie
+% pomiaru zmieniające wniosek H2, plan v2. Cytowania: literatura o zaufaniu do nauki (do dobrania).
+\dopisania{wprowadzenie (lead badawczy)}
+
+\section{Dane i próba}
+% 0,8 s., inżynier danych. Tezy: źródła i okresy z config.yaml; rama Reddita (\resRedditFrame postów)
+% i Wikipedii (\resWikipediaFrame opisów); losowanie warstwowe, wagi, podział pilotaż/dev/test;
+% data statement (regulaminy, Arctic Shift, CC BY-SA, RODO, teksty w data_samples/).
+\dopisania{dane, próba i data statement (inżynier danych)}
+
+\begin{table}[htbp]
+\centering
+\caption{Rama losowania, próba gold i zgodność annotatorów w pilotażu.}
+\label{tab:dane}
+\szeroka{preprint_data}
+\end{table}
+
+\section{Pomiar: codebook i gold standard}
+% 0,9 s., inżynier pipelinu. Tezy: konstrukt i jednostki; zmienne, 9 kategorii, reguły R2, R3, R9, R10;
+% annotacja w ciemno, podział gold; zgodność: \resPilotRedditCitesAlpha przy \resPilotRedditCitesAgreement
+% (paradoks rozpowszechnienia), typy \resPilotRedditMasiAlpha; druga runda, \resPilotDisputes{} sporów do arbitra;
+% etykiety JP wspomagane przez AI (ujawnić); udziały z samego gold (\resGoldShareRedditMedia).
+\dopisania{codebook i gold standard (inżynier pipelinu)}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\linewidth]{preprint_agreement.png}
+\caption{Zgodność dwóch osób w pilotażu: $\alpha$ Krippendorffa z 95\% przedziałem i progi 0,667 oraz 0,8.}
+\label{fig:zgodnosc}
+\end{figure}
+
+\section{Walidacja instrumentów AI}
+% 1,2 s., inżynier pipelinu. Tezy: trzy zamrożone instrumenty, jeden test (commit 33ff729);
+% Reddit: GLiNER \resTestGlinerRedditCitesF, czułość \resTestGlinerRedditCitesRecall, typy \resTestGlinerRedditMasi,
+% McNemar \resMcnemarRedditZeroshotGlinerP; v1 nie czyta linku (\resErrorsVoneUrlShare błędów);
+% Wikipedia: wynik negatywny (\resTestGlinerWikipediaCitesF); zależność od annotatora
+% (\resTestGlinerRedditMasiIS a \resTestGlinerRedditMasiJP); błąd różnicowy; wybór GLiNER do H1-B.
+\dopisania{walidacja instrumentów (inżynier pipelinu)}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{preprint_instruments.png}
+\caption{Metryki trzech instrumentów na zbiorze testowym, ważone, z 95\% przedziałami bootstrap.}
+\label{fig:instrumenty}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\caption{Wyniki na zbiorze testowym (jeden przebieg na zamrożonych instrumentach).}
+\label{tab:test}
+\tabela{test_metrics}
+\end{table}
+
+\section{Wyniki}
+\subsection{H1: zaufanie do konsensusu naukowego}
+% 0,8 s., inżynier analityk. Tezy: H1-A się nie odbyło; H1-B na \resHoneBCiting postach:
+% konsensus \resHoneBConsensusOr (p = \resHoneBConsensusP), alternatywne \resHoneBAlternativeOr
+% (p = \resHoneBAlternativeP); surowe udziały w kierunku hipotezy, ale r/conspiracy rośnie
+% z \resHoneConspiracyShareTwothousandeight do \resHoneConspiracyShareTwothousandeighteen; dekompozycja
+% (eksploracyjna): alternatywne \resHoneBAlternativeShiftTotal, w tym skład \resHoneBAlternativeShiftComposition.
+\dopisania{wyniki H1 (inżynier analityk)}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{preprint_h1.png}
+\caption{H1-B: roczne udziały źródeł konsensusu i alternatywnych wśród postów z powołaniem (z 95\% przedziałami) oraz skład próby według subredditu.}
+\label{fig:h1}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\caption{H1-B: iloraz szans na rok z efektami stałymi subredditu; $p$ jednostronne w kierunku hipotezy.}
+\label{tab:h1b}
+\szeroka{h1b}
+\end{table}
+
+\subsection{H2: źródła alternatywne w Wikipedii}
+% 0,8 s., inżynier analityk. Tezy: test preregistrowany \resHtwoOr (p = \resHtwoP),
+% \resHtwoAlternativeLinks{} z \resHtwoLinks{} linków; wrażliwości nieistotne (\resHtwoWithoutCovidP,
+% permutacja \resHtwoPermutationP); \resHtwoOfficialLinks{} linków to konta WHO i GIS, link WHO
+% dodany \resHtwoWhoRepeats{} razy; według właściciela 2 linki, test dokładny \resHtwoExactP.
+\dopisania{wyniki H2 (inżynier analityk)}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{preprint_h2.png}
+\caption{H2: wszystkie linki zaklasyfikowane jako alternatywne według domeny, według właściciela konta; puste punkty to ponowne dodania tego samego linku.}
+\label{fig:h2}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\caption{H2: test z preregistracji, analizy odporności i sprawdzenie pomiaru.}
+\label{tab:h2}
+\tabela{preprint_h2}
+\end{table}
+
+\section{Dyskusja i ograniczenia}
+% 0,7 s., lead i analityk. Tezy: co dane rozstrzygają, a czego nie; lekcja o pomiarze
+% (domena a właściciel konta, rewerty); ograniczenia (zgodność ludzi, etykiety wspomagane przez AI,
+% błąd instrumentu, korelacja a przyczynowość, zmiany w obrębie subredditu, 8 stron);
+% preregistracja v2 i analiza mocy jako dalsze prace.
+\dopisania{dyskusja i ograniczenia (lead badawczy i inżynier analityk)}
+
+\section{Odtwarzalność, dane i użycie AI}
+% 0,3 s. Tezy: repozytorium, commit, polecenia make, preregistracje z commitami; data statement;
+% użycie AI zgodne z faktami (kod i testy, etykiety wstępne JP zatwierdzone przez JP, lista domen,
+% propozycje przyczyn błędów, pakiet wyników i szkic struktury; tekst napisali autorzy).
+\dopisania{odtwarzalność, data statement i ujawnienie AI (inżynier danych i wszyscy)}
+
+\begin{thebibliography}{99}
+\bibitem{cohen1960} J.~Cohen. A coefficient of agreement for nominal scales. \textit{Educational and Psychological Measurement}, 20(1):37--46, 1960.
+\bibitem{feinstein1990} A.~R. Feinstein, D.~V. Cicchetti. High agreement but low kappa: I.~The problems of two paradoxes. \textit{Journal of Clinical Epidemiology}, 43(6):543--549, 1990.
+\bibitem{firth1993} D.~Firth. Bias reduction of maximum likelihood estimates. \textit{Biometrika}, 80(1):27--38, 1993.
+\bibitem{kendall1938} M.~G. Kendall. A new measure of rank correlation. \textit{Biometrika}, 30(1/2):81--93, 1938.
+\bibitem{krippendorff2004} K.~Krippendorff. \textit{Content Analysis: An Introduction to Its Methodology}. Wyd.~2. Sage, 2004.
+\bibitem{laurer2024} M.~Laurer, W.~van Atteveldt, A.~Casas, K.~Welbers. Less annotating, more classifying: Addressing the data scarcity issue of supervised machine learning with deep transfer learning and BERT-NLI. \textit{Political Analysis}, 32(1):84--100, 2024.
+\bibitem{mcnemar1947} Q.~McNemar. Note on the sampling error of the difference between correlated proportions or percentages. \textit{Psychometrika}, 12(2):153--157, 1947.
+\bibitem{passonneau2006} R.~Passonneau. Measuring agreement on set-valued items (MASI) for semantic and pragmatic annotation. W: \textit{Proceedings of LREC 2006}, 2006.
+\bibitem{zaratiana2024} U.~Zaratiana, N.~Tomeh, P.~Holat, T.~Charnois. GLiNER: Generalist model for named entity recognition using bidirectional transformer. W: \textit{Proceedings of NAACL 2024}, 2024.
+\end{thebibliography}
+
+\end{document}
