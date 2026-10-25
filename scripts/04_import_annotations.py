@@ -1,4 +1,12 @@
-"""Import filled annotation workbooks into text-free label files in `annotations/labels/`."""
+"""Import filled annotation workbooks into text-free label files in `annotations/labels/`.
+
+Rows with invalid labels (unknown codes, empty `source_types`, `none` with other
+codes, a value other than 0/1) are left out of the label file and listed, so one
+bad row does not stop the import. Problems of the whole workbook (wrong headers,
+units outside the phase, repeated units, missing units without `--partial`,
+another person in the `annotator` column) stop it: nothing is written for that
+workbook and the script exits with an error.
+"""
 
 import argparse
 import sys
@@ -10,6 +18,13 @@ from digital_media_analysis.paths import SHEETS_DIR
 MAX_PROBLEMS_SHOWN = 20
 
 
+def show(problems: list[str]) -> None:
+    for problem in problems[:MAX_PROBLEMS_SHOWN]:
+        print(f"  - {problem}")
+    if len(problems) > MAX_PROBLEMS_SHOWN:
+        print(f"  ... and {len(problems) - MAX_PROBLEMS_SHOWN} more")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--phase", choices=gold.PHASE_SPLITS, default="pilot")
@@ -18,12 +33,6 @@ def main() -> None:
         "--partial",
         action="store_true",
         help="The phase is split between annotators: skip rows without labels and allow missing units.",
-    )
-    parser.add_argument(
-        "--drop-invalid",
-        action="store_true",
-        help="Import a workbook without its invalid rows (listed) instead of rejecting it; "
-        "header and manifest problems still block.",
     )
     args = parser.parse_args()
 
@@ -36,27 +45,23 @@ def main() -> None:
     failed = False
     for annotator, path in paths.items():
         labels, problems = annotations.import_workbook(path, annotator, args.phase, manifest, codebook, partial=args.partial)
-        if problems and args.drop_invalid:
-            labels, dropped, problems = annotations.drop_invalid_rows(labels, problems)
-            if dropped:
-                print(f"{path.name}: {len(dropped)} invalid row(s) left out")
-                for problem in dropped[:MAX_PROBLEMS_SHOWN]:
-                    print(f"  - {problem}")
-        if problems:
+        labels, dropped, blocking = annotations.drop_invalid_rows(labels, problems)
+        if dropped:
+            print(f"{path.name}: {len(dropped)} row(s) with invalid labels left out")
+            show(dropped)
+        if blocking:
             failed = True
-            print(f"{path.name}: {len(problems)} problem(s)")
-            for problem in problems[:MAX_PROBLEMS_SHOWN]:
-                print(f"  - {problem}")
-            if len(problems) > MAX_PROBLEMS_SHOWN:
-                print(f"  ... and {len(problems) - MAX_PROBLEMS_SHOWN} more")
-        elif args.check:
-            print(f"{path.name}: OK, {len(labels)} labels")
+            print(f"{path.name}: {len(blocking)} problem(s) of the whole workbook; nothing written")
+            show(blocking)
+            continue
+        if args.check:
+            print(f"{path.name}: validated, {len(labels)} label(s)")
         else:
             output_path = annotations.label_path(args.phase, annotator)
             annotations.save_labels(labels, output_path)
-            print(f"{path.name}: {len(labels)} labels -> {output_path}")
+            print(f"{path.name}: {len(labels)} label(s) -> {output_path}")
     if failed:
-        sys.exit("Fix the problems above in the workbooks and run the import again.")
+        sys.exit("Fix the workbook problems above and run the import again.")
 
 
 if __name__ == "__main__":

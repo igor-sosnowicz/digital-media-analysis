@@ -83,7 +83,7 @@ Cel: etykiety referencyjne i pierwsza estymata zjawiska niezależna od instrumen
   - etykiety: nieznane kody, puste pola, `none` razem z innymi kodami;
   - zgodność z manifestem: brakujące, nadmiarowe i powtórzone jednostki, zła osoba w kolumnie `annotator`.
 
-  Etykiety bez tekstu, z wersją codebooka zapisaną w arkuszu, trafiają do `annotations/labels/<faza>/<osoba>.csv` (w repo). Arkusz z błędami nie jest zapisywany.
+  Etykiety bez tekstu, z wersją codebooka zapisaną w arkuszu, trafiają do `annotations/labels/<faza>/<osoba>.csv` (w repo). Wiersze z błędnymi etykietami są pomijane i wypisywane, więc pojedynczy błąd nie zatrzymuje importu. Błędy całego arkusza (nagłówki, jednostki spoza fazy, powtórzenia, brakujące jednostki bez `--partial`, inna osoba w kolumnie `annotator`) zatrzymują import, a arkusz nie jest zapisywany (od scalenia z PR #5, 25.10.2026).
 - `make agreement` (`src/digital_media_analysis/agreement.py`) liczy:
   - κ Cohena (dla dwóch osób) i α Krippendorffa: nominalną dla zmiennych 0/1 i z odległością MASI dla całego zbioru `source_types`;
   - zgodność per kategoria;
@@ -94,14 +94,14 @@ Cel: etykiety referencyjne i pierwsza estymata zjawiska niezależna od instrumen
 - W obu notebookach sekcja „Zgodność annotatorów w pilotażu” pokazuje te same wyniki, a niezgodności z tekstem z lokalnych danych są materiałem na sesję uzgadniania.
 - Sprawdzone end-to-end na symulowanych etykietach poza repo. Prawdziwych etykiet jeszcze nie ma.
 
-**Wynik pilotażu (25.10.2026, `annotations/agreement/pilot_*`).** Obie osoby kodowały 32 posty i 20 opisów (pierwsza runda):
+**Wynik pilotażu (25.10.2026, `annotations/agreement/pilot_*`).** Obie osoby kodowały 32 posty i 21 opisów (pierwsza runda):
 
 | | jednostki | zgodność | α [95% CI] | ocena |
 |---|---|---|---|---|
 | Reddit, `cites_source` | 32 | 0,91 | −0,03 [−0,09; 0,00] | niewystarczające |
 | Reddit, `source_types` (MASI) | 32 | 0,50 | 0,34 [0,11; 0,54] | niewystarczające |
-| Wikipedia, `cites_source` | 20 | 0,85 | −0,05 [−0,15; 0,00] | za mało przypadków |
-| Wikipedia, `edit_about_sources` | 20 | 0,90 | 0,70 [−0,03; 1,00] | tylko wstępne wnioski |
+| Wikipedia, `cites_source` | 21 | 0,86 | −0,05 [−0,14; 0,00] | za mało przypadków |
+| Wikipedia, `edit_about_sources` | 21 | 0,90 | 0,70 [−0,03; 1,00] | tylko wstępne wnioski |
 
 - Na Reddicie IS uznał wszystkie 32 posty za powołujące się na źródło, a JP 29. Przy takim rozpowszechnieniu α i κ są bliskie zera mimo 91% zgodności (paradoks rozpowszechnienia). Zgodności co do samego powołania na tej próbie nie da się więc ocenić.
 - Typy źródeł na Reddicie to główny problem: α (MASI) 0,34.

@@ -79,7 +79,9 @@ make import-labels
 make agreement
 ```
 
-Both take `PHASE=gold` for the main sample. `DROP_INVALID=1` imports a workbook without its invalid rows (they are listed) instead of rejecting it; header and manifest problems still block.
+Both take `PHASE=gold` for the main sample. Rows with invalid labels are left out of the label file and listed, so one bad row does not stop the import; header and manifest problems (wrong columns, units outside the phase, another person in the `annotator` column) stop it and nothing is written.
+
+`scripts/07_kappa_consensus.py` (`make kappa-consensus`) additionally computes Cohen's kappa per annotator pair and variable and writes `annotations/agreement/<phase>_consensus.csv` with the units where both annotators of a pair agreed on a single label. `make combine-labels` (`scripts/08_combine_labels.py`) writes both annotators' labels of a phase into one table, `annotations/agreement/<phase>_combined.csv`.
 
 By default every annotator gets every unit of a phase, as agreement needs. To split the main sample between annotators instead, export only the units after the last row someone already coded and cap how many each platform gets, then import with `PARTIAL=1` (`--partial`), which skips rows without labels and does not require every unit of the phase:
 
@@ -125,7 +127,7 @@ Both models are pinned to a Hugging Face commit and run locally, so no text leav
 Import the gold labels, tune the model instruments on the dev split, freeze the chosen hypothesis language and thresholds in the instrument modules and commit them, then run the test split once:
 
 ```bash
-make import-labels PHASE=gold PARTIAL=1 DROP_INVALID=1
+make import-labels PHASE=gold PARTIAL=1
 make tune
 make validate SPLIT=test FROZEN=1
 ```

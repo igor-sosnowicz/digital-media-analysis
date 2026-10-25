@@ -1,4 +1,4 @@
-.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets append-sheets sample-csv import-labels agreement adjudication-sheet import-adjudication tune validate audit-metrics errors compare report-tables h2-frame h2-history h1-frame label-h1-v2 h2-links hypotheses-v2 power import-stance validate-stance label-h1 domain-review hypotheses
+.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets append-sheets sample-csv import-labels agreement kappa-consensus combine-labels adjudication-sheet import-adjudication tune validate audit-metrics errors compare report-tables h2-frame h2-history h1-frame label-h1-v2 h2-links hypotheses-v2 power import-stance validate-stance label-h1 domain-review hypotheses
 
 ANNOTATORS ?= A B
 PHASE ?= pilot
@@ -38,9 +38,9 @@ sample-csv:
 	uv run scripts/06_export_sample_csv.py
 
 # PARTIAL=1 when a phase is split between annotators (rows without labels are skipped).
-# DROP_INVALID=1 imports a workbook without its invalid rows (listed) instead of rejecting it.
+# Rows with invalid labels are left out (listed); workbook problems stop the import.
 import-labels:
-	uv run scripts/04_import_annotations.py --phase $(PHASE) $(if $(PARTIAL),--partial) $(if $(DROP_INVALID),--drop-invalid)
+	uv run scripts/04_import_annotations.py --phase $(PHASE) $(if $(PARTIAL),--partial)
 
 agreement:
 	uv run scripts/05_compute_agreement.py --phase $(PHASE)
@@ -51,6 +51,14 @@ adjudication-sheet:
 
 import-adjudication:
 	uv run scripts/05b_adjudicate.py --phase $(PHASE) --import
+
+# Cohen's kappa per annotator pair plus consensus cases (single-label agreement).
+kappa-consensus:
+	uv run scripts/07_kappa_consensus.py --phase $(PHASE)
+
+# Combine both annotators' labels into one dataset per phase.
+combine-labels:
+	uv run scripts/08_combine_labels.py --phase $(PHASE)
 
 # Instrument validation on gold (needs `uv sync --group ml`). Tune on dev, freeze, then: make validate SPLIT=test FROZEN=1.
 # Each instrument runs on test once: name the ones not run yet, e.g. INSTRUMENTS="rules_v2 refs_v1".
