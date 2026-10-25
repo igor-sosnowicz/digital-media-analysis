@@ -82,7 +82,7 @@ def test_problems_are_reported(tmp_path):
     assert any("COVID-19#3" in problem and "edit_about_sources brak wartości" in problem for problem in problems)
     # Polish v1.0 codes are no longer valid.
     assert any("COVID-19#4" in problem and "nieznane kody ['oficjalne']" in problem for problem in problems)
-    # A label that breaks R13 gives no cites_source.
+    # Empty `source_types` gives no cites_source (missing label).
     assert labels["cites_source"].isna().all()
 
 

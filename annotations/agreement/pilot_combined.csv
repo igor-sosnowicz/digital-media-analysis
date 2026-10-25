@@ -1,0 +1,107 @@
+unit_id,platform,annotator,source_types,cites_source,uncertain,notes,n_annotators,agrees
+155rje,reddit,IS,media,1,0,,2,False
+155rje,reddit,JP,social_blog,1,1,socialeaf.com: serwis społecznościowy z newsami obrazkowymi?,2,False
+155v43,reddit,IS,institutional,1,0,,2,True
+155v43,reddit,JP,institutional,1,1,nhs.uk/news (NHS Behind the Headlines): publiczna służba zdrowia jako institutional?,2,True
+16gs4,reddit,IS,social_blog,1,0,,2,True
+16gs4,reddit,JP,social_blog,1,0,,2,True
+1b6ytt,reddit,IS,media,1,0,,2,False
+1b6ytt,reddit,JP,social_blog,1,0,,2,False
+1kzs1t,reddit,IS,social_blog,1,0,,2,True
+1kzs1t,reddit,JP,social_blog,1,0,,2,True
+1yeyr8,reddit,IS,social_blog,1,0,,2,False
+1yeyr8,reddit,JP,none,0,0,,2,False
+20385,reddit,IS,scientific,1,0,,2,False
+20385,reddit,JP,institutional,1,1,strona prof. Kitaoki w domenie uczelni (ritsumei.ac.jp): institutional?,2,False
+2dfyeb,reddit,IS,media,1,1,don’t know Italian,2,False
+2dfyeb,reddit,JP,none,0,1,strona firmy (wkładki Noene): reklama (R3) czy other?,2,False
+2w7jvw,reddit,IS,other,1,0,,2,True
+2w7jvw,reddit,JP,other,1,1,strona grupy AA (organizacja): źródło treści czy temat kpiny (R2)?,2,True
+3gxu91,reddit,IS,social_blog,1,0,,2,True
+3gxu91,reddit,JP,social_blog,1,0,,2,True
+4y25jg,reddit,IS,social_blog,1,0,,2,True
+4y25jg,reddit,JP,social_blog,1,0,,2,True
+5k7t1a,reddit,IS,social_blog,1,0,,2,True
+5k7t1a,reddit,JP,social_blog,1,0,,2,True
+5ld507,reddit,IS,media,1,0,,2,True
+5ld507,reddit,JP,media,1,0,,2,True
+5zf0c,reddit,IS,social_blog,1,0,,2,False
+5zf0c,reddit,JP,media,1,0,,2,False
+6f5xev,reddit,IS,media,1,0,,2,False
+6f5xev,reddit,JP,social_blog,1,1,weandtheworld.org/single-post – wpis blogowy na stronie organizacji?,2,False
+6jlp3,reddit,IS,media,1,0,,2,True
+6jlp3,reddit,JP,media,1,0,,2,True
+7ak4r,reddit,IS,social_blog,1,0,,2,True
+7ak4r,reddit,JP,social_blog,1,1,Groklaw: blog o prawie (social_blog) czy media?,2,True
+7sb0as,reddit,IS,social_blog,1,0,,2,True
+7sb0as,reddit,JP,social_blog,1,0,,2,True
+8461,reddit,IS,media,1,0,,2,True
+8461,reddit,JP,media,1,0,,2,True
+8hrqy8,reddit,IS,scientific,1,0,,2,False
+8hrqy8,reddit,JP,media,1,1,nature.com/articles/d41586-… to dział News/Comment Nature (R4); może scientific,2,False
+94aix,reddit,IS,social_blog,1,0,,2,True
+94aix,reddit,JP,social_blog,1,0,,2,True
+9jsar,reddit,IS,social_blog,1,0,,2,False
+9jsar,reddit,JP,unknown,1,1,„per documentary”: film bez wskazania którego (unknown czy media?),2,False
+b0igw,reddit,IS,media,1,1,TED Talk can be considered either a media or social depending on the context.,2,False
+b0igw,reddit,JP,other,1,1,TED (ted.com) to platforma wykładów organizacji TED; other czy social_blog?,2,False
+djtcd,reddit,IS,media,1,0,,2,True
+djtcd,reddit,JP,media,1,0,,2,True
+dw2voc,reddit,IS,other,1,0,,2,False
+dw2voc,reddit,JP,media,1,1,Liveuamap: serwis mapujący doniesienia (media czy social_blog?),2,False
+dwc8u8,reddit,IS,media,1,0,,2,False
+dwc8u8,reddit,JP,institutional,1,1,norwegianscitechnews.com prowadzą NTNU i SINTEF (komunikaty uczelni): institutional czy media?,2,False
+fmwxdq,reddit,IS,media,1,0,,2,True
+fmwxdq,reddit,JP,media,1,0,,2,True
+fn86ht,reddit,IS,personal;social_blog;unknown,1,0,,2,False
+fn86ht,reddit,JP,social_blog;unknown,1,0,,2,False
+hj6vz,reddit,IS,media,1,0,,2,False
+hj6vz,reddit,JP,social_blog,1,1,"tytuł wskazuje materiał Jamesa Corbetta (Corbett Report, niezależny kanał) bez linku",2,False
+ntj9v,reddit,IS,other,1,0,,2,False
+ntj9v,reddit,JP,none,0,0,,2,False
+ql5d,reddit,IS,social_blog,1,0,,2,True
+ql5d,reddit,JP,social_blog,1,0,,2,True
+qtcj,reddit,IS,scientific,1,1,looks like a scientific publication but can be a media outlet as well,2,False
+qtcj,reddit,JP,other,1,0,,2,False
+COVID-19#137,wikipedia,IS,none,0,0,,2,True
+COVID-19#137,wikipedia,JP,none,0,0,,2,True
+COVID-19#61,wikipedia,IS,none,0,0,,2,True
+COVID-19#61,wikipedia,JP,none,0,0,,2,True
+COVID-19#653,wikipedia,IS,personal,1,0,,2,False
+COVID-19#653,wikipedia,JP,none,0,0,,2,False
+COVID-19#699,wikipedia,IS,none,0,0,,2,True
+COVID-19#699,wikipedia,JP,none,0,0,,2,True
+COVID-19#734,wikipedia,IS,none,0,0,,2,True
+COVID-19#734,wikipedia,JP,none,0,0,,2,True
+COVID-19#763,wikipedia,IS,none,0,0,,2,True
+COVID-19#763,wikipedia,JP,none,0,0,,2,True
+COVID-19#843,wikipedia,IS,none,0,0,,2,True
+COVID-19#843,wikipedia,JP,none,0,1,bot zmienia nazwę szablonu „Potrzebny przypis”: bez pracy nad samymi przypisami?,2,True
+COVID-19#852,wikipedia,IS,none,0,0,,2,True
+COVID-19#852,wikipedia,JP,none,0,0,,2,True
+Globalne ocieplenie#181,wikipedia,IS,none,0,0,,2,True
+Globalne ocieplenie#181,wikipedia,JP,none,0,1,ujednolicenie daty dostępu w szablonie cytowania: czy to „poprawa przypisów” (R10)?,2,True
+Globalne ocieplenie#197,wikipedia,IS,none,0,0,,2,True
+Globalne ocieplenie#197,wikipedia,JP,none,0,0,,2,True
+Globalne ocieplenie#230,wikipedia,IS,none,0,0,,2,True
+Globalne ocieplenie#230,wikipedia,JP,none,0,0,,2,True
+Globalne ocieplenie#257,wikipedia,IS,personal,1,0,,2,False
+Globalne ocieplenie#257,wikipedia,JP,none,0,0,,2,False
+Kwas askorbinowy#130,wikipedia,IS,none,0,0,,2,True
+Kwas askorbinowy#130,wikipedia,JP,none,0,0,,2,True
+Lekarz#143,wikipedia,IS,none,0,0,,2,True
+Lekarz#143,wikipedia,JP,none,0,0,,2,True
+Lekarz#184,wikipedia,IS,none,0,0,,2,True
+Lekarz#184,wikipedia,JP,none,0,0,,2,True
+Lekarz#194,wikipedia,IS,other,1,0,,2,False
+Lekarz#194,wikipedia,JP,none,0,0,,2,False
+Zespół nabytego niedoboru odporności#215,wikipedia,IS,none,0,0,,2,True
+Zespół nabytego niedoboru odporności#215,wikipedia,JP,none,0,0,,2,True
+Zespół nabytego niedoboru odporności#256,wikipedia,IS,none,0,0,,2,True
+Zespół nabytego niedoboru odporności#256,wikipedia,JP,none,0,0,,2,True
+Zespół nabytego niedoboru odporności#286,wikipedia,IS,none,0,0,,2,True
+Zespół nabytego niedoboru odporności#286,wikipedia,JP,none,0,0,,2,True
+Zespół nabytego niedoboru odporności#297,wikipedia,IS,none,0,0,,2,True
+Zespół nabytego niedoboru odporności#297,wikipedia,JP,none,0,0,,2,True
+Zmiana klimatu#67,wikipedia,IS,none,0,0,,2,True
+Zmiana klimatu#67,wikipedia,JP,none,0,0,,2,True

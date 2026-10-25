@@ -1,4 +1,4 @@
-.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets append-sheets sample-csv import-labels agreement adjudication-sheet import-adjudication tune validate audit-metrics errors compare report-tables h2-frame h2-history h1-frame label-h1-v2 h2-links hypotheses-v2 power import-stance validate-stance label-h1 domain-review hypotheses
+.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets append-sheets sample-csv import-labels agreement kappa-consensus combine-labels adjudication-sheet import-adjudication tune validate audit-metrics errors compare report-tables h2-frame h2-history h1-frame label-h1-v2 h2-links hypotheses-v2 power import-stance validate-stance label-h1 domain-review hypotheses
 
 ANNOTATORS ?= A B
 PHASE ?= pilot
@@ -44,6 +44,14 @@ import-labels:
 
 agreement:
 	uv run scripts/05_compute_agreement.py --phase $(PHASE)
+
+# Cohen's kappa per annotator pair plus consensus cases (single-label agreement).
+kappa-consensus:
+	uv run scripts/07_kappa_consensus.py --phase $(PHASE)
+
+# Combine both annotators' labels into one dataset per phase.
+combine-labels:
+	uv run scripts/08_combine_labels.py --phase $(PHASE)
 
 # Disputed units go to an arbiter (ARBITER=initials); the decisions settle them in the gold reference.
 adjudication-sheet:
@@ -118,4 +126,3 @@ hypotheses-v2:
 
 power:
 	uv run scripts/17_power_analysis.py
-

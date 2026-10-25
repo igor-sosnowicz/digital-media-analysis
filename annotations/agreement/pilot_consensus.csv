@@ -1,0 +1,82 @@
+unit_id,platform,pair,annotator_1,annotator_2,variable,label,value_1,value_2,uncertain
+155rje,reddit,IS–JP,IS,JP,cites_source,1,1,1,JP
+155v43,reddit,IS–JP,IS,JP,cites_source,1,1,1,JP
+16gs4,reddit,IS–JP,IS,JP,cites_source,1,1,1,
+1b6ytt,reddit,IS–JP,IS,JP,cites_source,1,1,1,
+1kzs1t,reddit,IS–JP,IS,JP,cites_source,1,1,1,
+20385,reddit,IS–JP,IS,JP,cites_source,1,1,1,JP
+2w7jvw,reddit,IS–JP,IS,JP,cites_source,1,1,1,JP
+3gxu91,reddit,IS–JP,IS,JP,cites_source,1,1,1,
+4y25jg,reddit,IS–JP,IS,JP,cites_source,1,1,1,
+5k7t1a,reddit,IS–JP,IS,JP,cites_source,1,1,1,
+5ld507,reddit,IS–JP,IS,JP,cites_source,1,1,1,
+5zf0c,reddit,IS–JP,IS,JP,cites_source,1,1,1,
+6f5xev,reddit,IS–JP,IS,JP,cites_source,1,1,1,JP
+6jlp3,reddit,IS–JP,IS,JP,cites_source,1,1,1,
+7ak4r,reddit,IS–JP,IS,JP,cites_source,1,1,1,JP
+7sb0as,reddit,IS–JP,IS,JP,cites_source,1,1,1,
+8461,reddit,IS–JP,IS,JP,cites_source,1,1,1,
+8hrqy8,reddit,IS–JP,IS,JP,cites_source,1,1,1,JP
+94aix,reddit,IS–JP,IS,JP,cites_source,1,1,1,
+9jsar,reddit,IS–JP,IS,JP,cites_source,1,1,1,JP
+b0igw,reddit,IS–JP,IS,JP,cites_source,1,1,1,"IS, JP"
+djtcd,reddit,IS–JP,IS,JP,cites_source,1,1,1,
+dw2voc,reddit,IS–JP,IS,JP,cites_source,1,1,1,JP
+dwc8u8,reddit,IS–JP,IS,JP,cites_source,1,1,1,JP
+fmwxdq,reddit,IS–JP,IS,JP,cites_source,1,1,1,
+fn86ht,reddit,IS–JP,IS,JP,cites_source,1,1,1,
+hj6vz,reddit,IS–JP,IS,JP,cites_source,1,1,1,JP
+ql5d,reddit,IS–JP,IS,JP,cites_source,1,1,1,
+qtcj,reddit,IS–JP,IS,JP,cites_source,1,1,1,IS
+155v43,reddit,IS–JP,IS,JP,source_types,institutional,institutional,institutional,JP
+16gs4,reddit,IS–JP,IS,JP,source_types,social_blog,social_blog,social_blog,
+1kzs1t,reddit,IS–JP,IS,JP,source_types,social_blog,social_blog,social_blog,
+2w7jvw,reddit,IS–JP,IS,JP,source_types,other,other,other,JP
+3gxu91,reddit,IS–JP,IS,JP,source_types,social_blog,social_blog,social_blog,
+4y25jg,reddit,IS–JP,IS,JP,source_types,social_blog,social_blog,social_blog,
+5k7t1a,reddit,IS–JP,IS,JP,source_types,social_blog,social_blog,social_blog,
+5ld507,reddit,IS–JP,IS,JP,source_types,media,media,media,
+6jlp3,reddit,IS–JP,IS,JP,source_types,media,media,media,
+7ak4r,reddit,IS–JP,IS,JP,source_types,social_blog,social_blog,social_blog,JP
+7sb0as,reddit,IS–JP,IS,JP,source_types,social_blog,social_blog,social_blog,
+8461,reddit,IS–JP,IS,JP,source_types,media,media,media,
+94aix,reddit,IS–JP,IS,JP,source_types,social_blog,social_blog,social_blog,
+djtcd,reddit,IS–JP,IS,JP,source_types,media,media,media,
+fmwxdq,reddit,IS–JP,IS,JP,source_types,media,media,media,
+ql5d,reddit,IS–JP,IS,JP,source_types,social_blog,social_blog,social_blog,
+COVID-19#137,wikipedia,IS–JP,IS,JP,cites_source,0,0,0,
+COVID-19#61,wikipedia,IS–JP,IS,JP,cites_source,0,0,0,
+COVID-19#699,wikipedia,IS–JP,IS,JP,cites_source,0,0,0,
+COVID-19#734,wikipedia,IS–JP,IS,JP,cites_source,0,0,0,
+COVID-19#763,wikipedia,IS–JP,IS,JP,cites_source,0,0,0,
+COVID-19#843,wikipedia,IS–JP,IS,JP,cites_source,0,0,0,JP
+COVID-19#852,wikipedia,IS–JP,IS,JP,cites_source,0,0,0,
+Globalne ocieplenie#181,wikipedia,IS–JP,IS,JP,cites_source,0,0,0,JP
+Globalne ocieplenie#197,wikipedia,IS–JP,IS,JP,cites_source,0,0,0,
+Globalne ocieplenie#230,wikipedia,IS–JP,IS,JP,cites_source,0,0,0,
+Kwas askorbinowy#130,wikipedia,IS–JP,IS,JP,cites_source,0,0,0,
+Lekarz#143,wikipedia,IS–JP,IS,JP,cites_source,0,0,0,
+Lekarz#184,wikipedia,IS–JP,IS,JP,cites_source,0,0,0,
+Zespół nabytego niedoboru odporności#215,wikipedia,IS–JP,IS,JP,cites_source,0,0,0,
+Zespół nabytego niedoboru odporności#256,wikipedia,IS–JP,IS,JP,cites_source,0,0,0,
+Zespół nabytego niedoboru odporności#286,wikipedia,IS–JP,IS,JP,cites_source,0,0,0,
+Zespół nabytego niedoboru odporności#297,wikipedia,IS–JP,IS,JP,cites_source,0,0,0,
+Zmiana klimatu#67,wikipedia,IS–JP,IS,JP,cites_source,0,0,0,
+COVID-19#137,wikipedia,IS–JP,IS,JP,source_types,none,none,none,
+COVID-19#61,wikipedia,IS–JP,IS,JP,source_types,none,none,none,
+COVID-19#699,wikipedia,IS–JP,IS,JP,source_types,none,none,none,
+COVID-19#734,wikipedia,IS–JP,IS,JP,source_types,none,none,none,
+COVID-19#763,wikipedia,IS–JP,IS,JP,source_types,none,none,none,
+COVID-19#843,wikipedia,IS–JP,IS,JP,source_types,none,none,none,JP
+COVID-19#852,wikipedia,IS–JP,IS,JP,source_types,none,none,none,
+Globalne ocieplenie#181,wikipedia,IS–JP,IS,JP,source_types,none,none,none,JP
+Globalne ocieplenie#197,wikipedia,IS–JP,IS,JP,source_types,none,none,none,
+Globalne ocieplenie#230,wikipedia,IS–JP,IS,JP,source_types,none,none,none,
+Kwas askorbinowy#130,wikipedia,IS–JP,IS,JP,source_types,none,none,none,
+Lekarz#143,wikipedia,IS–JP,IS,JP,source_types,none,none,none,
+Lekarz#184,wikipedia,IS–JP,IS,JP,source_types,none,none,none,
+Zespół nabytego niedoboru odporności#215,wikipedia,IS–JP,IS,JP,source_types,none,none,none,
+Zespół nabytego niedoboru odporności#256,wikipedia,IS–JP,IS,JP,source_types,none,none,none,
+Zespół nabytego niedoboru odporności#286,wikipedia,IS–JP,IS,JP,source_types,none,none,none,
+Zespół nabytego niedoboru odporności#297,wikipedia,IS–JP,IS,JP,source_types,none,none,none,
+Zmiana klimatu#67,wikipedia,IS–JP,IS,JP,source_types,none,none,none,

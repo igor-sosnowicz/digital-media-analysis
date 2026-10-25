@@ -79,6 +79,8 @@ make import-labels
 make agreement
 ```
 
+`scripts/07_kappa_consensus.py` (`make kappa-consensus`) additionally computes Cohen's kappa per annotator pair and variable and writes `annotations/agreement/<phase>_consensus.csv` with the units where both annotators of a pair agreed on a single label.
+
 Both take `PHASE=gold` for the main sample. `DROP_INVALID=1` imports a workbook without its invalid rows (they are listed) instead of rejecting it; header and manifest problems still block.
 
 By default every annotator gets every unit of a phase, as agreement needs. To split the main sample between annotators instead, export only the units after the last row someone already coded and cap how many each platform gets, then import with `PARTIAL=1` (`--partial`), which skips rows without labels and does not require every unit of the phase:
@@ -194,4 +196,3 @@ make hypotheses CONFIRMATORY=1
 ```
 
 Stance workbooks (`annotations/sheets/stance_<phase>_<annotator>.xlsx`) hold only the Reddit posts and the `consensus_stance` column; gold stance sheets for each annotator's own posts come from `--units-from annotations/sheets/gold_<annotator>.xlsx`. `scripts/08_label_h1_sample.py --audit-annotators ...` also exports audit workbooks for the rare source categories; once they are coded, `make audit-metrics` estimates `gliner_v1`'s sensitivity and specificity for the H1-B indicators (weighted by inverse inclusion probability, also pooled with the gold test split), checks the validity gate and corrects the yearly shares (amendment of 25.10.2026 in the preregistration). The confirmatory run refuses while the preregistration files are uncommitted; H1-A additionally waits for a tuned `stance_v1` that has run on the test split. Results go to `annotations/hypotheses/`.
-
