@@ -74,6 +74,23 @@ def get_hypotheses() -> dict[str, Any]:
     return settings
 
 
+def get_hypotheses_v2() -> dict[str, Any]:
+    """The `hypotheses_v2` section (docs/hipotezy_v2.md), checked for periods, groups and namespaces."""
+    settings = get_config("hypotheses_v2")
+    for key in ("h1", "h2"):
+        first, last = settings[key]["period"]
+        if first > last:
+            raise ValueError(f"hypotheses_v2.{key}.period must start before it ends in {CONFIG_PATH}.")
+    h2 = settings["h2"]
+    if h2["baseline_period"][1] >= h2["period"][0]:
+        raise ValueError(f"hypotheses_v2.h2.baseline_period must end before the period starts in {CONFIG_PATH}.")
+    if set(h2["groups"]) != {"health", "control"}:
+        raise ValueError(f"hypotheses_v2.h2.groups must be health and control in {CONFIG_PATH}.")
+    if not set(h2["namespaces"]) <= {0, 1}:
+        raise ValueError(f"hypotheses_v2.h2.namespaces may hold 0 (articles) and 1 (talk pages) in {CONFIG_PATH}.")
+    return settings
+
+
 def get_study_period(platform: str) -> tuple[datetime, datetime]:
     """Return a platform's study period from `study_periods` as timezone-aware UTC datetimes (end exclusive)."""
     periods = get_config("study_periods")

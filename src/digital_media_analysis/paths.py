@@ -45,3 +45,7 @@ MODEL_CACHE_DIR = DATA_DIR / "model_cache"
 # Hypothesis tests (docs/hipotezy.md): analysis samples, results, and instrument labels of frame posts.
 HYPOTHESES_DIR = ANNOTATIONS_DIR / "hypotheses"
 FRAME_LABELS_DIR = ANNOTATIONS_DIR / "frame_labels"
+# Extended hypothesis tests (docs/hipotezy_v2.md): raw downloads outside git, results and samples in it.
+RAW_H1V2_DIR = DATA_DIR / "raw" / "reddit_h1v2"
+RAW_WIKIPEDIA_V2_DIR = DATA_DIR / "raw" / "wikipedia_v2"
+HYPOTHESES_V2_DIR = ANNOTATIONS_DIR / "hypotheses_v2"

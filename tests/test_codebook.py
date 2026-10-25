@@ -23,7 +23,7 @@ def test_codebook_loads_and_validates():
         "cites_source", "source_types", "edit_about_sources",
     }
     assert {variable.code for variable in codebook.variables_for("reddit")} == {
-        "cites_source", "source_types", "consensus_stance",
+        "cites_source", "source_types", "consensus_stance", "consensus_topic",
     }
     assert codebook.variable("consensus_stance").type == "nominal"
 

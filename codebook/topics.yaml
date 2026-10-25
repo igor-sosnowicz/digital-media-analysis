@@ -1,0 +1,63 @@
+# Consensus topics of hypothesis H1 (v2, docs/hipotezy_v2.md): the scientific
+# consensus a Reddit post or comment can support or challenge.
+# - consensus: the consensus statement in one English sentence; instrument
+#   stance_v2 asks whether a text supports or rejects it.
+# - patterns: regular expressions matched case-insensitively as whole words;
+#   a unit is about a topic when any pattern matches its text (instrument topics_v1).
+#   The frame of H1 v2 is every unit about at least one topic.
+# Changes after the preregistration commit are amendments (docs/hipotezy_v2.md).
+
+version: "1.0"
+
+topics:
+  climate:
+    name: Zmiana klimatu
+    consensus: Recent global warming is real and mainly caused by human activity.
+    patterns:
+      - global warming
+      - climate change
+      - climate crisis
+      - climate (?:science|scientists?|denial|deniers?|skeptics?|sceptics?|models?|alarmis\w*)
+      - greenhouse (?:gas\w*|effect)
+      - carbon (?:dioxide|emissions?)
+      - CO2
+      - IPCC
+      - climategate
+      - sea level rise
+  vaccines:
+    name: Szczepionki
+    consensus: Approved vaccines are safe and effective, and vaccines do not cause autism.
+    patterns:
+      - vaccin\w*
+      - anti-?vax\w*
+      - vaxx\w*
+      - immuni[sz]ations?
+      - MMR
+      - measles
+      - whooping cough
+      - thimerosal
+  evolution:
+    name: Ewolucja
+    consensus: Living species, including humans, evolved by natural processes over billions of years.
+    patterns:
+      - evolution(?:ary)? (?:theory|biology)
+      - theory of evolution
+      - darwin\w*
+      - natural selection
+      - creationis\w*
+      - intelligent design
+      - common ancestor
+  gmo:
+    name: Żywność modyfikowana genetycznie
+    consensus: Approved genetically modified foods are as safe to eat as conventional foods.
+    patterns:
+      - GMOs?
+      - genetically (?:modified|engineered)
+      - GM (?:crops?|foods?)
+      - monsanto
+  fluoride:
+    name: Fluoryzacja wody
+    consensus: Community water fluoridation at recommended levels is safe and prevents tooth decay.
+    patterns:
+      - fluorid\w*
+      - water fluoridation

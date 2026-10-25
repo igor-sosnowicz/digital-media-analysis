@@ -269,6 +269,23 @@ Preregistracja: [`docs/hipotezy.md`](hipotezy.md); ustawienia w sekcji `hypothes
   - **H1-B:** brak trendu w obrębie subredditów (źródła konsensusu OR 1,03 na rok, p = 0,93; źródła alternatywne OR 0,99, p = 0,85). Surowe zmiany udziałów wynikają ze zmiany składu (rosnący r/conspiracy).
   - **H2:** test główny OR 1,47 na rok [1,09; 1,99], p = 0,006, ale tylko 10 linków alternatywnych. Eksploracyjne sprawdzenie pomiaru (`scripts/10_h2_robustness.py`) pokazało, że 8 z nich to oficjalne wpisy WHO (Periscope) i GIS (Twitter) policzone wielokrotnie. Po przypisaniu ich do instytucji zostają 2 linki alternatywne (test dokładny p = 0,21). Formalne potwierdzenie jest artefaktem klasyfikacji po domenie i dane nie wspierają H2.
 
+## Etap 6: rozszerzony test hipotez (v2)
+
+Test v1 nie rozstrzygnął żadnej hipotezy (zob. etap 5). Druga preregistracja, [`docs/hipotezy_v2.md`](hipotezy_v2.md), jest projektem do zatwierdzenia przez zespół. Stan na 25.10.2026:
+
+- **Kod gotowy, z testami na danych syntetycznych i przebiegiem całego potoku 14 → 15 → 16 na danych sztucznych:**
+  - ramy (`h1_frame.py`, `wikipedia_frame.py`, `wikipedia_history.py`) i skrypty pobierające `00b`, `00c`, `01c`;
+  - instrumenty `topics_v1`, `stance_v2`, `distrust_v1`, klasyfikacja właścicieli kont (`owners.py`) i lista „perennial sources” (`rsp.py`);
+  - modele (`inference.py`): TOST, logit z błędami grupowanymi, korekta błędu pomiaru w funkcji wiarygodności, logit warunkowy po autorze, ujemny dwumianowy, różnica w różnicach, przerwany szereg czasowy, przetrwanie, dekompozycja;
+  - krzywa specyfikacji (`multiverse.py`), moc (`power.py`), zgodność z GSS (`external.py`), wykresy (`charts.py`), codebook 2.2 ze zmienną `consensus_topic` (R15).
+- **Moc:** H1 przy udziale bazowym 0,15 i 100 jednostkach na komórkę ma 0,96 mocy wykrycia SESOI i 0,95 mocy wykazania braku trendu. H2 potrzebuje około 40–50 tys. pierwszych dodań linków (`annotations/hypotheses_v2/power_*.csv`).
+- **Czeka:**
+  - zatwierdzenie i commit preregistracji v2;
+  - pobranie danych (zgoda zespołu);
+  - kodowanie walidacji H1 i właścicieli kont H2;
+  - strojenie i jednorazowa ocena `stance_v2`;
+  - przebieg potwierdzający.
+
 ## Kolejność prac
 
 Stan na 25.10.2026.

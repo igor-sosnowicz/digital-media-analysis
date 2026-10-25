@@ -142,6 +142,28 @@ make compare
 
 `make errors` lists every error on the dev split with a cause suggested from a closed list (`annotations/errors/dev_errors.csv`) and writes the review workbook `annotations/sheets/errors_dev.xlsx`, where a person confirms or corrects each cause; `IMPORT=1` reads it back. It also draws the Pareto chart of causes and computes differential error: false positive and false negative rates of `cites_source` by period and by subreddit or page on the test split, with a permutation test. `make compare` writes the kappa of each instrument next to the annotators' kappa in the pilot, exact McNemar tests between instruments, Kendall's tau between category rankings, and the weighted category shares from the gold labels alone (`annotations/validation/gold_shares.csv`).
 
+# Extended hypothesis tests (v2)
+
+The first tests settled neither hypothesis, so a second preregistration ([`docs/hipotezy_v2.md`](docs/hipotezy_v2.md), section `hypotheses_v2` of `config.yaml`) extends them:
+
+- **H1:** posts and top-level comments about five consensus topics (`codebook/topics.yaml`) in 13 subreddits. Their stance is measured toward the consensus of their own topic (instrument `stance_v2`, codebook 2.2 variable `consensus_topic`), with a lexicon of distrust as a second indicator. Analyses: the within-author trend, a trend corrected for instrument error, a shift-share decomposition and an optional comparison with the GSS.
+- **H2:** hundreds of health and control articles of Polish Wikipedia (category trees) with their talk pages, 2015–2026. The measure is the first additions of links, classified by the owner of the account (`codebook/owners.yaml`), by domain or by English Wikipedia's perennial-sources list. Analyses: reverts, survival of links, difference in differences and an interrupted time series at March 2020.
+- **Both:** equivalence tests against the smallest effect of interest, specification curves and a power analysis.
+
+The download scripts and the confirmatory run refuse to start until the preregistration v2 is committed:
+
+```bash
+make power
+make h2-frame
+make h2-history LIMIT=5
+make h1-frame
+make label-h1-v2 ARGS="--validation-annotators IS JP"
+make h2-links ARGS="--fetch-rsp --resolve-youtube"
+make hypotheses-v2 CONFIRMATORY=1
+```
+
+The full order of steps, including human coding, tuning and the single evaluation of `stance_v2`, is in the preregistration.
+
 # Report
 
 `report/raport.tex` is the draft report (in Polish) of the codebook, the gold standard, the instrument validation and the hypothesis tests. Its tables (`report/tables/`) and figures (`report/figures/`) are generated from the saved results, so no number in a table is copied by hand; regenerate them after any analysis changes:
