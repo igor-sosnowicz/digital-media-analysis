@@ -45,7 +45,10 @@ def main() -> None:
         sys.exit("Fix the problems above in the workbooks and run the import again.")
 
     labels = stance.load_labels(args.phase)
-    if not args.check and labels["annotator"].nunique() >= 2:
+    shared = labels[labels[stance.STANCE].notna()].groupby("unit_id")["annotator"].nunique().ge(2).sum()
+    if not args.check and labels["annotator"].nunique() >= 2 and not shared:
+        print(f"No post of phase {args.phase!r} was coded by two people, so there is no agreement to compute.")
+    elif not args.check and labels["annotator"].nunique() >= 2:
         table = stance.agreement(labels)
         AGREEMENT_DIR.mkdir(parents=True, exist_ok=True)
         table.to_csv(AGREEMENT_DIR / f"{args.phase}_stance_agreement.csv", index=False, encoding="utf-8")

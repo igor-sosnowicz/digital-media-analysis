@@ -1,4 +1,4 @@
-.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets append-sheets sample-csv import-labels agreement kappa-consensus combine-labels adjudication-sheet import-adjudication tune validate audit-metrics errors compare report-tables preprint-package h2-frame h2-history h1-frame label-h1-v2 h2-links hypotheses-v2 power import-stance validate-stance label-h1 domain-review hypotheses
+.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets append-sheets sample-csv import-labels agreement kappa-consensus combine-labels adjudication-sheet import-adjudication tune validate audit-metrics errors compare report-tables preprint-package h2-frame h2-history h1-frame label-h1-v2 h2-links hypotheses-v2 power check-stance import-stance validate-stance label-h1 domain-review hypotheses
 
 ANNOTATORS ?= A B
 PHASE ?= pilot
@@ -93,9 +93,13 @@ preprint-package:
 import-stance:
 	uv run scripts/04b_import_stance_labels.py --phase $(PHASE) $(if $(PARTIAL),--partial)
 
-# Tune on dev (STANCE_TUNE=1), freeze stance_v1, then: make validate-stance SPLIT=test FROZEN=1.
+# Check filled stance workbooks without writing anything (PARTIAL=1 while coding is under way). Steps: docs/h1a_kroki.md.
+check-stance:
+	uv run scripts/04b_import_stance_labels.py --phase $(PHASE) --check $(if $(PARTIAL),--partial)
+
+# Tune on dev (STANCE_TUNE=1; STANCE_APPLY=1 writes the best thresholds), commit, then: make validate-stance SPLIT=test FROZEN=1.
 validate-stance:
-	uv run --group ml scripts/07b_validate_stance.py --split $(SPLIT) $(if $(STANCE_TUNE),--tune) $(if $(FROZEN),--frozen)
+	uv run --group ml scripts/07b_validate_stance.py --split $(SPLIT) $(if $(STANCE_TUNE),--tune) $(if $(STANCE_APPLY),--apply) $(if $(FROZEN),--frozen)
 
 label-h1:
 	uv run --group ml scripts/08_label_h1_sample.py

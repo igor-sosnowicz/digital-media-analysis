@@ -205,7 +205,8 @@ def agreement(labels: pd.DataFrame, samples: int = 2000, seed: int = 20261024) -
     rows = []
     for variable, transform in [(STANCE, lambda value: value), ("trust_relevant", lambda value: value != NOT_APPLICABLE)]:
         coded = matrix.map(lambda value: None if pd.isna(value) else transform(value))
-        units = [[value for value in row if value is not None] for row in coded.itertuples(index=False)]
+        # Missing labels come back as NaN from DataFrame.map, so test with pd.isna, not `is None`.
+        units = [[value for value in row if not pd.isna(value)] for row in coded.itertuples(index=False)]
         units = [row for row in units if len(row) >= 2]
         kappa = (
             cohen_kappa(coded.iloc[:, 0].tolist(), coded.iloc[:, 1].tolist(), samples, seed)

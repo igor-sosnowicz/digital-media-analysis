@@ -13,6 +13,7 @@ Needs the `ml` dependency group. This is measurement only: no hypothesis is test
 """
 
 import argparse
+import json
 
 import numpy as np
 import pandas as pd
@@ -22,7 +23,7 @@ from digital_media_analysis.annotation_sheets import write_workbook
 from digital_media_analysis.codebook import load_codebook
 from digital_media_analysis.config_reader import get_hypotheses
 from digital_media_analysis.instruments import runner, stance_v1
-from digital_media_analysis.paths import FRAME_LABELS_DIR, HYPOTHESES_DIR, MODEL_CACHE_DIR, SHEETS_DIR
+from digital_media_analysis.paths import FRAME_LABELS_DIR, HYPOTHESES_DIR, MODEL_CACHE_DIR, SHEETS_DIR, VALIDATION_DIR
 
 # Audit strata by predicted category, in priority order; the rest forms the last stratum.
 AUDIT_STRATA = ["scientific", "institutional", "unknown", "personal", "other"]
@@ -84,12 +85,17 @@ def main() -> None:
 
     # Last, as it is the slowest step (three NLI hypotheses per post on a CPU).
     scores = hypotheses.cached_scores(MODEL_CACHE_DIR / "stance_v1_h1.csv", units, stance_v1.score, refresh=args.refresh)
-    if stance_v1.TUNED:
+    test_run = VALIDATION_DIR / "stance_test_run.json"
+    passed = json.loads(test_run.read_text(encoding="utf-8")).get("gate", {}).get("passed", False) if test_run.exists() else False
+    if stance_v1.TUNED and passed:
         stances = stance_v1.labels(scores)
         stances.to_csv(FRAME_LABELS_DIR / "h1_stance_v1.csv", index=False, encoding="utf-8")
         print(f"stance_v1 labels: {len(stances)} posts -> {FRAME_LABELS_DIR / 'h1_stance_v1.csv'}")
+    elif stance_v1.TUNED and test_run.exists():
+        print("stance_v1 did not pass the validity gate on the test split: no stance labels written; "
+              "H1-A cannot be measured with this instrument (docs/hipotezy.md).")
     else:
-        print("stance_v1 is not tuned yet: scores cached, no stance labels written (H1-A waits for stance gold labels).")
+        print("stance_v1 is not tuned and tested yet: scores cached, no stance labels written (scripts/07b).")
 
 
 if __name__ == "__main__":

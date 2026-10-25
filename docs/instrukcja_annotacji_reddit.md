@@ -221,5 +221,7 @@ Przykłady (uproszczone):
 - r/skeptic, „Homeopathy is just expensive water — again shown in a large trial” → `supports`;
 - r/conspiracy, „The Fed is printing money again” → `not_applicable` (gospodarka, bez twierdzenia naukowego).
 
+Sprawdzenie w trakcie i przed oddaniem, bez zapisywania czegokolwiek: `make check-stance PHASE=gold PARTIAL=1` (albo `PHASE=pilot`). Kolejne kroki po kodowaniu: [`h1a_kroki.md`](h1a_kroki.md).
+
 Import: `make import-stance PHASE=pilot` (albo `PHASE=gold`, z `PARTIAL=1` dla arkusza wypełnionego w części). Etykiety trafiają do `annotations/labels/<faza>/stance_<inicjały>.csv`. Po imporcie obu osób skrypt wypisuje zgodność (α Krippendorffa, κ Cohena) na wspólnych postach rundy `pilot2`.
 

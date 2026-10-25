@@ -101,8 +101,11 @@ def read_label_file(path: Path) -> pd.DataFrame:
 
 
 def load_labels(phase: str, labels_dir: Path = LABELS_DIR) -> pd.DataFrame:
-    """All annotators' labels for a phase in one long table (empty if none imported yet)."""
-    paths = sorted((labels_dir / phase).glob("*.csv"))
+    """All annotators' source labels for a phase in one long table (empty if none imported yet).
+
+    Stance labels share the folder (`stance_<annotator>.csv`, module `stance`) and are left out.
+    """
+    paths = sorted(path for path in (labels_dir / phase).glob("*.csv") if not path.name.startswith("stance_"))
     if not paths:
         return pd.DataFrame(columns=LABEL_FILE_COLUMNS)
     return pd.concat([read_label_file(path) for path in paths], ignore_index=True)
