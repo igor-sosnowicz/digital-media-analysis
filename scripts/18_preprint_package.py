@@ -6,11 +6,15 @@ the exploratory shift-share split of the H1-B change, computed from the
 analysis sample and its labels. Writes:
 - report/numbers.tex: one macro per number the text cites (`\\res...`), so the
   prose follows the results; docs/podsumowanie_wynikow.md lists them by section;
-- report/tables/preprint_data.tex (data, sample, agreement) and
-  preprint_h2.tex (H2: preregistered test, robustness, measurement check);
-  the preprint also uses test_metrics.tex and h1b.tex from scripts/13;
+- report/tables/preprint_data.tex (data, sample, agreement), preprint_h1.tex
+  (H1-A and H1-B trends side by side), preprint_stance.tex (stance agreement and
+  stance_v1 on dev and test) and preprint_h2.tex (H2: preregistered test,
+  robustness, measurement check); the preprint also uses test_metrics.tex from scripts/13;
 - report/figures/preprint_instruments.png, preprint_h1.png, preprint_h2.png,
   preprint_agreement.png.
+H1-A numbers, its table cells and its figure panel are placeholders (macro
+\\resPending) until the H1-A pipeline has run (docs/h1a_kroki.md); rerunning this
+script then fills them in.
 """
 
 import json
@@ -242,6 +246,106 @@ def h2_numbers(numbers: Numbers, links: pd.DataFrame) -> None:
     numbers.put("htwo exact p", p_value(exact["p_one_sided"]))
 
 
+PENDING = r"\resPending"
+H1_ANALYSES = [("primary", "główna (2005--2018)"), ("sensitivity_period", "2005--2020"), ("only_science", "tylko r/science"),
+               ("only_conspiracy", "tylko r/conspiracy")]
+H1_INDICATORS = [("H1-A", "challenges", "H1-A: podważanie konsensusu (wzrost)"), ("H1-A", "supports", "H1-A: wsparcie konsensusu (spadek)"),
+                 ("H1-B", "consensus", "H1-B: źródła konsensusu (spadek)"), ("H1-B", "alternative", "H1-B: źródła alternatywne (wzrost)")]
+
+
+def h1a_numbers(numbers: Numbers, validation_dir=VALIDATION_DIR, agreement_dir=AGREEMENT_DIR, hypotheses_dir=HYPOTHESES_DIR) -> str:
+    """Numbers of H1-A from the outputs of its pipeline (docs/h1a_kroki.md); each missing one is the placeholder macro.
+
+    Returns the status: pending (no stance test yet), gate_failed, awaiting_test (gate passed, no confirmatory
+    H1-A rows yet) or tested.
+    """
+    agreement_path = agreement_dir / "pilot_stance_agreement.csv"
+    rows = pd.read_csv(agreement_path).set_index("variable") if agreement_path.exists() else None
+    row = rows.loc["consensus_stance"] if rows is not None and "consensus_stance" in rows.index else None
+    numbers.put("hone a pilot units", count(row["units"]) if row is not None else PENDING)
+    numbers.put("hone a pilot alpha", both(row["alpha"], row["alpha_low"], row["alpha_high"]) if row is not None else PENDING)
+    numbers.put("hone a pilot kappa", both(row["kappa"], row["kappa_low"], row["kappa_high"]) if row is not None else PENDING)
+    numbers.put("hone a pilot agreement", number(row["observed_agreement"]) if row is not None else PENDING)
+    for split in ["dev", "test"]:
+        metrics_path, run_path = validation_dir / f"stance_{split}_metrics.csv", validation_dir / f"stance_{split}_run.json"
+        values = dict(pd.read_csv(metrics_path)[["metric", "value"]].itertuples(index=False)) if metrics_path.exists() else {}
+        run = json.loads(run_path.read_text(encoding="utf-8")) if run_path.exists() else {}
+        numbers.put(f"hone a {split} posts", count(run["posts"]) if "posts" in run else PENDING)
+        for key, name in [("challenges f", "challenges:f1"), ("kappa", "kappa"), ("macro f", "macro_f1"), ("accuracy", "accuracy")]:
+            numbers.put(f"hone a {split} {key}", number(values[name]) if name in values else PENDING)
+    run_path = validation_dir / "stance_test_run.json"
+    run = json.loads(run_path.read_text(encoding="utf-8")) if run_path.exists() else {}
+    passed = run.get("gate", {}).get("passed")
+    numbers.put("hone a gate", PENDING if passed is None else ("spełniony" if passed else "niespełniony"))
+    thresholds = run.get("thresholds")
+    numbers.put("hone a thresholds", PENDING if not thresholds else
+                ", ".join(f"{name} {number(thresholds[name])}" for name in ["relevance", "supports", "challenges"]))
+    trends_path = hypotheses_dir / "confirmatory_trends.csv"
+    trends = pd.read_csv(trends_path) if trends_path.exists() else pd.DataFrame(columns=["hypothesis"])
+    found = trends[trends["hypothesis"].eq("H1-A")].set_index(["analysis", "outcome"]) if len(trends) else pd.DataFrame()
+    labels = {"primary": "", "sensitivity_period": " twenty", "only_science": " science", "only_conspiracy": " conspiracy"}
+    for analysis, label in labels.items():
+        for outcome in ["challenges", "supports"]:
+            key = (analysis, outcome)
+            hit = len(found) and key in found.index
+            numbers.put(f"hone a {outcome}{label} or",
+                        both(found.loc[key, "odds_ratio_per_year"], found.loc[key, "ci_low"], found.loc[key, "ci_high"]) if hit else PENDING)
+            numbers.put(f"hone a {outcome}{label} p", p_value(found.loc[key, "p_one_sided"]) if hit else PENDING)
+    primary = ("primary", "challenges")
+    numbers.put("hone a relevant posts", count(found.loc[primary, "units"]) if len(found) and primary in found.index else PENDING)
+    yearly_path = hypotheses_dir / "confirmatory_yearly.csv"
+    yearly = pd.read_csv(yearly_path) if yearly_path.exists() else pd.DataFrame(columns=["hypothesis"])
+    part = yearly[yearly["hypothesis"].eq("H1-A") & yearly["outcome"].eq("challenges") & yearly["group"].eq("all")] if len(yearly) else yearly
+    part = part.set_index("year")["share"] if len(part) else pd.Series(dtype=float)
+    numbers.put("hone a challenges share early", percent(part.loc[2005:2009].mean()) if part.loc[2005:2009].notna().any() else PENDING)
+    numbers.put("hone a challenges share late", percent(part.loc[2014:2018].mean()) if part.loc[2014:2018].notna().any() else PENDING)
+    if passed is None:
+        status = "pending"
+    elif not passed:
+        status = "gate_failed"
+    else:
+        status = "tested" if len(found) else "awaiting_test"
+    texts = {"pending": "czeka na kodowanie stanowiska",
+             "gate_failed": r"warunek trafności niespełniony: H1-A niemierzalne instrumentem \kod{stance\_v1}",
+             "awaiting_test": "warunek trafności spełniony, czeka na test potwierdzający", "tested": "przetestowane"}
+    numbers.put("hone a status", texts[status])
+    return status
+
+
+def h1_table(hypotheses_dir=HYPOTHESES_DIR) -> str:
+    """H1-A and H1-B trends side by side: one row per indicator, one column per analysis, OR per year [CI] and p."""
+    trends_path = hypotheses_dir / "confirmatory_trends.csv"
+    trends = pd.read_csv(trends_path).set_index(["hypothesis", "analysis", "outcome"]) if trends_path.exists() else pd.DataFrame()
+    rows = []
+    for hypothesis, outcome, label in H1_INDICATORS:
+        cells = []
+        for analysis, _ in H1_ANALYSES:
+            key = (hypothesis, analysis, outcome)
+            if len(trends) and key in trends.index:
+                row = trends.loc[key]
+                cells.append(f"{both(row['odds_ratio_per_year'], row['ci_low'], row['ci_high'])}\\newline"
+                             f"{{\\scriptsize $p$ = {p_value(row['p_one_sided'])}}}")
+            else:
+                cells.append(PENDING)
+        rows.append([label, *cells])
+    header = ["Wskaźnik (oczekiwany kierunek)", *(name for _, name in H1_ANALYSES)]
+    return tabular(header, rows, "p{3.9cm}" + "p{2.55cm}" * len(H1_ANALYSES), groups=[2])
+
+
+def stance_table(numbers: Numbers) -> str:
+    """Agreement of the two people on stance and the dev and test results of stance_v1 (placeholders until known)."""
+    rows = [
+        ["zgodność dwóch osób (\\kod{pilot2})", numbers["hone a pilot units"], "--", numbers["hone a pilot kappa"],
+         f"$\\alpha$ = {numbers['hone a pilot alpha']}"],
+        ["\\kod{stance\\_v1}, \\kod{dev} (strojenie)", numbers["hone a dev posts"], numbers["hone a dev challenges f"],
+         numbers["hone a dev kappa"], f"macro-F1 {numbers['hone a dev macro f']}"],
+        ["\\kod{stance\\_v1}, test (jeden przebieg)", numbers["hone a test posts"], numbers["hone a test challenges f"],
+         numbers["hone a test kappa"], f"warunek trafności: {numbers['hone a gate']}"],
+    ]
+    header = ["Pomiar", "$n$", "F1 \\kod{challenges}", "$\\kappa$", "Uwagi"]
+    return tabular(header, rows, "llllp{4.4cm}")
+
+
 def data_table(coded: pd.DataFrame, agreement_table: pd.DataFrame, numbers: Numbers) -> str:
     rows = []
     agree = agreement_table.set_index(["platform", "variable"])
@@ -325,35 +429,47 @@ def figure_instruments(path) -> None:
     figure.savefig(path, dpi=200, facecolor=SURFACE)
 
 
-def figure_h1(frame: pd.DataFrame, path) -> None:
-    """H1-B: yearly shares of consensus and alternative sources, and the subreddit make-up of the citing posts."""
+def figure_h1(frame: pd.DataFrame, path, hypotheses_dir=HYPOTHESES_DIR) -> None:
+    """H1: yearly share of posts challenging the consensus (H1-A; a placeholder until its pipeline has run),
+    yearly shares of consensus and alternative sources (H1-B) and the subreddit make-up of the citing posts."""
     import matplotlib.pyplot as plt
     from matplotlib.ticker import FuncFormatter
 
-    yearly = pd.read_csv(HYPOTHESES_DIR / "confirmatory_yearly.csv")
-    yearly = yearly[yearly["hypothesis"].eq("H1-B") & yearly["group"].eq("all")]
+    yearly = pd.read_csv(hypotheses_dir / "confirmatory_yearly.csv")
+    yearly = yearly[yearly["group"].eq("all")]
     weights = frame.groupby(["year", "group"])["weight"].sum().unstack(fill_value=0)
     shares = weights.div(weights.sum(axis=1), axis=0)
     shares = shares[[name for name in ["reddit.com", "science", "skeptic", "conspiracy"] if name in shares]]
-    figure, axes = plt.subplots(1, 3, figsize=(12, 3.3), facecolor=SURFACE)
+    figure, grid = plt.subplots(2, 2, figsize=(11, 6.2), facecolor=SURFACE)
+    axes = grid.flatten()
     formatter = FuncFormatter(lambda value, _: f"{value:.0%}".replace("%", " %"))
-    for axis, (outcome, title) in zip(axes[:2], [("consensus", "źródła konsensusu"), ("alternative", "źródła alternatywne")]):
-        part = yearly[yearly["outcome"].eq(outcome)].sort_values("year")
+    panels = [("H1-A", "challenges", "H1-A: posty podważające konsensus (wśród postów o nauce)"),
+              ("H1-B", "consensus", "H1-B: źródła konsensusu (wśród postów z powołaniem)"),
+              ("H1-B", "alternative", "H1-B: źródła alternatywne (wśród postów z powołaniem)")]
+    for axis, (hypothesis, outcome, title) in zip(axes[:3], panels):
+        part = yearly[yearly["hypothesis"].eq(hypothesis) & yearly["outcome"].eq(outcome)].sort_values("year")
         _axes(axis, "y")
+        axis.set_title(title, loc="left", fontsize=9, color=INK)
+        if part.empty:
+            axis.set_xticks([])
+            axis.set_yticks([])
+            axis.spines["bottom"].set_visible(False)
+            axis.text(0.5, 0.5, "czeka na kodowanie stanowiska i test H1-A\n(docs/h1a_kroki.md)", ha="center", va="center",
+                      fontsize=9, color=INK_SECONDARY, transform=axis.transAxes)
+            continue
         axis.fill_between(part["year"], part["low"], part["high"], color=SERIES, alpha=0.12, linewidth=0)
         axis.plot(part["year"], part["share"], color=SERIES, linewidth=2)
         axis.plot(part["year"], part["share"], "o", color=SERIES, markersize=4, markeredgecolor=SURFACE, clip_on=False)
         axis.set_ylim(0, max(part["high"].max(), 0.1) * 1.1)
         axis.yaxis.set_major_formatter(formatter)
-        axis.set_title(f"H1-B: {title}", loc="left", fontsize=9, color=INK)
-    axis = axes[2]
+    axis = axes[3]
     _axes(axis, "y")
     axis.stackplot(shares.index, shares.T.to_numpy(), labels=[f"r/{name}" for name in shares.columns],
                    colors=CATEGORICAL[: shares.shape[1]], edgecolor=SURFACE, linewidth=1.5)
     axis.set_ylim(0, 1)
     axis.set_xlim(shares.index.min(), shares.index.max())
     axis.yaxis.set_major_formatter(formatter)
-    axis.set_title("skład próby (udział ważony)", loc="left", fontsize=9, color=INK)
+    axis.set_title("skład próby H1-B (udział ważony subredditów)", loc="left", fontsize=9, color=INK)
     axis.legend(frameon=False, fontsize=7, labelcolor=INK, loc="upper left", bbox_to_anchor=(1.0, 1.0))
     figure.tight_layout()
     figure.savefig(path, dpi=200, facecolor=SURFACE)
@@ -416,6 +532,7 @@ def figure_agreement(table: pd.DataFrame, path) -> None:
 
 def main() -> None:
     numbers = Numbers()
+    numbers.put("pending", r"\textit{[czeka na H1-A]}")
     coded = data_numbers(numbers)
     agreement_table = agreement_numbers(numbers)
     instrument_numbers(numbers)
@@ -423,17 +540,20 @@ def main() -> None:
     h1_numbers(numbers, frame)
     links = h2_links()
     h2_numbers(numbers, links)
+    status = h1a_numbers(numbers)
     (REPORT_DIR / "numbers.tex").write_text(macro_file(numbers, "scripts/18_preprint_package.py"), encoding="utf-8")
     (REPORT_DIR / "tables").mkdir(parents=True, exist_ok=True)
     (REPORT_DIR / "tables" / "preprint_data.tex").write_text(data_table(coded, agreement_table, numbers), encoding="utf-8")
     (REPORT_DIR / "tables" / "preprint_h2.tex").write_text(h2_table(), encoding="utf-8")
+    (REPORT_DIR / "tables" / "preprint_h1.tex").write_text(h1_table(), encoding="utf-8")
+    (REPORT_DIR / "tables" / "preprint_stance.tex").write_text(stance_table(numbers), encoding="utf-8")
     figures = REPORT_DIR / "figures"
     figures.mkdir(parents=True, exist_ok=True)
     figure_instruments(figures / "preprint_instruments.png")
     figure_h1(frame, figures / "preprint_h1.png")
     figure_h2(links, figures / "preprint_h2.png")
     figure_agreement(agreement_table, figures / "preprint_agreement.png")
-    print(f"{len(numbers)} numbers -> {REPORT_DIR / 'numbers.tex'}; tables and figures in {REPORT_DIR}")
+    print(f"{len(numbers)} numbers -> {REPORT_DIR / 'numbers.tex'}; tables and figures in {REPORT_DIR}; H1-A: {status}")
 
 
 if __name__ == "__main__":

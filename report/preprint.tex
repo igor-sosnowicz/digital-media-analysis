@@ -1,7 +1,9 @@
-% Szkielet preprintu (v1, 7 stron). Tekst piszą autorzy, każdy swoją sekcję według roli
+% Szkielet preprintu (v1, 7--8 stron, z wynikiem H1-A). Tekst piszą autorzy, każdy swoją sekcję według roli
 % (docs/preprint_szkic.md). Tu są tylko: struktura, budżet stron, wstawione tabele i rysunki,
 % makra liczb (report/numbers.tex, `make preprint-package`) i lista tez do uzasadnienia w komentarzach.
 % Kompilacja: pdflatex preprint.tex (dwa razy) albo Overleaf z całym katalogiem report/.
+% Liczby H1-A są makrami-zaślepkami (\resPending, kursywa „[czeka na H1-A]”), dopóki nie przejdzie potok H1-A
+% (docs/h1a_kroki.md); potem `make preprint-package` wpisuje wyniki. Stan: \resHoneAStatus.
 \documentclass[10pt,a4paper]{article}
 
 \usepackage[utf8]{inputenc}
@@ -35,9 +37,9 @@
 
 \begin{abstract}
 % 0,3 s., lead badawczy. Tezy: pytanie (H1, H2), dane (2 x 500 jednostek, gold), instrumenty AI
-% zwalidowane z jednym testem, odpowiedź (H1 nierozstrzygnięta, wskaźniki źródeł nie wspierają;
-% H2 formalnie potwierdzona, ale artefakt pomiaru, \resHtwoExactP), instrument AI działa tylko
-% dla wykrywania powołań na Reddicie (\resTestGlinerRedditCitesF).
+% zwalidowane z jednym testem; odpowiedź H1 według wyniku H1-A (\resHoneAStatus; trend \resHoneAChallengesOr,
+% p = \resHoneAChallengesP) i H1-B (brak trendu w obrębie subredditów); H2 formalnie potwierdzona,
+% ale artefakt pomiaru (\resHtwoExactP); GLiNER działa dla wykrywania powołań na Reddicie (\resTestGlinerRedditCitesF).
 \dopisania{streszczenie, do 200 słów (lead badawczy)}
 \end{abstract}
 
@@ -75,11 +77,14 @@
 \end{figure}
 
 \section{Walidacja instrumentów AI}
-% 1,2 s., inżynier pipelinu. Tezy: trzy zamrożone instrumenty, jeden test (commit 33ff729);
+% 1,3 s., inżynier pipelinu. Tezy: trzy zamrożone instrumenty źródeł, jeden test (commit 33ff729);
 % Reddit: GLiNER \resTestGlinerRedditCitesF, czułość \resTestGlinerRedditCitesRecall, typy \resTestGlinerRedditMasi,
 % McNemar \resMcnemarRedditZeroshotGlinerP; v1 nie czyta linku (\resErrorsVoneUrlShare błędów);
 % Wikipedia: wynik negatywny (\resTestGlinerWikipediaCitesF); zależność od annotatora
 % (\resTestGlinerRedditMasiIS a \resTestGlinerRedditMasiJP); błąd różnicowy; wybór GLiNER do H1-B.
+% Instrument stanowiska stance_v1 (H1-A): zgodność ludzi na pilot2 (\resHoneAPilotKappa, n = \resHoneAPilotUnits),
+% strojenie na dev (\resHoneADevPosts postów, progi \resHoneAThresholds), jeden test (\resHoneATestPosts postów):
+% F1 challenges \resHoneATestChallengesF, kappa \resHoneATestKappa; warunek trafności (F1 >= 0,5 i kappa >= 0,4): \resHoneAGate.
 \dopisania{walidacja instrumentów (inżynier pipelinu)}
 
 \begin{figure}[htbp]
@@ -96,9 +101,21 @@
 \tabela{test_metrics}
 \end{table}
 
+\begin{table}[htbp]
+\centering
+\caption{Stanowisko wobec konsensusu (H1-A): zgodność dwóch osób i wyniki instrumentu \kod{stance\_v1}; warunek trafności z preregistracji: F1 \kod{challenges} $\geq$ 0,5 i $\kappa \geq$ 0,4 na teście.}
+\label{tab:stance}
+\tabela{preprint_stance}
+\end{table}
+
 \section{Wyniki}
 \subsection{H1: zaufanie do konsensusu naukowego}
-% 0,8 s., inżynier analityk. Tezy: H1-A się nie odbyło; H1-B na \resHoneBCiting postach:
+% 1,0 s., inżynier analityk. Tezy H1-A (stan: \resHoneAStatus): na \resHoneARelevantPosts postach o nauce udział
+% challenges \resHoneAChallengesShareEarly (2005--2009) i \resHoneAChallengesShareLate (2014--2018); trend
+% \resHoneAChallengesOr (p = \resHoneAChallengesP), supports \resHoneASupportsOr (p = \resHoneASupportsP);
+% wrażliwości: 2005--2020 \resHoneAChallengesTwentyOr, r/science \resHoneAChallengesScienceOr, r/conspiracy
+% \resHoneAChallengesConspiracyOr. Werdykt według docs/h1a_kroki.md (warunek trafności, kierunek, p < 0,05).
+% Tezy H1-B na \resHoneBCiting postach:
 % konsensus \resHoneBConsensusOr (p = \resHoneBConsensusP), alternatywne \resHoneBAlternativeOr
 % (p = \resHoneBAlternativeP); surowe udziały w kierunku hipotezy, ale r/conspiracy rośnie
 % z \resHoneConspiracyShareTwothousandeight do \resHoneConspiracyShareTwothousandeighteen; dekompozycja
@@ -108,15 +125,15 @@
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{preprint_h1.png}
-\caption{H1-B: roczne udziały źródeł konsensusu i alternatywnych wśród postów z powołaniem (z 95\% przedziałami) oraz skład próby według subredditu.}
+\caption{H1: roczny udział postów podważających konsensus wśród postów o nauce (H1-A), udziały źródeł konsensusu i alternatywnych wśród postów z powołaniem (H1-B), z 95\% przedziałami, oraz skład próby według subredditu.}
 \label{fig:h1}
 \end{figure}
 
 \begin{table}[htbp]
 \centering
-\caption{H1-B: iloraz szans na rok z efektami stałymi subredditu; $p$ jednostronne w kierunku hipotezy.}
-\label{tab:h1b}
-\szeroka{h1b}
+\caption{H1: iloraz szans na rok [95\% CI] z efektami stałymi subredditu, $p$ jednostronne w kierunku hipotezy; H1-A to test główny, H1-B wskaźniki poboczne.}
+\label{tab:h1}
+\tabela{preprint_h1}
 \end{table}
 
 \subsection{H2: źródła alternatywne w Wikipedii}

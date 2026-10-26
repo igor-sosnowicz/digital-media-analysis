@@ -1,6 +1,6 @@
 # Szkic preprintu (v1): sekcje, budżet stron, tezy i dowody
 
-Plan 7 stron (limit kursu to 8), oparty na wynikach v1. Szkielet LaTeX z wstawionymi tabelami i rysunkami jest w [`report/preprint.tex`](../report/preprint.tex). Liczby i makra są w [`podsumowanie_wynikow.md`](podsumowanie_wynikow.md).
+Plan 7–8 stron (limit kursu to 8), oparty na wynikach v1, z miejscem na wynik H1-A. Szkielet LaTeX z wstawionymi tabelami i rysunkami jest w [`report/preprint.tex`](../report/preprint.tex). Liczby i makra są w [`podsumowanie_wynikow.md`](podsumowanie_wynikow.md).
 
 **Tekst piszą członkowie zespołu, każdy swoją sekcję według roli.** Kurs sprawdza publikacje detektorem tekstu generowanego (Pangram) i ocenia wkład indywidualnie. Poniżej są tylko tezy do uzasadnienia i dowody, bez gotowych zdań.
 
@@ -20,14 +20,16 @@ Plan 7 stron (limit kursu to 8), oparty na wynikach v1. Szkielet LaTeX z wstawio
 | 1 | Wprowadzenie | 0,6 | lead badawczy | – |
 | 2 | Dane i próba | 0,8 | inżynier danych | Tab. 1 |
 | 3 | Pomiar: codebook i gold standard | 0,9 | inżynier pipelinu | Rys. 1 |
-| 4 | Walidacja instrumentów AI | 1,2 | inżynier pipelinu | Rys. 2, Tab. 2 |
-| 5 | Wyniki: H1 i H2 | 1,6 | inżynier analityk | Rys. 3, Rys. 4, Tab. 3, Tab. 4 |
+| 4 | Walidacja instrumentów AI (źródła i stanowisko) | 1,3 | inżynier pipelinu | Rys. 2, Tab. 2, Tab. 3 (stanowisko) |
+| 5 | Wyniki: H1-A, H1-B, H2 | 1,9 | inżynier analityk | Rys. 3 (H1-A i H1-B), Rys. 4, Tab. 4 (H1), Tab. 5 (H2) |
 | 6 | Dyskusja i ograniczenia | 0,7 | lead i analityk | – |
 | 7 | Odtwarzalność, data statement, użycie AI | 0,3 | inżynier danych i wszyscy | – |
 | – | Bibliografia | 0,4 | – | – |
-| | **Razem** | **6,8** | | 4 rysunki, 4 tabele |
+| | **Razem** | **7,2** | | 4 rysunki, 5 tabel |
 
-Rysunki zajmują około 1,6 strony, tabele około 1,2. Jeśli zabraknie miejsca, najpierw skracamy Tab. 3 (zostają wiersze „główna” i „2005–2020”), a Rys. 1 zastępujemy jednym zdaniem z liczbami.
+Rysunki zajmują około 1,8 strony, tabele około 1,4. Jeśli zabraknie miejsca, najpierw usuwamy z Tab. 4 kolumny r/science i r/conspiracy (zostają w tekście jako makra), a Rys. 1 zastępujemy jednym zdaniem z liczbami.
+
+**Liczby H1-A** są w makrach `\resHoneA...`. Do czasu przebiegu potoku H1-A ([`h1a_kroki.md`](h1a_kroki.md)) każde z nich wyświetla kursywą „[czeka na H1-A]”, a panel H1-A na Rys. 3 pokazuje napis zastępczy. Po potoku `make preprint-package` wpisuje wyniki bez zmian w tekście. Stan pokazuje makro `\resHoneAStatus`.
 
 ### Streszczenie (0,3 s.)
 Tezy:
@@ -99,11 +101,21 @@ Tezy:
 6. **Błąd różnicowy:** brak różnic między okresami, ale przy małej mocy.
 7. **Wybór do H1-B:** GLiNER na Reddicie. Reguły v2 i I4 tylko jako wynik z `dev` albo dalsze prace.
 
-Dowody: Rys. 2, Tab. 2. Cytowania: Laurer i in. 2024, Zaratiana i in. 2024, Cohen 1960, McNemar 1947, Kendall 1938.
+8. **Instrument stanowiska (H1-A):** zgodność dwóch osób na `pilot2` (`\resHoneAPilotKappa`, n = `\resHoneAPilotUnits`); strojenie na `dev` (`\resHoneADevPosts` postów, progi `\resHoneAThresholds`); jeden test (`\resHoneATestPosts` postów): F1 `challenges` `\resHoneATestChallengesF`, κ `\resHoneATestKappa`; warunek trafności `\resHoneAGate`.
+
+Dowody: Rys. 2, Tab. 2, Tab. 3 (stanowisko). Cytowania: Laurer i in. 2024, Zaratiana i in. 2024, Cohen 1960, McNemar 1947, Kendall 1938.
 
 ### 5. Wyniki: H1 i H2 (1,6 s.)
-**H1** (około 0,8 s.):
-1. H1-A (test główny) się nie odbył, bo brak etykiet stanowiska. Napisać wprost.
+**H1** (około 1,1 s.):
+1. **H1-A (test główny)** na `\resHoneARelevantPosts` postach o nauce:
+   - trend `challenges`: `\resHoneAChallengesOr`, p = `\resHoneAChallengesP`; `supports`: `\resHoneASupportsOr`, p = `\resHoneASupportsP`;
+   - udział `challenges`: `\resHoneAChallengesShareEarly` w latach 2005–2009 i `\resHoneAChallengesShareLate` w latach 2014–2018;
+   - wrażliwości (2005–2020, r/science, r/conspiracy) w Tab. 4.
+
+   Werdykt według wyniku:
+   - warunek trafności niespełniony: „H1-A niemierzalne instrumentem `stance_v1`” (wynik negatywny co do pomiaru);
+   - warunek spełniony i p < 0,05 w kierunku wzrostu: potwierdzona; w dyskusji: postawy czy skład subredditów;
+   - warunek spełniony, bez istotnego wzrostu: wynik negatywny.
 2. H1-B na `\resHoneBCiting` postach z powołaniem (GLiNER):
    - źródła konsensusu: `\resHoneBConsensusOr`, p = `\resHoneBConsensusP`;
    - źródła alternatywne: `\resHoneBAlternativeOr`, p = `\resHoneBAlternativeP`.
@@ -118,7 +130,7 @@ Dowody: Rys. 2, Tab. 2. Cytowania: Laurer i in. 2024, Zaratiana i in. 2024, Cohe
 3. **Sprawdzenie pomiaru:** `\resHtwoOfficialLinks` z 10 linków to oficjalne konta WHO i GIS, a jeden link WHO dodano `\resHtwoWhoRepeats` razy. Według właściciela konta zostają 2 linki, a test dokładny daje p = `\resHtwoExactP`.
 4. **Werdykt:** formalne potwierdzenie to artefakt, dane nie wspierają H2, a moc jest niska.
 
-Dowody: Rys. 3, Rys. 4, Tab. 3, Tab. 4. Cytowania: Firth 1993.
+Dowody: Rys. 3, Rys. 4, Tab. 4 (H1), Tab. 5 (H2). Cytowania: Firth 1993.
 
 ### 6. Dyskusja i ograniczenia (0,7 s.)
 Tezy:

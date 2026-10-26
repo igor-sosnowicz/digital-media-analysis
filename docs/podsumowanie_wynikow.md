@@ -100,6 +100,26 @@ Materiał roboczy dla osób piszących preprint. **To nie jest tekst do wklejeni
 - Przyczyny błędów proponuje heurystyka; nie są jeszcze potwierdzone przez człowieka.
 - Wynik dla subredditów opiera się na kilkunastu postach bez powołania.
 
+## H1-A (Reddit, stanowisko wobec konsensusu; stance_v1)
+
+Do czasu przebiegu potoku ([`h1a_kroki.md`](h1a_kroki.md)) makra pokazują „[czeka na H1-A]”; `make preprint-package` uzupełnia je z plików wyników.
+
+| Fakt | Makra | Źródło (po potoku) |
+|---|---|---|
+| Stan H1-A | `\resHoneAStatus` | `annotations/validation/stance_test_run.json`, `confirmatory_trends.csv` |
+| Zgodność dwóch osób (pilot2): n, κ, α, zgodność surowa | `\resHoneAPilotUnits`, `\resHoneAPilotKappa`, `\resHoneAPilotAlpha`, `\resHoneAPilotAgreement` | `annotations/agreement/pilot_stance_agreement.csv` |
+| Strojenie na dev: posty, F1 `challenges`, κ, macro-F1, progi | `\resHoneADevPosts`, `\resHoneADevChallengesF`, `\resHoneADevKappa`, `\resHoneADevMacroF`, `\resHoneAThresholds` | `stance_dev_metrics.csv`, `stance_dev_run.json` |
+| Test (jeden przebieg): posty, F1 `challenges`, κ, warunek trafności | `\resHoneATestPosts`, `\resHoneATestChallengesF`, `\resHoneATestKappa`, `\resHoneAGate` | `stance_test_metrics.csv`, `stance_test_run.json` |
+| Posty o nauce w teście trendu | `\resHoneARelevantPosts` | `confirmatory_trends.csv` |
+| Trend `challenges` / `supports` (główna) | `\resHoneAChallengesOr`, `\resHoneAChallengesP`, `\resHoneASupportsOr`, `\resHoneASupportsP` | jw. |
+| Wrażliwości: 2005–2020, r/science, r/conspiracy | `\resHoneAChallengesTwentyOr`, `...ScienceOr`, `...ConspiracyOr` (i `...P`) | jw. |
+| Udział `challenges`: 2005–2009 / 2014–2018 | `\resHoneAChallengesShareEarly`, `\resHoneAChallengesShareLate` | `confirmatory_yearly.csv` |
+
+**Zastrzeżenia:**
+- `dev` ma 79 postów, a test 78, więc progi mogą być niestabilne.
+- Etykiety stanowiska pochodzą od jednej osoby na post (poza `pilot2`).
+- Warunek trafności rozstrzyga, czy H1-A w ogóle da się zmierzyć.
+
 ## H1-B (Reddit, wskaźniki źródeł; GLiNER)
 
 | Fakt | Makra (wartość) | Źródło |
@@ -144,12 +164,13 @@ Materiał roboczy dla osób piszących preprint. **To nie jest tekst do wklejeni
 |---|---|---|
 | Rys. 1 | `report/figures/preprint_agreement.png` | zgodność annotatorów w pilotażu wobec progów Krippendorffa |
 | Rys. 2 | `report/figures/preprint_instruments.png` | metryki trzech instrumentów na teście z przedziałami |
-| Rys. 3 | `report/figures/preprint_h1.png` | udziały H1-B w latach i skład próby (zmiana składu) |
+| Rys. 3 | `report/figures/preprint_h1.png` | udział postów podważających konsensus (H1-A), udziały źródeł (H1-B) i skład próby |
 | Rys. 4 | `report/figures/preprint_h2.png` | wszystkie 10 linków „alternatywnych” według właściciela konta |
 | Tab. 1 | `report/tables/preprint_data.tex` | rama, próba, gold, zgodność |
 | Tab. 2 | `report/tables/test_metrics.tex` | metryki na teście |
-| Tab. 3 | `report/tables/h1b.tex` | trendy H1-B |
-| Tab. 4 | `report/tables/preprint_h2.tex` | H2: preregistracja, odporność, sprawdzenie pomiaru |
+| Tab. 3 | `report/tables/preprint_stance.tex` | stanowisko: zgodność ludzi i `stance_v1` na dev i teście |
+| Tab. 4 | `report/tables/preprint_h1.tex` | trendy H1-A i H1-B obok siebie |
+| Tab. 5 | `report/tables/preprint_h2.tex` | H2: preregistracja, odporność, sprawdzenie pomiaru |
 
 ## Co dalej (do sekcji o ograniczeniach i dalszych pracach)
 
