@@ -1,0 +1,181 @@
+unit_id,ai_source_types,ai_uncertain,ai_reason
+8t5048,media,0,link do astronomy.com (magazyn)
+2f975s,media,0,link do washingtonpost.com
+21hrr9,media,0,link do portalu technobahn.com
+3d7t2d,media;social_blog,1,"film dokumentalny CBC na YouTube: redakcja nazwana jako źródło, kanał to YouTube"
+b4v34n,media,0,link do phys.org (serwis informacyjny)
+qa1hk,media,0,link do dailymail.co.uk
+axmr1,media,0,wpis w huffingtonpost.com; The Lancet tylko jako temat (R2)
+1b7j87,media,0,link do mercurynews.com; Stanford jako uczestnik (R4)
+2l6nzv,social_blog,0,film na YouTube
+jr84fn,media,0,link do upi.com; „Study” bez wskazania publikacji
+3lurr7,social_blog,0,film na YouTube
+7lypg,media;other,1,archiwum strony africa2000.com z transkryptem dokumentu BBC
+527pzl,media,0,link do dailymail.co.uk
+czmxq,media,0,link do todayszaman.com
+21ivpo,none,0,prośba o materiały (R8)
+2l5kbz,social_blog,0,blog na wordpress.com
+afo2u7,none,0,opinia autora bez powołania
+ntm99,social_blog,0,blog skepchick.org
+18nagq,media,0,link do guardian.co.uk
+kltje0,media,0,link do psychnewsdaily.com
+khi5n,personal,1,"autor opiera się na własnych doświadczeniach (uczeń, kolega z pracy); polecane książki nie są podstawą twierdzenia"
+bkg54l,media,0,link do worldreligionnews.com; uczelnia jako uczestnik
+527jzg,media,0,link do activistpost.com (R6)
+7se1mo,media,0,link do digitaljournal.com
+3pzjp0,none,0,opinia bez powołania
+jazjz,social_blog,1,"film na YouTube, podobno lokalny reportaż telewizyjny (redakcja nienazwana)"
+e9uoin,none,0,post meta o regulaminie
+ut2cj,none,1,strona z poradami zdrowotnymi wyglądająca na spam (R3)
+g3veol,social_blog,0,podcast i blog youarenotsosmart.com
+8i96d,social_blog,1,prywatny blog widepossibilities.com
+kh82f,media,0,link do thinkprogress.org
+j0gj5k,scientific,1,"sciencemag.org (lista domen: scientific), choć to dział wiadomości"
+gq8gft,scientific,1,physics.aps.org (czasopismo Physics APS)
+b4zhvy,scientific,0,artykuł w onlinelibrary.wiley.com (DOI)
+20476,other,1,esej PDF na prywatnej stronie dreamsongs.com
+drauo,none,0,obraz na imgur (R3)
+mtmcq,social_blog,0,film na YouTube
+3gzys8,scientific,0,artykuł w onlinelibrary.wiley.com
+e9ivwd,media,0,link do theguardian.com
+bkgq05,social_blog,1,strona-klon bloga (nflsport10.tk); może to spam (none)
+5lgut3,social_blog;media,1,film na YouTube o artykule portlandzkiej gazety (redakcja wskazana jako źródło)
+ev81fh,other,1,strona kreacjonistyczna sixdayscience.com
+1pjc7f,none,0,opinia bez powołania
+v7pz,media,0,link do newscientisttech.com
+6off7f,scientific,0,artykuł w Science Translational Medicine
+13vo8k,other,1,edge.org (serwis z esejami); może być media
+22ax3m,social_blog,0,blog na wordpress.com
+8x7wp,social_blog,0,dokument wgrany na scribd.com
+at858,social_blog,1,blog na salutedomani.com; może to spam
+2de757,media,1,komunikat prasowy na eurekalert.org (jak sciencedaily: media)
+235p6,media,0,link do sciam.com
+d5xe6,personal,1,twierdzenie przypisane nauczycielce z otoczenia autora
+dt1i7,media,0,link do newscientist.com
+faywfa,scientific,0,artykuł w NEJM
+8a5pim,none,0,prośba o lektury; cytat Twaina nie jest źródłem informacji
+76g5ki,other,1,strona z ciekawostkami (caracteristicass.de)
+q8xpa,media,0,link do abc.net.au
+2js126,none,0,obraz na imgur (R3)
+cwdcp,media,0,depesza AP w google.com/hostednews
+46rr1p,social_blog,0,film na YouTube
+21j5fl,social_blog,0,forum skeptiforum.org; Richard Green jako temat
+r26rw,social_blog,1,film na YouTube z nienazwanej stacji telewizyjnej
+c5owrm,social_blog;media,1,autor powołuje się na filmy z YouTube i historie z radia
+15uwci,social_blog,1,"kanał MIT na YouTube (konto instytucji w serwisie, jak konto redakcji)"
+10nddj,media,0,link do deadspin.com z fragmentami książki
+3xn1a1,other,0,strona astrologer.com
+1yfisn,social_blog,1,blog firmy redakcyjnej (blog.askscientific.com)
+etqsm,media,0,link do independent.co.uk
+g3ietl,institutional,0,komunikat uczelni buffalo.edu
+83ud2y,scientific,0,artykuł wydawnictwa symbiosisonlinepublishing.com (R6)
+3b0sny,media,0,link do vice.com
+r2bo9,media,0,link do canadafreepress.com
+d7z4e,media;other,1,debata Munk usłyszana w radiu i strona munkdebates.com jako źródło twierdzeń
+9cx14,social_blog,1,blog sciencebasedmedicine.org
+8328,media,0,link do newindpress.com
+23bau,social_blog,1,strona hobbystyczna allaboutthepenguins.com
+7bj79,other,0,przemówienie kongresmena McFaddena (afn.org)
+1mhof0,none,0,reklama szpitala (R3)
+5fmua6,social_blog,1,obraz z bloga ifitshipitshere.com
+7kle9m,institutional,1,komunikat prasowy APA (apa.org)
+gaglg,none,0,twierdzenie bez powołania
+7jw77,social_blog,0,film na YouTube
+888j7,media,0,blog Bad Astronomy w discovermagazine.com (blog redakcji: media)
+5k7fyw,social_blog,0,link do wątku na Reddicie jako źródło twierdzeń
+khsco,media,0,link do newhumanist.org.uk
+2dfqsg,institutional,0,komunikat uczelni news.wisc.edu
+o5s0a,media,0,link do digitaljournal.com
+3d8gse,institutional,0,komunikat CERN
+klpcai,scientific,0,artykuł w journals.sagepub.com
+76j68q,media,1,portal wakingtimes.com (R6)
+7gozv,other,1,strona dounicornsexist.com
+3daran,social_blog,0,film na YouTube
+9rah9,social_blog,0,prywatny blog (hoysater.no)
+4n45ha,none,0,"sklep internetowy, reklama (R3)"
+6f9r5g,social_blog,0,film na YouTube
+qa3xl,media,0,link do theepochtimes.com
+1svmni,media,0,link do thegatewaypundit.com
+9goz2z,media,0,link do theconversation.com
+evalbw,other,1,autor opiera się na przeczytanych książkach JBS
+klp9r6,scientific,0,artykuł w onlinelibrary.wiley.com
+3ls6q5,social_blog,1,włoski serwis parentingowy bambinizerotre.it; może być media
+6ak8u,media,0,link do time.com
+1pkaco,media,0,link do news.discovery.com
+83if7,media,1,"scienceblog.com (serwis komunikatów prasowych, jak sciencedaily)"
+9u2m2d,social_blog,0,film na YouTube
+6oh8ku,scientific,0,artykuł w sciencedirect.com
+9keowg,media,0,link do firstpost.com
+jr1mub,media,0,link do thenewcivilrightsmovement.com
+ut2e3,none,1,strona o hemoroidach wyglądająca na spam (R3)
+1b5zhr,none,0,pytanie bez powołania
+63iekw,other,1,„Source: the wonderful author bill Bryson” (książka popularnonaukowa)
+6cpatw,media,0,link do medicalxpress.com
+i7w7e1,social_blog,0,film na YouTube
+e9pqic,none,0,obraz na i.redd.it (R3)
+cbhmyz,none,1,strona wyglądająca na spam (bestquality4all.com)
+9kejj1,institutional,0,serwis uczelni source.wustl.edu
+gue3dl,scientific,0,artykuł w PLOS ONE
+7znmhd,none,1,AMA: autor przedstawia własną pracę i badania (R8)
+i7sbga,scientific,1,nature.com (dział wiadomości; lista domen: scientific)
+6sjbk,media,0,link do sciencedaily.com
+bkk5db,media,1,serwis ponderwall.com; może to blog
+dwekgz,social_blog,0,film na YouTube
+8393,media,0,link do thecrimson.com
+888vq,other,1,blog fundacji JREF (randi.org); może social_blog
+suau6,media,0,link do salon.com
+1mhjpy,social_blog,1,teorie widziane w tym subreddicie jako punkt wyjścia
+4egpsy,media,0,link do independent.co.uk
+1l09sn,other,1,strona healthfreedom.info
+228jky,personal,1,historie o duchach od znajomych i rodziny
+at3h0,none,0,obraz na imgur (R3)
+go6yf,media,0,link do theatlantic.com
+2dgsyk,none,0,pytanie bez powołania
+2f97mh,media,0,link do scientificamerican.com
+jr1q3g,none,0,własne wyliczenia i opinia autora
+7wzti,social_blog,1,film w serwisie disclose.tv
+9a8qj,media,0,link do stuff.co.nz
+dhuib,social_blog,1,serwis blogowy goddiscussion.com
+2w6jsz,media,0,blog w huffingtonpost.ca (blog medium: media)
+cps3vf,scientific,1,"własny artykuł autora w Elsevier; publikacja, choć autor nie powołuje się na cudze źródło"
+8qoy2,none,0,spam (klucze odpowiedzi; R3)
+3ls43q,social_blog,0,blog notrickszone.com
+5k8bze,social_blog,1,„słyszałem gdzieś w tym subreddicie”
+fmt6ar,none,1,subreddit jako przedmiot rozmowy (R2)
+4edrbv,encyclopedia,1,biography.com (serwis biograficzny)
+6ofn4p,media,0,link do scientificamerican.com
+155bu5,media,0,link do arstechnica.com
+drh2q,personal,1,przykład kolegi z pracy jako podstawa twierdzenia autora
+8t1lie,institutional,1,strona kursu Uniwersytetu Waszyngtońskiego (callingbullshit.org); wykłady na YouTube
+9j2n1,social_blog,0,blog skepticblog.org
+1bktu,media,0,link do newscientist.com
+d1erhx,media,0,link do futurism.com
+8t1yne,media,1,serwis bioengineer.org (agregator wiadomości)
+bkoyk4,none,1,własny esej autora w Google Docs (R8)
+18n3vn,social_blog,1,blog na wordpress.com; „surveys suggest” bez wskazania badań
+1ye7r0,other,1,plik w box.com firmy neurocogconsultants; może publikacja (scientific)
+czm2t,media,0,link do bostonherald.com
+7wtej,media,0,link do sciencedaily.com
+5ttj31,none,0,opinia bez powołania
+3gyp4j,institutional,1,serwis towarzystwa naukowego agronomy.org
+e9o7ss,scientific,0,artykuł w American Journal of Clinical Nutrition (academic.oup.com)
+26lpwn,social_blog,0,wpis z Facebooka linkujący blog na wordpress.com
+mt5sp,none,0,pytanie; E-Cat jako temat
+6og6ww,media,0,link do nautil.us
+4borag,social_blog,0,blog singularityweblog.com
+e9pl1z,media,0,link do theamericanconservative.com
+4xwxdg,encyclopedia,1,RationalWiki
+3gzlby,media,1,portal hypeworld.net
+7z3u0,social_blog,0,blog Pharyngula w scienceblogs.com
+e19ru,personal,0,relacja o diagnozie i słowach lekarza teściowej
+7gdmy,social_blog,1,strona rantpuppets.com
+fmedn,media;social_blog;unknown,1,"rosyjska telewizja, „nienazwane źródła” i link do blogspot"
+6co5ie,media,0,link do vox.com
+7zn1x1,none,1,prośba o pomoc; własne odczucie nie jest dowodem
+5tvi32,none,0,opinia o przewidywaniach; brak powołania
+1562cl,other,1,serwis nursing360.com; może spam
+5leidh,media,0,link do nytimes.com
+5lfqed,social_blog,0,wpis na medium.com
+atc5o,media,0,blog redakcji telegraph.co.uk
+o5ff0,none,0,pytanie bez powołania
+5zg1t,media,0,link do discovermagazine.com

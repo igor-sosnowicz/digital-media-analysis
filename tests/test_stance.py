@@ -52,6 +52,35 @@ def test_stance_workbook_problems_and_partial(tmp_path):
     assert "p2" not in set(labels["unit_id"])
 
 
+def test_ai_suggestions_count_only_after_the_person_verifies_them(tmp_path):
+    path = stance.workbook_path("gold", "C", tmp_path)
+    stance.write_workbook(path, "C", "gold", posts(), load_codebook())
+    fill(path, [(None, None, None), (None, None, None), ("supports", None, "own")])
+    suggestions = pd.DataFrame({"unit_id": ["p1", "p2", "p3"], "ai_stance": ["challenges", "neutral", "not_applicable"],
+                                "ai_uncertain": [0, 1, 0], "ai_reason": ["anti-vaccine claim", "news", "pet"]})
+    assert stance.add_ai_suggestions(path, suggestions, "test AI") == 3
+    workbook = load_workbook(path)
+    header = [cell.value for cell in workbook[stance.SHEET_NAME][1]]
+    assert header[-4:] == stance.AI_COLUMNS
+    # The person's own label stays; empty ones get the suggestion.
+    assert [workbook[stance.SHEET_NAME].cell(row, header.index(stance.STANCE) + 1).value for row in (2, 3, 4)] == [
+        "challenges", "neutral", "supports"]
+    labels, problems = stance.read_workbook(path, load_codebook())
+    assert labels.empty and any("3 wierszy z podpowiedzią AI" in problem for problem in problems)
+    sheet = workbook[stance.SHEET_NAME]
+    sheet.cell(2, header.index("verified") + 1, 1)
+    sheet.cell(4, header.index("verified") + 1, 1)
+    workbook.save(path)
+    labels, problems = stance.read_workbook(path, load_codebook(), partial=True)
+    assert problems == [] and labels["unit_id"].tolist() == ["p1", "p3"]
+    review = stance.ai_review(labels).iloc[0]
+    assert (review["checked"], review["changed"]) == (2, 1)
+    import pytest
+
+    with pytest.raises(ValueError, match="already has columns"):
+        stance.add_ai_suggestions(path, suggestions, "test AI")
+
+
 def test_stance_labels_save_load_reference_and_agreement(tmp_path):
     rows = [("p1", "A", "challenges"), ("p2", "A", "neutral"), ("p3", "A", "supports"),
             ("p1", "B", "challenges"), ("p2", "B", "supports"), ("p3", "B", "supports")]

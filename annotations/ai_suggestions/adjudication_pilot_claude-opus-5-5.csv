@@ -1,0 +1,21 @@
+unit_id,ai_source_types,ai_edit_about_sources,ai_uncertain,ai_reason
+8hrqy8,scientific,,1,"nature.com jest na liście domen jako scientific, choć d41586 to dział News; warto doprecyzować w codebooku"
+b0igw,other,,1,"ted.com: platforma wykładów organizacji TED; ani redakcja, ani treści użytkowników"
+6f5xev,social_blog,,1,wpis blogowy (single-post) na stronie weandtheworld.org
+qtcj,other,,0,PDF think tanku Center for the New Europe (cne.org); to nie czasopismo naukowe
+hj6vz,social_blog,,1,materiał Jamesa Corbetta (niezależny kanał internetowy) nazwany bez linku
+2dfyeb,none,,1,strona firmy sprzedającej wkładki: reklama (R3)
+dwc8u8,institutional,,1,serwis NTNU i SINTEF z komunikatami uczelni
+1yeyr8,none,,0,spam ośrodka szkoleniowego na wordpress.com (R3)
+1b6ytt,social_blog,,0,blog heresyclub.com
+fn86ht,social_blog;unknown,,1,"„some scientists were arguing” bez wskazania, kto; lektura autora nie jest doświadczeniem własnym"
+20385,institutional,,1,strona profesora w domenie uczelni (ritsumei.ac.jp); nie konkretna publikacja
+dw2voc,media,,1,liveuamap: serwis mapujący doniesienia medialne
+155rje,social_blog,,1,serwis społecznościowy socialeaf.com
+ntj9v,none,,0,reklama producenta farb (R3)
+5zf0c,media,,0,portal treehugger.com
+9jsar,unknown,,1,"„per documentary” bez wskazania, który film"
+Lekarz#194,none,1,0,znacznik „źródła/przypisy” bez wskazania źródła (R10)
+COVID-19#653,none,0,0,uzupełnienie objawów bez powołania; „prawdopodobnie” to opinia (R8)
+Globalne ocieplenie#181,none,1,1,ujednolicenie daty dostępu w szablonie cytowania to poprawa przypisów (R10)
+Globalne ocieplenie#257,none,0,0,„Ściema”: opinia bez powołania

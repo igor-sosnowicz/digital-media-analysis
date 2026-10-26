@@ -1,0 +1,188 @@
+unit_id,ai_stance,ai_uncertain,ai_reason
+10nax3,not_applicable,0,"produkt technologiczny; entuzjazm wobec produktu, nie nauki"
+1162w1,neutral,0,wiadomość o MRI owoców; żart bez stanowiska
+117fwg,neutral,1,cytat z artykułu w PubMed bez własnego komentarza; może być supports
+13vcgl,not_applicable,0,spam (kredyty hipoteczne)
+14544,not_applicable,0,technologia (nośnik danych)
+1572g3,neutral,0,wiadomość o metodzie (Nature) bez komentarza
+15vi2k,not_applicable,0,spam (rozliczenia medyczne)
+1b6qbj,neutral,0,wiadomość o badaniu bez komentarza
+1bhyn,neutral,0,wiadomość o nowym gatunku bez komentarza
+1bkll,neutral,1,esej o energii i termodynamice cywilizacji; bez stanowiska wobec nauki
+1bl6f,neutral,0,wiadomość o badaniu bez komentarza
+1dmrje,neutral,0,wiadomość o egzoplanetach bez komentarza
+1dms1q,not_applicable,0,"waluta (złoto, srebro)"
+1icmjd,not_applicable,0,zdjęcie budynku
+1jyo4,neutral,0,pytanie o badanie (placebo a ćwiczenia)
+1piczn,not_applicable,0,teoria o Sorosie
+1pjnmk,not_applicable,0,technologia i prywatność
+1pke3c,not_applicable,0,DHS; polityka
+1prxzq,not_applicable,0,brak treści naukowej
+1u53s6,challenges,1,"sugestia, że oficjalna ocena bezpieczeństwa po Fukushimie ukrywa szkody; nieufność wobec rządu i oceny ryzyka promieniowania"
+1u580r,neutral,0,wiadomość o badaniu bez komentarza
+1u5az1,not_applicable,1,"film po arabsku; z tytułu nie wiadomo, czego dotyczy"
+1u60px,not_applicable,1,"zamówienie jodku potasu przez rząd (Infowars); nieufność wobec rządu, nie nauki"
+1u6aw7,neutral,0,wiadomość o badaniu (po turecku) bez komentarza
+1yfokg,neutral,0,wiadomość o badaniu Arktyki bez komentarza
+20487,not_applicable,0,wiadomość kryminalna
+20539,not_applicable,0,podsłuchy i prawo
+21iy5u,not_applicable,0,"polityka (Turcja, Syria)"
+228pcd,not_applicable,0,audycja radiowa o spiskach
+229wxn,not_applicable,0,MH370; polityka
+269,not_applicable,0,artykuł prasowy bez nauki
+26klvl,neutral,1,"prośba do sceptyków o ocenę filmów; nie wiadomo, czego dotyczą"
+26lz5n,neutral,0,wiadomość o badaniu (Yale) bez komentarza
+26m8m8,not_applicable,0,wojna na Ukrainie
+274,not_applicable,0,porady prawne
+2f8tb7,not_applicable,0,protest i policja
+2flr7,neutral,0,wiadomość o hipotezie komety bez komentarza
+2fnfb,not_applicable,0,spam (życzenia weselne)
+2fr43,supports,0,autor broni ustaleń fizyki przed medialnym przesadzeniem
+2qv903,neutral,0,film o meteorytach bez stanowiska
+2r2bv1,not_applicable,0,utajnione strony raportu o 11 września
+2w58qs,not_applicable,0,nadużycia policji
+3222,not_applicable,0,religia i polityka
+324ft3,neutral,0,wiadomość o badaniu bez komentarza
+325t9a,neutral,0,wiadomość o badaniu bez komentarza
+37b23q,supports,1,"wpis HotWhopper (blog kpiący z negacjonistów klimatu) o Willisie Eschenbachu; stanowisko z kontekstu, nie z tytułu"
+37b784,not_applicable,1,fotografia gigapikselowa; brak twierdzenia naukowego
+37brv9,not_applicable,0,nadużycia w misji ONZ
+3d8g2k,not_applicable,0,skandal policyjny
+3d97m6,challenges,1,przekupstwo jako motyw obowiązkowych szczepień (NaturalNews); narracja antyszczepionkowa
+3daqoe,not_applicable,0,gerrymandering
+3gyz74,not_applicable,1,„tajny program kosmiczny iluminatów”; spisek bez twierdzenia naukowego
+3h122r,not_applicable,0,inwigilacja telefonów
+3lr00r,not_applicable,0,sprawa sądowa
+3lt7u5,neutral,1,artykuł z ekonomii (Journal of Finance) bez komentarza
+3q0gjs,not_applicable,0,teoria historyczna o Hitlerze; bez nauki
+425zpl,not_applicable,0,refleksja osobista
+4bmoc3,not_applicable,0,przelewy na granicy
+4bmoe3,not_applicable,0,krytyka mediów
+4bp56r,not_applicable,0,moderacja komentarzy
+4efkpg,not_applicable,0,spam (sklep z probiotykami)
+4n4pmv,not_applicable,0,spam (kursy)
+4y0ewi,supports,0,naukowiec „miażdży” polityka negującego zmiany klimatu
+52bb5i,not_applicable,0,polityka (Hillary Clinton)
+5444,not_applicable,0,historia hakera
+5446,not_applicable,1,"bezpieczeństwo komputerowe (podsłuch klawiatury); technologia, choć z Scientific American"
+5fqcrg,not_applicable,1,felieton o przegrywającej prawdzie w polityce; bez odniesienia do nauki
+5fqtjy,not_applicable,0,"polityka (Trump, Izrael)"
+5k9j1p,neutral,0,wiadomość o technologii medycznej bez komentarza
+5tvxwu,challenges,1,przychylne przedstawienie „prognozy” trzęsienia ziemi Dutchsinse (pseudonauka sprzeczna z sejsmologią)
+5x1uz0,not_applicable,0,plik bez treści naukowej
+5x35vz,not_applicable,1,sprzeczne oświadczenia lekarza sądowego i policji; temat polityczny
+5zerm,not_applicable,1,komercyjne loty kosmiczne (technologia); może być neutral
+5zfx9,neutral,0,wiadomość o superbakteriach bez komentarza
+5zghp,neutral,0,wiadomość o lekach na cholesterol bez komentarza
+5zrv9,neutral,0,wiadomość o badaniu triażu bez komentarza
+6271u,neutral,0,pytanie o różnicę między chemią a fizyką; bez stanowiska
+63oi6v,not_applicable,0,nieruchomości
+64xk2,neutral,0,wiadomość o badaniu bez komentarza
+64xx1,not_applicable,1,spam stomatologiczny (strona o wybielaniu zębów)
+69vgc,neutral,0,wiadomość o badaniu (obrzezanie a HIV) bez komentarza
+6f5icq,not_applicable,1,film bez opisu
+6f7agq,not_applicable,0,zdjęcie przedmiotu na drodze
+6f8eqo,not_applicable,1,spam w hindi (domowe leczenie zaparć); bez odniesienia do nauki
+6ff0f,neutral,0,wiadomość NASA bez komentarza
+6uo65m,not_applicable,0,oceny filmów w IMDb
+6uqrum,not_applicable,0,spam marketingowy
+6vj38,neutral,0,wiadomość o LHC bez komentarza
+7agt0,not_applicable,0,film o produkcji kulek; bez nauki
+7ajrn,neutral,0,wiadomość astronomiczna bez komentarza
+7am45,neutral,0,wiadomość o emulacji mózgu bez stanowiska
+7hywg,not_applicable,0,"polityka (broń, stan wojenny)"
+7jkb7,not_applicable,0,wywiad i polityka
+7lb60,not_applicable,1,"link do komentarza w r/atheism; z tytułu nie wiadomo, czego dotyczy"
+7pzkp,neutral,0,wiadomość o badaniu bez komentarza
+7wqfp,neutral,0,pokaz fizyczny bez stanowiska
+7wwyi,not_applicable,0,tajne stowarzyszenia elit; bez twierdzeń naukowych
+7wzi6,challenges,1,cytat z dokumentów NIST podany jako dowód tuszowania przyczyny zawalenia WTC7 (prisonplanet); nieufność wobec instytucji naukowej tylko implikowana
+7zrgc1,not_applicable,0,film bez kontekstu naukowego
+8342,not_applicable,0,moda na „apokalipsę”
+83yh12,neutral,0,wiadomość o badaniu bez komentarza
+8478,not_applicable,0,FEMA; polityka
+86lyc,supports,1,karnawał blogów sceptycznych rodziców; stanowisko z kontekstu
+8i9fd,not_applicable,0,analityka stron internetowych
+8qs04,neutral,0,wiadomość o badaniu bez komentarza
+8syh2h,neutral,1,"ukrywanie raportu o skażeniu wody przez Biały Dom; nieufność wobec rządu, nie nauki"
+8t3qwx,challenges,1,denisowianie i megality z linkiem o „zakazanej wiedzy” i olbrzymach (pseudoarcheologia); tytuł sam w sobie neutralny
+8vj5ik,not_applicable,1,spam handlowy (feng shui); bez odniesienia do nauki
+96wju,neutral,0,wiadomość o badaniu bez komentarza
+9gh9hq,neutral,0,artykuł naukowy bez komentarza
+9j6m9,not_applicable,1,demaskowanie sztuczki iluzjonisty (Derren Brown); można rozważyć supports
+9klr3g,not_applicable,0,"propaganda antysemicka; historia, bez twierdzeń naukowych"
+9rbpr,neutral,0,wiadomość o Noblu bez komentarza
+9u7pka,not_applicable,0,spisek wokół lotniska w Denver
+9v0wc,supports,1,"wpis Bad Science (Goldacre) o słabych dowodach; ironiczny tytuł, stanowisko z kontekstu"
+abe3v,neutral,1,"Royal Society o Climategate, link do bloga sceptyka klimatycznego (Bishop Hill); tytuł bez stanowiska"
+b4qj2,supports,0,znachor leczący raka nazwany szarlatanem
+b4v135,not_applicable,0,śledztwo wywiadu
+b7p4u,supports,1,link do muzeum sceptycznego wobec zjawisk paranormalnych
+bj2pi2,not_applicable,0,polityka (Tulsi Gabbard)
+bj6in,not_applicable,0,spam (kamery)
+bkmt1p,neutral,0,artykuł naukowy bez komentarza
+bxuz7,neutral,1,nagłówek prasowy o człowieku bez jedzenia od 70 lat; w r/skeptic można czytać jako kpinę (supports)
+c6a6y,neutral,0,artykuł o muszce owocowej bez stanowiska
+cbbv8g,neutral,0,wiadomość o badaniu bez komentarza
+cbibfw,supports,1,„Not looking good” przy alarmującym badaniu o oceanach: autor przyjmuje wynik jako wiarygodny
+cd5th,supports,1,"tytuł artykułu krytykującego negowanie zmian klimatu, AIDS i GMO jako dogmat"
+cpnxdv,not_applicable,0,WikiLeaks; polityka
+cpqvr0,neutral,0,wiadomość o badaniu (Nature) bez komentarza
+cuvxf,supports,0,autor szuka argumentów naukowych przeciw akupunkturze
+cyn4a,supports,1,autor krytykuje retorykę przeciw implantom ślimakowym jako podobną do teorii spiskowych
+d16onr,not_applicable,1,film rozrywkowy; z tytułu brak związku z nauką
+d1hhgl,neutral,1,"glifosat „prawdopodobnie rakotwórczy” (zgodne z IARC, sporne wobec EPA/EFSA); tytuł programu bez komentarza"
+d1t12,supports,0,kpina z pseudonauki („electro-quackery”)
+e9jv4q,neutral,0,wiadomość o wodzie na Marsie bez komentarza
+eabig,not_applicable,1,ateizm i religia; bez twierdzeń naukowych
+ek3e1,neutral,0,ciekawostki przyrodnicze bez stanowiska
+eu6nvb,not_applicable,0,praca w Amazon
+f69xu,neutral,0,wiadomość o badaniu bez komentarza
+fanutg,challenges,1,"spekulacja, że koronawirus to celowo uwolniona broń biologiczna; teza sprzeczna z ustaleniami nauki, ale głównie geopolityczna"
+far1cu,not_applicable,1,"krytyka rządu i Berniego; obowiązkowe szczepienia tylko jako przykład kontroli, bez tezy o nauce"
+fmjrg,neutral,1,"krytyka konkretnego algorytmu rekonstrukcji twarzy, nie konsensusu naukowego; może być supports"
+fmvofg,not_applicable,0,"pytanie o sytuację w Kanadzie; wieże 5G tylko relacjonowane, bez tezy"
+garev,neutral,0,wiadomość o wyszukiwarce anatomii bez stanowiska
+goi3f,supports,1,ironiczny tytuł o straszeniu kobiet (prawdopodobnie medialnymi doniesieniami o zdrowiu); bez treści trudno ocenić
+hj9sk,neutral,0,pokaz wahadeł bez stanowiska
+hjb96,neutral,0,pytanie o teorię strun bez stanowiska
+i01dnz,neutral,0,wiadomość o badaniu bez komentarza
+i0urve,not_applicable,0,polityka (konwencja antyprzemocowa)
+i5d6c4,not_applicable,0,równość płci; polityka
+i7nqzq,not_applicable,0,teoria o 11 września i Mosadzie; bez twierdzeń naukowych
+ilxtgf,not_applicable,0,polityka obyczajowa
+inb4s,neutral,0,wiadomość o badaniu bez komentarza
+j0ax28,not_applicable,0,polaryzacja polityczna
+j0dsgx,not_applicable,0,gafa polityka
+jf2mzv,not_applicable,0,Twitter i wybory
+jf4id1,neutral,0,wiadomość o badaniu bez komentarza
+jr51u9,not_applicable,0,żart o łańcuszkach SMS
+kljums,not_applicable,0,film odtwarzany wstecz
+kxevl,not_applicable,1,"materiał Fox News o „2012”; z tytułu nie wiadomo, czy dotyczy twierdzeń naukowych"
+mt3v6,not_applicable,0,spam (pożyczki)
+nfnn,not_applicable,1,polityka połowów wielorybów; komentarz „(sic)” dotyczy nagłówka
+nt099,neutral,0,pytanie o biopaliwa z alg bez stanowiska
+o5aq6,not_applicable,0,spam (szkodniki)
+o62aj,supports,0,autor wyjaśnia „moce parapsychiczne” błędem przeżywalności
+pf1t,supports,0,krytyka homeopatii jako oszustwa
+pouj,supports,0,obrona zaufania do nauki
+pwkp,neutral,0,wiadomość o badaniu bez komentarza
+q9e0l,neutral,0,udostępnienie artykułu naukowego bez stanowiska
+qa6ka,not_applicable,0,inwigilacja w internecie
+qwaj,neutral,1,reportaż z wyprawy badawczej Earthwatch; bez stanowiska; może być not_applicable
+r02r,neutral,0,wiadomość o badaniu bez komentarza
+rb7q,neutral,0,wiadomość o badaniu bez komentarza
+ssy8u,challenges,1,sugerujące pytanie z linkiem do „Wheat Belly” (teza sprzeczna z konsensusem); może być neutral (pytanie)
+twj0z,not_applicable,0,lista teorii spiskowych; bez twierdzeń naukowych
+va4y,neutral,0,wiadomość o badaniu bez komentarza
+vdag,neutral,0,artykuł Scientific American bez komentarza
+vex7,neutral,0,wiadomość o topnieniu lodowców bez komentarza
+vhf7,not_applicable,0,reklama
+vs1e,neutral,1,pytanie o sens fotelików samochodowych (artykuł o danych); bez stanowiska wobec nauki
+w9l5,neutral,0,wiadomość o badaniu bez komentarza
+wo84x,supports,0,wyjaśnienie (obalenie) teorii o chemtrails w r/skeptic
+wo987,not_applicable,0,protest pod Bohemian Grove
+woc95,not_applicable,0,plotka towarzyska
+wokcn,neutral,0,wiadomość o suszy bez komentarza
+wow0n,not_applicable,1,samolot hipersoniczny (technologia); może być neutral
+wphmg,supports,0,krytyka pseudonaukowego produktu reklamowanego przez Billa Nye’a

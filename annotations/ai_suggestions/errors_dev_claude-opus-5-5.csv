@@ -1,0 +1,346 @@
+unit_id,platform,instrument,variable,error,ai_cause,ai_uncertain,ai_reason
+8vj5ik,reddit,rules_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: social_blog przy spamie handlowym (R3: none)
+q9e0l,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+1u6aw7,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+52bb5i,reddit,rules_v1,cites_source,FN,inne,1,"prawdopodobny błąd etykiety referencyjnej; gold: social_blog, ale imgur to nie źródło (R3)"
+qwaj,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+117fwg,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+vhf7,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+wo84x,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+26m8m8,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+i7nqzq,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+5446,reddit,rules_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: institutional przy sciam.com (wydawca to media; R4)
+37b784,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+1pke3c,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+9rbpr,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+269,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+bxuz7,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+2f8tb7,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+7ajrn,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+1prxzq,reddit,rules_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: social_blog przy poście bez linku i treści
+8i9fd,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+7lb60,reddit,rules_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal przy linku do komentarza na Reddicie (raczej social_blog)
+5zghp,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+abe3v,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+1jyo4,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+5444,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+9u7pka,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+1u60px,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+wo987,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+vex7,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+e9jv4q,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+o5aq6,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+37brv9,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+COVID-19#799,wikipedia,rules_v1,cites_source,FP,znacznik edycji,0,zgodne z podpowiedzią heurystyki
+COVID-19#848,wikipedia,rules_v1,cites_source,FP,skrót WP:,0,zgodne z podpowiedzią heurystyki
+Lekarz#138,wikipedia,rules_v1,cites_source,FP,znacznik edycji,0,zgodne z podpowiedzią heurystyki
+COVID-19#723,wikipedia,rules_v1,cites_source,FP,skrót WP:,0,zgodne z podpowiedzią heurystyki
+COVID-19#846,wikipedia,rules_v1,cites_source,FP,skrót WP:,0,zgodne z podpowiedzią heurystyki
+Globalne ocieplenie#193,wikipedia,rules_v1,source_types:institutional,FP,podciąg,0,zgodne z podpowiedzią heurystyki
+Globalne ocieplenie#193,wikipedia,rules_v1,source_types:media,FN,brak w słowniku,0,zgodne z podpowiedzią heurystyki
+COVID-19#832,wikipedia,rules_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal przy „dodano dżumę” (brak powołania)
+Szczepionka#244,wikipedia,rules_v1,cites_source,FN,inne,1,"prawdopodobny błąd etykiety referencyjnej; gold: encyclopedia przy „lit.” (poprawa literówki, R9)"
+COVID-19#664,wikipedia,rules_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: other i edit=1 przy samym prefiksie sekcji (R9)
+Szczepionka#282,wikipedia,rules_v1,source_types:personal,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal przy opinii bez powołania (R8)
+Szczepionka#282,wikipedia,rules_v1,source_types:unknown,FP,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal przy opinii bez powołania (R8)
+Zmiana klimatu#75,wikipedia,rules_v1,cites_source,FP,skrót WP:,0,zgodne z podpowiedzią heurystyki
+COVID-19#818,wikipedia,rules_v1,source_types:personal,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal i edit=1 przy opisie narzędzi (R9)
+COVID-19#818,wikipedia,rules_v1,source_types:encyclopedia,FP,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal i edit=1 przy opisie narzędzi (R9)
+Zespół nabytego niedoboru odporności#309,wikipedia,rules_v1,source_types:other,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: other i edit=1 przy samym słowie „link”
+Zespół nabytego niedoboru odporności#309,wikipedia,rules_v1,source_types:unknown,FP,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: other i edit=1 przy samym słowie „link”
+Kwas askorbinowy#133,wikipedia,rules_v1,cites_source,FP,skrót WP:,0,zgodne z podpowiedzią heurystyki
+Lekarz#180,wikipedia,rules_v1,cites_source,FP,brak kontekstu,1,granica R9/R10: rewert z powodu braku źródła; gold edit=0
+Lekarz#187,wikipedia,rules_v1,cites_source,FP,znacznik edycji,0,zgodne z podpowiedzią heurystyki
+Zespół nabytego niedoboru odporności#291,wikipedia,rules_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: cites=1 przy „ja nie znam”
+Globalne ocieplenie#186,wikipedia,rules_v1,cites_source,FN,inne,1,"prawdopodobny błąd etykiety referencyjnej; gold: cites=1 przy rewercie powołującym się na zasadę, nie na źródło (R9)"
+COVID-19#780,wikipedia,rules_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: cites=1 przy rewercie (R9)
+Kwas askorbinowy#123,wikipedia,rules_v1,source_types:other,FN,inne,1,"prawdopodobny błąd etykiety referencyjnej; gold: other, a „w/g świeżego źródła” bez nazwy to unknown"
+Kwas askorbinowy#123,wikipedia,rules_v1,source_types:unknown,FP,inne,1,"prawdopodobny błąd etykiety referencyjnej; gold: other, a „w/g świeżego źródła” bez nazwy to unknown"
+Zespół nabytego niedoboru odporności#224,wikipedia,rules_v1,source_types:institutional,FN,brak w słowniku,0,zgodne z podpowiedzią heurystyki
+Zespół nabytego niedoboru odporności#224,wikipedia,rules_v1,source_types:encyclopedia,FP,skrót WP:,0,zgodne z podpowiedzią heurystyki
+Globalne ocieplenie#221,wikipedia,rules_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: encyclopedia i edit=1 przy linkach interwiki (R9)
+COVID-19#622,wikipedia,rules_v1,cites_source,FP,brak kontekstu,1,granica R9/R10: rewert z powodu braku źródła; gold edit=0
+COVID-19#816,wikipedia,rules_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal i edit=1 przy opinii spiskowej bez powołania (R8)
+COVID-19#131,wikipedia,rules_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal przy „tłumaczenie obrazka”
+COVID-19#140,wikipedia,rules_v1,cites_source,FP,znacznik edycji,0,zgodne z podpowiedzią heurystyki
+Zmiana klimatu#70,wikipedia,rules_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: cites=1 i edit=1 przy automatycznym opisie narzędzia (R9)
+Globalne ocieplenie#164,wikipedia,rules_v1,cites_source,FN,brak w słowniku,0,zgodne z podpowiedzią heurystyki
+1bkll,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+fmvofg,reddit,rules_v1,cites_source,FN,brak w słowniku,0,zgodne z podpowiedzią heurystyki
+bj2pi2,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+inb4s,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+jf4id1,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+ek3e1,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+7agt0,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+fmjrg,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+9gh9hq,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+5fqcrg,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+2flr7,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+1piczn,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+8t3qwx,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+96wju,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+63oi6v,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+vs1e,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+1572g3,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+b4qj2,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+1162w1,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+cbibfw,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+325t9a,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+5fqtjy,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+j0dsgx,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+5zrv9,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+86lyc,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+i5d6c4,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+1dmrje,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+20539,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+b4v135,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+1dms1q,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+1u580r,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+3daqoe,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+nt099,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+o62aj,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+3lr00r,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+i0urve,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+6f5icq,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+hj9sk,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+eabig,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+3222,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+2w58qs,reddit,rules_v1,cites_source,FN,pominięte pole url,0,"v1 nie czyta pola url, a post jest linkiem"
+Zespół nabytego niedoboru odporności#313,wikipedia,rules_v1,cites_source,FP,skrót WP:,0,zgodne z podpowiedzią heurystyki
+COVID-19#702,wikipedia,rules_v1,cites_source,FP,skrót WP:,0,zgodne z podpowiedzią heurystyki
+Lekarz#163,wikipedia,rules_v1,cites_source,FP,skrót WP:,0,zgodne z podpowiedzią heurystyki
+COVID-19#732,wikipedia,rules_v1,cites_source,FN,brak w słowniku,0,zgodne z podpowiedzią heurystyki
+Szczepionka#278,wikipedia,rules_v1,cites_source,FP,skrót WP:,0,zgodne z podpowiedzią heurystyki
+Zespół nabytego niedoboru odporności#307,wikipedia,rules_v1,cites_source,FP,brak kontekstu,0,zgodne z podpowiedzią heurystyki
+Globalne ocieplenie#184,wikipedia,rules_v1,source_types:encyclopedia,FP,skrót WP:,0,zgodne z podpowiedzią heurystyki
+Globalne ocieplenie#184,wikipedia,rules_v1,source_types:unknown,FN,brak w słowniku,0,zgodne z podpowiedzią heurystyki
+Lekarz#140,wikipedia,rules_v1,cites_source,FP,skrót WP:,0,zgodne z podpowiedzią heurystyki
+Globalne ocieplenie#163,wikipedia,rules_v1,cites_source,FP,znacznik edycji,0,zgodne z podpowiedzią heurystyki
+Zespół nabytego niedoboru odporności#312,wikipedia,rules_v1,cites_source,FP,skrót WP:,0,zgodne z podpowiedzią heurystyki
+COVID-19#825,wikipedia,rules_v1,cites_source,FP,skrót WP:,1,„Potrzebne źródło” (WP:WER) dotyczy źródeł; gold edit=0 zgodny z R9
+Lekarz#171,wikipedia,rules_v1,cites_source,FP,skrót WP:,0,zgodne z podpowiedzią heurystyki
+Lekarz#168,wikipedia,rules_v1,cites_source,FP,skrót WP:,0,zgodne z podpowiedzią heurystyki
+COVID-19#42,wikipedia,rules_v1,cites_source,FP,znacznik edycji,0,zgodne z podpowiedzią heurystyki
+Zespół nabytego niedoboru odporności#302,wikipedia,rules_v1,cites_source,FP,skrót WP:,0,zgodne z podpowiedzią heurystyki
+COVID-19#574,wikipedia,rules_v1,cites_source,FN,brak w słowniku,0,zgodne z podpowiedzią heurystyki
+Lekarz#186,wikipedia,rules_v1,cites_source,FP,znacznik edycji,0,zgodne z podpowiedzią heurystyki
+Zespół nabytego niedoboru odporności#209,wikipedia,rules_v1,cites_source,FP,brak kontekstu,0,zgodne z podpowiedzią heurystyki
+COVID-19#798,wikipedia,rules_v1,cites_source,FP,znacznik edycji,0,zgodne z podpowiedzią heurystyki
+q9e0l,reddit,gliner_v1,source_types:scientific,FN,brak w słowniku,0,domeny nie ma na liście
+q9e0l,reddit,gliner_v1,source_types:other,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+1u6aw7,reddit,gliner_v1,source_types:personal,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+52bb5i,reddit,gliner_v1,cites_source,FN,inne,1,"prawdopodobny błąd etykiety referencyjnej; gold: social_blog, ale imgur to nie źródło (R3)"
+qwaj,reddit,gliner_v1,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+qwaj,reddit,gliner_v1,source_types:other,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+117fwg,reddit,gliner_v1,source_types:other,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+vhf7,reddit,gliner_v1,source_types:media,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+vhf7,reddit,gliner_v1,source_types:other,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+i7nqzq,reddit,gliner_v1,source_types:social_blog,FN,brak w słowniku,0,domeny nie ma na liście
+i7nqzq,reddit,gliner_v1,source_types:other,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+5446,reddit,gliner_v1,source_types:institutional,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: institutional przy sciam.com (wydawca to media; R4)
+5446,reddit,gliner_v1,source_types:other,FP,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: institutional przy sciam.com (wydawca to media; R4)
+37b784,reddit,gliner_v1,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+37b784,reddit,gliner_v1,source_types:other,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+1pke3c,reddit,gliner_v1,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+1pke3c,reddit,gliner_v1,source_types:other,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+2f8tb7,reddit,gliner_v1,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+2f8tb7,reddit,gliner_v1,source_types:social_blog,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+1prxzq,reddit,gliner_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: social_blog przy poście bez linku i treści
+8i9fd,reddit,gliner_v1,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+8i9fd,reddit,gliner_v1,source_types:other,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+7lb60,reddit,gliner_v1,source_types:personal,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal przy linku do komentarza na Reddicie (raczej social_blog)
+7lb60,reddit,gliner_v1,source_types:social_blog,FP,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal przy linku do komentarza na Reddicie (raczej social_blog)
+far1cu,reddit,gliner_v1,cites_source,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+abe3v,reddit,gliner_v1,source_types:institutional,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+1u60px,reddit,gliner_v1,source_types:other,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+o5aq6,reddit,gliner_v1,source_types:social_blog,FN,brak w słowniku,0,domeny nie ma na liście
+o5aq6,reddit,gliner_v1,source_types:other,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+37brv9,reddit,gliner_v1,source_types:other,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+Globalne ocieplenie#193,wikipedia,gliner_v1,cites_source,FN,brak w słowniku,0,zgodne z podpowiedzią heurystyki
+COVID-19#832,wikipedia,gliner_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal przy „dodano dżumę” (brak powołania)
+Szczepionka#244,wikipedia,gliner_v1,cites_source,FN,inne,1,"prawdopodobny błąd etykiety referencyjnej; gold: encyclopedia przy „lit.” (poprawa literówki, R9)"
+COVID-19#664,wikipedia,gliner_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: other i edit=1 przy samym prefiksie sekcji (R9)
+Szczepionka#282,wikipedia,gliner_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal przy opinii bez powołania (R8)
+COVID-19#818,wikipedia,gliner_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal i edit=1 przy opisie narzędzi (R9)
+Zespół nabytego niedoboru odporności#309,wikipedia,gliner_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: other i edit=1 przy samym słowie „link”
+Zespół nabytego niedoboru odporności#291,wikipedia,gliner_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: cites=1 przy „ja nie znam”
+Globalne ocieplenie#186,wikipedia,gliner_v1,cites_source,FN,inne,1,"prawdopodobny błąd etykiety referencyjnej; gold: cites=1 przy rewercie powołującym się na zasadę, nie na źródło (R9)"
+COVID-19#780,wikipedia,gliner_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: cites=1 przy rewercie (R9)
+Kwas askorbinowy#123,wikipedia,gliner_v1,cites_source,FN,inne,1,"prawdopodobny błąd etykiety referencyjnej; gold: other, a „w/g świeżego źródła” bez nazwy to unknown"
+Zespół nabytego niedoboru odporności#224,wikipedia,gliner_v1,cites_source,FN,brak w słowniku,0,zgodne z podpowiedzią heurystyki
+Globalne ocieplenie#221,wikipedia,gliner_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: encyclopedia i edit=1 przy linkach interwiki (R9)
+COVID-19#816,wikipedia,gliner_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal i edit=1 przy opinii spiskowej bez powołania (R8)
+COVID-19#131,wikipedia,gliner_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal przy „tłumaczenie obrazka”
+Zmiana klimatu#70,wikipedia,gliner_v1,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: cites=1 i edit=1 przy automatycznym opisie narzędzia (R9)
+Globalne ocieplenie#164,wikipedia,gliner_v1,cites_source,FN,brak w słowniku,0,zgodne z podpowiedzią heurystyki
+1bkll,reddit,gliner_v1,source_types:social_blog,FN,brak w słowniku,0,domeny nie ma na liście
+1bkll,reddit,gliner_v1,source_types:other,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+fmvofg,reddit,gliner_v1,cites_source,FN,brak w słowniku,0,zgodne z podpowiedzią heurystyki
+ek3e1,reddit,gliner_v1,source_types:social_blog,FN,brak w słowniku,0,domeny nie ma na liście
+ek3e1,reddit,gliner_v1,source_types:other,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+26klvl,reddit,gliner_v1,cites_source,FP,brak kontekstu,1,link do kanału YouTube jako przedmiot pytania (R2); gold 0
+4efkpg,reddit,gliner_v1,cites_source,FP,link niebędący źródłem,0,link do sklepu (R3)
+2flr7,reddit,gliner_v1,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+2flr7,reddit,gliner_v1,source_types:other,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+1572g3,reddit,gliner_v1,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+1572g3,reddit,gliner_v1,source_types:other,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+b4qj2,reddit,gliner_v1,source_types:scientific,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+4n4pmv,reddit,gliner_v1,cites_source,FP,link niebędący źródłem,0,spam szkoleniowy (R3)
+cbibfw,reddit,gliner_v1,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+cbibfw,reddit,gliner_v1,source_types:other,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+325t9a,reddit,gliner_v1,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+325t9a,reddit,gliner_v1,source_types:unknown,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+j0dsgx,reddit,gliner_v1,source_types:other,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+i5d6c4,reddit,gliner_v1,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+i5d6c4,reddit,gliner_v1,source_types:other,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+1dmrje,reddit,gliner_v1,source_types:scientific,FP,podciąg,0,„nature” w nazwie domeny natureworldnews.com
+1dmrje,reddit,gliner_v1,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+b4v135,reddit,gliner_v1,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+b4v135,reddit,gliner_v1,source_types:other,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+1dms1q,reddit,gliner_v1,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+1dms1q,reddit,gliner_v1,source_types:other,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+1u580r,reddit,gliner_v1,source_types:institutional,FN,brak w słowniku,0,domeny nie ma na liście
+1u580r,reddit,gliner_v1,source_types:other,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+3daqoe,reddit,gliner_v1,source_types:social_blog,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+nt099,reddit,gliner_v1,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+nt099,reddit,gliner_v1,source_types:social_blog,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+i0urve,reddit,gliner_v1,source_types:other,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+6f5icq,reddit,gliner_v1,source_types:scientific,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+hj9sk,reddit,gliner_v1,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+hj9sk,reddit,gliner_v1,source_types:social_blog,FP,brak kontekstu,0,model przypisał kategorię bez wskazówki w tekście lub domenie
+Zmiana klimatu#73,wikipedia,gliner_v1,cites_source,FN,brak w słowniku,1,granica R10: „uzgodnienie informacji z podanymi źródłami”; gold edit=0
+COVID-19#732,wikipedia,gliner_v1,cites_source,FN,brak w słowniku,0,zgodne z podpowiedzią heurystyki
+Globalne ocieplenie#184,wikipedia,gliner_v1,source_types:encyclopedia,FP,skrót WP:,0,zgodne z podpowiedzią heurystyki
+Globalne ocieplenie#184,wikipedia,gliner_v1,source_types:unknown,FN,brak w słowniku,0,zgodne z podpowiedzią heurystyki
+Szczepionka#292,wikipedia,gliner_v1,cites_source,FP,skrót WP:,0,link do strony [[Wikipedia:Dostępność]] potraktowany jako źródło
+COVID-19#574,wikipedia,gliner_v1,cites_source,FN,brak w słowniku,0,zgodne z podpowiedzią heurystyki
+8vj5ik,reddit,rules_v2,source_types:social_blog,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: social_blog przy spamie handlowym (R3: none)
+8vj5ik,reddit,rules_v2,source_types:other,FP,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: social_blog przy spamie handlowym (R3: none)
+52bb5i,reddit,rules_v2,cites_source,FN,inne,1,"prawdopodobny błąd etykiety referencyjnej; gold: social_blog, ale imgur to nie źródło (R3)"
+qwaj,reddit,rules_v2,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+qwaj,reddit,rules_v2,source_types:other,FP,brak w słowniku,0,domena spoza listy trafia domyślnie do other
+vhf7,reddit,rules_v2,source_types:social_blog,FN,brak w słowniku,0,domeny nie ma na liście
+vhf7,reddit,rules_v2,source_types:other,FP,brak w słowniku,0,domena spoza listy trafia domyślnie do other
+i7nqzq,reddit,rules_v2,source_types:social_blog,FN,brak w słowniku,0,domeny nie ma na liście
+i7nqzq,reddit,rules_v2,source_types:other,FP,brak w słowniku,0,domena spoza listy trafia domyślnie do other
+5446,reddit,rules_v2,source_types:institutional,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: institutional przy sciam.com (wydawca to media; R4)
+5446,reddit,rules_v2,source_types:media,FP,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: institutional przy sciam.com (wydawca to media; R4)
+1pke3c,reddit,rules_v2,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+1pke3c,reddit,rules_v2,source_types:other,FP,brak w słowniku,0,domena spoza listy trafia domyślnie do other
+269,reddit,rules_v2,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+269,reddit,rules_v2,source_types:other,FP,brak w słowniku,0,domena spoza listy trafia domyślnie do other
+2f8tb7,reddit,rules_v2,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+2f8tb7,reddit,rules_v2,source_types:other,FP,brak w słowniku,0,domena spoza listy trafia domyślnie do other
+1prxzq,reddit,rules_v2,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: social_blog przy poście bez linku i treści
+8i9fd,reddit,rules_v2,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+8i9fd,reddit,rules_v2,source_types:other,FP,brak w słowniku,0,domena spoza listy trafia domyślnie do other
+7lb60,reddit,rules_v2,source_types:personal,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal przy linku do komentarza na Reddicie (raczej social_blog)
+7lb60,reddit,rules_v2,source_types:social_blog,FP,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal przy linku do komentarza na Reddicie (raczej social_blog)
+5zghp,reddit,rules_v2,source_types:social_blog,FN,brak w słowniku,0,domeny nie ma na liście
+5zghp,reddit,rules_v2,source_types:other,FP,brak w słowniku,0,domena spoza listy trafia domyślnie do other
+abe3v,reddit,rules_v2,source_types:social_blog,FN,brak w słowniku,0,domeny nie ma na liście
+abe3v,reddit,rules_v2,source_types:other,FP,brak w słowniku,0,domena spoza listy trafia domyślnie do other
+o5aq6,reddit,rules_v2,source_types:social_blog,FN,brak w słowniku,0,domeny nie ma na liście
+o5aq6,reddit,rules_v2,source_types:other,FP,brak w słowniku,0,domena spoza listy trafia domyślnie do other
+Globalne ocieplenie#193,wikipedia,rules_v2,cites_source,FN,brak w słowniku,0,zgodne z podpowiedzią heurystyki
+COVID-19#832,wikipedia,rules_v2,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal przy „dodano dżumę” (brak powołania)
+Szczepionka#244,wikipedia,rules_v2,cites_source,FN,inne,1,"prawdopodobny błąd etykiety referencyjnej; gold: encyclopedia przy „lit.” (poprawa literówki, R9)"
+COVID-19#58,wikipedia,rules_v2,edit_about_sources,FP,znacznik edycji,1,granica R9/R10: komunikat bota o tytułach linków w przypisach; gold edit=0
+COVID-19#664,wikipedia,rules_v2,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: other i edit=1 przy samym prefiksie sekcji (R9)
+COVID-19#664,wikipedia,rules_v2,edit_about_sources,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: other i edit=1 przy samym prefiksie sekcji (R9)
+Szczepionka#282,wikipedia,rules_v2,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal przy opinii bez powołania (R8)
+COVID-19#818,wikipedia,rules_v2,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal i edit=1 przy opisie narzędzi (R9)
+COVID-19#818,wikipedia,rules_v2,edit_about_sources,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal i edit=1 przy opisie narzędzi (R9)
+Globalne ocieplenie#162,wikipedia,rules_v2,cites_source,FP,inne,1,"prawdopodobny błąd etykiety referencyjnej; gold: cites=0, choć opis wskazuje SPM IPCC AR6 jako podstawę (R10: institutional)"
+Globalne ocieplenie#162,wikipedia,rules_v2,edit_about_sources,FN,inne,1,"prawdopodobny błąd etykiety referencyjnej; gold: edit=1, choć opis nie deklaruje pracy nad przypisami"
+Zespół nabytego niedoboru odporności#309,wikipedia,rules_v2,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: other i edit=1 przy samym słowie „link”
+Zespół nabytego niedoboru odporności#309,wikipedia,rules_v2,edit_about_sources,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: other i edit=1 przy samym słowie „link”
+Lekarz#128,wikipedia,rules_v2,edit_about_sources,FN,brak w słowniku,0,zgodne z podpowiedzią heurystyki
+Lekarz#180,wikipedia,rules_v2,edit_about_sources,FP,brak kontekstu,1,granica R9/R10: rewert z powodu braku źródła; gold edit=0
+Zespół nabytego niedoboru odporności#291,wikipedia,rules_v2,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: cites=1 przy „ja nie znam”
+Globalne ocieplenie#186,wikipedia,rules_v2,cites_source,FN,inne,1,"prawdopodobny błąd etykiety referencyjnej; gold: cites=1 przy rewercie powołującym się na zasadę, nie na źródło (R9)"
+COVID-19#780,wikipedia,rules_v2,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: cites=1 przy rewercie (R9)
+Kwas askorbinowy#123,wikipedia,rules_v2,source_types:other,FN,inne,1,"prawdopodobny błąd etykiety referencyjnej; gold: other, a „w/g świeżego źródła” bez nazwy to unknown"
+Kwas askorbinowy#123,wikipedia,rules_v2,source_types:unknown,FP,inne,1,"prawdopodobny błąd etykiety referencyjnej; gold: other, a „w/g świeżego źródła” bez nazwy to unknown"
+Zespół nabytego niedoboru odporności#224,wikipedia,rules_v2,cites_source,FN,brak w słowniku,0,zgodne z podpowiedzią heurystyki
+Globalne ocieplenie#221,wikipedia,rules_v2,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: encyclopedia i edit=1 przy linkach interwiki (R9)
+Globalne ocieplenie#221,wikipedia,rules_v2,edit_about_sources,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: encyclopedia i edit=1 przy linkach interwiki (R9)
+COVID-19#622,wikipedia,rules_v2,edit_about_sources,FP,brak kontekstu,1,granica R9/R10: rewert z powodu braku źródła; gold edit=0
+COVID-19#816,wikipedia,rules_v2,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal i edit=1 przy opinii spiskowej bez powołania (R8)
+COVID-19#816,wikipedia,rules_v2,edit_about_sources,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal i edit=1 przy opinii spiskowej bez powołania (R8)
+COVID-19#131,wikipedia,rules_v2,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal przy „tłumaczenie obrazka”
+Zmiana klimatu#70,wikipedia,rules_v2,cites_source,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: cites=1 i edit=1 przy automatycznym opisie narzędzia (R9)
+Zmiana klimatu#70,wikipedia,rules_v2,edit_about_sources,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: cites=1 i edit=1 przy automatycznym opisie narzędzia (R9)
+Globalne ocieplenie#164,wikipedia,rules_v2,edit_about_sources,FN,brak w słowniku,0,zgodne z podpowiedzią heurystyki
+1bkll,reddit,rules_v2,source_types:social_blog,FN,brak w słowniku,0,domeny nie ma na liście
+1bkll,reddit,rules_v2,source_types:other,FP,brak w słowniku,0,domena spoza listy trafia domyślnie do other
+fmvofg,reddit,rules_v2,cites_source,FN,brak w słowniku,0,zgodne z podpowiedzią heurystyki
+bj2pi2,reddit,rules_v2,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+jf4id1,reddit,rules_v2,source_types:scientific,FP,inne,1,"dział wiadomości w domenie z listy scientific (sciencemag.org, nature.com); niejasność codebooka"
+jf4id1,reddit,rules_v2,source_types:media,FN,inne,1,"dział wiadomości w domenie z listy scientific (sciencemag.org, nature.com); niejasność codebooka"
+ek3e1,reddit,rules_v2,source_types:social_blog,FN,brak w słowniku,0,domeny nie ma na liście
+ek3e1,reddit,rules_v2,source_types:other,FP,brak w słowniku,0,domena spoza listy trafia domyślnie do other
+fmjrg,reddit,rules_v2,source_types:social_blog,FN,brak w słowniku,0,domeny nie ma na liście
+fmjrg,reddit,rules_v2,source_types:other,FP,brak w słowniku,0,domena spoza listy trafia domyślnie do other
+26klvl,reddit,rules_v2,cites_source,FP,brak kontekstu,1,link do kanału YouTube jako przedmiot pytania (R2); gold 0
+4efkpg,reddit,rules_v2,cites_source,FP,link niebędący źródłem,0,link do sklepu (R3)
+1572g3,reddit,rules_v2,source_types:scientific,FP,inne,1,"dział wiadomości w domenie z listy scientific (sciencemag.org, nature.com); niejasność codebooka"
+1572g3,reddit,rules_v2,source_types:media,FN,inne,1,"dział wiadomości w domenie z listy scientific (sciencemag.org, nature.com); niejasność codebooka"
+4n4pmv,reddit,rules_v2,cites_source,FP,link niebędący źródłem,0,spam szkoleniowy (R3)
+cbibfw,reddit,rules_v2,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+cbibfw,reddit,rules_v2,source_types:other,FP,brak w słowniku,0,domena spoza listy trafia domyślnie do other
+5fqtjy,reddit,rules_v2,source_types:social_blog,FN,brak w słowniku,0,domeny nie ma na liście
+5fqtjy,reddit,rules_v2,source_types:other,FP,brak w słowniku,0,domena spoza listy trafia domyślnie do other
+86lyc,reddit,rules_v2,source_types:social_blog,FN,brak w słowniku,0,domeny nie ma na liście
+86lyc,reddit,rules_v2,source_types:other,FP,brak w słowniku,0,domena spoza listy trafia domyślnie do other
+i5d6c4,reddit,rules_v2,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+i5d6c4,reddit,rules_v2,source_types:other,FP,brak w słowniku,0,domena spoza listy trafia domyślnie do other
+1dmrje,reddit,rules_v2,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+1dmrje,reddit,rules_v2,source_types:other,FP,brak w słowniku,0,domena spoza listy trafia domyślnie do other
+b4v135,reddit,rules_v2,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+b4v135,reddit,rules_v2,source_types:other,FP,brak w słowniku,0,domena spoza listy trafia domyślnie do other
+nt099,reddit,rules_v2,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+nt099,reddit,rules_v2,source_types:other,FP,brak w słowniku,0,domena spoza listy trafia domyślnie do other
+hj9sk,reddit,rules_v2,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+hj9sk,reddit,rules_v2,source_types:other,FP,brak w słowniku,0,domena spoza listy trafia domyślnie do other
+2w58qs,reddit,rules_v2,source_types:media,FN,brak w słowniku,0,domeny nie ma na liście
+2w58qs,reddit,rules_v2,source_types:other,FP,brak w słowniku,0,domena spoza listy trafia domyślnie do other
+Zmiana klimatu#73,wikipedia,rules_v2,cites_source,FN,brak w słowniku,1,granica R10: „uzgodnienie informacji z podanymi źródłami”; gold edit=0
+Zmiana klimatu#73,wikipedia,rules_v2,edit_about_sources,FP,brak kontekstu,1,granica R10: „uzgodnienie informacji z podanymi źródłami”; gold edit=0
+Globalne ocieplenie#184,wikipedia,rules_v2,cites_source,FN,brak w słowniku,0,zgodne z podpowiedzią heurystyki
+Globalne ocieplenie#184,wikipedia,rules_v2,edit_about_sources,FP,skrót WP:,0,zgodne z podpowiedzią heurystyki
+COVID-19#825,wikipedia,rules_v2,edit_about_sources,FP,skrót WP:,1,„Potrzebne źródło” (WP:WER) dotyczy źródeł; gold edit=0 zgodny z R9
+COVID-19#574,wikipedia,rules_v2,cites_source,FN,brak w słowniku,0,zgodne z podpowiedzią heurystyki
+Medycyna#41,wikipedia,refs_v1,edit_about_sources,FN,inne,0,refs_v1 nie rozpoznał deklaracji pracy nad źródłami
+COVID-19#800,wikipedia,refs_v1,edit_about_sources,FP,inne,0,refs_v1 trafia w opis bez słowa o przypisach (próg lub wzorzec)
+COVID-19#58,wikipedia,refs_v1,edit_about_sources,FP,inne,1,granica R9/R10: komunikat bota o tytułach linków w przypisach; gold edit=0
+COVID-19#664,wikipedia,refs_v1,edit_about_sources,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: other i edit=1 przy samym prefiksie sekcji (R9)
+Globalne ocieplenie#216,wikipedia,refs_v1,edit_about_sources,FP,inne,0,refs_v1 trafia w opis bez słowa o przypisach (próg lub wzorzec)
+COVID-19#24,wikipedia,refs_v1,edit_about_sources,FP,inne,0,refs_v1 trafia w opis bez słowa o przypisach (próg lub wzorzec)
+Zespół nabytego niedoboru odporności#268,wikipedia,refs_v1,edit_about_sources,FP,inne,0,refs_v1 trafia w opis bez słowa o przypisach (próg lub wzorzec)
+Globalne ocieplenie#162,wikipedia,refs_v1,edit_about_sources,FN,inne,1,"prawdopodobny błąd etykiety referencyjnej; gold: edit=1, choć opis nie deklaruje pracy nad przypisami"
+Zespół nabytego niedoboru odporności#309,wikipedia,refs_v1,edit_about_sources,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: other i edit=1 przy samym słowie „link”
+Lekarz#128,wikipedia,refs_v1,edit_about_sources,FN,inne,0,refs_v1 nie rozpoznał deklaracji pracy nad źródłami
+Globalne ocieplenie#186,wikipedia,refs_v1,edit_about_sources,FN,inne,0,refs_v1 nie rozpoznał deklaracji pracy nad źródłami
+Globalne ocieplenie#253,wikipedia,refs_v1,edit_about_sources,FP,inne,0,refs_v1 trafia w opis bez słowa o przypisach (próg lub wzorzec)
+Globalne ocieplenie#278,wikipedia,refs_v1,edit_about_sources,FP,inne,0,refs_v1 trafia w opis bez słowa o przypisach (próg lub wzorzec)
+Globalne ocieplenie#221,wikipedia,refs_v1,edit_about_sources,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: encyclopedia i edit=1 przy linkach interwiki (R9)
+COVID-19#816,wikipedia,refs_v1,edit_about_sources,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: personal i edit=1 przy opinii spiskowej bez powołania (R8)
+Lekarz#153,wikipedia,refs_v1,edit_about_sources,FP,inne,0,refs_v1 trafia w opis bez słowa o przypisach (próg lub wzorzec)
+COVID-19#849,wikipedia,refs_v1,edit_about_sources,FP,inne,0,refs_v1 trafia w opis bez słowa o przypisach (próg lub wzorzec)
+COVID-19#746,wikipedia,refs_v1,edit_about_sources,FP,inne,0,refs_v1 trafia w opis bez słowa o przypisach (próg lub wzorzec)
+Zmiana klimatu#70,wikipedia,refs_v1,edit_about_sources,FN,inne,1,prawdopodobny błąd etykiety referencyjnej; gold: cites=1 i edit=1 przy automatycznym opisie narzędzia (R9)
+Lekarz#178,wikipedia,refs_v1,edit_about_sources,FP,inne,0,refs_v1 trafia w opis bez słowa o przypisach (próg lub wzorzec)
+Szczepionka#293,wikipedia,refs_v1,edit_about_sources,FP,inne,0,refs_v1 trafia w opis bez słowa o przypisach (próg lub wzorzec)
+Globalne ocieplenie#270,wikipedia,refs_v1,edit_about_sources,FP,inne,0,refs_v1 trafia w opis bez słowa o przypisach (próg lub wzorzec)
+COVID-19#702,wikipedia,refs_v1,edit_about_sources,FP,skrót WP:,0,[[WP:SK]] potraktowany jako praca nad przypisami
+COVID-19#62,wikipedia,refs_v1,edit_about_sources,FP,inne,0,refs_v1 trafia w opis bez słowa o przypisach (próg lub wzorzec)
+Zmiana klimatu#35,wikipedia,refs_v1,edit_about_sources,FP,inne,0,refs_v1 trafia w opis bez słowa o przypisach (próg lub wzorzec)
+Globalne ocieplenie#275,wikipedia,refs_v1,edit_about_sources,FP,inne,0,refs_v1 trafia w opis bez słowa o przypisach (próg lub wzorzec)
+COVID-19#675,wikipedia,refs_v1,edit_about_sources,FP,inne,0,refs_v1 trafia w opis bez słowa o przypisach (próg lub wzorzec)
+Lekarz#140,wikipedia,refs_v1,edit_about_sources,FP,skrót WP:,0,[[WP:SK]] potraktowany jako praca nad przypisami
+Globalne ocieplenie#168,wikipedia,refs_v1,edit_about_sources,FP,inne,0,refs_v1 trafia w opis bez słowa o przypisach (próg lub wzorzec)
+Globalne ocieplenie#277,wikipedia,refs_v1,edit_about_sources,FP,inne,0,refs_v1 trafia w opis bez słowa o przypisach (próg lub wzorzec)
+Lekarz#192,wikipedia,refs_v1,edit_about_sources,FP,inne,0,refs_v1 trafia w opis bez słowa o przypisach (próg lub wzorzec)
+Lekarz#139,wikipedia,refs_v1,edit_about_sources,FP,inne,0,refs_v1 trafia w opis bez słowa o przypisach (próg lub wzorzec)
+COVID-19#394,wikipedia,refs_v1,edit_about_sources,FP,inne,0,refs_v1 trafia w opis bez słowa o przypisach (próg lub wzorzec)

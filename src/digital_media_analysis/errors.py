@@ -21,7 +21,7 @@ from openpyxl.styles import Alignment, Font
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
 
-from digital_media_analysis.annotation_sheets import HEADER_FONT, LABEL_FILL
+from digital_media_analysis.annotation_sheets import HEADER_FONT, LABEL_FILL, VERIFIED, unverified
 from digital_media_analysis.codebook import NO_SOURCE
 from digital_media_analysis.instruments import rules_v1
 from digital_media_analysis.instruments.unit_text import OWN_MEDIA_HOSTS, link_host
@@ -177,6 +177,10 @@ def read_review(path: Path, errors: pd.DataFrame) -> tuple[pd.DataFrame, list[st
     problems = []
     if reviewed.empty:
         return errors, problems
+    if VERIFIED in reviewed.columns:
+        # An AI-suggested cause counts as confirmed only once a person verified the row.
+        checked = [not unverified(record) for record in reviewed.to_dict("records")]
+        reviewed.loc[[not flag for flag in checked], "cause"] = ""
     reviewed = reviewed.assign(unit_id=reviewed["unit_id"].astype(str)).fillna({"cause": "", "notes": ""})
     reviewed["cause"] = reviewed["cause"].astype(str).str.strip()
     for row in reviewed[reviewed["cause"].ne("") & ~reviewed["cause"].isin(CAUSES)].itertuples(index=False):

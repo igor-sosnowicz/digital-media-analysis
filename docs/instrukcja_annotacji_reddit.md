@@ -223,5 +223,7 @@ Przykłady (uproszczone):
 
 Sprawdzenie w trakcie i przed oddaniem, bez zapisywania czegokolwiek: `make check-stance PHASE=gold PARTIAL=1` (albo `PHASE=pilot`). Kolejne kroki po kodowaniu: [`h1a_kroki.md`](h1a_kroki.md).
 
+**Podpowiedzi AI (od 26.10.2026).** Arkusze stanowiska mają wstępnie wypełnioną kolumnę `consensus_stance` i kolumny `ai_stance`, `ai_uncertain`, `ai_reason` oraz `verified`. Sprawdź każdy wiersz według kroków powyżej, popraw etykietę, jeśli się nie zgadzasz, i wpisz `verified = 1`. Kolumn `ai_*` nie zmieniaj. Import liczy tylko sprawdzone wiersze. Szczegóły: [`h1a_kroki.md`](h1a_kroki.md).
+
 Import: `make import-stance PHASE=pilot` (albo `PHASE=gold`, z `PARTIAL=1` dla arkusza wypełnionego w części). Etykiety trafiają do `annotations/labels/<faza>/stance_<inicjały>.csv`. Po imporcie obu osób skrypt wypisuje zgodność (α Krippendorffa, κ Cohena) na wspólnych postach rundy `pilot2`.
 

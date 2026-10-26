@@ -37,6 +37,8 @@ LABEL_FILE_COLUMNS = [
 EXCEL_CELL_LIMIT = 32_000
 HEADER_FONT = Font(bold=True)
 LABEL_FILL = PatternFill("solid", fgColor="FFF2CC")
+# Column a person sets to 1 after checking an AI suggestion (ai_suggestions.prefill).
+VERIFIED = "verified"
 
 
 def write_workbook(
@@ -254,7 +256,7 @@ def read_workbook(path: Path, codebook: Codebook, partial: bool = False) -> tupl
     workbook = load_workbook(path, read_only=True, data_only=True)
     metadata = _metadata(workbook)
     known_codes = set(codebook.category_codes)
-    labeled, problems = [], []
+    labeled, problems, unchecked = [], [], []
     for platform, sheet_name in SHEET_NAMES.items():
         if sheet_name not in workbook.sheetnames:
             continue
@@ -266,7 +268,13 @@ def read_workbook(path: Path, codebook: Codebook, partial: bool = False) -> tupl
             continue
         for excel_row, values in enumerate(body, start=2):
             record = dict(zip(header, values))
-            if record["unit_id"] is None or (partial and not _has_labels(record)):
+            if record["unit_id"] is None:
+                continue
+            if unverified(record):
+                # A prefilled label nobody has checked is the AI's, not the person's.
+                unchecked.append(f"{sheet_name}: {record['unit_id']}")
+                continue
+            if partial and not _has_labels(record):
                 continue
             where = f"{sheet_name}, wiersz {excel_row} ({record['unit_id']})"
             label = {
@@ -304,7 +312,19 @@ def read_workbook(path: Path, codebook: Codebook, partial: bool = False) -> tupl
                 label["cites_source"] = int(codes != [NO_SOURCE])
             label["notes"] = "" if record["notes"] is None else str(record["notes"])
             labeled.append(label)
+    if unchecked and not partial:
+        problems.append(f"{len(unchecked)} wierszy z podpowiedzią AI bez verified = 1 (sprawdź etykietę i wpisz 1), "
+                        f"np. {unchecked[:3]}")
     return pd.DataFrame(labeled, columns=LABEL_FILE_COLUMNS), problems
+
+
+def unverified(record: dict) -> bool:
+    """Whether a sheet row carries an AI suggestion (columns `ai_*`) the person has not checked (verified = 1) yet."""
+    suggested = any(isinstance(name, str) and name.startswith("ai_") and value not in (None, "") for name, value in record.items())
+    if not suggested:
+        return False
+    value, _ = _binary(record.get(VERIFIED), required=False)
+    return pd.isna(value) or value != 1
 
 
 def _has_labels(record: dict) -> bool:

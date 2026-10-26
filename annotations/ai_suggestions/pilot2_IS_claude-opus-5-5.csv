@@ -1,0 +1,61 @@
+unit_id,ai_source_types,ai_edit_about_sources,ai_uncertain,ai_reason
+7wzi6,media;institutional,,1,prisonplanet.com powołuje się na dokumenty NIST (źródło pierwotne nazwane w tytule; R4)
+d1t12,social_blog,,0,blog na wordpress.com
+cuvxf,personal,,1,twierdzenie znajomego z dyskusji na Facebooku
+f69xu,media,,0,link do nytimes.com
+r02r,media,,0,depesza AP w news.yahoo.com
+7wwyi,social_blog,,0,wpis blogowy w serwisie ning.com
+14544,media,,0,link do vnunet.com
+2fr43,social_blog,,0,blog na blogspot.com
+8syh2h,media,,0,link do newrepublic.com
+1b6qbj,media,,0,link do huffingtonpost.com; CERN jako uczestnik
+3q0gjs,unknown,,1,"„strona, która twierdziła…” i forum, bez nazwy i linku"
+d16onr,social_blog,,0,film na YouTube
+ssy8u,media,,1,magazyn spiritualityhealth.com
+twj0z,media,,1,listverse.com (serwis z listami); może social_blog
+cpnxdv,social_blog,,0,film na YouTube
+7jkb7,other,,1,wikileaks.org
+229wxn,media,,1,skrócony link (b4in.info) do materiału przypisanego CNN
+5k9j1p,media,,0,technologyreview.com przez google amp
+83yh12,media,,0,link do slashgear.com
+5tvxwu,social_blog,,0,film na YouTube
+pouj,social_blog,,0,blog na blogspot.com
+21iy5u,social_blog,,0,link do wątku na Reddicie
+1pjnmk,other,,1,autor cytuje opisy uprawnień aplikacji Facebooka (tekst producenta)
+hjb96,media,,0,link do examiner.com
+3d8g2k,media,,0,link do washingtonpost.com
+ilxtgf,social_blog,,0,film na YouTube
+6f8eqo,none,,1,spam (R3)
+eu6nvb,none,,0,pytania bez powołania
+7hywg,social_blog,,0,blog na wordpress.com
+4bmoe3,media,,1,autor opiera się na oglądanych programach informacyjnych w telewizji
+Szczepionka#247,none,0,0,„Tak”
+Zespół nabytego niedoboru odporności#231,unknown,0,1,„według źródła” bez nazwy i linku
+Lekarz#94,none,0,0,sam prefiks sekcji i „drobne merytoryczne” (R9)
+Kwas askorbinowy#98,other,1,1,uzupełnienie dat w szablonie cytowania Sigma-Aldrich (strona producenta)
+COVID-19#231,none,0,0,„+”
+COVID-19#70,none,0,0,drobne techniczne (R9)
+Zespół nabytego niedoboru odporności#273,none,0,0,poprawa językowa
+COVID-19#804,none,0,1,rewert (R9); wzmianka o ICD-10 w infoboksie nie jest powołaniem
+COVID-19#298,none,0,0,uzupełnienie listy bez powołania
+COVID-19#644,none,0,0,treść bez powołania
+COVID-19#359,none,1,1,„potrzebne wiarygodne źródło”: praca nad źródłami bez wskazania źródła
+COVID-19#811,none,0,0,poszerzenie treści bez powołania
+Globalne ocieplenie#196,none,0,0,poprawa literówki
+COVID-19#785,none,0,0,sam prefiks sekcji (R9)
+COVID-19#765,none,1,1,rewert z powodu braku źródła (R9); deklaracja dotyczy źródeł
+Zmiana klimatu#55,none,1,0,"„źródło” bez wskazania, jakie (R10)"
+Kwas askorbinowy#134,none,0,0,literówki
+Lekarz#117,none,0,0,drobne techniczne (R9)
+Lekarz#86,none,0,0,rewert (R9)
+Zespół nabytego niedoboru odporności#290,none,0,0,sam prefiks sekcji (R9)
+Globalne ocieplenie#239,none,0,0,rewert (R9)
+COVID-19#200,none,0,0,drobne redakcyjne (R9)
+Zespół nabytego niedoboru odporności#269,none,0,0,sam prefiks sekcji (R9)
+COVID-19#833,none,0,0,rewert (R9)
+Szczepionka#229,none,0,0,rewert (R9)
+Lekarz#110,none,0,0,sam prefiks sekcji (R9)
+Szczepionka#283,none,0,0,rewert (R9)
+COVID-19#565,none,1,0,znacznik „źródła/przypisy” (R10)
+COVID-19#683,none,1,1,"komunikat bota (R9), ale dotyczy przypisów (tytuły linków)"
+COVID-19#559,none,0,0,uzupełnienie liczby zachorowań bez powołania

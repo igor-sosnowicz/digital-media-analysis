@@ -6,6 +6,10 @@ workbooks of codebook 2.0 stay as they are. A stance workbook,
 `annotations/sheets/stance_<phase>_<annotator>.xlsx`, holds the Reddit posts and
 the columns consensus_stance, uncertain, notes and annotator. Imported labels go
 to `annotations/labels/<phase>/stance_<annotator>.csv`, without post text.
+
+A workbook may also carry AI suggestions (`add_ai_suggestions`): consensus_stance
+is prefilled, the suggestion itself is kept in ai_stance, and a row counts as
+coded only after the person checked it and set verified = 1.
 """
 
 import json
@@ -14,7 +18,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from openpyxl import Workbook, load_workbook
-from openpyxl.styles import Alignment, Font
+from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
 
@@ -33,7 +37,11 @@ from digital_media_analysis.paths import LABELS_DIR, SHEETS_DIR
 STANCE = "consensus_stance"
 SHEET_NAME = "Reddit"
 LABEL_COLUMNS = [STANCE, "uncertain", "notes", "annotator"]
-FILE_COLUMNS = ["unit_id", "platform", "annotator", "codebook_version", STANCE, "uncertain", "notes"]
+FILE_COLUMNS = ["unit_id", "platform", "annotator", "codebook_version", STANCE, "uncertain", "notes", "ai_stance"]
+# Columns after LABEL_COLUMNS in a workbook with AI suggestions; the person fills only `verified`.
+AI_COLUMNS = ["ai_stance", "ai_uncertain", "ai_reason", "verified"]
+AI_FILL = PatternFill("solid", fgColor="EDEDED")
+AI_DOUBT_FILL = PatternFill("solid", fgColor="F8CBAD")
 # Values that say nothing about trust in science.
 NOT_APPLICABLE = "not_applicable"
 
@@ -140,11 +148,20 @@ def read_workbook(path: Path, codebook: Codebook, partial: bool = False) -> tupl
     expected = [name for _, name, _ in CONTENT_COLUMNS["reddit"]] + LABEL_COLUMNS
     if header[: len(expected)] != expected:
         return pd.DataFrame(columns=FILE_COLUMNS), [f"{SHEET_NAME}: nagłówki {header} różnią się od oczekiwanych {expected}."]
-    labels, problems = [], []
+    labels, problems, unverified = [], [], []
     for excel_row, values in enumerate(body, start=2):
         record = dict(zip(header, values))
         if record["unit_id"] is None:
             continue
+        suggestion = str(record.get("ai_stance") or "").strip()
+        if suggestion:
+            verified, problem = _binary(record.get("verified"), required=False)
+            if problem:
+                problems.append(f"{SHEET_NAME}, wiersz {excel_row} ({record['unit_id']}): verified {problem}")
+            if pd.isna(verified) or verified != 1:
+                # A prefilled label nobody has checked is the AI's, not the person's.
+                unverified.append(str(record["unit_id"]))
+                continue
         filled = any(record[name] not in (None, "") for name in (STANCE, "uncertain", "notes"))
         if partial and not filled:
             continue
@@ -167,13 +184,87 @@ def read_workbook(path: Path, codebook: Codebook, partial: bool = False) -> tupl
             STANCE: stance,
             "uncertain": 0 if pd.isna(uncertain) else uncertain,
             "notes": "" if record["notes"] is None else str(record["notes"]),
+            "ai_stance": suggestion,
         })
+    if unverified and not partial:
+        problems.append(f"{len(unverified)} wierszy z podpowiedzią AI bez verified = 1 (sprawdź etykietę i wpisz 1), "
+                        f"np. {unverified[:3]}")
     return pd.DataFrame(labels, columns=FILE_COLUMNS), problems
+
+
+def add_ai_suggestions(path: Path, suggestions: pd.DataFrame, source: str) -> int:
+    """Prefill consensus_stance with AI suggestions, keeping each suggestion and its reason in read-only columns.
+
+    `suggestions` has unit_id, ai_stance, ai_uncertain and ai_reason. A label the
+    person has already entered stays. Returns the number of rows that got a suggestion.
+    """
+    if (path.parent / f"~${path.name}").exists():
+        raise RuntimeError(f"{path.name} is open in Excel (lock file ~${path.name}); close it first.")
+    workbook = load_workbook(path)
+    sheet = workbook[SHEET_NAME]
+    header = [cell.value for cell in sheet[1]]
+    expected = [name for _, name, _ in CONTENT_COLUMNS["reddit"]] + LABEL_COLUMNS
+    if header[: len(expected)] != expected:
+        raise ValueError(f"{path.name}: headers {header} differ from {expected}")
+    if len(header) > len(expected):
+        raise ValueError(f"{path.name} already has columns after {expected[-1]}: {header[len(expected):]}")
+    by_unit = suggestions.astype({"unit_id": str}).set_index("unit_id")
+    first = len(header) + 1
+    for offset, name in enumerate(AI_COLUMNS):
+        cell = sheet.cell(1, first + offset, name)
+        cell.font = HEADER_FONT
+        sheet.column_dimensions[get_column_letter(first + offset)].width = {"ai_reason": 50, "verified": 10}.get(name, 14)
+    stance_column = header.index(STANCE) + 1
+    filled = 0
+    for row in range(2, sheet.max_row + 1):
+        unit_id = sheet.cell(row, 1).value
+        if unit_id is None or str(unit_id) not in by_unit.index:
+            continue
+        suggestion = by_unit.loc[str(unit_id)]
+        if sheet.cell(row, stance_column).value in (None, ""):
+            sheet.cell(row, stance_column, suggestion["ai_stance"])
+        doubt = int(suggestion["ai_uncertain"]) == 1
+        for offset, value in enumerate([suggestion["ai_stance"], int(suggestion["ai_uncertain"]), suggestion["ai_reason"], None]):
+            cell = sheet.cell(row, first + offset, value)
+            cell.alignment = Alignment(wrap_text=True, vertical="top")
+            cell.fill = LABEL_FILL if AI_COLUMNS[offset] == "verified" else AI_DOUBT_FILL if doubt else AI_FILL
+        filled += 1
+    letter = get_column_letter(first + AI_COLUMNS.index("verified"))
+    validation = DataValidation(type="list", formula1='"0,1"', allow_blank=True, showErrorMessage=True)
+    sheet.add_data_validation(validation)
+    validation.add(f"{letter}2:{letter}{max(sheet.max_row, 2)}")
+
+    instructions = workbook["Instrukcja"]
+    for line in [
+        [],
+        ["Podpowiedzi AI"],
+        [f"Kolumnę {STANCE} wstępnie wypełnił asystent AI ({source}) na podstawie tytułu, treści i adresu linku."],
+        ["ai_stance, ai_uncertain i ai_reason to jego podpowiedź i uzasadnienie: nie zmieniaj ich (porównujemy je z Twoją etykietą)."],
+        [f"Sprawdź każdy wiersz według R14. Jeśli się nie zgadzasz, popraw {STANCE}. Własne wątpliwości: uncertain i notes."],
+        ["Po sprawdzeniu wiersza wpisz verified = 1. Wiersze bez verified = 1 import pomija albo odrzuca."],
+        ["Wiersze z ai_uncertain = 1 (pomarańczowe) budziły wątpliwość AI: sprawdź je szczególnie uważnie."],
+    ]:
+        instructions.append(line)
+        if line and line[0] == "Podpowiedzi AI":
+            instructions.cell(instructions.max_row, 1).font = HEADER_FONT
+    metadata = json.loads(workbook.properties.description or "{}")
+    workbook.properties.description = json.dumps({**metadata, "ai_suggestions": source})
+    workbook.save(path)
+    return filled
+
+
+def ai_review(labels: pd.DataFrame) -> pd.DataFrame:
+    """Per annotator: AI suggestions checked and how many the person changed."""
+    checked = labels[labels["ai_stance"].fillna("").ne("") & labels[STANCE].notna()]
+    rows = [{"annotator": annotator, "checked": len(part), "changed": int(part[STANCE].ne(part["ai_stance"]).sum())}
+            for annotator, part in checked.groupby("annotator")]
+    table = pd.DataFrame(rows, columns=["annotator", "checked", "changed"])
+    return table.assign(kept_share=1 - table["changed"] / table["checked"])
 
 
 def save_labels(labels: pd.DataFrame, path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    labels[FILE_COLUMNS].to_csv(path, index=False, encoding="utf-8")
+    labels.reindex(columns=FILE_COLUMNS).to_csv(path, index=False, encoding="utf-8")
 
 
 def load_labels(phase: str, labels_dir: Path = LABELS_DIR) -> pd.DataFrame:
@@ -182,11 +273,12 @@ def load_labels(phase: str, labels_dir: Path = LABELS_DIR) -> pd.DataFrame:
     if not paths:
         return pd.DataFrame(columns=FILE_COLUMNS)
     labels = pd.concat(
-        [pd.read_csv(path, dtype={"unit_id": str, "annotator": str, "codebook_version": str, STANCE: str, "notes": str},
+        [pd.read_csv(path, dtype={"unit_id": str, "annotator": str, "codebook_version": str, STANCE: str, "notes": str,
+                                  "ai_stance": str},
                      keep_default_na=False, na_values={STANCE: [""]}) for path in paths],
         ignore_index=True,
     )
-    return labels.astype({"uncertain": "Int64"})
+    return labels.reindex(columns=FILE_COLUMNS).astype({"uncertain": "Int64"})
 
 
 def reference(labels: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
