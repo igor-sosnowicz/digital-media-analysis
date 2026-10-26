@@ -1,4 +1,4 @@
-.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets append-sheets sample-csv import-labels agreement kappa-consensus combine-labels adjudication-sheet import-adjudication tune validate audit-metrics errors compare report-tables preprint-package h2-frame h2-history h1-frame label-h1-v2 h2-links hypotheses-v2 power check-stance import-stance validate-stance label-h1 domain-review hypotheses
+.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets append-sheets sample-csv import-labels agreement kappa-consensus combine-labels adjudication-sheet import-adjudication tune validate audit-metrics errors compare report-tables preprint-package h2-frame h2-history h1-frame label-h1-v2 h2-links hypotheses-v2 power check-stance import-stance validate-stance label-h1 domain-review hypotheses enriched-stance llm-annotate llm-queue llm-quality
 
 ANNOTATORS ?= A B
 PHASE ?= pilot
@@ -100,6 +100,20 @@ check-stance:
 # Tune on dev (STANCE_TUNE=1; STANCE_APPLY=1 writes the best thresholds), commit, then: make validate-stance SPLIT=test FROZEN=1.
 validate-stance:
 	uv run --group ml scripts/07b_validate_stance.py --split $(SPLIT) $(if $(STANCE_TUNE),--tune) $(if $(STANCE_APPLY),--apply) $(if $(FROZEN),--frozen)
+
+# Plan B, automated annotation (docs/plan_b_automatyzacja.md): enriched stance sample, A1/A2 labels, review queue, quality.
+enriched-stance:
+	uv run scripts/03e_enriched_stance_sample.py
+
+# e.g. make llm-annotate TASK=stance INPUT=annotations/sheets/llm/stance_gold_JP.xlsx SHEET=Reddit ANNOTATOR=A1
+llm-annotate:
+	uv run $(if $(filter A1,$(ANNOTATOR)),--with anthropic,--group ml) scripts/19_llm_annotate.py --task $(TASK) --input "$(INPUT)" $(if $(SHEET),--sheet "$(SHEET)") $(if $(KEY),--key $(KEY)) --annotator $(ANNOTATOR) $(if $(ONLY_EMPTY),--only-empty)
+
+llm-queue:
+	uv run scripts/20_review_queue.py --task $(TASK) --input "$(INPUT)" $(if $(SHEET),--sheet "$(SHEET)") $(if $(KEY),--key $(KEY)) --a1 "$(A1)" --a2 "$(A2)" --output "$(OUTPUT)" $(if $(ONLY_EMPTY),--only-empty)
+
+llm-quality:
+	uv run scripts/21_llm_quality.py --name $(NAME) --task $(TASK) --queue "$(QUEUE)" --reviewed "$(REVIEWED)" $(if $(SHEET),--sheet "$(SHEET)") $(if $(KEY),--key $(KEY))
 
 label-h1:
 	uv run --group ml scripts/08_label_h1_sample.py

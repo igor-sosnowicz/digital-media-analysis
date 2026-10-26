@@ -39,6 +39,8 @@ HEADER_FONT = Font(bold=True)
 LABEL_FILL = PatternFill("solid", fgColor="FFF2CC")
 # Column a person sets to 1 after checking an AI suggestion (ai_suggestions.prefill).
 VERIFIED = "verified"
+# auto: accepted by the two LLM annotators without review; human: in the review queue.
+DECIDED_BY = "decided_by"
 
 
 def write_workbook(
@@ -319,7 +321,12 @@ def read_workbook(path: Path, codebook: Codebook, partial: bool = False) -> tupl
 
 
 def unverified(record: dict) -> bool:
-    """Whether a sheet row carries an AI suggestion (columns `ai_*`) the person has not checked (verified = 1) yet."""
+    """Whether a sheet row carries an AI suggestion (columns `ai_*`) the person has not checked (verified = 1) yet.
+
+    A row the review queue accepted automatically (`decided_by = auto`, llm_annotation.combine) needs no check.
+    """
+    if str(record.get(DECIDED_BY) or "").strip() == "auto":
+        return False
     suggested = any(isinstance(name, str) and name.startswith("ai_") and value not in (None, "") for name, value in record.items())
     if not suggested:
         return False

@@ -13,6 +13,8 @@ coded only after the person checked it and set verified = 1.
 """
 
 import json
+import re
+from collections.abc import Sequence
 from pathlib import Path
 
 import numpy as np
@@ -31,13 +33,15 @@ from digital_media_analysis.annotation_sheets import (
     _binary,
     _metadata,
 )
+from digital_media_analysis.annotation_sheets import unverified as is_unverified  # `unverified` names a list below
 from digital_media_analysis.codebook import Codebook
 from digital_media_analysis.paths import LABELS_DIR, SHEETS_DIR
 
 STANCE = "consensus_stance"
 SHEET_NAME = "Reddit"
 LABEL_COLUMNS = [STANCE, "uncertain", "notes", "annotator"]
-FILE_COLUMNS = ["unit_id", "platform", "annotator", "codebook_version", STANCE, "uncertain", "notes", "ai_stance"]
+FILE_COLUMNS = ["unit_id", "platform", "annotator", "codebook_version", STANCE, "uncertain", "notes", "ai_stance",
+                "decided_by", "p_review"]
 # Columns after LABEL_COLUMNS in a workbook with AI suggestions; the person fills only `verified`.
 AI_COLUMNS = ["ai_stance", "ai_uncertain", "ai_reason", "verified"]
 AI_FILL = PatternFill("solid", fgColor="EDEDED")
@@ -153,12 +157,12 @@ def read_workbook(path: Path, codebook: Codebook, partial: bool = False) -> tupl
         record = dict(zip(header, values))
         if record["unit_id"] is None:
             continue
-        suggestion = str(record.get("ai_stance") or "").strip()
+        suggestion = str(record.get("ai_stance") or record.get(f"ai_{STANCE}") or "").strip()
         if suggestion:
-            verified, problem = _binary(record.get("verified"), required=False)
+            _, problem = _binary(record.get("verified"), required=False)
             if problem:
                 problems.append(f"{SHEET_NAME}, wiersz {excel_row} ({record['unit_id']}): verified {problem}")
-            if pd.isna(verified) or verified != 1:
+            if is_unverified(record):
                 # A prefilled label nobody has checked is the AI's, not the person's.
                 unverified.append(str(record["unit_id"]))
                 continue
@@ -185,6 +189,8 @@ def read_workbook(path: Path, codebook: Codebook, partial: bool = False) -> tupl
             "uncertain": 0 if pd.isna(uncertain) else uncertain,
             "notes": "" if record["notes"] is None else str(record["notes"]),
             "ai_stance": suggestion,
+            "decided_by": str(record.get("decided_by") or "human"),
+            "p_review": 1.0 if record.get("p_review") in (None, "") else float(record["p_review"]),
         })
     if unverified and not partial:
         problems.append(f"{len(unverified)} wierszy z podpowiedzią AI bez verified = 1 (sprawdź etykietę i wpisz 1), "
@@ -318,3 +324,81 @@ def agreement(labels: pd.DataFrame, samples: int = 2000, seed: int = 20261024) -
             "alpha_high": alpha.high,
         })
     return pd.DataFrame(rows)
+
+
+ENRICHED_PHASE = "enriched"
+
+
+def validation_frame(gold_labels: pd.DataFrame, manifest: pd.DataFrame, split: str,
+                     enriched_labels: pd.DataFrame | None = None, enriched_sample: pd.DataFrame | None = None) -> pd.DataFrame:
+    """Reference stances of one split with weights: the gold sample and, when given, the enriched r/conspiracy sample.
+
+    Gold posts weigh N_h / coded (design weights); enriched posts 1 / inclusion
+    probability. Each source's weights are rescaled to sum to its number of
+    posts, as in the pooled audit (docs/hipotezy.md, 25.10.2026). `review_weight`
+    is the weight divided by p_review for rows a person decided, and missing for
+    rows accepted automatically: the main validity gate uses the reviewed rows only.
+    """
+    from digital_media_analysis.validation import design_weights
+
+    parts = []
+    gold, _ = reference(gold_labels)
+    if len(gold):
+        gold = gold.merge(design_weights(gold[["unit_id", "platform"]], manifest), on=["unit_id", "platform"])
+        parts.append(gold[gold["split"].eq(split)].assign(source="gold"))
+    if enriched_labels is not None and enriched_sample is not None and len(enriched_labels):
+        enriched, _ = reference(enriched_labels)
+        sample = enriched_sample[["unit_id", "split", "inclusion"]].astype({"unit_id": str})
+        enriched = enriched.merge(sample, on="unit_id").assign(weight=lambda frame: 1 / frame["inclusion"])
+        parts.append(enriched[enriched["split"].eq(split)].assign(source=ENRICHED_PHASE))
+    columns = ["unit_id", "source", STANCE, "weight", "decided_by", "p_review", "review_weight"]
+    if not parts:
+        return pd.DataFrame(columns=columns)
+    frames = []
+    for part in parts:
+        part = part.assign(weight=part["weight"] * len(part) / part["weight"].sum())
+        decided = part["decided_by"].fillna("human").astype(str) if "decided_by" in part else pd.Series("human", index=part.index)
+        p_review = pd.to_numeric(part["p_review"], errors="coerce").fillna(1.0) if "p_review" in part else 1.0
+        frames.append(part.assign(decided_by=decided, p_review=p_review,
+                                  review_weight=(part["weight"] / p_review).where(decided.eq("human"))))
+    return pd.concat(frames, ignore_index=True)[columns]
+
+
+# Plan B enrichment (docs/hipotezy.md, 26.10.2026): words that make a post more likely to state a stance on science.
+SCIENCE_TERMS = re.compile(
+    r"(?<!\w)(?:scien\w*|stud(?:y|ies)|research\w*|scholar\w*|doctor\w*|physician\w*|medic\w*|cancer\w*|tumou?r\w*|vaccin\w*"
+    r"|vax\w*|virus\w*|viral|disease\w*|pandemic\w*|epidemic\w*|flu|chemtrail\w*|geoengineer\w*|autism|nasa|evolution\w*"
+    r"|climate|warming|gmo\w*|monsanto|fluorid\w*|radiation|radioactiv\w*|nuclear|health\w*|pharma\w*|cure\w*|drug\w*|fda"
+    r"|cdc|who|nutrition\w*|diet\w*|gene\w*|dna)(?!\w)",
+    re.IGNORECASE,
+)
+ENRICHED_STRATA = {"topic": None, "science_terms": 150, "rest": 60}
+
+
+def draw_enriched(units: pd.DataFrame, topic_codes: pd.Series, sizes: dict[str, int | None] = ENRICHED_STRATA,
+                  annotators: Sequence[str] = ("IS", "JP"), seed: int = 20261026) -> pd.DataFrame:
+    """Stratified sample of posts for the stance reference, with inclusion probabilities, splits and annotators.
+
+    Strata: a consensus topic found by topics_v1 (`topic_codes` != none), else a
+    science term (`SCIENCE_TERMS`), else the rest; None takes the whole stratum.
+    Within each stratum half the posts go to dev and half to test, and the
+    annotators alternate in a random order.
+    """
+    text = units["title"].fillna("") + " " + units["text"].fillna("")
+    stratum = np.where(topic_codes.to_numpy() != "none", "topic", np.where(text.str.contains(SCIENCE_TERMS), "science_terms", "rest"))
+    frame = units.assign(stratum=stratum)
+    rng = np.random.default_rng(seed)
+    parts = []
+    for name, size in sizes.items():
+        group = frame[frame["stratum"].eq(name)]
+        chosen = group if size is None or len(group) <= size else group.sample(n=size, random_state=rng)
+        order = rng.permutation(len(chosen))
+        chosen = chosen.iloc[order].assign(
+            stratum_size=len(group), inclusion=len(chosen) / len(group) if len(group) else np.nan,
+            split=np.where(np.arange(len(chosen)) % 2 == 0, "dev", "test"),
+        )
+        parts.append(chosen)
+    sample = pd.concat(parts, ignore_index=True)
+    sample = sample.iloc[rng.permutation(len(sample))].reset_index(drop=True)
+    return sample.assign(order=np.arange(1, len(sample) + 1),
+                         annotator=[annotators[index % len(annotators)] for index in range(len(sample))])

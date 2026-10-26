@@ -268,7 +268,10 @@ def h1a_numbers(numbers: Numbers, validation_dir=VALIDATION_DIR, agreement_dir=A
     numbers.put("hone a pilot agreement", number(row["observed_agreement"]) if row is not None else PENDING)
     for split in ["dev", "test"]:
         metrics_path, run_path = validation_dir / f"stance_{split}_metrics.csv", validation_dir / f"stance_{split}_run.json"
-        values = dict(pd.read_csv(metrics_path)[["metric", "value"]].itertuples(index=False)) if metrics_path.exists() else {}
+        table = pd.read_csv(metrics_path) if metrics_path.exists() else pd.DataFrame(columns=["metric", "value"])
+        # Plan B writes metrics on the reviewed rows (the gate) and on all rows; the preprint reports the gate's.
+        table = table[table["rows"].eq("reviewed")] if "rows" in table else table
+        values = dict(table[["metric", "value"]].itertuples(index=False))
         run = json.loads(run_path.read_text(encoding="utf-8")) if run_path.exists() else {}
         numbers.put(f"hone a {split} posts", count(run["posts"]) if "posts" in run else PENDING)
         for key, name in [("challenges f", "challenges:f1"), ("kappa", "kappa"), ("macro f", "macro_f1"), ("accuracy", "accuracy")]:

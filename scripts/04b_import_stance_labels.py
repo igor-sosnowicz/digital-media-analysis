@@ -3,16 +3,18 @@
 import argparse
 import sys
 
+import pandas as pd
+
 from digital_media_analysis import gold, stance
 from digital_media_analysis.codebook import load_codebook
-from digital_media_analysis.paths import AGREEMENT_DIR, SHEETS_DIR
+from digital_media_analysis.paths import AGREEMENT_DIR, HYPOTHESES_DIR, SHEETS_DIR
 
 MAX_PROBLEMS_SHOWN = 20
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--phase", choices=gold.PHASE_SPLITS, default="pilot")
+    parser.add_argument("--phase", choices=[*gold.PHASE_SPLITS, stance.ENRICHED_PHASE], default="pilot")
     parser.add_argument("--check", action="store_true", help="Only validate the workbooks; write nothing.")
     parser.add_argument("--partial", action="store_true", help="Skip rows without labels (a workbook coded in part).")
     args = parser.parse_args()
@@ -21,7 +23,11 @@ def main() -> None:
     if not paths:
         sys.exit(f"No workbooks named stance_{args.phase}_<annotator>.xlsx in {SHEETS_DIR}.")
     manifest = gold.load_manifest()
-    known = set(manifest.loc[gold.phase_mask(manifest, args.phase) & manifest["platform"].eq("reddit"), "unit_id"].astype(str))
+    if args.phase == stance.ENRICHED_PHASE:
+        # Posts of the enriched r/conspiracy sample (scripts/03e) are not in the gold manifest.
+        known = set(pd.read_csv(HYPOTHESES_DIR / "stance_enriched_sample.csv", dtype={"unit_id": str})["unit_id"])
+    else:
+        known = set(manifest.loc[gold.phase_mask(manifest, args.phase) & manifest["platform"].eq("reddit"), "unit_id"].astype(str))
     codebook = load_codebook()
 
     failed = False

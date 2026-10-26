@@ -9,6 +9,12 @@ The test run checks the validity gate of the preregistration (docs/hipotezy.md:
 F1 of `challenges` >= 0.5 and kappa >= 0.4) and records it in
 stance_test_run.json; scripts/08 labels the H1 sample only when it passed.
 Results go to annotations/validation/stance_<split>_*.csv. Needs the `ml` dependency group.
+
+Plan B (docs/hipotezy.md, 26.10.2026): the reference also takes the enriched
+r/conspiracy sample (phase `enriched`, weights 1 / inclusion) and labels the
+LLM review queue accepted automatically. Tuning uses all reference rows; the
+gate is decided on the rows a person decided, weighted by 1 / p_review, and
+reported on all rows as a sensitivity analysis.
 """
 
 import argparse
@@ -26,10 +32,11 @@ import pandas as pd
 from digital_media_analysis import gold, hypotheses, stance, validation
 from digital_media_analysis.codebook import load_codebook
 from digital_media_analysis.instruments import stance_v1
-from digital_media_analysis.paths import MODEL_CACHE_DIR, PREDICTIONS_DIR, PROJECT_ROOT, VALIDATION_DIR
+from digital_media_analysis.paths import HYPOTHESES_DIR, MODEL_CACHE_DIR, PREDICTIONS_DIR, PROJECT_ROOT, VALIDATION_DIR
 
 FROZEN_PATHS = ["src/digital_media_analysis/instruments/stance_v1.py", "src/digital_media_analysis/instruments/nli.py",
-                "src/digital_media_analysis/validation.py", "scripts/07b_validate_stance.py"]
+                "src/digital_media_analysis/validation.py", "src/digital_media_analysis/stance.py", "scripts/07b_validate_stance.py"]
+ENRICHED_SAMPLE = HYPOTHESES_DIR / "stance_enriched_sample.csv"
 GRID = [round(value, 2) for value in np.arange(0.3, 0.91, 0.1)]
 # Validity gate of H1-A (docs/hipotezy.md), checked on the test split.
 GATE = {"challenges_f1": 0.5, "kappa": 0.4}
@@ -80,22 +87,33 @@ def main() -> None:
 
     classes = stance.stance_values(load_codebook())
     manifest = gold.load_manifest()
-    reference, conflicts = stance.reference(stance.load_labels("gold"))
-    if reference.empty:
-        sys.exit("No stance labels of the gold phase yet: export stance sheets (03b), code them, import them (04b).")
-    if len(conflicts):
-        print(f"{conflicts['unit_id'].nunique()} posts with different stances are left out until adjudicated.")
-    reference = reference.merge(manifest[["unit_id", "platform", "split"]], on=["unit_id", "platform"])
-    reference = reference[reference["split"].eq(args.split)]
+    gold_labels = stance.load_labels("gold")
+    enriched_labels = stance.load_labels(stance.ENRICHED_PHASE)
+    enriched_sample = pd.read_csv(ENRICHED_SAMPLE, dtype={"unit_id": str}) if ENRICHED_SAMPLE.exists() else None
+    if gold_labels.empty and enriched_labels.empty:
+        sys.exit("No stance labels yet: export stance sheets (03b, 03e), code or review them, import them (04b).")
+    for labels in [gold_labels, enriched_labels]:
+        if len(conflicts := stance.reference(labels)[1]):
+            print(f"{conflicts['unit_id'].nunique()} posts with different stances are left out until adjudicated.")
+    frame = stance.validation_frame(gold_labels, manifest, args.split, enriched_labels, enriched_sample).set_index("unit_id")
+    print(f"{args.split}: {frame['source'].value_counts().to_dict()} posts; decided by a person: "
+          f"{frame['decided_by'].eq('human').sum()}")
     reddit, _ = gold.load_units()
-    units = reddit[reddit["unit_id"].isin(reference["unit_id"])].reset_index(drop=True)
+    gold_ids = frame.index[frame["source"].eq("gold")]
+    units = reddit[reddit["unit_id"].isin(gold_ids)].reset_index(drop=True)
     scores = hypotheses.cached_scores(MODEL_CACHE_DIR / f"stance_v1_{args.split}.csv", units, stance_v1.score, refresh=args.refresh)
-    weights = validation.design_weights(reference[["unit_id", "platform"]], manifest).set_index("unit_id")["weight"]
-    truth = reference.set_index("unit_id")[stance.STANCE]
+    if (enriched_ids := frame.index[frame["source"].eq(stance.ENRICHED_PHASE)]).size:
+        # Enriched posts come from the H1 sample, whose model output is cached already.
+        cached = pd.read_csv(MODEL_CACHE_DIR / "stance_v1_h1.csv", dtype={"unit_id": str}, keep_default_na=False)
+        scores = pd.concat([scores, cached[cached["unit_id"].isin(enriched_ids)]], ignore_index=True)
+        if missing := sorted(set(enriched_ids) - set(scores["unit_id"])):
+            sys.exit(f"{len(missing)} enriched posts lack cached stance_v1 output, e.g. {missing[:3]}")
+    truth = frame[stance.STANCE]
+    reviewed = frame[frame["review_weight"].notna()]
 
-    def evaluate(thresholds: dict[str, float] | None) -> dict[str, float]:
+    def evaluate(thresholds: dict[str, float] | None, rows: pd.DataFrame = frame, weight: str = "weight") -> dict[str, float]:
         predicted = stance_v1.labels(scores, thresholds).set_index("unit_id")[stance.STANCE]
-        return validation.nominal_metrics(truth, predicted.loc[truth.index], weights.loc[truth.index], classes)
+        return validation.nominal_metrics(rows[stance.STANCE], predicted.loc[rows.index], rows[weight], classes)
 
     VALIDATION_DIR.mkdir(parents=True, exist_ok=True)
     if args.tune:
@@ -113,18 +131,21 @@ def main() -> None:
             stance_v1.THRESHOLDS = {name: float(best[name]) for name in ["relevance", "supports", "challenges"]}
             print(f"Wrote the best thresholds into {INSTRUMENT_PATH.name} and set TUNED = True; commit it before the test run.")
 
-    metrics = evaluate(None)
+    metrics = evaluate(None, reviewed, "review_weight") if len(reviewed) else evaluate(None)
+    all_rows = evaluate(None)
     predicted = stance_v1.labels(scores)
     PREDICTIONS_DIR.mkdir(parents=True, exist_ok=True)
     predicted.to_csv(PREDICTIONS_DIR / f"stance_v1_{args.split}.csv", index=False, encoding="utf-8")
-    pd.DataFrame([{"metric": name, "value": value} for name, value in metrics.items()]).to_csv(
+    pd.DataFrame([{"metric": name, "value": value, "rows": "reviewed"} for name, value in metrics.items()]
+                 + [{"metric": name, "value": value, "rows": "all"} for name, value in all_rows.items()]).to_csv(
         VALIDATION_DIR / f"stance_{args.split}_metrics.csv", index=False, encoding="utf-8"
     )
     checked = gate(metrics)
     (VALIDATION_DIR / f"stance_{args.split}_run.json").write_text(json.dumps({
         "split": args.split, "created_utc": datetime.now(UTC).isoformat(timespec="seconds"), "commit": head,
         "uncommitted_stance_code": bool(dirty), "tuned": stance_v1.TUNED, "thresholds": stance_v1.THRESHOLDS,
-        "model": stance_v1.MODEL, "revision": stance_v1.REVISION, "posts": len(truth), "gate": checked,
+        "model": stance_v1.MODEL, "revision": stance_v1.REVISION, "posts": len(truth), "reviewed_posts": len(reviewed),
+        "sources": frame["source"].value_counts().to_dict(), "gate": checked, "gate_all_rows": gate(all_rows),
     }, indent=2) + "\n", encoding="utf-8")
     print(f"{args.split}: {len(truth)} posts; accuracy {metrics['accuracy']:.3f}, macro-F1 {metrics['macro_f1']:.3f}, "
           f"F1 challenges {checked['challenges_f1']:.3f}, kappa {checked['kappa']:.3f}")
