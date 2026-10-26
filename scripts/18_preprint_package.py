@@ -10,7 +10,7 @@ analysis sample and its labels. Writes:
   (H1-A and H1-B trends side by side), preprint_stance.tex (stance agreement and
   stance_v1 on dev and test) and preprint_h2.tex (H2: preregistered test,
   robustness, measurement check); the preprint also uses test_metrics.tex from scripts/13;
-- report/figures/preprint_instruments.png, preprint_h1.png, preprint_h2.png,
+- report/figures/preprint_instruments.png, preprint_h1.png (slide_h1.png: H1-B only, 16:9), preprint_h2.png,
   preprint_agreement.png.
 H1-A numbers, its table cells and its figure panel are placeholders (macro
 \\resPending) until the H1-A pipeline has run (docs/h1a_kroki.md); rerunning this
@@ -429,40 +429,29 @@ def figure_instruments(path) -> None:
     figure.savefig(path, dpi=200, facecolor=SURFACE)
 
 
-def figure_h1(frame: pd.DataFrame, path, hypotheses_dir=HYPOTHESES_DIR) -> None:
-    """H1: yearly share of posts challenging the consensus (H1-A; a placeholder until its pipeline has run),
-    yearly shares of consensus and alternative sources (H1-B) and the subreddit make-up of the citing posts."""
-    import matplotlib.pyplot as plt
-    from matplotlib.ticker import FuncFormatter
+def _share_panel(axis, part: pd.DataFrame, title: str, formatter) -> None:
+    """Yearly share with its interval, or a placeholder note while the outcome has no results."""
+    _axes(axis, "y")
+    axis.set_title(title, loc="left", fontsize=9, color=INK)
+    if part.empty:
+        axis.set_xticks([])
+        axis.set_yticks([])
+        axis.spines["bottom"].set_visible(False)
+        axis.text(0.5, 0.5, "czeka na kodowanie stanowiska i test H1-A\n(docs/h1a_kroki.md)", ha="center", va="center",
+                  fontsize=9, color=INK_SECONDARY, transform=axis.transAxes)
+        return
+    axis.fill_between(part["year"], part["low"], part["high"], color=SERIES, alpha=0.12, linewidth=0)
+    axis.plot(part["year"], part["share"], color=SERIES, linewidth=2)
+    axis.plot(part["year"], part["share"], "o", color=SERIES, markersize=4, markeredgecolor=SURFACE, clip_on=False)
+    axis.set_ylim(0, max(part["high"].max(), 0.1) * 1.1)
+    axis.yaxis.set_major_formatter(formatter)
 
-    yearly = pd.read_csv(hypotheses_dir / "confirmatory_yearly.csv")
-    yearly = yearly[yearly["group"].eq("all")]
+
+def _composition_panel(axis, frame: pd.DataFrame, formatter, legend_below: bool = False) -> None:
+    """Weighted subreddit make-up of the H1-B sample per year."""
     weights = frame.groupby(["year", "group"])["weight"].sum().unstack(fill_value=0)
     shares = weights.div(weights.sum(axis=1), axis=0)
     shares = shares[[name for name in ["reddit.com", "science", "skeptic", "conspiracy"] if name in shares]]
-    figure, grid = plt.subplots(2, 2, figsize=(11, 6.2), facecolor=SURFACE)
-    axes = grid.flatten()
-    formatter = FuncFormatter(lambda value, _: f"{value:.0%}".replace("%", " %"))
-    panels = [("H1-A", "challenges", "H1-A: posty podważające konsensus (wśród postów o nauce)"),
-              ("H1-B", "consensus", "H1-B: źródła konsensusu (wśród postów z powołaniem)"),
-              ("H1-B", "alternative", "H1-B: źródła alternatywne (wśród postów z powołaniem)")]
-    for axis, (hypothesis, outcome, title) in zip(axes[:3], panels):
-        part = yearly[yearly["hypothesis"].eq(hypothesis) & yearly["outcome"].eq(outcome)].sort_values("year")
-        _axes(axis, "y")
-        axis.set_title(title, loc="left", fontsize=9, color=INK)
-        if part.empty:
-            axis.set_xticks([])
-            axis.set_yticks([])
-            axis.spines["bottom"].set_visible(False)
-            axis.text(0.5, 0.5, "czeka na kodowanie stanowiska i test H1-A\n(docs/h1a_kroki.md)", ha="center", va="center",
-                      fontsize=9, color=INK_SECONDARY, transform=axis.transAxes)
-            continue
-        axis.fill_between(part["year"], part["low"], part["high"], color=SERIES, alpha=0.12, linewidth=0)
-        axis.plot(part["year"], part["share"], color=SERIES, linewidth=2)
-        axis.plot(part["year"], part["share"], "o", color=SERIES, markersize=4, markeredgecolor=SURFACE, clip_on=False)
-        axis.set_ylim(0, max(part["high"].max(), 0.1) * 1.1)
-        axis.yaxis.set_major_formatter(formatter)
-    axis = axes[3]
     _axes(axis, "y")
     axis.stackplot(shares.index, shares.T.to_numpy(), labels=[f"r/{name}" for name in shares.columns],
                    colors=CATEGORICAL[: shares.shape[1]], edgecolor=SURFACE, linewidth=1.5)
@@ -470,9 +459,62 @@ def figure_h1(frame: pd.DataFrame, path, hypotheses_dir=HYPOTHESES_DIR) -> None:
     axis.set_xlim(shares.index.min(), shares.index.max())
     axis.yaxis.set_major_formatter(formatter)
     axis.set_title("skład próby H1-B (udział ważony subredditów)", loc="left", fontsize=9, color=INK)
-    axis.legend(frameon=False, fontsize=7, labelcolor=INK, loc="upper left", bbox_to_anchor=(1.0, 1.0))
+    if legend_below:
+        axis.legend(frameon=False, fontsize=7, labelcolor=INK, loc="upper center", bbox_to_anchor=(0.5, -0.1), ncol=4)
+    else:
+        axis.legend(frameon=False, fontsize=7, labelcolor=INK, loc="upper left", bbox_to_anchor=(1.0, 1.0))
+
+
+def _percent_formatter():
+    from matplotlib.ticker import FuncFormatter
+
+    return FuncFormatter(lambda value, _: f"{value:.0%}".replace("%", " %"))
+
+
+def figure_h1(frame: pd.DataFrame, path, hypotheses_dir=HYPOTHESES_DIR) -> None:
+    """H1: yearly share of posts challenging the consensus (H1-A; a placeholder until its pipeline has run),
+    yearly shares of consensus and alternative sources (H1-B) and the subreddit make-up of the citing posts."""
+    import matplotlib.pyplot as plt
+
+    yearly = pd.read_csv(hypotheses_dir / "confirmatory_yearly.csv")
+    yearly = yearly[yearly["group"].eq("all")]
+    figure, grid = plt.subplots(2, 2, figsize=(11, 6.2), facecolor=SURFACE)
+    axes = grid.flatten()
+    formatter = _percent_formatter()
+    panels = [("H1-A", "challenges", "H1-A: posty podważające konsensus (wśród postów o nauce)"),
+              ("H1-B", "consensus", "H1-B: źródła konsensusu (wśród postów z powołaniem)"),
+              ("H1-B", "alternative", "H1-B: źródła alternatywne (wśród postów z powołaniem)")]
+    for axis, (hypothesis, outcome, title) in zip(axes[:3], panels):
+        part = yearly[yearly["hypothesis"].eq(hypothesis) & yearly["outcome"].eq(outcome)].sort_values("year")
+        _share_panel(axis, part, title, formatter)
+    _composition_panel(axes[3], frame, formatter)
     figure.tight_layout()
     figure.savefig(path, dpi=200, facecolor=SURFACE)
+
+
+def figure_h1_slide(frame: pd.DataFrame, path, hypotheses_dir=HYPOTHESES_DIR) -> None:
+    """H1-B for a 16:9 slide, without the H1-A panel: consensus and alternative sources per year, each with the
+    within-subreddit trend of the confirmatory test, and the subreddit make-up of the sample."""
+    import matplotlib.pyplot as plt
+
+    yearly = pd.read_csv(hypotheses_dir / "confirmatory_yearly.csv")
+    yearly = yearly[yearly["group"].eq("all") & yearly["hypothesis"].eq("H1-B")]
+    trends = pd.read_csv(hypotheses_dir / "confirmatory_trends.csv")
+    trends = trends[trends["hypothesis"].eq("H1-B") & trends["analysis"].eq("primary")].set_index("outcome")
+    figure, axes = plt.subplots(1, 3, figsize=(13.3, 4.2), facecolor=SURFACE)
+    formatter = _percent_formatter()
+    for axis, (outcome, title) in zip(axes[:2], [("consensus", "źródła konsensusu (wśród postów z powołaniem)"),
+                                                 ("alternative", "źródła alternatywne (wśród postów z powołaniem)")]):
+        _share_panel(axis, yearly[yearly["outcome"].eq(outcome)].sort_values("year"), title, formatter)
+        if outcome in trends.index:
+            row = trends.loc[outcome]
+            text = (f"trend w subredditach: OR/rok {row['odds_ratio_per_year']:.2f} "
+                    f"[{row['ci_low']:.2f}; {row['ci_high']:.2f}], p = {row['p_one_sided']:.2f}").replace(".", ",")
+            axis.text(0.0, -0.16, text, transform=axis.transAxes, fontsize=8, color=INK_SECONDARY, va="top")
+    _composition_panel(axes[2], frame, formatter, legend_below=True)
+    figure.suptitle("H1-B: udział typów źródeł w próbie i jej skład w latach", x=0.01, ha="left", fontsize=11, color=INK)
+    figure.tight_layout(rect=(0, 0.02, 1, 0.95))
+    figure.savefig(path, dpi=200, facecolor=SURFACE, bbox_inches="tight")
 
 
 def figure_h2(links: pd.DataFrame, path) -> None:
@@ -551,6 +593,7 @@ def main() -> None:
     figures.mkdir(parents=True, exist_ok=True)
     figure_instruments(figures / "preprint_instruments.png")
     figure_h1(frame, figures / "preprint_h1.png")
+    figure_h1_slide(frame, figures / "slide_h1.png")
     figure_h2(links, figures / "preprint_h2.png")
     figure_agreement(agreement_table, figures / "preprint_agreement.png")
     print(f"{len(numbers)} numbers -> {REPORT_DIR / 'numbers.tex'}; tables and figures in {REPORT_DIR}; H1-A: {status}")
