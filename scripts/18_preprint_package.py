@@ -340,7 +340,9 @@ CONTROL_MEASURES = {"control stance kappa": ("stance", "kappa", 2), "control sta
                     "control audit exact": ("audit", "exact_set", None),
                     "control sources exact": ("sources", "exact_set", None),
                     "control sources pilot exact": ("sources", "exact_set_pilot_consensus", None),
-                    "control sources gold exact": ("sources", "exact_set_gold_single", None)}
+                    "control sources is exact": ("sources_is", "exact_set", None),
+                    "control sources gold is exact": ("sources", "exact_set_gold_IS", None),
+                    "control sources gold jp exact": ("sources", "exact_set_gold_JP", None)}
 
 
 def control_numbers(numbers: Numbers, control_dir=ANNOTATIONS_DIR / "control") -> None:

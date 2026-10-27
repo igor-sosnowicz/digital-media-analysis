@@ -41,3 +41,12 @@ def test_check_passes_a_finished_preprint(tmp_path):
     (tmp_path / "r" / "preprint.tex").write_text("\\input{numbers}\nWynik \\resResult.\n\\tabela{t}\n", encoding="utf-8")
     problems, _ = script.check(tmp_path / "r")
     assert problems == []
+
+
+def test_check_counts_point_boxes(tmp_path):
+    script = load_script()
+    write_report(tmp_path, "1", box=False)
+    with (tmp_path / "preprint.tex").open("a", encoding="utf-8") as handle:
+        handle.write("\punkty{wstęp}{\item fakt}\n")
+    problems, _ = script.check(tmp_path)
+    assert any(r"\punkty" in problem for problem in problems)

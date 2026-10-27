@@ -36,17 +36,19 @@ def stance_rows() -> pd.DataFrame:
 
 
 def source_reference() -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Human source labels with the post text, all coded before any AI suggestion: the pilot posts IS and JP coded
-    alike, and the gold Reddit posts one person coded."""
+    """Source labels of people with the post text: the pilot posts IS and JP coded alike, and the gold Reddit posts
+    one person coded. IS coded alone; JP's labels are AI first labels JP approved on 23.10.2026
+    (docs/plan_walidacji.md), so `coder` keeps them apart (correction of 27.10.2026)."""
     labels = ANNOTATIONS_DIR / "labels"
     consensus = cc.human_consensus(pd.read_csv(labels / "pilot" / "IS.csv", dtype=str),
                                    pd.read_csv(labels / "pilot" / "JP.csv", dtype=str))
     gold = pd.concat([pd.read_csv(labels / "gold" / f"{who}.csv", dtype=str) for who in ("IS", "JP")])
-    single = gold.loc[gold["platform"].eq("reddit"), ["unit_id", "source_types"]].rename(columns={"source_types": "label"})
+    single = (gold.loc[gold["platform"].eq("reddit"), ["unit_id", "source_types", "annotator"]]
+              .rename(columns={"source_types": "label"}).assign(coder=lambda d: "gold_" + d["annotator"]))
     posts = pd.concat([cc.sheet_rows(SHEETS / f"{phase}_{who}.xlsx", "source_types")
                        for phase in ("pilot", "gold") for who in ("JP", "IS")])
     posts = posts[cc.TEXT_COLUMNS].drop_duplicates("unit_id")
-    return (consensus.merge(posts, on="unit_id").assign(sheet="labels/pilot"),
+    return (consensus.merge(posts, on="unit_id").assign(sheet="labels/pilot", coder="pilot_consensus"),
             single.drop_duplicates("unit_id").merge(posts, on="unit_id").assign(sheet="labels/gold"))
 
 
@@ -79,12 +81,16 @@ def score() -> None:
         raise SystemExit(f"{missing} sampled units have no blind label in {AI_BLIND}.")
     references = {"stance": stance_rows()[["unit_id", "label"]],
                   "audit": cc.sheet_rows(SHEETS / AUDIT_SHEET, "source_types")[["unit_id", "label"]],
-                  "sources": pd.concat(source_reference())[["unit_id", "label"]].drop_duplicates("unit_id")}
+                  "sources": pd.concat(source_reference())[["unit_id", "label", "coder"]].drop_duplicates("unit_id")}
     rows, differences = [], []
     for task, reference in references.items():
         frame = (key[key["task"].eq(task)].merge(reference, on="unit_id", how="left")
                  .merge(coded[coded["task"].eq(task)][["unit_id", "blind"]], on="unit_id", how="left"))
         multilabel = task != "stance"
+        if task == "sources":
+            # Strata by who coded the reference; IS alone is the only reference without AI help.
+            frame = frame.assign(stratum=frame["coder"])
+            rows += cc.score_sets(frame[frame["coder"].isin(["pilot_consensus", "gold_IS"])], "sources_is")
         rows += cc.score_stance(frame) if task == "stance" else cc.score_sets(frame, task)
         differences.append(cc.disagreements(frame, task, multilabel))
     scores = pd.DataFrame(rows)

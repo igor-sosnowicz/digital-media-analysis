@@ -25,6 +25,8 @@
 \newcommand{\tabela}[1]{{\small\input{tables/#1}}}
 \newcommand{\szeroka}[1]{\resizebox{\linewidth}{!}{\input{tables/#1}}}
 % Miejsce na tekst autorów; usunąć przed oddaniem.
+% Punkty dla autorów (fakty i makra); każdą ramkę zastąpić własnym tekstem przed oddaniem.
+\newcommand{\punkty}[2]{\par\noindent\fbox{\parbox{\dimexpr\linewidth-2\fboxsep}{\small\textbf{Do napisania własnymi słowami (#1).} Punkty i liczby:\begin{itemize}\setlength\itemsep{0pt}#2\end{itemize}}}\par}
 \newcommand{\dopisania}[1]{\par\noindent\fbox{\parbox{\dimexpr\linewidth-2\fboxsep}{\small\textit{Do napisania: #1}}}\par}
 
 % Tytuł do ustalenia przez lead badawczego.
@@ -40,20 +42,40 @@
 % zwalidowane z jednym testem; odpowiedź H1 według wyniku H1-A (\resHoneAStatus; trend \resHoneAChallengesOr,
 % p = \resHoneAChallengesP) i H1-B (brak trendu w obrębie subredditów); H2 formalnie potwierdzona,
 % ale artefakt pomiaru (\resHtwoExactP); GLiNER działa dla wykrywania powołań na Reddicie (\resTestGlinerRedditCitesF).
-\dopisania{streszczenie, do 200 słów (lead badawczy)}
+\punkty{streszczenie, do 200 słów, lead badawczy}{
+\item Pytanie: czy na Reddicie (2005--2018) słabnie zaufanie do konsensusu naukowego (H1) i czy w Wikipedii rośnie udział źródeł alternatywnych (H2); obie hipotezy preregistrowane.
+\item Dane: \resHoneSample{} postów z 10 subredditów w próbie H1, \resHtwoLinks{} linków dodanych do przypisów 8 stron Wikipedii (H2); gold standard do walidacji.
+\item H1-A (stanowisko wobec konsensusu): instrument \kod{stance\_v1} nie spełnił preregistrowanego warunku trafności w jedynym teście (F1 \kod{challenges} \resHoneATestChallengesF, $\kappa$ \resHoneATestKappa), więc H1-A jest niemierzalne tym instrumentem.
+\item H1-B (źródła): wskaźnik alternatywny trafny i bez wzrostu (OR \resHoneBAlternativeOr, $p$ = \resHoneBAlternativeP); wskaźnik konsensusu tylko opisowy; zmiana w całej próbie to zmiana składu subredditów.
+\item H2: formalnie istotna (OR \resHtwoOr, $p$ = \resHtwoP), ale to artefakt pomiaru: \resHtwoOfficialLinks{} z \resHtwoAlternativeLinks{} linków to oficjalne konta WHO i GIS; według właściciela konta $p$ = \resHtwoExactP.
+\item Wniosek: wyniki negatywne; główna lekcja dotyczy walidacji pomiaru przed testem trendu.
+}
 \end{abstract}
 
 \section{Wprowadzenie}
 % 0,6 s., lead badawczy. Tezy: zjawisko; H1 i H2 jak w preregistracji (commit 440b5fb);
 % problem pomiaru automatycznego; wkład: walidacja na gold, preregistrowany test, sprawdzenie
 % pomiaru zmieniające wniosek H2, plan v2. Cytowania: literatura o zaufaniu do nauki (do dobrania).
-\dopisania{wprowadzenie (lead badawczy)}
+\punkty{wprowadzenie, lead badawczy}{
+\item Zjawisko: zaufanie do nauki w przestrzeni online i sięganie po źródła spoza nauki i mediów; dobrać 2--3 pozycje literatury o zaufaniu do nauki i dezinformacji.
+\item H1 i H2 dokładnie w brzmieniu preregistracji (\kod{docs/hipotezy.md}, commit \kod{440b5fb}); H1-A to test główny, H1-B wskaźniki poboczne.
+\item Problem: zjawisko w takiej skali da się zmierzyć tylko automatycznie, więc kluczowe jest, czy instrument AI mierzy to, co opisuje codebook.
+\item Wkład: (1) codebook i gold standard, (2) walidacja instrumentów z jednym testem i warunkiem trafności zapisanym przed testem, (3) sprawdzenie pomiaru, które zmienia odczytanie H2, (4) wyniki negatywne raportowane w pełni.
+\item Zapowiedź struktury artykułu w jednym zdaniu.
+}
 
 \section{Dane i próba}
 % 0,8 s., inżynier danych. Tezy: źródła i okresy z config.yaml; rama Reddita (\resRedditFrame postów)
 % i Wikipedii (\resWikipediaFrame opisów); losowanie warstwowe, wagi, podział pilotaż/dev/test;
 % data statement (regulaminy, Arctic Shift, CC BY-SA, RODO, teksty w data_samples/).
-\dopisania{dane, próba i data statement (inżynier danych)}
+\punkty{dane, próba i data statement, inżynier danych}{
+\item Źródła i okresy z \kod{config.yaml}: Reddit (10 subredditów, w tym r/science, r/skeptic, r/conspiracy; 2005--2020, archiwum Arctic Shift), Wikipedia (8 stron, 2020 -- październik 2026, API MediaWiki).
+\item Rama: \resRedditFrame{} postów Reddita i \resWikipediaFrame{} opisów zmian Wikipedii; losowanie warstwowe po latach (Wikipedia: rok $\times$ sygnał), wagi $N_h/n_h$, stałe ziarno.
+\item Podział: pilotaż (\resRedditPilot{} + \resWikipediaPilot{} jednostek), \kod{dev} i \kod{test} (Tab.~\ref{tab:dane}); kodowane gold: Reddit \resRedditCodedDev/\resRedditCodedTest, Wikipedia \resWikipediaCodedDev/\resWikipediaCodedTest (dev/test).
+\item Próba H1: \resHoneSample{} postów w 42 subredditach-latach; próba wzbogacona r/conspiracy (\resEnrichedPosts{} postów, wagi włączenia) tylko do walidacji stanowiska.
+\item H2: \resHtwoLinks{} linków dodanych do przypisów, kategoria według domeny (\kod{codebook/domains.yaml}).
+\item Data statement: regulaminy platform, licencja CC BY-SA Wikipedii, brak nazw użytkowników w analizach (RODO), surowe dane poza repozytorium (\kod{data/} w \kod{.gitignore}), posty usunięte poza ramą.
+}
 
 \begin{table}[htbp]
 \centering
@@ -67,7 +89,14 @@
 % annotacja w ciemno, podział gold; zgodność: \resPilotRedditCitesAlpha przy \resPilotRedditCitesAgreement
 % (paradoks rozpowszechnienia), typy \resPilotRedditMasiAlpha; druga runda, \resPilotDisputes{} sporów do arbitra;
 % etykiety JP wspomagane przez AI (ujawnić); udziały z samego gold (\resGoldShareRedditMedia).
-\dopisania{codebook i gold standard (inżynier pipelinu)}
+\punkty{codebook i gold standard, inżynier pipelinu}{
+\item Konstrukt: powołanie się na źródło (funkcja źródła, nie wiarygodność); jednostki: post Reddita, opis zmiany w Wikipedii.
+\item Zmienne: \kod{source\_types} (9 kategorii, w tym \kod{none}), \kod{cites\_source} wyliczane, \kod{edit\_about\_sources}, \kod{consensus\_stance} (4 wartości, R14); najważniejsze reguły R2, R3, R9, R10, R14 z jednym przykładem z danych.
+\item Pilotaż: zgodność \kod{cites\_source} na Reddicie \resPilotRedditCitesAgreement{} przy $\alpha$ = \resPilotRedditCitesAlpha{} (paradoks rozpowszechnienia; Rys.~\ref{fig:zgodnosc}); typy źródeł $\alpha$ = \resPilotRedditMasiAlpha; \resPilotDisputes{} sporów do arbitra.
+\item Ujawnienie: etykiety źródeł JP w pilotażu i gold to etykiety wstępne AI zatwierdzone przez JP (23.10); zgodność IS--JP nie jest więc niezależna.
+\item Odniesienie stanowiska (plan C): reguła R14 rozstrzyga \resPlanCStanceAutoShare{} postów (kontrola na ślepo \resPlanCStanceRulePrecision), resztę stanowią podpowiedzi AI sprawdzone przez \resPlanCCheckedBy{} (\resPlanCAiChecked{} postów, zmieniono \resPlanCAiChanged); JP sprawdzał, znając podpowiedzi.
+\item Pilotaż stanowiska dwóch osób: \resHoneAPilotKappa{} -- brak niezależnej zgodności ludzi dla H1-A (ograniczenie).
+}
 
 \begin{figure}[htbp]
 \centering
@@ -93,7 +122,15 @@
 % F1 \resHoneATestAllRowsChallengesF, kappa \resHoneATestAllRowsKappa. Ujawnić przebieg próbny z 27.10.
 % Audyt H1-B: konsensus J = \resAuditConsensusJ (\resAuditConsensusValid), alternatywne J = \resAuditAlternativeJ
 % (\resAuditAlternativeValid).
-\dopisania{walidacja instrumentów (inżynier pipelinu)}
+\punkty{walidacja instrumentów, inżynier pipelinu}{
+\item Źródła: trzy zamrożone instrumenty, jeden test (commit \kod{33ff729}). Reddit: GLiNER F1 \kod{cites\_source} \resTestGlinerRedditCitesF{} (czułość \resTestGlinerRedditCitesRecall), typy MASI \resTestGlinerRedditMasi; lepszy od zero-shot (McNemar $p$ = \resMcnemarRedditZeroshotGlinerP); reguły v1 nie czytają linku (\resErrorsVoneUrlShare{} błędów).
+\item Wikipedia: wynik negatywny (F1 \resTestGlinerWikipediaCitesF), dlatego H2 mierzymy po domenach. Zależność od annotatora: MASI \resTestGlinerRedditMasiIS{} (IS) a \resTestGlinerRedditMasiJP{} (JP, etykiety wspomagane AI).
+\item Stanowisko: \kod{stance\_v1} (NLI zero-shot, \cite{laurer2024}) strojony na \kod{dev} (\resHoneADevPosts{} postów; progi \resHoneAThresholds), zamrożony, jeden test na \resHoneATestPosts{} postach (\resStanceTestChallengesPosts{} \kod{challenges} dzięki próbie wzbogaconej).
+\item Wynik testu (Tab.~\ref{tab:stance}, Rys.~\ref{fig:stance}): F1 \kod{challenges} \resHoneATestChallengesF, $\kappa$ \resHoneATestKappa{} przy progach 0,5 i 0,4: warunek \resHoneAGate; precyzja \resHoneATestChallengesPrecision, czułość \resHoneATestChallengesRecall{} -- model rzadko wskazuje podważanie nauki. Na wszystkich wierszach $\kappa$ \resHoneATestAllRowsKappa.
+\item Kontrola odniesienia (eksploracyjna): ślepe drugie kodowanie AI potwierdziło \resControlStanceAgreement{} etykiet stanowiska ($\kappa$ \resControlStanceKappa); przy źródłach AI zgadzało się z etykietami IS (bez AI) w \resControlSourcesIsExact{} postów (n = \resControlSourcesIsExactN).
+\item Ujawnić przebieg próbny z 27.10 na etykietach AI przed prawdziwym testem (bez zmian instrumentu i progów).
+\item Audyt H1-B na \resAuditConsensusPositives{}/\resAuditAlternativePositives{} pozytywach: konsensus J = \resAuditConsensusJ{} (\resAuditConsensusValid), alternatywne J = \resAuditAlternativeJ{} (\resAuditAlternativeValid).
+}
 
 \begin{figure}[htbp]
 \centering
@@ -135,7 +172,13 @@
 % (p = \resHoneBAlternativeP); surowe udziały w kierunku hipotezy, ale r/conspiracy rośnie
 % z \resHoneConspiracyShareTwothousandeight do \resHoneConspiracyShareTwothousandeighteen; dekompozycja
 % (eksploracyjna): alternatywne \resHoneBAlternativeShiftTotal, w tym skład \resHoneBAlternativeShiftComposition.
-\dopisania{wyniki H1 (inżynier analityk)}
+\punkty{wyniki H1, inżynier analityk}{
+\item H1-A: \resHoneAStatus{} -- trendu nie liczono (preregistrowana reguła); to wynik negatywny co do pomiaru, nie dowód braku zjawiska.
+\item H1-B na \resHoneBCiting{} postach z powołaniem, regresja z efektami stałymi subredditu (Tab.~\ref{tab:h1}): konsensus OR \resHoneBConsensusOr{} ($p$ = \resHoneBConsensusP, tylko opis, bo J $\leq$ 0,2), alternatywne OR \resHoneBAlternativeOr{} ($p$ = \resHoneBAlternativeP) -- brak trendu w kierunku hipotezy.
+\item Wrażliwości bez zmiany wniosku: 2005--2020, tylko r/science, tylko r/conspiracy (Tab.~\ref{tab:h1}).
+\item Surowe udziały idą w kierunku hipotezy (konsensus \resHoneBConsensusShareTwothousandsix{} w 2006, \resHoneBConsensusShareLateLow--\resHoneBConsensusShareLateHigh{} w 2016--2018), ale r/conspiracy rośnie z \resHoneConspiracyShareTwothousandeight{} do \resHoneConspiracyShareTwothousandeighteen{} próby (Rys.~\ref{fig:h1}).
+\item Dekompozycja (eksploracyjna): zmiana udziału alternatywnych \resHoneBAlternativeShiftTotal, w tym skład \resHoneBAlternativeShiftComposition{} i wewnątrz \resHoneBAlternativeShiftWithin.
+}
 
 \begin{figure}[htbp]
 \centering
@@ -156,7 +199,12 @@
 % \resHtwoAlternativeLinks{} z \resHtwoLinks{} linków; wrażliwości nieistotne (\resHtwoWithoutCovidP,
 % permutacja \resHtwoPermutationP); \resHtwoOfficialLinks{} linków to konta WHO i GIS, link WHO
 % dodany \resHtwoWhoRepeats{} razy; według właściciela 2 linki, test dokładny \resHtwoExactP.
-\dopisania{wyniki H2 (inżynier analityk)}
+\punkty{wyniki H2, inżynier analityk}{
+\item Test z preregistracji: OR \resHtwoOr{} na rok, $p$ = \resHtwoP{} (\resHtwoModelLinks{} linków w modelu); ten sam wynik przed przeglądem domen (\resHtwoBeforeReviewOr, $p$ = \resHtwoBeforeReviewP).
+\item Ale tylko \resHtwoAlternativeLinks{} z \resHtwoLinks{} linków to źródła alternatywne, na \resHtwoAlternativePages{} stronach; wrażliwości nieistotne: bez COVID-19 $p$ = \resHtwoWithoutCovidP, permutacja $p$ = \resHtwoPermutationP.
+\item Sprawdzenie pomiaru (Rys.~\ref{fig:h2}): \resHtwoOfficialLinks{} linków to oficjalne konta WHO i GIS w serwisach społecznościowych, link WHO dodano \resHtwoWhoRepeats{} razy; według właściciela konta zostają \resHtwoByOwnerLinks{} linki, test dokładny $p$ = \resHtwoExactP.
+\item Werdykt: formalnie potwierdzona, merytorycznie artefakt klasyfikacji po domenie (Tab.~\ref{tab:h2}); analizy po właścicielu są eksploracyjne.
+}
 
 \begin{figure}[htbp]
 \centering
@@ -177,13 +225,24 @@
 % (domena a właściciel konta, rewerty); ograniczenia (zgodność ludzi, etykiety wspomagane przez AI,
 % błąd instrumentu, korelacja a przyczynowość, zmiany w obrębie subredditu, 8 stron);
 % preregistracja v2 i analiza mocy jako dalsze prace.
-\dopisania{dyskusja i ograniczenia (lead badawczy i inżynier analityk)}
+\punkty{dyskusja i ograniczenia, lead badawczy i inżynier analityk}{
+\item Co dane rozstrzygają: brak wzrostu źródeł alternatywnych w obrębie subredditów; H2 nie świadczy o zmianie zachowań redaktorów.
+\item Czego nie rozstrzygają: H1-A (instrument nie przeszedł walidacji); wskaźnik konsensusu tylko opisowy.
+\item Lekcja o pomiarze: domena to nie wydawca (konta WHO), skład próby zmienia się w czasie, walidacja przed testem zmieniła odczytanie obu hipotez.
+\item Ograniczenia: odniesienie stanowiska z podpowiedzi AI sprawdzonych przez jedną osobę znającą podpowiedzi; brak pilotażu stanowiska dwóch osób; etykiety JP w gold wspomagane AI; przebieg próbny przed testem; korelacja w czasie to nie przyczynowość; zmiany populacji w obrębie subredditów; mało stron Wikipedii.
+\item Dalsze prace: instrument stanowiska trenowany na etykietach ludzi, niezależna zgodność dwóch osób, preregistracja v2 z analizą mocy.
+}
 
 \section{Odtwarzalność, dane i użycie AI}
 % 0,3 s. Tezy: repozytorium, commit, polecenia make, preregistracje z commitami; data statement;
 % użycie AI zgodne z faktami (kod i testy, etykiety wstępne JP zatwierdzone przez JP, lista domen,
 % propozycje przyczyn błędów, pakiet wyników i szkic struktury; tekst napisali autorzy).
-\dopisania{odtwarzalność, data statement i ujawnienie AI (inżynier danych i wszyscy)}
+\punkty{odtwarzalność, data statement i ujawnienie AI, inżynier danych i wszyscy}{
+\item Repozytorium \kod{digital-media-analysis}; polecenia \kod{make} od danych do pakietu wyników; preregistracja i jej datowane zmiany w \kod{docs/hipotezy.md}; commit zamrażający \kod{7ad9409} przed testem stanowiska.
+\item Instrumenty pomiaru to lokalne modele otwarte (GLiNER, mDeBERTa NLI) z przypiętymi rewizjami.
+\item Użycie AI (Claude, asystent kodu), zgodnie z faktami: kod i testy; etykiety wstępne źródeł JP (zatwierdzone przez JP); podpowiedzi etykiet stanowiska, audytu, przyczyn błędów i domen, sprawdzone przez AI i następnie przez JP; ślepa kontrola etykiet; przebieg próbny; pakiet wyników i punkty do tekstu.
+\item Tekst artykułu napisali autorzy.
+}
 
 \begin{thebibliography}{99}
 \bibitem{cohen1960} J.~Cohen. A coefficient of agreement for nominal scales. \textit{Educational and Psychological Measurement}, 20(1):37--46, 1960.

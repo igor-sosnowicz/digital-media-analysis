@@ -49,9 +49,9 @@ def check(report_dir: Path = REPORT_DIR) -> tuple[list[str], list[Path]]:
     raw = sum(text.count(placeholder) for text in texts[1:] for placeholder in PLACEHOLDERS)
     if raw:
         problems.append(f"tabele zawierają {raw} wartości zastępczych")
-    boxes = len(re.findall(r"^\\dopisania\{", body, flags=re.MULTILINE))
+    boxes = len(re.findall(r"^\\(?:dopisania|punkty)\{", body, flags=re.MULTILINE))
     if boxes:
-        problems.append(f"{boxes} ramek \\dopisania{{}} do zastąpienia tekstem")
+        problems.append(f"{boxes} ramek \\dopisania{{}} lub \\punkty{{}} do zastąpienia tekstem")
     return problems, needed
 
 

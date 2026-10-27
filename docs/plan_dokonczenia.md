@@ -1,5 +1,14 @@
 # Plan dokończenia eksperymentów i preprintu (7 stron)
 
+> **Stan po wykonaniu (27.10.2026):** etapy 0–5 zrobione i zacommitowane:
+> - weryfikacja JP 878 wierszy i kontrola wariantu A;
+> - commit zamrażający `7ad9409` i jedyny test: warunek trafności niespełniony, H1-A niemierzalne;
+> - testy potwierdzające;
+> - domeny i H2 w dwóch wersjach;
+> - pakiet.
+>
+> W preprincie 9 ramek `\punkty{}` zawiera fakty i makra; zespół zamienia je na własny tekst (etap 6). Zostaje też kompilacja na Overleafie z liczbą stron (etap 7), bo lokalnie nie ma LaTeX-a. Wyniki: [`zarzuty_red_teaming.md`](zarzuty_red_teaming.md), [`notatka_slajd_pierwszy_wynik.md`](notatka_slajd_pierwszy_wynik.md).
+
 Stan na 27.10.2026:
 - **Gotowe:** dane, codebook, gold, walidacja instrumentów źródeł, H1-B i H2, plan C (reguły, kolejki, podpowiedzi AI, próba wzbogacona), pakiet preprintu z makrami.
 - **Brakuje:** weryfikacji przez ludzi, prawdziwego testu `stance_v1`, audytu i domen „na czysto” oraz tekstu.

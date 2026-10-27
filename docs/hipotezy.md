@@ -215,3 +215,9 @@ Zmiany w `codebook/domains.yaml` po przeglądzie domen i progi `stance_v1` po st
 - **po przeglądzie:** pliki `confirmatory_*` z przebiegu po tym commicie.
 
 Wersja po przeglądzie jest główna. Zmiana werdyktu między wersjami oznaczałaby wrażliwość wyniku na klasyfikację domen.
+
+**27.10.2026, sprostowanie wpisu o wariancie A (porównanie AI z ludźmi na źródłach).** Wpis o wariancie A podał, że wszystkie etykiety źródeł w próbie porównawczej powstały przed podpowiedziami AI. To nieprawda dla JP: jego arkusze `pilot_JP` i `gold_JP` wypełnił 23.10.2026 asystent AI, a JP etykiety zatwierdził (`plan_walidacji.md`, etap 2). Próba i ślepe etykiety się nie zmieniają; zmienia się tylko opis wyniku:
+
+- **odniesienie bez pomocy AI** to wyłącznie etykiety IS: 16 postów pilotażu (IS zgodny z JP) i 6 postów gold zakodowanych przez IS; raportujemy je osobno jako porównanie AI z człowiekiem (`sources_is`);
+- 16 postów pilotażu wybrano dlatego, że IS zgodził się z etykietą wspomaganą przez AI, więc to łatwiejsze przypadki;
+- 8 postów gold JP to porównanie z etykietami wspomaganymi przez AI, nie z niezależnym człowiekiem.
