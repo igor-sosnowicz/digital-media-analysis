@@ -66,3 +66,24 @@ def test_rule_queue_sheet_round_trip(tmp_path):
     assert labels["decided_by"].tolist() == ["auto"]
     rows = llm_annotation.read_rows(output, stance.SHEET_NAME).set_index("unit_id")
     assert rows.loc[["p1", "p2"], "consensus_stance"].isna().all()
+
+
+def test_ai_suggestions_fill_only_rows_for_a_person(tmp_path):
+    from digital_media_analysis import ai_suggestions
+
+    codebook = load_codebook()
+    template = stance.workbook_path("gold", "A", tmp_path)
+    units = posts().assign(group="conspiracy", title=["Vaccines cause autism, wake up", "New study on bees", "My cat"])
+    stance.write_workbook(template, "A", "gold", units, codebook)
+    queue = rule_annotation.queue(llm_annotation.read_rows(template, stance.SHEET_NAME), "stance", ["unit_id"], control_share=0.0)
+    output = tmp_path / "review" / "stance_gold_A.xlsx"
+    llm_annotation.write_queue(template, output, stance.SHEET_NAME, rule_annotation.sheet_view(queue),
+                               llm_annotation.TASKS["stance"], ["unit_id"], "test")
+    suggestions = pd.DataFrame({"unit_id": ["p1", "p2", "p3"], "ai_consensus_stance": ["challenges", "neutral", "supports"],
+                                "ai_uncertain": [0, 1, 0], "ai_reason": ["a", "b", "c"]})
+    assert ai_suggestions.fill_queue_rows(output, stance.SHEET_NAME, ["unit_id"], suggestions, "consensus_stance") == 2
+    rows = llm_annotation.read_rows(output, stance.SHEET_NAME).set_index("unit_id")
+    assert rows.loc["p1", "consensus_stance"] == "challenges" and rows.loc["p3", "consensus_stance"] == "not_applicable"
+    labels, _ = stance.read_workbook(output, codebook, partial=True)
+    # The suggested rows wait for verified = 1; the rule row counts.
+    assert labels["unit_id"].tolist() == ["p3"]

@@ -98,3 +98,52 @@ def prefill(path: Path, sheet_name: str, key_columns: Sequence[str], suggestions
     workbook.save(path)
     return filled
 
+
+
+def fill_queue_rows(path: Path, sheet: str | None, key_columns: Sequence[str], suggestions: pd.DataFrame, target: str) -> int:
+    """Put AI suggestions into the rows a person decides (`decided_by = human`) of a review sheet; returns rows filled.
+
+    The target cell gets the suggestion where it is empty, and the columns
+    ai_<target>, ai_uncertain and ai_reason hold the suggestion, the AI's doubt and
+    its reason; `verified` stays empty, so a row counts only after a person checks
+    it. Rows decided by a rule are left as they are. Works on workbooks and CSV files.
+    """
+    keys = list(key_columns)
+    by_key = {tuple(str(value) for value in row[keys]): row for _, row in suggestions.iterrows()}
+    columns = [target, f"ai_{target}", "ai_uncertain", "ai_reason"]
+    if path.suffix.lower() == ".csv":
+        frame = pd.read_csv(path, dtype=str, keep_default_na=False, encoding="utf-8-sig")
+        filled = 0
+        for index, row in frame.iterrows():
+            key = tuple(str(row[column]) for column in keys)
+            if row.get("decided_by") != "human" or key not in by_key:
+                continue
+            suggestion = by_key[key]
+            if not str(row[target]).strip():
+                frame.at[index, target] = suggestion[f"ai_{target}"]
+            frame.loc[index, columns[1:]] = [suggestion[f"ai_{target}"], str(suggestion["ai_uncertain"]), suggestion["ai_reason"]]
+            filled += 1
+        frame.to_csv(path, index=False, encoding="utf-8-sig")
+        return filled
+    if (path.parent / f"~${path.name}").exists():
+        raise RuntimeError(f"{path.name} is open in Excel (lock file ~${path.name}); close it first.")
+    workbook = load_workbook(path)
+    worksheet = workbook[sheet]
+    header = [cell.value for cell in worksheet[1]]
+    position = {name: header.index(name) + 1 for name in [*keys, *columns, "decided_by"]}
+    filled = 0
+    for row in range(2, worksheet.max_row + 1):
+        key = tuple(str(worksheet.cell(row, position[column]).value) for column in keys)
+        if worksheet.cell(row, position["decided_by"]).value != "human" or key not in by_key:
+            continue
+        suggestion = by_key[key]
+        value = suggestion[f"ai_{target}"]
+        value = None if pd.isna(value) else value
+        if worksheet.cell(row, position[target]).value in (None, ""):
+            worksheet.cell(row, position[target], value)
+        worksheet.cell(row, position[f"ai_{target}"], value)
+        worksheet.cell(row, position["ai_uncertain"], int(suggestion["ai_uncertain"]))
+        worksheet.cell(row, position["ai_reason"], suggestion["ai_reason"])
+        filled += 1
+    workbook.save(path)
+    return filled

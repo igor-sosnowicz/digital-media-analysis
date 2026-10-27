@@ -1,5 +1,7 @@
 # Plan C: reguły codebooka i ludzie, bez modeli językowych
 
+> **27.10.2026: podpowiedzi AI.** Wiersze dla ludzi mają wstępną etykietę asystenta AI (kolumny `ai_*`, skrypt `22b_add_ai_suggestions.py`; wpis w `hipotezy.md` z 27.10.2026). Kodowanie nie jest już ślepe: sprawdzacie podpowiedź, w razie niezgody poprawiacie etykietę i wpisujecie `verified = 1`. Pilotaż stanowiska zostaje bez podpowiedzi.
+
 Zasady są w preregistracji [`hipotezy.md`](hipotezy.md), wpis z 26.10.2026 o planie C. Nie korzystamy z zewnętrznego API ani z lokalnych modeli językowych.
 
 - Reguły codebooka etykietują tylko jednostki, które rozstrzygają same (`src/digital_media_analysis/rule_annotation.py`).
