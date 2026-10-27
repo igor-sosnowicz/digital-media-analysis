@@ -108,3 +108,10 @@ def test_stance_v1_decision_rule():
     assert labels["consensus_stance"].tolist() == ["not_applicable", "challenges", "supports", "challenges", "neutral"]
     assert set(stance_v1.HYPOTHESES) == {"relevance", "supports", "challenges"}
     assert set(stance.stance_values(load_codebook())) == {"supports", "challenges", "neutral", "not_applicable"}
+
+
+def test_ai_review_leaves_out_rows_decided_by_a_rule():
+    labels = pd.DataFrame({"annotator": "A", "consensus_stance": ["challenges", "neutral", "not_applicable"],
+                           "ai_stance": ["supports", "neutral", "not_applicable"], "decided_by": ["human", "human", "auto"]})
+    review = stance.ai_review(labels).iloc[0]
+    assert (review["checked"], review["changed"]) == (2, 1)

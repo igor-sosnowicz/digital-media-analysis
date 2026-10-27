@@ -98,8 +98,12 @@ def main() -> None:
                            by_group.assign(hypothesis="H1-B", outcome=outcome)]
         if "h1a" in args.hypotheses:
             path = FRAME_LABELS_DIR / "h1_stance_v1.csv"
-            tested = (VALIDATION_DIR / "stance_test_run.json").exists()
-            if not (stance_v1.TUNED and path.exists() and tested):
+            run_path = VALIDATION_DIR / "stance_test_run.json"
+            gate = json.loads(run_path.read_text(encoding="utf-8")).get("gate", {}) if run_path.exists() else {}
+            if gate and not gate.get("passed"):
+                notes["H1-A"] = ("nie testowano: stance_v1 nie spełnił warunku trafności na teście (07b), "
+                                 "więc H1-A jest niemierzalne tym instrumentem")
+            elif not (stance_v1.TUNED and path.exists() and run_path.exists()):
                 notes["H1-A"] = "czeka na etykiety stanowiska: strojenie stance_v1 na dev, test (07b) i etykiety próby (08)"
             else:
                 stances = pd.read_csv(path, dtype={"unit_id": str})

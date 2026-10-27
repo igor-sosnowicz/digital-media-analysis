@@ -26,7 +26,7 @@ matplotlib.use("Agg")
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 
-from digital_media_analysis import adjudication, annotations, gold, hypotheses, inference, owners, wikipedia_refs  # noqa: E402
+from digital_media_analysis import adjudication, annotations, gold, hypotheses, inference, owners, stance, wikipedia_refs  # noqa: E402
 from digital_media_analysis.agreement import ALPHA_RELIABLE, ALPHA_TENTATIVE, GRID, INK, INK_SECONDARY, SERIES, SURFACE  # noqa: E402
 from digital_media_analysis.charts import CATEGORICAL, MUTED  # noqa: E402
 from digital_media_analysis.config_reader import get_hypotheses  # noqa: E402
@@ -36,6 +36,8 @@ from digital_media_analysis.paths import (  # noqa: E402
     ERRORS_DIR,
     FRAME_LABELS_DIR,
     HYPOTHESES_DIR,
+    LABELS_DIR,
+    PREDICTIONS_DIR,
     PROJECT_ROOT,
     VALIDATION_DIR,
 )
@@ -247,6 +249,8 @@ def h2_numbers(numbers: Numbers, links: pd.DataFrame) -> None:
 
 
 PENDING = r"\resPending"
+# H1-A results that will never exist because stance_v1 failed its validity gate.
+NOT_TESTED = r"\textit{nie testowano}"
 H1_ANALYSES = [("primary", "główna (2005--2018)"), ("sensitivity_period", "2005--2020"), ("only_science", "tylko r/science"),
                ("only_conspiracy", "tylko r/conspiracy")]
 H1_INDICATORS = [("H1-A", "challenges", "H1-A: podważanie konsensusu (wzrost)"), ("H1-A", "supports", "H1-A: wsparcie konsensusu (spadek)"),
@@ -283,6 +287,7 @@ def h1a_numbers(numbers: Numbers, validation_dir=VALIDATION_DIR, agreement_dir=A
     thresholds = run.get("thresholds")
     numbers.put("hone a thresholds", PENDING if not thresholds else
                 ", ".join(f"{name} {number(thresholds[name])}" for name in ["relevance", "supports", "challenges"]))
+    missing = NOT_TESTED if passed is False else PENDING
     trends_path = hypotheses_dir / "confirmatory_trends.csv"
     trends = pd.read_csv(trends_path) if trends_path.exists() else pd.DataFrame(columns=["hypothesis"])
     found = trends[trends["hypothesis"].eq("H1-A")].set_index(["analysis", "outcome"]) if len(trends) else pd.DataFrame()
@@ -292,16 +297,16 @@ def h1a_numbers(numbers: Numbers, validation_dir=VALIDATION_DIR, agreement_dir=A
             key = (analysis, outcome)
             hit = len(found) and key in found.index
             numbers.put(f"hone a {outcome}{label} or",
-                        both(found.loc[key, "odds_ratio_per_year"], found.loc[key, "ci_low"], found.loc[key, "ci_high"]) if hit else PENDING)
-            numbers.put(f"hone a {outcome}{label} p", p_value(found.loc[key, "p_one_sided"]) if hit else PENDING)
+                        both(found.loc[key, "odds_ratio_per_year"], found.loc[key, "ci_low"], found.loc[key, "ci_high"]) if hit else missing)
+            numbers.put(f"hone a {outcome}{label} p", p_value(found.loc[key, "p_one_sided"]) if hit else missing)
     primary = ("primary", "challenges")
-    numbers.put("hone a relevant posts", count(found.loc[primary, "units"]) if len(found) and primary in found.index else PENDING)
+    numbers.put("hone a relevant posts", count(found.loc[primary, "units"]) if len(found) and primary in found.index else missing)
     yearly_path = hypotheses_dir / "confirmatory_yearly.csv"
     yearly = pd.read_csv(yearly_path) if yearly_path.exists() else pd.DataFrame(columns=["hypothesis"])
     part = yearly[yearly["hypothesis"].eq("H1-A") & yearly["outcome"].eq("challenges") & yearly["group"].eq("all")] if len(yearly) else yearly
     part = part.set_index("year")["share"] if len(part) else pd.Series(dtype=float)
-    numbers.put("hone a challenges share early", percent(part.loc[2005:2009].mean()) if part.loc[2005:2009].notna().any() else PENDING)
-    numbers.put("hone a challenges share late", percent(part.loc[2014:2018].mean()) if part.loc[2014:2018].notna().any() else PENDING)
+    numbers.put("hone a challenges share early", percent(part.loc[2005:2009].mean()) if part.loc[2005:2009].notna().any() else missing)
+    numbers.put("hone a challenges share late", percent(part.loc[2014:2018].mean()) if part.loc[2014:2018].notna().any() else missing)
     if passed is None:
         status = "pending"
     elif not passed:
@@ -315,8 +320,74 @@ def h1a_numbers(numbers: Numbers, validation_dir=VALIDATION_DIR, agreement_dir=A
     return status
 
 
-def h1_table(hypotheses_dir=HYPOTHESES_DIR) -> str:
-    """H1-A and H1-B trends side by side: one row per indicator, one column per analysis, OR per year [CI] and p."""
+WAITING = r"\resWaiting"
+STANCE_SHEETS = ["stance_gold_IS", "stance_gold_JP", "stance_enriched_IS", "stance_enriched_JP"]
+QUALITY_GROUPS = {"stance": STANCE_SHEETS, "sources": ["audit_JP"], "errors": ["errors_dev"], "domains": ["domain_review"]}
+
+
+def plan_c_numbers(numbers: Numbers, agreement_dir=AGREEMENT_DIR, hypotheses_dir=HYPOTHESES_DIR,
+                   validation_dir=VALIDATION_DIR, labels_dir=LABELS_DIR) -> None:
+    """Plan C (docs/plan_c_reguly.md): enriched sample, share decided by rules, rule precision on the blind controls,
+    AI suggestions people changed, stance_v1 precision and recall, and the H1-B audit. Missing inputs give WAITING."""
+    sample_path = hypotheses_dir / "stance_enriched_sample.csv"
+    sample = pd.read_csv(sample_path, dtype={"unit_id": str}) if sample_path.exists() else pd.DataFrame(columns=["stratum"])
+    numbers.put("enriched posts", count(len(sample)) if len(sample) else WAITING)
+    for stratum, key in [("topic", "topic"), ("science_terms", "science"), ("rest", "rest")]:
+        numbers.put(f"enriched {key}", count(sample["stratum"].eq(stratum).sum()) if len(sample) else WAITING)
+    gold_labels, enriched_labels = stance.load_labels("gold", labels_dir), stance.load_labels(stance.ENRICHED_PHASE, labels_dir)
+    for split in ["dev", "test"]:
+        frame = stance.validation_frame(gold_labels, gold.load_manifest(), split, enriched_labels, sample if len(sample) else None)
+        numbers.put(f"stance {split} challenges posts",
+                    count(frame[stance.STANCE].eq("challenges").sum()) if len(frame) else WAITING)
+
+    reviews = [pd.read_csv(path) for name in ["gold", stance.ENRICHED_PHASE]
+               if (path := agreement_dir / f"{name}_stance_ai_review.csv").exists()]
+    review = pd.concat(reviews, ignore_index=True) if reviews else pd.DataFrame(columns=["checked", "changed"])
+    checked = review["checked"].sum()
+    numbers.put("plan c ai checked", count(checked) if checked else WAITING)
+    numbers.put("plan c ai changed", percent(review["changed"].sum() / checked) if checked else WAITING)
+
+    quality_path = agreement_dir / "llm_quality.csv"
+    quality = pd.read_csv(quality_path) if quality_path.exists() else pd.DataFrame(columns=["name"])
+    for group, names in QUALITY_GROUPS.items():
+        part = quality[quality["name"].isin(names)]
+        rows = part["rows"].sum() if len(part) else 0
+        controls = part["control_rows"].sum() if len(part) else 0
+        kept = (part["control_kept"].fillna(0) * part["control_rows"]).sum() if len(part) else 0
+        numbers.put(f"plan c {group} auto share", percent((part["auto_share"] * part["rows"]).sum() / rows) if rows else WAITING)
+        numbers.put(f"plan c {group} controls", count(controls) if len(part) else WAITING)
+        numbers.put(f"plan c {group} rule precision", f"{count(round(kept))}/{count(controls)}" if controls else WAITING)
+
+    metrics_path, run_path = validation_dir / "stance_test_metrics.csv", validation_dir / "stance_test_run.json"
+    table = pd.read_csv(metrics_path) if metrics_path.exists() else pd.DataFrame(columns=["metric", "value"])
+    table = table[table["rows"].eq("reviewed")] if "rows" in table else table
+    values = dict(table[["metric", "value"]].itertuples(index=False))
+    for name, key in [("challenges:precision", "precision"), ("challenges:recall", "recall")]:
+        numbers.put(f"hone a test challenges {key}", number(values[name]) if name in values else PENDING)
+    run = json.loads(run_path.read_text(encoding="utf-8")) if run_path.exists() else {}
+    all_rows = run.get("gate_all_rows", {})
+    numbers.put("hone a test all rows challenges f", number(all_rows["challenges_f1"]) if all_rows else PENDING)
+    numbers.put("hone a test all rows kappa", number(all_rows["kappa"]) if all_rows else PENDING)
+    numbers.put("hone a reviewed posts", count(run["reviewed_posts"]) if "reviewed_posts" in run else PENDING)
+
+    audit_path = hypotheses_dir / "audit_error_rates.csv"
+    audit = pd.read_csv(audit_path).set_index(["source", "indicator"]) if audit_path.exists() else pd.DataFrame()
+    for indicator in ["consensus", "alternative"]:
+        key = ("pooled", indicator)
+        found = len(audit) and key in audit.index
+        row = audit.loc[key] if found else None
+        numbers.put(f"audit {indicator} j", both(row["youden"], row["youden_low"], row["youden_high"]) if found else WAITING)
+        numbers.put(f"audit {indicator} sensitivity", number(row["sensitivity"]) if found else WAITING)
+        numbers.put(f"audit {indicator} specificity", number(row["specificity"]) if found else WAITING)
+        numbers.put(f"audit {indicator} valid", ("ważny" if bool(row["valid"]) else "tylko opis") if found else WAITING)
+        numbers.put(f"audit {indicator} positives", count(row["positives"]) if found else WAITING)
+
+
+def h1_table(hypotheses_dir=HYPOTHESES_DIR, h1a_missing: str = PENDING) -> str:
+    """H1-A and H1-B trends side by side: one row per indicator, one column per analysis, OR per year [CI] and p.
+
+    `h1a_missing` fills H1-A cells without a result (NOT_TESTED once stance_v1 failed its gate).
+    """
     trends_path = hypotheses_dir / "confirmatory_trends.csv"
     trends = pd.read_csv(trends_path).set_index(["hypothesis", "analysis", "outcome"]) if trends_path.exists() else pd.DataFrame()
     rows = []
@@ -329,24 +400,72 @@ def h1_table(hypotheses_dir=HYPOTHESES_DIR) -> str:
                 cells.append(f"{both(row['odds_ratio_per_year'], row['ci_low'], row['ci_high'])}\\newline"
                              f"{{\\scriptsize $p$ = {p_value(row['p_one_sided'])}}}")
             else:
-                cells.append(PENDING)
+                cells.append(h1a_missing if hypothesis == "H1-A" else PENDING)
         rows.append([label, *cells])
     header = ["Wskaźnik (oczekiwany kierunek)", *(name for _, name in H1_ANALYSES)]
     return tabular(header, rows, "p{3.9cm}" + "p{2.55cm}" * len(H1_ANALYSES), groups=[2])
 
 
 def stance_table(numbers: Numbers) -> str:
-    """Agreement of the two people on stance and the dev and test results of stance_v1 (placeholders until known)."""
+    """Quality of the stance reference (agreement of two people, rule precision, AI suggestions people changed) and
+    the dev and test results of stance_v1, with the gate on reviewed rows and on all rows (placeholders until known)."""
     rows = [
-        ["zgodność dwóch osób (\\kod{pilot2})", numbers["hone a pilot units"], "--", numbers["hone a pilot kappa"],
+        ["zgodność dwóch osób (\\kod{pilot2}, bez podpowiedzi)", numbers["hone a pilot units"], "--", numbers["hone a pilot kappa"],
          f"$\\alpha$ = {numbers['hone a pilot alpha']}"],
+        ["odniesienie: reguła R14 (kontrola na ślepo)", numbers["plan c stance controls"], "--", "--",
+         f"zachowane {numbers['plan c stance rule precision']}"],
+        ["odniesienie: podpowiedzi AI sprawdzone przez ludzi", numbers["plan c ai checked"], "--", "--",
+         f"poprawiono {numbers['plan c ai changed']}"],
         ["\\kod{stance\\_v1}, \\kod{dev} (strojenie)", numbers["hone a dev posts"], numbers["hone a dev challenges f"],
          numbers["hone a dev kappa"], f"macro-F1 {numbers['hone a dev macro f']}"],
-        ["\\kod{stance\\_v1}, test (jeden przebieg)", numbers["hone a test posts"], numbers["hone a test challenges f"],
-         numbers["hone a test kappa"], f"warunek trafności: {numbers['hone a gate']}"],
+        ["\\kod{stance\\_v1}, test (jeden przebieg)", numbers["hone a reviewed posts"], numbers["hone a test challenges f"],
+         numbers["hone a test kappa"], f"warunek trafności: {numbers['hone a gate']}; precyzja "
+         f"{numbers['hone a test challenges precision']}, czułość {numbers['hone a test challenges recall']}"],
+        ["test, wszystkie wiersze (wrażliwość)", numbers["hone a test posts"], numbers["hone a test all rows challenges f"],
+         numbers["hone a test all rows kappa"], "z etykietami z reguł"],
     ]
     header = ["Pomiar", "$n$", "F1 \\kod{challenges}", "$\\kappa$", "Uwagi"]
-    return tabular(header, rows, "llllp{4.4cm}")
+    return tabular(header, rows, "p{4.6cm}lllp{4.4cm}", groups=[3])
+
+
+def figure_stance_confusion(path, validation_dir=VALIDATION_DIR, predictions_dir=PREDICTIONS_DIR, labels_dir=LABELS_DIR,
+                            hypotheses_dir=HYPOTHESES_DIR) -> None:
+    """Confusion matrix of stance_v1 on the test split (counts, reference by rows); a placeholder before the test."""
+    import matplotlib.pyplot as plt
+    from matplotlib.colors import LinearSegmentedColormap
+
+    order = ["challenges", "supports", "neutral", "not_applicable"]
+    predictions_path = predictions_dir / "stance_v1_test.csv"
+    sample_path = hypotheses_dir / "stance_enriched_sample.csv"
+    figure, axis = plt.subplots(figsize=(5.2, 3.4), facecolor=SURFACE)
+    axis.set_facecolor(SURFACE)
+    if not (validation_dir / "stance_test_run.json").exists() or not predictions_path.exists():
+        axis.axis("off")
+        axis.text(0.5, 0.5, "czeka na test stance_v1 (07b)", ha="center", va="center", fontsize=10, color=INK_SECONDARY)
+        figure.savefig(path, dpi=200, facecolor=SURFACE)
+        return
+    sample = pd.read_csv(sample_path, dtype={"unit_id": str}) if sample_path.exists() else None
+    frame = stance.validation_frame(stance.load_labels("gold", labels_dir), gold.load_manifest(), "test",
+                                    stance.load_labels(stance.ENRICHED_PHASE, labels_dir), sample)
+    predicted = pd.read_csv(predictions_path, dtype={"unit_id": str}).drop_duplicates("unit_id").set_index("unit_id")[stance.STANCE]
+    table = pd.crosstab(frame[stance.STANCE].to_numpy(), predicted.reindex(frame["unit_id"]).to_numpy()).reindex(
+        index=order, columns=order, fill_value=0)
+    cmap = LinearSegmentedColormap.from_list("ink", [SURFACE, SERIES])
+    axis.imshow(table.to_numpy(), cmap=cmap, aspect="auto")
+    peak = table.to_numpy().max() or 1
+    for (row, column), value in np.ndenumerate(table.to_numpy()):
+        axis.text(column, row, str(value), ha="center", va="center", fontsize=9, color=SURFACE if value > peak / 2 else INK)
+    labels = ["challenges", "supports", "neutral", "n/a"]
+    axis.set_xticks(range(4), labels, fontsize=8, color=INK)
+    axis.set_yticks(range(4), labels, fontsize=8, color=INK)
+    axis.tick_params(length=0)
+    for side in axis.spines.values():
+        side.set_visible(False)
+    axis.set_xlabel("stance_v1", fontsize=8, color=INK_SECONDARY)
+    axis.set_ylabel("odniesienie", fontsize=8, color=INK_SECONDARY)
+    axis.set_title(f"stance_v1 na teście: liczba postów (n = {int(table.to_numpy().sum())})", loc="left", fontsize=9, color=INK)
+    figure.tight_layout()
+    figure.savefig(path, dpi=200, facecolor=SURFACE)
 
 
 def data_table(coded: pd.DataFrame, agreement_table: pd.DataFrame, numbers: Numbers) -> str:
@@ -578,6 +697,7 @@ def figure_agreement(table: pd.DataFrame, path) -> None:
 def main() -> None:
     numbers = Numbers()
     numbers.put("pending", r"\textit{[czeka na H1-A]}")
+    numbers.put("waiting", r"\textit{[czeka na dane]}")
     coded = data_numbers(numbers)
     agreement_table = agreement_numbers(numbers)
     instrument_numbers(numbers)
@@ -586,11 +706,13 @@ def main() -> None:
     links = h2_links()
     h2_numbers(numbers, links)
     status = h1a_numbers(numbers)
+    plan_c_numbers(numbers)
     (REPORT_DIR / "numbers.tex").write_text(macro_file(numbers, "scripts/18_preprint_package.py"), encoding="utf-8")
     (REPORT_DIR / "tables").mkdir(parents=True, exist_ok=True)
     (REPORT_DIR / "tables" / "preprint_data.tex").write_text(data_table(coded, agreement_table, numbers), encoding="utf-8")
     (REPORT_DIR / "tables" / "preprint_h2.tex").write_text(h2_table(), encoding="utf-8")
-    (REPORT_DIR / "tables" / "preprint_h1.tex").write_text(h1_table(), encoding="utf-8")
+    (REPORT_DIR / "tables" / "preprint_h1.tex").write_text(
+        h1_table(h1a_missing=NOT_TESTED if status == "gate_failed" else PENDING), encoding="utf-8")
     (REPORT_DIR / "tables" / "preprint_stance.tex").write_text(stance_table(numbers), encoding="utf-8")
     figures = REPORT_DIR / "figures"
     figures.mkdir(parents=True, exist_ok=True)
@@ -599,6 +721,7 @@ def main() -> None:
     figure_h1_slide(frame, figures / "slide_h1.png")
     figure_h2(links, figures / "preprint_h2.png")
     figure_agreement(agreement_table, figures / "preprint_agreement.png")
+    figure_stance_confusion(figures / "preprint_stance_confusion.png")
     print(f"{len(numbers)} numbers -> {REPORT_DIR / 'numbers.tex'}; tables and figures in {REPORT_DIR}; H1-A: {status}")
 
 

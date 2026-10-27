@@ -79,6 +79,11 @@ Tezy:
    - wniosek: potrzebna druga runda, a spory (`\resPilotDisputes`) idą do arbitra.
 5. Etykiety JP powstały z etykiet wstępnych AI zatwierdzonych przez JP. Trzeba to ujawnić, bo ma znaczenie dla walidacji instrumentów AI.
 6. Udziały z samego gold to pierwsza estymata niezależna od instrumentu, np. `\resGoldShareRedditMedia`.
+7. **Odniesienie stanowiska i Fazy B według planu C** (`docs/plan_c_reguly.md`, wpisy z 26–27.10 w preregistracji):
+   - reguły codebooka rozstrzygają łatwe przypadki (stanowisko: `\resPlanCStanceAutoShare`), a ich precyzję mierzy kontrola na ślepo (`\resPlanCStanceRulePrecision`);
+   - pozostałe wiersze mają podpowiedź AI sprawdzoną przez człowieka (`\resPlanCAiChecked`, poprawiono `\resPlanCAiChanged`), więc kodowanie nie jest ślepe;
+   - próba wzbogacona r/conspiracy (`\resEnrichedPosts` postów w trzech warstwach, z wagami włączenia) daje `\resStanceTestChallengesPosts` postów `challenges` w teście zamiast kilku;
+   - niezależna zgodność ludzi jest mierzona tylko na pilotażu stanowiska bez podpowiedzi.
 
 Dowody: Rys. 1. Cytowania: Krippendorff 2004, Passonneau 2006, Feinstein i Cicchetti 1990.
 
@@ -101,7 +106,11 @@ Tezy:
 6. **Błąd różnicowy:** brak różnic między okresami, ale przy małej mocy.
 7. **Wybór do H1-B:** GLiNER na Reddicie. Reguły v2 i I4 tylko jako wynik z `dev` albo dalsze prace.
 
-8. **Instrument stanowiska (H1-A):** zgodność dwóch osób na `pilot2` (`\resHoneAPilotKappa`, n = `\resHoneAPilotUnits`); strojenie na `dev` (`\resHoneADevPosts` postów, progi `\resHoneAThresholds`); jeden test (`\resHoneATestPosts` postów): F1 `challenges` `\resHoneATestChallengesF`, κ `\resHoneATestKappa`; warunek trafności `\resHoneAGate`.
+8. **Instrument stanowiska (H1-A)** (Tab. 3, rys. macierzy pomyłek): zgodność dwóch osób na `pilot2` (`\resHoneAPilotKappa`, n = `\resHoneAPilotUnits`); strojenie na `dev` (`\resHoneADevPosts` postów, progi `\resHoneAThresholds`); jeden test (`\resHoneATestPosts` postów): F1 `challenges` `\resHoneATestChallengesF`, κ `\resHoneATestKappa`; warunek trafności `\resHoneAGate`.
+   - precyzja `challenges` `\resHoneATestChallengesPrecision`, czułość `\resHoneATestChallengesRecall`: instrument rzadko rozpoznaje podważanie nauki;
+   - wrażliwość na wszystkich wierszach: F1 `\resHoneATestAllRowsChallengesF`, κ `\resHoneATestAllRowsKappa`;
+   - ujawnić przebieg próbny na etykietach AI z 27.10 (`docs/przebieg_probny_2026-10-27.md`).
+9. **Audyt H1-B:** wskaźnik konsensusu J = `\resAuditConsensusJ` (`\resAuditConsensusValid`), alternatywny J = `\resAuditAlternativeJ` (`\resAuditAlternativeValid`).
 
 Dowody: Rys. 2, Tab. 2, Tab. 3 (stanowisko). Cytowania: Laurer i in. 2024, Zaratiana i in. 2024, Cohen 1960, McNemar 1947, Kendall 1938.
 
@@ -135,12 +144,14 @@ Dowody: Rys. 3, Rys. 4, Tab. 4 (H1), Tab. 5 (H2). Cytowania: Firth 1993.
 ### 6. Dyskusja i ograniczenia (0,7 s.)
 Tezy:
 1. Co wiemy, a czego nie:
-   - H1: brak dowodu spadku w obrębie społeczności, ale bez testu stanowiska nie wiemy, czy zaufanie się zmienia;
+   - H1: brak dowodu spadku w obrębie społeczności; jeśli `stance_v1` nie przejdzie warunku, nie wiemy, czy zaufanie się zmienia (NLI zero-shot nie rozpoznaje podważania nauki);
    - H2: 8 stron to za mało, by rozstrzygnąć.
 2. Lekcja metodologiczna: kategoria domeny nie odróżnia instytucji od influencera, a rewerty wielokrotnie liczą ten sam link.
 3. Ograniczenia:
    - niska zgodność ludzi;
-   - etykiety wspomagane przez AI;
+   - odniesienie z udziałem AI (podpowiedzi sprawdzane przez ludzi, kodowanie nieślepe);
+   - przebieg próbny przed prawdziwym testem (wynik części testowej był znany);
+   - J audytu konsensusu na granicy reguły;
    - błędy instrumentu;
    - korelacja a przyczynowość;
    - efekty stałe nie usuwają zmian w obrębie subredditu;
@@ -157,7 +168,9 @@ Tezy:
    - asystent AI (Claude Code) pisał kod i testy;
    - przygotował etykiety wstępne JP, które JP zatwierdził;
    - sklasyfikował listę domen H2;
-   - zaproponował przyczyny błędów (niepotwierdzone);
+   - przygotował podpowiedzi etykiet w planie C (stanowisko, audyt, przyczyny błędów, domeny), sprawdzone przez ludzi, z liczbą poprawek;
+   - zaproponował reguły codebooka do automatycznej annotacji; ich precyzję zmierzyli ludzie na ślepo;
+   - wykonał przebieg próbny potoku na swoich etykietach (wynik ujawniony w preregistracji);
    - przygotował pakiet wyników i szkic struktury;
    - instrumenty w badaniu to lokalne modele otwarte;
    - tekst preprintu napisali autorzy.

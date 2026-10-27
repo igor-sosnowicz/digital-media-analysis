@@ -157,3 +157,17 @@ Zmiany w `codebook/domains.yaml` po przeglądzie domen i progi `stance_v1` po st
 3. **Wiersze kontrolne reguł** też mają podpowiedź AI, nie etykietę reguły. Precyzję reguły liczymy względem etykiety po sprawdzeniu przez człowieka, który nie zna etykiety reguły; jego decyzja może jednak być zakotwiczona w podpowiedzi AI. Opisujemy to jako ograniczenie.
 4. **Zgodność ludzi:** pilotaż stanowiska (30 postów, obie osoby) zostaje bez podpowiedzi i bez reguł, więc nadal daje niezależną miarę zgodności.
 5. **Warunek trafności H1-A** liczymy jak dotąd na wierszach sprawdzonych przez ludzi. Ich etykiety są etykietami AI zweryfikowanymi przez człowieka; podajemy to w opisie walidacji i w sekcji o użyciu AI.
+
+**27.10.2026, przebieg próbny na etykietach AI (ujawnienie, bez zmiany planu).** Na prośbę zespołu cały potok uruchomiono w osobnej kopii repozytorium (commit `c2cbafe`). Etykiety AI z arkuszy planu C potraktowano tam tak, jakby ludzie je sprawdzili (`verified = 1` wpisane automatycznie, tylko w kopii). Prawdziwy jednorazowy test `stance_v1` nie został użyty, a `stance_v1` w repozytorium jest nadal nienastrojony. Opis i liczby: [`przebieg_probny_2026-10-27.md`](przebieg_probny_2026-10-27.md); pliki wynikowe poza gitem w `data/dryrun_2026-10-27/`.
+
+1. **Co widzieliśmy:**
+   - na części testowej (próbnie) `stance_v1` nie spełnił warunku trafności H1-A: F1 dla `challenges` 0,33, κ 0,24;
+   - audyt H1-B dał wskaźnikowi konsensusu J = 0,20, czyli tylko opis;
+   - H1-B i H2 bez zmian.
+2. **Skutek dla prawdziwego przebiegu:** wyniki części testowej (na etykietach AI) są już znane zespołowi. Prawdziwy test po weryfikacji przez ludzi wykonujemy bez zmian w instrumencie, siatce strojenia i progach warunku trafności. Każda zmiana któregoś z nich po tym przebiegu byłaby decyzją podjętą po zobaczeniu wyniku i raportujemy ją wyłącznie jako analizę eksploracyjną.
+3. **Poprawki kodu wykryte w przebiegu** (bez wpływu na wyniki liczbowe):
+   - `scripts/09_test_hypotheses.py` (plik objęty tą preregistracją) podaje teraz w uwagach, że H1-A nie testowano, gdy `stance_test_run.json` zapisuje niespełniony warunek, zamiast „czeka na etykiety”; obliczenia się nie zmieniają;
+   - `scripts/18_preprint_package.py` wpisuje wtedy „nie testowano” w makra i tabelę trendów H1-A;
+   - `stance.ai_review` liczy zmiany podpowiedzi tylko w wierszach decydowanych przez ludzi, bez wierszy z reguł.
+
+   Skrypt `09 --confirmatory` odmówi uruchomienia, dopóki te zmiany nie zostaną zacommitowane.

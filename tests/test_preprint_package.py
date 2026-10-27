@@ -67,7 +67,32 @@ def test_failed_gate_and_missing_test_have_their_own_status(tmp_path):
     write_outputs(tmp_path, passed=False, with_trends=False)
     numbers = script.Numbers()
     assert script.h1a_numbers(numbers, tmp_path, tmp_path, tmp_path) == "gate_failed"
-    assert numbers["hone a gate"] == "niespełniony" and numbers["hone a challenges or"] == script.PENDING
+    assert numbers["hone a gate"] == "niespełniony" and numbers["hone a challenges or"] == script.NOT_TESTED
+    assert script.NOT_TESTED in script.h1_table(tmp_path, h1a_missing=script.NOT_TESTED).split("H1-B")[0]
     write_outputs(tmp_path, passed=True, with_trends=False)
     numbers = script.Numbers()
     assert script.h1a_numbers(numbers, tmp_path, tmp_path, tmp_path) == "awaiting_test"
+
+
+def test_plan_c_numbers_wait_for_data_and_fill_in(tmp_path):
+    script = load_script()
+    numbers = script.Numbers()
+    script.plan_c_numbers(numbers, tmp_path, tmp_path, tmp_path, tmp_path)
+    assert numbers["plan c stance rule precision"] == script.WAITING and numbers["audit consensus j"] == script.WAITING
+    pd.DataFrame([{"name": "stance_gold_IS", "rows": 60, "auto_share": 0.25, "control_rows": 4, "control_kept": 0.75},
+                  {"name": "stance_gold_JP", "rows": 40, "auto_share": 0.5, "control_rows": 2, "control_kept": 1.0}]).to_csv(
+        tmp_path / "llm_quality.csv", index=False)
+    pd.DataFrame([{"annotator": "IS", "checked": 40, "changed": 4}]).to_csv(tmp_path / "gold_stance_ai_review.csv", index=False)
+    pd.DataFrame([{"source": "pooled", "indicator": indicator, "sensitivity": 0.5, "specificity": 0.8, "youden": 0.3,
+                   "youden_low": 0.1, "youden_high": 0.5, "valid": True, "positives": 20} for indicator in ["consensus", "alternative"]]
+                 ).to_csv(tmp_path / "audit_error_rates.csv", index=False)
+    numbers = script.Numbers()
+    script.plan_c_numbers(numbers, tmp_path, tmp_path, tmp_path, tmp_path)
+    assert numbers["plan c stance auto share"] == "35\,\%" and numbers["plan c stance rule precision"] == "5/6"
+    assert numbers["plan c ai changed"] == "10\,\%" and numbers["audit consensus valid"] == "ważny"
+
+
+def test_confusion_figure_is_a_placeholder_before_the_test(tmp_path):
+    script = load_script()
+    script.figure_stance_confusion(tmp_path / "confusion.png", tmp_path, tmp_path, tmp_path, tmp_path)
+    assert (tmp_path / "confusion.png").exists()

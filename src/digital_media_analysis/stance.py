@@ -260,8 +260,12 @@ def add_ai_suggestions(path: Path, suggestions: pd.DataFrame, source: str) -> in
 
 
 def ai_review(labels: pd.DataFrame) -> pd.DataFrame:
-    """Per annotator: AI suggestions checked and how many the person changed."""
-    checked = labels[labels["ai_stance"].fillna("").ne("") & labels[STANCE].notna()]
+    """Per annotator: AI suggestions checked and how many the person changed.
+
+    Rows decided by a rule (`decided_by = auto`) carry the rule label in their AI column, so they are left out.
+    """
+    by_person = labels["decided_by"].fillna("human").ne("auto") if "decided_by" in labels else True
+    checked = labels[labels["ai_stance"].fillna("").ne("") & labels[STANCE].notna() & by_person]
     rows = [{"annotator": annotator, "checked": len(part), "changed": int(part[STANCE].ne(part["ai_stance"]).sum())}
             for annotator, part in checked.groupby("annotator")]
     table = pd.DataFrame(rows, columns=["annotator", "checked", "changed"])
