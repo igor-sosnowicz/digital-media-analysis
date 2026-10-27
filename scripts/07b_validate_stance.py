@@ -96,7 +96,7 @@ def main() -> None:
         if len(conflicts := stance.reference(labels)[1]):
             print(f"{conflicts['unit_id'].nunique()} posts with different stances are left out until adjudicated.")
     frame = stance.validation_frame(gold_labels, manifest, args.split, enriched_labels, enriched_sample).set_index("unit_id")
-    print(f"{args.split}: {frame['source'].value_counts().to_dict()} posts; decided by a person: "
+    print(f"{args.split}: {frame['source'].value_counts().to_dict()} posts; checked (by a person or the AI assistant): "
           f"{frame['decided_by'].eq('human').sum()}")
     reddit, _ = gold.load_units()
     gold_ids = frame.index[frame["source"].eq("gold")]

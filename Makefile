@@ -1,4 +1,4 @@
-.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets append-sheets sample-csv import-labels agreement kappa-consensus combine-labels adjudication-sheet import-adjudication tune validate audit-metrics errors compare report-tables preprint-package h2-frame h2-history h1-frame label-h1-v2 h2-links hypotheses-v2 power check-stance import-stance validate-stance label-h1 domain-review hypotheses enriched-stance llm-annotate llm-queue llm-quality rule-queue after-verification finish-results check-preprint
+.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets append-sheets sample-csv import-labels agreement kappa-consensus combine-labels adjudication-sheet import-adjudication tune validate audit-metrics errors compare report-tables preprint-package h2-frame h2-history h1-frame label-h1-v2 h2-links hypotheses-v2 power check-stance import-stance validate-stance label-h1 domain-review hypotheses enriched-stance llm-annotate llm-queue llm-quality rule-queue after-verification finish-results check-preprint control-draw control-score
 
 ANNOTATORS ?= A B
 PHASE ?= pilot
@@ -118,6 +118,13 @@ rule-queue:
 
 llm-quality:
 	uv run scripts/21_llm_quality.py --name $(NAME) --task $(TASK) --queue "$(QUEUE)" --reviewed "$(REVIEWED)" $(if $(SHEET),--sheet "$(SHEET)") $(if $(KEY),--key $(KEY))
+
+# Variant A done automatically (amendment of 27.10.2026): draw the control samples once, then score the blind coding.
+control-draw:
+	uv run scripts/25_control_check.py draw
+
+control-score:
+	uv run scripts/25_control_check.py score
 
 # Stages 2-5 of docs/plan_dokonczenia.md, once people verified the review sheets and copied them to annotations/sheets/.
 # Stage 2 up to tuning; then review git diff of stance_v1.py, commit the freeze and run the one test:

@@ -34,6 +34,7 @@ from digital_media_analysis.annotation_sheets import (
     _metadata,
 )
 from digital_media_analysis.annotation_sheets import unverified as is_unverified  # `unverified` names a list below
+from digital_media_analysis.annotation_sheets import verified_by as sheet_verified_by
 from digital_media_analysis.codebook import Codebook
 from digital_media_analysis.paths import LABELS_DIR, SHEETS_DIR
 
@@ -41,7 +42,7 @@ STANCE = "consensus_stance"
 SHEET_NAME = "Reddit"
 LABEL_COLUMNS = [STANCE, "uncertain", "notes", "annotator"]
 FILE_COLUMNS = ["unit_id", "platform", "annotator", "codebook_version", STANCE, "uncertain", "notes", "ai_stance",
-                "decided_by", "p_review"]
+                "decided_by", "p_review", "verified_by"]
 # Columns after LABEL_COLUMNS in a workbook with AI suggestions; the person fills only `verified`.
 AI_COLUMNS = ["ai_stance", "ai_uncertain", "ai_reason", "verified"]
 AI_FILL = PatternFill("solid", fgColor="EDEDED")
@@ -191,6 +192,7 @@ def read_workbook(path: Path, codebook: Codebook, partial: bool = False) -> tupl
             "ai_stance": suggestion,
             "decided_by": str(record.get("decided_by") or "human"),
             "p_review": 1.0 if record.get("p_review") in (None, "") else float(record["p_review"]),
+            "verified_by": sheet_verified_by(record),
         })
     if unverified and not partial:
         problems.append(f"{len(unverified)} wierszy z podpowiedzią AI bez verified = 1 (sprawdź etykietę i wpisz 1), "

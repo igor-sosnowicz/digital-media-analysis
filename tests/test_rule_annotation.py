@@ -87,3 +87,37 @@ def test_ai_suggestions_fill_only_rows_for_a_person(tmp_path):
     labels, _ = stance.read_workbook(output, codebook, partial=True)
     # The suggested rows wait for verified = 1; the rule row counts.
     assert labels["unit_id"].tolist() == ["p3"]
+
+
+def test_ai_verified_rows_count_and_people_override_them(tmp_path):
+    import importlib.util
+
+    from openpyxl import load_workbook
+
+    from digital_media_analysis import ai_suggestions
+    from digital_media_analysis.paths import PROJECT_ROOT
+
+    codebook = load_codebook()
+    template = stance.workbook_path("gold", "A", tmp_path)
+    units = posts().assign(group="conspiracy", title=["Vaccines cause autism, wake up", "New study on bees", "My cat"])
+    stance.write_workbook(template, "A", "gold", units, codebook)
+    queue = rule_annotation.queue(llm_annotation.read_rows(template, stance.SHEET_NAME), "stance", ["unit_id"], control_share=0.0)
+    output = tmp_path / "review" / "stance_gold_A.xlsx"
+    llm_annotation.write_queue(template, output, stance.SHEET_NAME, rule_annotation.sheet_view(queue),
+                               llm_annotation.TASKS["stance"], ["unit_id"], "test")
+    suggestions = pd.DataFrame({"unit_id": ["p1", "p2"], "ai_consensus_stance": ["challenges", "neutral"],
+                                "ai_uncertain": [0, 0], "ai_reason": ["a", "b"]})
+    ai_suggestions.fill_queue_rows(output, stance.SHEET_NAME, ["unit_id"], suggestions, "consensus_stance")
+    spec = importlib.util.spec_from_file_location("mark", PROJECT_ROOT / "scripts" / "22c_mark_ai_verified.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    assert module.mark(output, stance.SHEET_NAME) == 2
+    labels, problems = stance.read_workbook(output, codebook)
+    assert problems == [] and dict(zip(labels["unit_id"], labels["verified_by"])) == {"p1": "ai", "p2": "ai", "p3": "rule"}
+    workbook = load_workbook(output)
+    sheet = workbook[stance.SHEET_NAME]
+    header = [cell.value for cell in sheet[1]]
+    sheet.cell(2, header.index("verified") + 1, 1)
+    workbook.save(output)
+    labels, _ = stance.read_workbook(output, codebook)
+    assert labels.set_index("unit_id").loc["p1", "verified_by"] == "human"

@@ -1,0 +1,8 @@
+name,task,rows,a1_a2_agreement,a1_a2_kappa,a1_a2_kappa_low,a1_a2_kappa_high,auto_share,queued,checked,checked_by_ai,control_rows,control_kept,control_kept_low,control_kept_high,queue_changed
+stance_gold_IS,stance,67,,,,,0.2985074626865671,47,47,0,2,1.0,1.0,1.0,
+stance_gold_JP,stance,90,,,,,0.2777777777777778,65,65,0,3,1.0,1.0,1.0,
+stance_enriched_IS,stance,139,,,,,0.1942446043165467,112,112,0,3,1.0,1.0,1.0,
+stance_enriched_JP,stance,138,,,,,0.1956521739130435,111,111,0,3,1.0,1.0,1.0,
+audit_JP,sources_reddit,180,,,,,0.0388888888888888,173,173,0,1,1.0,1.0,1.0,
+errors_dev,error_cause,345,,,,,0.2231884057971014,268,268,0,9,1.0,1.0,1.0,
+domain_review,domain,222,,,,,0.5405405405405406,102,102,0,20,0.95,0.85,1.0,

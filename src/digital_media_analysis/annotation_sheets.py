@@ -41,6 +41,8 @@ LABEL_FILL = PatternFill("solid", fgColor="FFF2CC")
 VERIFIED = "verified"
 # auto: accepted by the two LLM annotators without review; human: in the review queue.
 DECIDED_BY = "decided_by"
+# 1 when the AI assistant, not a person, checked the row in a second pass (scripts/22c).
+AI_VERIFIED = "ai_verified"
 
 
 def write_workbook(
@@ -323,15 +325,34 @@ def read_workbook(path: Path, codebook: Codebook, partial: bool = False) -> tupl
 def unverified(record: dict) -> bool:
     """Whether a sheet row carries an AI suggestion (columns `ai_*`) the person has not checked (verified = 1) yet.
 
-    A row the review queue accepted automatically (`decided_by = auto`, llm_annotation.combine) needs no check.
+    A row the review queue accepted automatically (`decided_by = auto`, llm_annotation.combine) needs no check,
+    and a row the AI assistant checked in a second pass (`ai_verified = 1`, amendment of 27.10.2026) counts too;
+    `verified_by` tells the two kinds of check apart.
     """
     if str(record.get(DECIDED_BY) or "").strip() == "auto":
+        return False
+    if is_one(record.get(AI_VERIFIED)):
         return False
     suggested = any(isinstance(name, str) and name.startswith("ai_") and value not in (None, "") for name, value in record.items())
     if not suggested:
         return False
     value, _ = _binary(record.get(VERIFIED), required=False)
     return pd.isna(value) or value != 1
+
+
+def is_one(value) -> bool:
+    """Whether a 0/1 cell holds 1 (an empty or unreadable cell does not)."""
+    parsed, _ = _binary(value, required=False)
+    return not pd.isna(parsed) and parsed == 1
+
+
+def verified_by(record: dict) -> str:
+    """Who settled a sheet row: rule (accepted automatically), human (verified = 1) or ai (ai_verified = 1 only)."""
+    if str(record.get(DECIDED_BY) or "").strip() == "auto":
+        return "rule"
+    if is_one(record.get(VERIFIED)):
+        return "human"
+    return "ai" if is_one(record.get(AI_VERIFIED)) else "human"
 
 
 def _has_labels(record: dict) -> bool:

@@ -20,7 +20,7 @@ import pandas as pd
 
 from digital_media_analysis import llm_annotation
 from digital_media_analysis.agreement import cohen_kappa
-from digital_media_analysis.annotation_sheets import _binary
+from digital_media_analysis.annotation_sheets import unverified, verified_by
 from digital_media_analysis.paths import AGREEMENT_DIR
 
 OUTPUT = AGREEMENT_DIR / "llm_quality.csv"
@@ -48,8 +48,15 @@ def main() -> None:
     keys = {column: str for column in args.key}
     queue = pd.read_csv(args.queue, dtype=keys)
     reviewed = llm_annotation.read_rows(args.reviewed, args.sheet).astype(keys)
-    reviewed = reviewed.assign(checked=[_binary(value, required=False)[0] == 1 for value in reviewed.get("verified", pd.Series(dtype=object))])
-    frame = queue.merge(reviewed[[*args.key, task.target, "checked"]].rename(columns={task.target: "final"}), on=args.key, how="left")
+    # A row counts as checked by a person (verified = 1) or, after the amendment of 27.10.2026, by the AI assistant
+    # in a second pass (ai_verified = 1); checked_by keeps them apart, so the report says who checked.
+    records = reviewed.to_dict("records")
+    reviewed = reviewed.assign(
+        checked=[not unverified(record) and record.get("decided_by") != "auto" for record in records],
+        checked_by=[verified_by(record) for record in records],
+    )
+    frame = queue.merge(reviewed[[*args.key, task.target, "checked", "checked_by"]].rename(columns={task.target: "final"}),
+                        on=args.key, how="left")
     both = frame.dropna(subset=["label_a1", "label_a2"]) if "label_a1" in frame else frame.iloc[0:0]
     kappa = cohen_kappa(both["label_a1"].astype(str).tolist(), both["label_a2"].astype(str).tolist()) if len(both) else None
     checked = frame[frame["decided_by"].eq("human") & frame["checked"].fillna(False).astype(bool)]
@@ -66,7 +73,7 @@ def main() -> None:
         "a1_a2_kappa": kappa.value if kappa else np.nan, "a1_a2_kappa_low": kappa.low if kappa else np.nan,
         "a1_a2_kappa_high": kappa.high if kappa else np.nan,
         "auto_share": frame["decided_by"].eq("auto").mean(), "queued": int(frame["decided_by"].eq("human").sum()),
-        "checked": len(checked), "control_rows": len(control), "control_kept": control.mean() if len(control) else np.nan,
+        "checked": len(checked), "checked_by_ai": int(checked["checked_by"].eq("ai").sum()), "control_rows": len(control), "control_kept": control.mean() if len(control) else np.nan,
         "control_kept_low": low, "control_kept_high": high,
         "queue_changed": 1 - kept[~is_control & checked["suggestion"].notna()].mean() if len(checked) else np.nan,
     }

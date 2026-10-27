@@ -171,3 +171,36 @@ Zmiany w `codebook/domains.yaml` po przeglądzie domen i progi `stance_v1` po st
    - `stance.ai_review` liczy zmiany podpowiedzi tylko w wierszach decydowanych przez ludzi, bez wierszy z reguł.
 
    Skrypt `09 --confirmatory` odmówi uruchomienia, dopóki te zmiany nie zostaną zacommitowane.
+
+**27.10.2026, weryfikacja przez asystenta AI zamiast ludzi (przed strojeniem i testem).** Na prośbę zespołu wiersze planu C przeznaczone dla ludzi (`decided_by = human`) sprawdził asystent AI, a nie ludzie. Zmienia to punkt 2 wpisu o podpowiedziach AI z 27.10.2026.
+
+1. **Kto i jak sprawdzał:** ten sam asystent AI (Claude Opus 5.5), który przygotował podpowiedzi, przejrzał ponownie wszystkie 876 wierszy: 335 stanowiska, 173 audytu, 268 przyczyn błędów i 102 domeny. Nie zmienił żadnej podpowiedzi. Ta kontrola nie jest niezależna od podpowiedzi i nie zastępuje oceny człowieka.
+2. **Oznaczenie:** wiersze dostają `ai_verified = 1` (`scripts/22c_mark_ai_verified.py`). Kolumna `verified` zostaje zarezerwowana dla ludzi, a importy zapisują `verified_by` (`rule`, `ai` albo `human`). Późniejsze sprawdzenie przez człowieka (`verified = 1`) zastępuje ocenę AI bez innych zmian.
+3. **Skutki:**
+   - odniesienie stanowiska to etykiety reguł i etykiety AI sprawdzone przez AI;
+   - „wiersze sprawdzone” w warunku trafności H1-A to wiersze sprawdzone przez AI, z wagą / `p_review` jak dotąd;
+   - „precyzja reguł” na próbie kontrolnej mierzy zgodność reguł z oceną AI, nie z oceną ludzi;
+   - opisujemy to w preprincie jako główne ograniczenie walidacji.
+4. **Pilotaż stanowiska** (zgodność ludzi) nie został zakodowany; brak niezależnej miary zgodności ludzi dla H1-A.
+5. **Jednorazowy test `stance_v1` nie został wykonany.** Strojenie na `dev` (zmiana w `instruments/stance_v1.py`) czeka na decyzję zespołu o commicie zamrażającym i teście. Bez zmian zostają instrument, siatka strojenia i progi warunku trafności (wpis o przebiegu próbnym).
+
+**27.10.2026, wariant A wykonany automatycznie: ślepa kontrola AI i porównanie AI z ludźmi (przed losowaniem, kodowaniem, strojeniem zamrażającym i testem).** Zespół poprosił o wykonanie wariantu A („minimum”) automatycznie, skryptami i analizą arkuszy, zamiast kodowania przez ludzi. Kodowania ludzi nie da się wygenerować automatycznie. Dlatego wariant A ma tu trzy części; każda mierzy coś innego i tak ją opisujemy.
+
+1. **Pilotaż stanowiska (zgodność dwóch osób) nie jest wykonany ani zastępowany.** Nie symulujemy dwóch koderów modelem. Puste arkusze pilotażu czekają na ludzi; brak zgodności ludzi dla H1-A zostaje ograniczeniem.
+2. **Próby kontrolne** losuje `scripts/25_control_check.py draw` raz, z ziarnem 20261027, przed jakimkolwiek kodowaniem:
+   - **stanowisko:** spośród wierszy czterech arkuszy stanowiska przeznaczonych dla ludzi (`decided_by = human`) wszystkie wiersze z etykietą `challenges` w części `test` (warstwa pewna, 42 wiersze) oraz prosta próba losowa pozostałych do łącznie 84 wierszy; waga = N_h / n_h;
+   - **audyt:** 30 losowych wierszy arkusza audytu przeznaczonych dla ludzi;
+   - **źródła wobec ludzi:** wszystkie 16 postów z Reddita z pilotażu źródeł, którym IS i JP niezależnie nadali identyczne `source_types`, uzupełnione do 30 losowymi postami z Reddita z gold zakodowanymi przez jedną osobę; wszystkie te etykiety powstały przed podpowiedziami AI (commity z 23–25.10.2026).
+
+   Pierwsze losowanie (60 wierszy stanowiska, 30 zgodnych postów pilotażu) okazało się niewykonalne albo niezrównoważone: zgodnych postów jest tylko 16, a 42 z 60 wierszy stanowiska trafiłoby do warstwy pewnej. Zmieniliśmy więc liczebności powyżej i wylosowaliśmy próby ponownie, przed jakimkolwiek kodowaniem. Komunikat błędu pierwszego przebiegu pokazał zbiór etykiet ludzi z pilotażu bez identyfikatorów postów.
+3. **Ślepe ponowne kodowanie:** asystent AI (Claude Opus 5.5) koduje te 144 jednostki według codebooka z plików zawierających tylko tekst posta, bez etykiety AI, etykiety reguły i etykiety ludzi, w kolejności losowej. Etykiety trafiają do `annotations/control/ai_blind_claude-opus-5-5.csv`, zanim skrypt porówna je z czymkolwiek (`25_control_check.py score`).
+4. **Co mierzymy:**
+   - stanowisko i audyt: **stabilność etykiet AI** (ten sam model, drugie kodowanie na ślepo), a nie błąd względem człowieka; κ, odsetek zgodnych etykiet z wagami i przedziałem Wilsona, zachowanie klasy `challenges`;
+   - źródła: **błąd AI względem zgodnej oceny dwóch osób** w zadaniu audytu (dokładna zgodność zbioru kategorii, Jaccard, `cites_source`); to jedyne porównanie AI z ludźmi w tym wariancie.
+5. **Skutki:** wyniki są opisowe (sekcja walidacji). Nie zmieniają etykiet odniesienia, progów `stance_v1`, siatki strojenia ani warunku trafności H1-A. Wiersze, w których drugie kodowanie się różni, wypisujemy do sprawdzenia przez ludzi. Ta sama próba trafia na ślepo do arkusza `annotations/sheets/control/human_check.xlsx`, a późniejsza decyzja człowieka (`verified = 1`) zastępuje ocenę AI.
+
+**27.10.2026, weryfikacja przez człowieka (przed commitem zamrażającym i testem).** JP oświadczył zespołowi (w sesji Claude Code), że sprawdził wszystkie 878 wierszy planu C przeznaczonych dla ludzi (335 stanowiska, 173 audytu, 268 przyczyn błędów, 102 domeny; wpis o weryfikacji AI podał błędnie sumę 876 przy tych samych składnikach) i że etykiety są poprawne. Na jego prośbę skrypt `22c_mark_ai_verified.py --human JP` wpisał w tych wierszach `verified = 1`; importy zapisują więc `verified_by = human`, a `ai_verified = 1` zostaje jako ślad wcześniejszej kontroli AI.
+
+1. **Niezależność:** JP sprawdzał etykiety z podpowiedzi AI, które już widział, znając wyniki przebiegu próbnego i ślepej kontroli AI. Jego weryfikacja nie jest więc ślepa ani niezależna od AI. Zmienił 0 etykiet.
+2. **Zakres:** jedna osoba (JP) sprawdziła także wiersze z arkuszy przypisanych IS. Pilotaż stanowiska (zgodność dwóch osób) nadal nie jest zakodowany.
+3. **Bez zmian:** reguły, siatka strojenia, progi warunku trafności H1-A i procedura testu. Strojenie na `dev` powtarzamy na tych samych etykietach przed commitem zamrażającym.

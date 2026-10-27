@@ -325,6 +325,30 @@ STANCE_SHEETS = ["stance_gold_IS", "stance_gold_JP", "stance_enriched_IS", "stan
 QUALITY_GROUPS = {"stance": STANCE_SHEETS, "sources": ["audit_JP"], "errors": ["errors_dev"], "domains": ["domain_review"]}
 
 
+CONTROL_MEASURES = {"control stance kappa": ("stance", "kappa", 2), "control stance agreement": ("stance", "agreement", None),
+                    "control challenges kept": ("stance", "challenges_kept", None),
+                    "control audit exact": ("audit", "exact_set", None),
+                    "control sources exact": ("sources", "exact_set", None),
+                    "control sources pilot exact": ("sources", "exact_set_pilot_consensus", None),
+                    "control sources gold exact": ("sources", "exact_set_gold_single", None)}
+
+
+def control_numbers(numbers: Numbers, control_dir=ANNOTATIONS_DIR / "control") -> None:
+    """Variant A done automatically (amendment of 27.10.2026): stability of the AI labels on a blind second coding
+    (stance, audit) and AI against the human source labels (sources). Missing scores give WAITING."""
+    path = control_dir / "control_scores.csv"
+    scores = pd.read_csv(path) if path.exists() else pd.DataFrame(columns=["task", "measure"])
+    for key, (task, measure, digits) in CONTROL_MEASURES.items():
+        row = scores[scores["task"].eq(task) & scores["measure"].eq(measure)]
+        if row.empty:
+            numbers.put(key, WAITING)
+        elif digits:
+            numbers.put(key, number(row["value"].iloc[0], digits))
+        else:
+            numbers.put(key, f"{percent(row['value'].iloc[0])} {interval(100 * row['low'].iloc[0], 100 * row['high'].iloc[0], 0)}")
+        numbers.put(f"{key} n", count(row["n"].iloc[0]) if len(row) else WAITING)
+
+
 def plan_c_numbers(numbers: Numbers, agreement_dir=AGREEMENT_DIR, hypotheses_dir=HYPOTHESES_DIR,
                    validation_dir=VALIDATION_DIR, labels_dir=LABELS_DIR) -> None:
     """Plan C (docs/plan_c_reguly.md): enriched sample, share decided by rules, rule precision on the blind controls,
@@ -346,6 +370,11 @@ def plan_c_numbers(numbers: Numbers, agreement_dir=AGREEMENT_DIR, hypotheses_dir
     checked = review["checked"].sum()
     numbers.put("plan c ai checked", count(checked) if checked else WAITING)
     numbers.put("plan c ai changed", percent(review["changed"].sum() / checked) if checked else WAITING)
+    # Who checked the AI suggestions (amendment of 27.10.2026): people, the AI assistant, or both.
+    labels = pd.concat([gold_labels, enriched_labels], ignore_index=True)
+    checkers = set(labels.loc[labels["decided_by"].fillna("human").ne("auto"), "verified_by"].dropna()) if "verified_by" in labels else set()
+    numbers.put("plan c checked by", {frozenset({"human"}): "ludzi", frozenset({"ai"}): "asystenta AI"}.get(
+        frozenset(checkers), "ludzi i asystenta AI" if checkers else WAITING))
 
     quality_path = agreement_dir / "llm_quality.csv"
     quality = pd.read_csv(quality_path) if quality_path.exists() else pd.DataFrame(columns=["name"])
@@ -414,7 +443,7 @@ def stance_table(numbers: Numbers) -> str:
          f"$\\alpha$ = {numbers['hone a pilot alpha']}"],
         ["odniesienie: reguła R14 (kontrola na ślepo)", numbers["plan c stance controls"], "--", "--",
          f"zachowane {numbers['plan c stance rule precision']}"],
-        ["odniesienie: podpowiedzi AI sprawdzone przez ludzi", numbers["plan c ai checked"], "--", "--",
+        [f"odniesienie: podpowiedzi AI sprawdzone przez {numbers['plan c checked by']}", numbers["plan c ai checked"], "--", "--",
          f"poprawiono {numbers['plan c ai changed']}"],
         ["\\kod{stance\\_v1}, \\kod{dev} (strojenie)", numbers["hone a dev posts"], numbers["hone a dev challenges f"],
          numbers["hone a dev kappa"], f"macro-F1 {numbers['hone a dev macro f']}"],
@@ -707,6 +736,7 @@ def main() -> None:
     h2_numbers(numbers, links)
     status = h1a_numbers(numbers)
     plan_c_numbers(numbers)
+    control_numbers(numbers)
     (REPORT_DIR / "numbers.tex").write_text(macro_file(numbers, "scripts/18_preprint_package.py"), encoding="utf-8")
     (REPORT_DIR / "tables").mkdir(parents=True, exist_ok=True)
     (REPORT_DIR / "tables" / "preprint_data.tex").write_text(data_table(coded, agreement_table, numbers), encoding="utf-8")
