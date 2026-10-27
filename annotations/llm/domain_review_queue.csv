@@ -1,0 +1,223 @@
+domain,rule,suggestion,suggestion_binary,decided_by,queue_reason,p_review,reason
+who.int,,,,human,brak reguły,1.0,
+cdc.gov,,,,human,brak reguły,1.0,
+tvn24.pl,,,,human,brak reguły,1.0,
+ncbi.nlm.nih.gov,,,,human,brak reguły,1.0,
+nature.com,,,,human,brak reguły,1.0,
+wyborcza.pl,,,,human,brak reguły,1.0,
+ipcc.ch,,,,human,brak reguły,1.0,
+linkinghub.elsevier.com,,,,human,brak reguły,1.0,
+ecdc.europa.eu,,,,human,brak reguły,1.0,
+sciencemag.org,,,,human,brak reguły,1.0,
+worldometers.info,,,,human,brak reguły,1.0,
+nytimes.com,,,,human,brak reguły,1.0,
+biorxiv.org,,,,human,brak reguły,1.0,
+gov.pl,,,,human,brak reguły,1.0,
+sciencedaily.com,,,,human,brak reguły,1.0,
+bbc.com,,,,human,brak reguły,1.0,
+jamanetwork.com,,,,human,brak reguły,1.0,
+thelancet.com,,,,human,brak reguły,1.0,
+zdrowie.wprost.pl,,,,human,brak reguły,1.0,
+businessinsider.com,,,,human,brak reguły,1.0,
+gisanddata.maps.arcgis.com,,,,human,brak reguły,1.0,
+thespinoff.co.nz,,,,human,brak reguły,1.0,
+medonet.pl,,,,human,brak reguły,1.0,
+medrxiv.org,,,,human,brak reguły,1.0,
+newsweek.pl,,,,human,brak reguły,1.0,
+xinhuanet.com,,,,human,brak reguły,1.0,
+biqdata.wyborcza.pl,,,,human,brak reguły,1.0,
+health.gov.au,,,,human,brak reguły,1.0,
+scmp.com,,,,human,brak reguły,1.0,
+sjp.pwn.pl,,,,human,brak reguły,1.0,
+archive.is,,,,human,brak reguły,1.0,
+chinacdc.cn,,,,human,brak reguły,1.0,
+dziennikzachodni.pl,,,,human,brak reguły,1.0,
+elsevier.com,,,,human,brak reguły,1.0,
+imperial.ac.uk,,,,human,brak reguły,1.0,
+link.springer.com,,,,human,brak reguły,1.0,
+dziennikwschodni.pl,,,,human,brak reguły,1.0,
+mp.pl,,,,human,brak reguły,1.0,
+ourworldindata.org,,,,human,brak reguły,1.0,
+time.com,,,,human,brak reguły,1.0,
+wiadomosci.onet.pl,,,,human,brak reguły,1.0,
+apps.who.int,,,,human,brak reguły,1.0,
+doi.org,,,,human,brak reguły,1.0,
+fakty.interia.pl,,,,human,brak reguły,1.0,
+ndb.nal.usda.gov,,,,human,brak reguły,1.0,
+szczepienia.pzh.gov.pl,,,,human,brak reguły,1.0,
+thedoctormedicines.com,,,,human,brak reguły,1.0,
+vox.com,,,,human,brak reguły,1.0,
+academic.oup.com,,,,human,brak reguły,1.0,
+agupubs.onlinelibrary.wiley.com,,,,human,brak reguły,1.0,
+channelnewsasia.com,,,,human,brak reguły,1.0,
+gisaid.org,,,,human,brak reguły,1.0,
+institutefordiseasemodeling.github.io,,,,human,brak reguły,1.0,
+journals.ametsoc.org,,,,human,brak reguły,1.0,
+media.nature.com,,,,human,brak reguły,1.0,
+moh.gov.sg,,,,human,brak reguły,1.0,
+mz.gov.pl,,,,human,brak reguły,1.0,
+naukaoklimacie.pl,,,,human,brak reguły,1.0,
+nejm.org,,,,human,brak reguły,1.0,
+polskieradio24.pl,,,,human,brak reguły,1.0,
+pscp.tv,,,,human,brak reguły,1.0,
+statnews.com,,,,human,brak reguły,1.0,
+theconversation.com,,,,human,brak reguły,1.0,
+translate.google.pl,,,,human,brak reguły,1.0,
+tvp.info,,,,human,brak reguły,1.0,
+cdc.go.kr,,,,human,brak reguły,1.0,
+epicentro.iss.it,,,,human,brak reguły,1.0,
+forbes.com,,,,human,brak reguły,1.0,
+github.com,,,,human,brak reguły,1.0,
+gitlab.com,,,,human,brak reguły,1.0,
+informacje.pan.pl,,,,human,brak reguły,1.0,
+pubs.rsna.org,,,,human,brak reguły,1.0,
+sbs.com.au,,,,human,brak reguły,1.0,
+sciencedirect.com,,,,human,brak reguły,1.0,
+stat.gov.pl,,,,human,brak reguły,1.0,
+termedia.pl,,,,human,brak reguły,1.0,
+vetpol.org.pl,,,,human,brak reguły,1.0,
+weekly.chinacdc.cn,,,,human,brak reguły,1.0,
+aids.gov.pl,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+covid19.who.int,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+euromomo.eu,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+gk24.pl,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+interia.tv,domena poza priorytetem przeglądu: kategoria bez zmian,media,,human,kontrola reguły,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+jstage.jst.go.jp,domena poza priorytetem przeglądu: kategoria bez zmian,scientific,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+kslw.piwet.pulawy.pl,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+nhc.gov.cn,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+nt.interia.pl,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+otouczelnie.pl,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+reuters.com,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+rp.pl,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+aidsmap.com,domena poza priorytetem przeglądu: kategoria bez zmian,media,,human,kontrola reguły,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+bialykruk.pl,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+bmj.com,domena poza priorytetem przeglądu: kategoria bez zmian,scientific,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+clinicaltrials.gov,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+cyberdefence24.pl,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+dtnext.in,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+economist.com,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+euractiv.com,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+euvsdisinfo.eu,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+gbdeclaration.org,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+journals.sagepub.com,domena poza priorytetem przeglądu: kategoria bez zmian,scientific,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+jvi.asm.org,domena poza priorytetem przeglądu: kategoria bez zmian,scientific,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+listlekarzy.pl,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+lpj.pl,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+mdpi.com,domena poza priorytetem przeglądu: kategoria bez zmian,scientific,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+neovetwroc.pl,domena poza priorytetem przeglądu: kategoria bez zmian,other,,human,kontrola reguły,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+pacjent.gov.pl,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+pap.pl,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+policja.pl,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+polskieradio.pl,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+public.wmo.int,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+pulsmedycyny.pl,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+rsb.org.uk,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+spolecznosc.gazetalekarska.pl,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+washingtonpost.com,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+zus.pl,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+bbc.co.uk,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+cbc.ca,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+dailymail.co.uk,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+dw.com,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+fda.gov,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+hackaday.com,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+isap.sejm.gov.pl,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+izba-lekarska.pl,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+lancet.waw.pl,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+nil.org.pl,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+pediatria.mp.pl,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+pubmed.ncbi.nlm.nih.gov,domena poza priorytetem przeglądu: kategoria bez zmian,scientific,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+pulsar.olsztyn.pl,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+sp12.miasto.zgierz.pl,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+svpressa.ru,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+tandfonline.com,domena poza priorytetem przeglądu: kategoria bez zmian,scientific,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+techcrunch.com,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+twitter.com,,,,human,brak reguły,1.0,
+vaccine-safety-training.org,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+www2.mz.gov.pl,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+abc.net.au,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+aging-us.com,domena poza priorytetem przeglądu: kategoria bez zmian,scientific,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+aljazeera.com,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+am-online.org,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+ametsoc.org,domena poza priorytetem przeglądu: kategoria bez zmian,scientific,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+annals.org,domena poza priorytetem przeglądu: kategoria bez zmian,scientific,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+archive.ipcc.ch,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+archive.org,,,,human,brak reguły,1.0,
+business-gazeta.ru,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+cbr.gov.pl,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+climate.be,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+crolove.pl,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+czasopismo.legeartis.org,domena poza priorytetem przeglądu: kategoria bez zmian,scientific,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+data.giss.nasa.gov,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+dbc.wroc.pl,domena poza priorytetem przeglądu: kategoria bez zmian,other,,human,kontrola reguły,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+earthobservatory.nasa.gov,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+ecofys.com,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+environment.newscientist.com,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+essd.copernicus.org,domena poza priorytetem przeglądu: kategoria bez zmian,scientific,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+europarl.europa.eu,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+europeanreview.org,domena poza priorytetem przeglądu: kategoria bez zmian,scientific,,human,kontrola reguły,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+experience.arcgis.com,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,human,kontrola reguły,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+footprintnetwork.org,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+forsal.pl,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+frontiersin.org,domena poza priorytetem przeglądu: kategoria bez zmian,scientific,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+globalcarbonproject.org,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,human,kontrola reguły,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+grida.no,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,human,kontrola reguły,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+hc-sc.gc.ca,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+hdr.undp.org,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+icd.who.int,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,human,kontrola reguły,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+ijidonline.com,domena poza priorytetem przeglądu: kategoria bez zmian,scientific,,human,kontrola reguły,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+img.en25.com,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+inis.iaea.org,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+iopscience.iop.org,domena poza priorytetem przeglądu: kategoria bez zmian,scientific,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+katowice.wiw.gov.pl,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+library.wmo.int,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,human,kontrola reguły,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+livemint.com,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+livescience.com,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+mbari.org,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,human,kontrola reguły,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+merwinski.pl,domena poza priorytetem przeglądu: kategoria bez zmian,other,,human,kontrola reguły,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+metoffice.gov.uk,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,human,kontrola reguły,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+mgzt.ru,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+monbiot.com,,,,human,brak reguły,1.0,
+nationalacademies.org,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+news.theage.com.au,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+oilgdansk.pl,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+optimumpopulation.org,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+oregonlive.com,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+pangea.stanford.edu,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+papierowe.slomki.biz,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+pdsnpsr.ru,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+pka.edu.pl,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+pl.search.yahoo.com,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+plejada.pl,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+pm.microbiology.pl,domena poza priorytetem przeglądu: kategoria bez zmian,scientific,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+prep.edu.pl,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+psychiatriapolska.pl,domena poza priorytetem przeglądu: kategoria bez zmian,scientific,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+pzh.gov.pl,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+radiokp.ru,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+rff.org,domena poza priorytetem przeglądu: kategoria bez zmian,other,,human,kontrola reguły,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+rggi.org,domena poza priorytetem przeglądu: kategoria bez zmian,other,,human,kontrola reguły,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+rjp.pan.pl,domena poza priorytetem przeglądu: kategoria bez zmian,scientific,,human,kontrola reguły,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+rki.de,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+science.org,domena poza priorytetem przeglądu: kategoria bez zmian,scientific,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+science.sciencemag.org,domena poza priorytetem przeglądu: kategoria bez zmian,scientific,,human,kontrola reguły,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+scientificamerican.com,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+sechenov.ru,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+spiegel.de,domena poza priorytetem przeglądu: kategoria bez zmian,media,,human,kontrola reguły,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+studia.net,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+su.se,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+thetimes.co.uk,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+tygodnikprzeglad.pl,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+unenvironment.org,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+unfccc.int,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+upwr.edu.pl,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+usatoday.com,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+vet.umk.pl,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+video.google.com,,,,human,brak reguły,1.0,
+wiadomosci.dziennik.pl,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+wiadomosci.gazeta.pl,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+wmw.urk.edu.pl,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+wprost.pl,domena poza priorytetem przeglądu: kategoria bez zmian,media,,human,kontrola reguły,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+www-esd.lbl.gov,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+wwwold.pzh.gov.pl,domena poza priorytetem przeglądu: kategoria bez zmian,institutional,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+wyborcza.biz,domena poza priorytetem przeglądu: kategoria bez zmian,media,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
+yandex.ru,domena poza priorytetem przeglądu: kategoria bez zmian,other,,auto,,0.15,domena poza priorytetem przeglądu: kategoria bez zmian
