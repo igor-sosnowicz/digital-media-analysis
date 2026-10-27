@@ -1,5 +1,7 @@
 # Co zostało do dokończenia przed preprintem (stan 26.10.2026)
 
+> **Nieaktualne.** Aktualna lista z 27.10.2026: [`instrukcja_dokonczenia.md`](instrukcja_dokonczenia.md).
+
 Notatka do planowania pracy. Szczegóły kroków są w [`h1a_kroki.md`](h1a_kroki.md) (H1-A), [`podpowiedzi_ai.md`](podpowiedzi_ai.md) (weryfikacja etykiet AI) i [`preprint_szkic.md`](preprint_szkic.md) (sekcje i budżet stron). Tekst preprintu piszą członkowie zespołu, bo kurs sprawdza publikację Pangramem i ocenia wkład indywidualnie.
 
 ## 1. Stan obecny w skrócie
