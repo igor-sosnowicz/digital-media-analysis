@@ -28,6 +28,8 @@ Stan na 27.10.2026:
 Arkusze są w `annotations/sheets/llm/review/`. Poprawiacie etykietę i wpisujecie `verified = 1`; wierszy `auto` nie ruszacie. Gotowe pliki kopiujecie do `annotations/sheets/`.
 
 ## Etap 2. Stanowisko (ja; 1–2 godz.)
+Skrót: `make after-verification` wykonuje kroki 1–3 i zatrzymuje się przed commitem zamrażającym.
+
 1. `make import-stance PHASE=pilot`, `PHASE=gold`, `PHASE=enriched`.
 2. `make llm-quality …` dla każdego arkusza.
 3. Strojenie: `make validate-stance SPLIT=dev STANCE_TUNE=1 STANCE_APPLY=1`.
@@ -45,6 +47,8 @@ Arkusze są w `annotations/sheets/llm/review/`. Poprawiacie etykietę i wpisujec
 2. Porównanie z poprzednimi wynikami.
 3. Commit.
 
+Skrót dla etapów 3–5 po jedynym teście: `make finish-results` (etykiety H1, audyt, błędy, testy, tabele, pakiet, kontrola i paczka dla Overleafa).
+
 ## Etap 5. Pakiet (ja)
 `make report-tables` i `make preprint-package`. Nowe makra wypełnią się same; brakujące dane pokazują napis „[czeka na dane]”.
 
@@ -52,6 +56,8 @@ Arkusze są w `annotations/sheets/llm/review/`. Poprawiacie etykietę i wpisujec
 Sekcje, budżet 7,0 strony i tezy: [`preprint_szkic.md`](preprint_szkic.md).
 
 ## Etap 7. Kontrola i oddanie
+`make check-preprint` (z `STRICT=1` przed oddaniem; `ZIP=data/preprint_overleaf.zip` buduje paczkę). Zarzuty i odpowiedzi: [`zarzuty_red_teaming.md`](zarzuty_red_teaming.md).
+
 1. Paczka dla Overleafa i kompilacja.
 2. Kontrola makr.
 3. Lista zarzutów na red teaming.

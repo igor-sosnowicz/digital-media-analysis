@@ -1,4 +1,4 @@
-.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets append-sheets sample-csv import-labels agreement kappa-consensus combine-labels adjudication-sheet import-adjudication tune validate audit-metrics errors compare report-tables preprint-package h2-frame h2-history h1-frame label-h1-v2 h2-links hypotheses-v2 power check-stance import-stance validate-stance label-h1 domain-review hypotheses enriched-stance llm-annotate llm-queue llm-quality rule-queue
+.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets append-sheets sample-csv import-labels agreement kappa-consensus combine-labels adjudication-sheet import-adjudication tune validate audit-metrics errors compare report-tables preprint-package h2-frame h2-history h1-frame label-h1-v2 h2-links hypotheses-v2 power check-stance import-stance validate-stance label-h1 domain-review hypotheses enriched-stance llm-annotate llm-queue llm-quality rule-queue after-verification finish-results check-preprint
 
 ANNOTATORS ?= A B
 PHASE ?= pilot
@@ -118,6 +118,34 @@ rule-queue:
 
 llm-quality:
 	uv run scripts/21_llm_quality.py --name $(NAME) --task $(TASK) --queue "$(QUEUE)" --reviewed "$(REVIEWED)" $(if $(SHEET),--sheet "$(SHEET)") $(if $(KEY),--key $(KEY))
+
+# Stages 2-5 of docs/plan_dokonczenia.md, once people verified the review sheets and copied them to annotations/sheets/.
+# Stage 2 up to tuning; then review git diff of stance_v1.py, commit the freeze and run the one test:
+#   make validate-stance SPLIT=test FROZEN=1
+after-verification:
+	uv run scripts/04b_import_stance_labels.py --phase pilot
+	uv run scripts/04b_import_stance_labels.py --phase gold
+	uv run scripts/04b_import_stance_labels.py --phase enriched
+	for W in stance_gold_IS stance_gold_JP stance_enriched_IS stance_enriched_JP; do \
+		uv run scripts/21_llm_quality.py --name $$W --task stance --queue annotations/llm/$${W}_queue.csv --reviewed annotations/sheets/$$W.xlsx --sheet Reddit || exit 1; done
+	uv run scripts/21_llm_quality.py --name audit_JP --task sources_reddit --queue annotations/llm/audit_JP_queue.csv --reviewed annotations/sheets/audit_JP.xlsx --sheet Reddit
+	uv run scripts/21_llm_quality.py --name errors_dev --task error_cause --queue annotations/llm/errors_dev_queue.csv --reviewed annotations/sheets/errors_dev.xlsx --sheet "Błędy" --key unit_id platform instrument variable
+	uv run scripts/21_llm_quality.py --name domain_review --task domain --queue annotations/llm/domain_review_queue.csv --reviewed annotations/sheets/llm/review/domain_review.csv --key domain
+	uv run --group ml scripts/07b_validate_stance.py --split dev --tune --apply
+
+# Stages 3-5 after the one stance test: H1 labels (only if the gate passed), audit, error causes, confirmatory tests, package.
+finish-results:
+	uv run --group ml scripts/08_label_h1_sample.py
+	uv run scripts/07c_audit_metrics.py
+	uv run scripts/11_error_analysis.py --split dev --import
+	uv run scripts/09_test_hypotheses.py --confirmatory
+	uv run scripts/13_report_tables.py
+	uv run scripts/18_preprint_package.py
+	uv run scripts/24_check_preprint.py --zip data/preprint_overleaf.zip
+
+# Undefined macros, placeholders, unwritten boxes and missing files of the preprint; STRICT=1 fails while any is left.
+check-preprint:
+	uv run scripts/24_check_preprint.py $(if $(STRICT),--strict) $(if $(ZIP),--zip $(ZIP))
 
 label-h1:
 	uv run --group ml scripts/08_label_h1_sample.py
