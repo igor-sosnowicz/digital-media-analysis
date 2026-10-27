@@ -1,0 +1,38 @@
+{
+  "split": "test",
+  "created_utc": "2026-10-27T10:39:37+00:00",
+  "commit": "7ad940948f4b22a234eacee8b9de5f49a38872cb",
+  "uncommitted_stance_code": false,
+  "tuned": true,
+  "thresholds": {
+    "relevance": 0.3,
+    "supports": 0.3,
+    "challenges": 0.7
+  },
+  "model": "MoritzLaurer/mDeBERTa-v3-base-xnli-multilingual-nli-2mil7",
+  "revision": "b5113eb38ab63efdd7f280f8c144ea8b13f978ce",
+  "posts": 216,
+  "reviewed_posts": 171,
+  "sources": {
+    "enriched": 138,
+    "gold": 78
+  },
+  "gate": {
+    "challenges_f1": 0.3270548043202538,
+    "kappa": 0.2351132233715405,
+    "thresholds": {
+      "challenges_f1": 0.5,
+      "kappa": 0.4
+    },
+    "passed": false
+  },
+  "gate_all_rows": {
+    "challenges_f1": 0.3270548043202538,
+    "kappa": 0.26885880077369445,
+    "thresholds": {
+      "challenges_f1": 0.5,
+      "kappa": 0.4
+    },
+    "passed": false
+  }
+}
