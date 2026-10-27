@@ -430,7 +430,7 @@ W `report/preprint.tex`:
 
 ## 8. Kompilacja na Overleafie i limit stron
 
-Lokalnie nie ma LaTeX-a, więc kompilujemy na Overleafie.
+Lokalnie nie ma LaTeX-a, więc kompilujemy na Overleafie. Szczegółowo, z aktualizacją projektu, przeniesieniem tekstu do repozytorium i najczęstszymi błędami: [`overleaf_krok_po_kroku.md`](overleaf_krok_po_kroku.md).
 
 1. Odśwież paczkę (bierze aktualne `preprint.tex`, `numbers.tex` i tylko potrzebne tabele i rysunki):
    ```bash
