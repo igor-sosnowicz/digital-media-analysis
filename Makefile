@@ -1,4 +1,4 @@
-.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets append-sheets sample-csv import-labels agreement kappa-consensus combine-labels adjudication-sheet import-adjudication tune validate audit-metrics errors compare report-tables preprint-package h2-frame h2-history h1-frame label-h1-v2 h2-links hypotheses-v2 power check-stance import-stance validate-stance label-h1 domain-review hypotheses enriched-stance llm-annotate llm-queue llm-quality
+.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets append-sheets sample-csv import-labels agreement kappa-consensus combine-labels adjudication-sheet import-adjudication tune validate audit-metrics errors compare report-tables preprint-package h2-frame h2-history h1-frame label-h1-v2 h2-links hypotheses-v2 power check-stance import-stance validate-stance label-h1 domain-review hypotheses enriched-stance llm-annotate llm-queue llm-quality rule-queue
 
 ANNOTATORS ?= A B
 PHASE ?= pilot
@@ -111,6 +111,10 @@ llm-annotate:
 
 llm-queue:
 	uv run scripts/20_review_queue.py --task $(TASK) --input "$(INPUT)" $(if $(SHEET),--sheet "$(SHEET)") $(if $(KEY),--key $(KEY)) --a1 "$(A1)" --a2 "$(A2)" --output "$(OUTPUT)" $(if $(ONLY_EMPTY),--only-empty)
+
+# Plan C (docs/plan_c_reguly.md): codebook rules label what they decide alone; people code the rest blind.
+rule-queue:
+	uv run scripts/22_rule_queue.py --task $(TASK) --input "$(INPUT)" $(if $(SHEET),--sheet "$(SHEET)") $(if $(KEY),--key $(KEY)) --output "$(OUTPUT)" $(if $(ONLY_EMPTY),--only-empty)
 
 llm-quality:
 	uv run scripts/21_llm_quality.py --name $(NAME) --task $(TASK) --queue "$(QUEUE)" --reviewed "$(REVIEWED)" $(if $(SHEET),--sheet "$(SHEET)") $(if $(KEY),--key $(KEY))

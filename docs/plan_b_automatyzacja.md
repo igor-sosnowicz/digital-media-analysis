@@ -1,5 +1,7 @@
 # Plan B: automatyczne generowanie i weryfikacja annotacji
 
+> **Zastąpiony przez plan C** ([`plan_c_reguly.md`](plan_c_reguly.md), wpis w `hipotezy.md` z 26.10.2026): bez modeli językowych. Ten opis zostaje dla historii; kod planu B jest nieużywany.
+
 Zasady są w preregistracji: [`hipotezy.md`](hipotezy.md), wpis z 26.10.2026. W skrócie:
 - dwóch annotatorów LLM (A1: Claude przez API, A2: lokalny otwarty model) etykietuje te same wiersze na podstawie samego codebooka;
 - etykieta przechodzi automatycznie, gdy oba się zgadzają, są pewne, żadna reguła codebooka nie protestuje, a etykieta nie jest rzadka;

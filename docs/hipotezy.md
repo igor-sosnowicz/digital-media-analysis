@@ -135,3 +135,17 @@ Zmiany w `codebook/domains.yaml` po przeglądzie domen i progi `stance_v1` po st
 9. **Zgodność:** zamiast zgodności dwóch osób raportujemy zgodność A1 z A2 (κ Cohena) i odsetek sugestii zachowanych przez ludzi na próbie kontrolnej, z przedziałem bootstrap (`scripts/21_llm_quality.py`).
 10. **Zadania Fazy B** (audyt H1-B, przyczyny błędów, przegląd domen) przechodzą tę samą procedurę. Etykieta referencyjna audytu to etykieta przyjęta automatycznie albo decyzja człowieka z kolejki; jedna osoba wystarcza. Przegląd domen H2 nie zastępuje człowieka: każda domena, której kategoria by się zmieniła, trafia do kolejki.
 11. Skrypt annotacji (`19`) odmawia uruchomienia, dopóki ten wpis i kod annotacji nie są zacommitowane.
+
+**26.10.2026, plan C zamiast planu B: reguły codebooka i ludzie, bez modeli językowych (przed jakąkolwiek etykietą i testem).** Zespół zrezygnował z annotatorów LLM, bo nie chce korzystać ani z zewnętrznego API, ani z lokalnych modeli językowych. Ten wpis zastępuje punkty 1–4, 9 i 10 wpisu o planie B; punkty 5–8 (próba wzbogacona, łączenie z gold, strojenie, warunek trafności rozstrzygany na wierszach sprawdzonych przez ludzi z wagą / `p_review`) obowiązują dalej. Nadal 0 z 217 wierszy arkuszy stanowiska jest zweryfikowanych, a `stance_v1` jest nienastrojony. Procedura: [`plan_c_reguly.md`](plan_c_reguly.md).
+
+1. **Etykiety z reguł** (`src/digital_media_analysis/rule_annotation.py`) dostaje tylko jednostka, którą reguła codebooka rozstrzyga bez oceny:
+   - stanowisko: post spoza r/science i r/skeptic bez terminu naukowego (`stance.SCIENCE_TERMS`) i bez tematu konsensusu (`topics_v1`) → `not_applicable` (R14);
+   - źródła na Reddicie: brak słów wprowadzających źródło (`SOURCE_CUES`) oraz sam własny obraz lub film bez treści → `none` (R3), albo sam tytuł bez linku i treści → `none` (R13);
+   - opisy zmian w Wikipedii: rewert lub komunikat bota bez słów o źródłach → `none`, `edit_about_sources = 0` (R9); same znaczniki edycji lub sam prefiks sekcji → `none`, z `edit_about_sources = 1` tylko przy znaczniku „źródła/przypisy” (R9, R10);
+   - przyczyny błędów: „pominięte pole url” (v1, post z linkiem), „znacznik edycji”, „skrót WP:” w przypadkach jednoznacznych;
+   - domeny H2: domena spoza priorytetu przeglądu (mniej niż 5 linków i kategoria inna niż `social_blog`, `unclassified`, `unknown`) zachowuje kategorię.
+2. **Wszystko inne kodują ludzie, na ślepo** (bez podpowiedzi), jedna osoba na jednostkę, z `verified = 1`.
+3. **Kontrola reguł:** losowe 15% etykiet z reguł (ziarno 20261026) trafia do ludzi na ślepo; `p_review` = 0,15. Precyzję każdej reguły raportujemy z przedziałem bootstrap (`scripts/21_llm_quality.py`).
+4. **Zgodność ludzi:** 30 postów pilotażu stanowiska (`pilot2`) kodują obie osoby, bez podpowiedzi i bez reguł; to niezależna miara zgodności dla H1-A.
+5. **Ujawnienie:** regułę stanowiska zawęziliśmy do subredditów nienaukowych po porównaniu jej pierwszej wersji z wstępnymi etykietami asystenta AI z tej sesji na postach gold (`dev` i `test`): pierwsza wersja oznaczała jako `not_applicable` także posty z r/science o nauce. Porównanie dotyczyło tylko reguły budowania odniesienia, nie instrumentu `stance_v1`; precyzję reguły mierzy próba kontrolna.
+6. Skrypt `22_rule_queue.py` odmawia uruchomienia, dopóki ten wpis i kod reguł nie są zacommitowane. Kod planu B (`llm_annotation.py`, skrypty 19 i 20) zostaje w repozytorium nieużywany.

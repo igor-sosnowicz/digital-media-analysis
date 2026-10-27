@@ -1,6 +1,6 @@
 # H1-A: od kodowania stanowiska do testu potwierdzającego
 
-> **26.10.2026: plan B.** Etykiety referencyjne stanowiska mogą powstać automatycznie (dwóch annotatorów LLM, kolejka i 15% kontroli przez ludzi), z dodatkową próbą wzbogaconą r/conspiracy. Procedura i polecenia: [`plan_b_automatyzacja.md`](plan_b_automatyzacja.md). Kroki 3–8 poniżej się nie zmieniają.
+> **26.10.2026: plan C** (zastępuje plan B). Reguły codebooka etykietują posty bez odniesienia do nauki, resztę ludzie kodują na ślepo, a 15% etykiet z reguł sprawdzają kontrolnie. Dochodzi próba wzbogacona r/conspiracy. Procedura i polecenia: [`plan_c_reguly.md`](plan_c_reguly.md). Kroki 3–8 poniżej się nie zmieniają.
 
 Instrukcja dokończenia głównego testu hipotezy H1 (preregistracja [`hipotezy.md`](hipotezy.md)). Kod, arkusze i surowe wyniki modelu są gotowe. Brakuje tylko ludzkich etykiet stanowiska. Cały potok przeszedł próbny przebieg na sztucznych etykietach w kopii repozytorium (25.10.2026).
 
