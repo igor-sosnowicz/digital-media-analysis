@@ -1,7 +1,7 @@
 {
   "mode": "confirmatory",
-  "created_utc": "2026-10-27T10:41:45+00:00",
-  "commit": "7ad940948f4b22a234eacee8b9de5f49a38872cb",
+  "created_utc": "2026-10-27T10:45:05+00:00",
+  "commit": "28b0323f9024e450424908ff5d1653b2411f746e",
   "uncommitted_preregistration": false,
   "hypotheses": [
     "h1a",
@@ -48,6 +48,6 @@
   },
   "notes": {
     "H1-A": "nie testowano: stance_v1 nie spełnił warunku trafności na teście (07b), więc H1-A jest niemierzalne tym instrumentem",
-    "H2 unclassified links": 10
+    "H2 unclassified links": 0
   }
 }

@@ -222,6 +222,12 @@ def h2_numbers(numbers: Numbers, links: pd.DataFrame) -> None:
     trends = pd.read_csv(HYPOTHESES_DIR / "confirmatory_trends.csv")
     rows = trends[trends["hypothesis"].eq("H2")].set_index("analysis")
     alternative = links[links["alternative"].eq(1)]
+    # H2 before the domain review (amendment of 27.10.2026): the run that preceded the move into domains.yaml.
+    before_path = HYPOTHESES_DIR / "confirmatory_trends_before_domain_review.csv"
+    before = pd.read_csv(before_path) if before_path.exists() else pd.DataFrame(columns=["hypothesis", "analysis"])
+    before = before[before["hypothesis"].eq("H2") & before["analysis"].eq("primary")]
+    numbers.put("htwo before review or", both(*before[["odds_ratio_per_year", "ci_low", "ci_high"]].iloc[0]) if len(before) else WAITING)
+    numbers.put("htwo before review p", p_value(before["p_one_sided"].iloc[0]) if len(before) else WAITING)
     numbers.put("htwo links", count(len(links)))
     numbers.put("htwo alternative links", count(len(alternative)))
     numbers.put("htwo model links", count(rows.loc["primary", "units"]))
@@ -249,6 +255,8 @@ def h2_numbers(numbers: Numbers, links: pd.DataFrame) -> None:
 
 
 PENDING = r"\resPending"
+# The stance pilot people never coded.
+NOT_CODED = r"\textit{nie zakodowano}"
 # H1-A results that will never exist because stance_v1 failed its validity gate.
 NOT_TESTED = r"\textit{nie testowano}"
 H1_ANALYSES = [("primary", "główna (2005--2018)"), ("sensitivity_period", "2005--2020"), ("only_science", "tylko r/science"),
@@ -266,10 +274,12 @@ def h1a_numbers(numbers: Numbers, validation_dir=VALIDATION_DIR, agreement_dir=A
     agreement_path = agreement_dir / "pilot_stance_agreement.csv"
     rows = pd.read_csv(agreement_path).set_index("variable") if agreement_path.exists() else None
     row = rows.loc["consensus_stance"] if rows is not None and "consensus_stance" in rows.index else None
-    numbers.put("hone a pilot units", count(row["units"]) if row is not None else PENDING)
-    numbers.put("hone a pilot alpha", both(row["alpha"], row["alpha_low"], row["alpha_high"]) if row is not None else PENDING)
-    numbers.put("hone a pilot kappa", both(row["kappa"], row["kappa_low"], row["kappa_high"]) if row is not None else PENDING)
-    numbers.put("hone a pilot agreement", number(row["observed_agreement"]) if row is not None else PENDING)
+    # After the one stance test an uncoded pilot stays uncoded (amendments of 27.10.2026), so say so.
+    uncoded = NOT_CODED if (validation_dir / "stance_test_run.json").exists() else PENDING
+    numbers.put("hone a pilot units", count(row["units"]) if row is not None else uncoded)
+    numbers.put("hone a pilot alpha", both(row["alpha"], row["alpha_low"], row["alpha_high"]) if row is not None else uncoded)
+    numbers.put("hone a pilot kappa", both(row["kappa"], row["kappa_low"], row["kappa_high"]) if row is not None else uncoded)
+    numbers.put("hone a pilot agreement", number(row["observed_agreement"]) if row is not None else uncoded)
     for split in ["dev", "test"]:
         metrics_path, run_path = validation_dir / f"stance_{split}_metrics.csv", validation_dir / f"stance_{split}_run.json"
         table = pd.read_csv(metrics_path) if metrics_path.exists() else pd.DataFrame(columns=["metric", "value"])
