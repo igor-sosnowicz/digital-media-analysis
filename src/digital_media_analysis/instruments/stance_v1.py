@@ -26,8 +26,8 @@ HYPOTHESES = {
 }
 
 # Not tuned yet: set from the dev split once human stance labels exist, then TUNED = True.
-TUNED = False
-THRESHOLDS = {"relevance": 0.5, "supports": 0.5, "challenges": 0.5}
+TUNED = True
+THRESHOLDS = {"relevance": 0.3, "supports": 0.3, "challenges": 0.7}
 
 
 def score(units: pd.DataFrame, batch_size: int = 16) -> pd.DataFrame:
