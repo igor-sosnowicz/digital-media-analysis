@@ -1,0 +1,53 @@
+{
+  "mode": "confirmatory",
+  "created_utc": "2026-10-27T10:41:45+00:00",
+  "commit": "7ad940948f4b22a234eacee8b9de5f49a38872cb",
+  "uncommitted_preregistration": false,
+  "hypotheses": [
+    "h1a",
+    "h1b",
+    "h2"
+  ],
+  "settings": {
+    "alpha": 0.05,
+    "h1": {
+      "period": [
+        2005,
+        2018
+      ],
+      "sensitivity_period": [
+        2005,
+        2020
+      ],
+      "subreddits": [
+        "reddit.com",
+        "science",
+        "skeptic",
+        "conspiracy"
+      ],
+      "posts_per_subreddit_year": 150,
+      "consensus_sources": [
+        "scientific",
+        "institutional"
+      ],
+      "alternative_sources": [
+        "social_blog",
+        "unknown",
+        "personal"
+      ]
+    },
+    "h2": {
+      "period": [
+        2020,
+        2026
+      ],
+      "alternative_categories": [
+        "social_blog"
+      ]
+    }
+  },
+  "notes": {
+    "H1-A": "nie testowano: stance_v1 nie spełnił warunku trafności na teście (07b), więc H1-A jest niemierzalne tym instrumentem",
+    "H2 unclassified links": 10
+  }
+}

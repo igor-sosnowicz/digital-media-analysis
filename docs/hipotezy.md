@@ -204,3 +204,14 @@ Zmiany w `codebook/domains.yaml` po przeglądzie domen i progi `stance_v1` po st
 1. **Niezależność:** JP sprawdzał etykiety z podpowiedzi AI, które już widział, znając wyniki przebiegu próbnego i ślepej kontroli AI. Jego weryfikacja nie jest więc ślepa ani niezależna od AI. Zmienił 0 etykiet.
 2. **Zakres:** jedna osoba (JP) sprawdziła także wiersze z arkuszy przypisanych IS. Pilotaż stanowiska (zgodność dwóch osób) nadal nie jest zakodowany.
 3. **Bez zmian:** reguły, siatka strojenia, progi warunku trafności H1-A i procedura testu. Strojenie na `dev` powtarzamy na tych samych etykietach przed commitem zamrażającym.
+
+**27.10.2026, zmiany domen po przeglądzie (po pierwszym przebiegu potwierdzającym).** Przegląd domen (102 domeny do sprawdzenia, podpowiedzi AI sprawdzone przez JP; 20 wierszy kontrolnych reguł) zmienił kategorię trzech domen. Przenosimy je do `codebook/domains.yaml`, jak przewiduje ten dokument:
+
+- `archive.is` (9 linków) i `archive.org` (1 link): `unclassified` → `unknown`, bo z domeny archiwum nie widać źródła;
+- `rff.org` (1 link): `other` → `institutional` (instytut badawczy Resources for the Future).
+
+Żadna zmiana nie dotyczy `social_blog`, czyli zmiennej H2. Przebieg potwierdzający z commitu `1b17fc0` wykonano jednak przed tą zmianą, więc H2 raportujemy w dwóch wersjach:
+- **przed przeglądem:** pliki `confirmatory_*_before_domain_review.*`;
+- **po przeglądzie:** pliki `confirmatory_*` z przebiegu po tym commicie.
+
+Wersja po przeglądzie jest główna. Zmiana werdyktu między wersjami oznaczałaby wrażliwość wyniku na klasyfikację domen.

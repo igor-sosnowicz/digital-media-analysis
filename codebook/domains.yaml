@@ -53,6 +53,7 @@ scientific:
   - psychiatriapolska.pl
 
 institutional:
+  - rff.org  # research institute (domain review, 27.10.2026)
   - who.int
   - cdc.gov
   - ecdc.europa.eu
@@ -249,11 +250,11 @@ other:
   - prep.edu.pl
   - europarl.europa.eu
   - img.en25.com
-  - rff.org
   - rggi.org
   - unfccc.int
 
-# Archives whose original address cannot be recovered from the link.
-unclassified:
+# Archives whose original address cannot be recovered from the link: the cited source
+# is not identifiable from the domain, so `unknown` (domain review, docs/hipotezy.md, 27.10.2026).
+unknown:
   - archive.org
   - archive.is
