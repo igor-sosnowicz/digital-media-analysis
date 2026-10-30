@@ -52,17 +52,78 @@
 }
 \end{abstract}
 
-\section{Wprowadzenie}
+\section{Introduction}
+
+Public trust in science shapes how societies respond to vaccination programmes, climate
+change and pandemics. Longitudinal survey evidence shows that this trust is not uniformly
+stable: it has declined in some segments of the public, particularly where science has
+become politicised \cite{gauchat2012}. Online platforms have, moreover, changed the
+conditions under which scientific claims circulate, as false information diffuses farther
+and faster than accurate information \cite{vosoughi2018}, and misinformation, once
+encountered, is difficult to correct \cite{lewandowsky2012}. One observable expression of
+these processes is the choice of sources that users invoke to support their claims,
+ranging from scientific publications and public institutions to social media, blogs and
+personal experience. Because online communities preserve their discussions and editing
+histories, such choices can be traced over a decade or more.
+
+This study examines two complementary environments: Reddit, where discussion is organised
+into topical communities that include both science-oriented and conspiracy-oriented
+subreddits, and Polish Wikipedia, whose verifiability policy requires content to be
+attributable to published sources. We test two hypotheses that were preregistered before
+the confirmatory analysis (\kod{docs/hipotezy.md}, commit
+\kod{440b5fb})\footnote{The hypotheses are quoted in our translation of the Polish
+preregistration; its dated amendments are recorded in the same file.}:
+\begin{description}\setlength\itemsep{0pt}
+\item[H1:] \emph{In 2005--2018, online trust in the scientific consensus declines}
+  (tested on Reddit);
+\item[H2:] \emph{In 2020--2026, users refer more often to alternative sources of
+  knowledge} (tested on Wikipedia).
+\end{description}
+The primary test of H1 (H1-A) concerns the share of science-related posts that challenge
+the scientific consensus, whereas its secondary indicators (H1-B) concern the types of
+sources cited. H2 is tested on the share of links added to Wikipedia references that
+point to social media, video platforms, blogs or newsletters.
+
+Testing such hypotheses requires coding the stance and the sources of thousands of texts
+spread over many years, which exceeds the capacity of manual annotation; the measurement
+must therefore be automated. The validity of the conclusions then depends on whether the
+automated instrument measures the construct defined in the codebook, which cannot be
+assumed and has to be established for each application \cite{grimmer2013}. A trend
+estimated with an invalid instrument may reflect changes in its errors, in the
+composition of the sample or in the classification of sources rather than in the
+phenomenon itself. For this reason, the conditions under which each indicator would be
+considered valid were specified before the hypotheses were tested.
+
+The study makes four contributions. First, it provides a codebook of source types and of
+stance towards the scientific consensus, together with a gold standard of units coded or
+verified by human annotators on both platforms. Second, it validates rule-based and
+language-model instruments against this gold standard: each instrument was tuned on a
+development set, frozen and evaluated once on a held-out test set, with validity
+conditions fixed in advance; for H1-A, the stance instrument had to reach an F1 score of
+at least 0.5 for posts challenging the consensus and a Cohen's $\kappa$ of at least 0.4
+\cite{cohen1960}. Third, it shows that a check of the measurement changes the substantive
+reading of H2: the formally significant trend rests largely on links to official
+social-media accounts of the World Health Organization and the Polish Chief Sanitary
+Inspectorate, which are classified as alternative by their domain but not by their
+publisher. Fourth, it reports negative results in full, including the finding that H1-A
+could not be measured with the instrument used, and outlines a preregistered extension of
+the study.
+
+The remainder of the article is organised as follows. Section~2 describes the data and
+the sampling design, Section~3 the codebook and the gold standard, and Section~4 the
+validation of the instruments. Section~5 presents the results for H1 and H2, Section~6
+discusses them together with the limitations of the study, and Section~7 addresses
+reproducibility, data access and the use of AI.
 % 0,6 s., lead badawczy. Tezy: zjawisko; H1 i H2 jak w preregistracji (commit 440b5fb);
 % problem pomiaru automatycznego; wkład: walidacja na gold, preregistrowany test, sprawdzenie
 % pomiaru zmieniające wniosek H2, plan v2. Cytowania: literatura o zaufaniu do nauki (do dobrania).
-\punkty{wprowadzenie, lead badawczy}{
-\item Zjawisko: zaufanie do nauki w przestrzeni online i sięganie po źródła spoza nauki i mediów; dobrać 2--3 pozycje literatury o zaufaniu do nauki i dezinformacji.
-\item H1 i H2 dokładnie w brzmieniu preregistracji (\kod{docs/hipotezy.md}, commit \kod{440b5fb}); H1-A to test główny, H1-B wskaźniki poboczne.
-\item Problem: zjawisko w takiej skali da się zmierzyć tylko automatycznie, więc kluczowe jest, czy instrument AI mierzy to, co opisuje codebook.
-\item Wkład: (1) codebook i gold standard, (2) walidacja instrumentów z jednym testem i warunkiem trafności zapisanym przed testem, (3) sprawdzenie pomiaru, które zmienia odczytanie H2, (4) wyniki negatywne raportowane w pełni.
-\item Zapowiedź struktury artykułu w jednym zdaniu.
-}
+% \punkty{wprowadzenie, lead badawczy}{
+% \item Zjawisko: zaufanie do nauki w przestrzeni online i sięganie po źródła spoza nauki i mediów; dobrać 2--3 pozycje literatury o zaufaniu do nauki i dezinformacji.
+% \item H1 i H2 dokładnie w brzmieniu preregistracji (\kod{docs/hipotezy.md}, commit \kod{440b5fb}); H1-A to test główny, H1-B wskaźniki poboczne.
+% \item Problem: zjawisko w takiej skali da się zmierzyć tylko automatycznie, więc kluczowe jest, czy instrument AI mierzy to, co opisuje codebook.
+% \item Wkład: (1) codebook i gold standard, (2) walidacja instrumentów z jednym testem i warunkiem trafności zapisanym przed testem, (3) sprawdzenie pomiaru, które zmienia odczytanie H2, (4) wyniki negatywne raportowane w pełni.
+% \item Zapowiedź struktury artykułu w jednym zdaniu.
+% }
 
 \section{Dane i próba}
 % 0,8 s., inżynier danych. Tezy: źródła i okresy z config.yaml; rama Reddita (\resRedditFrame postów)
@@ -76,6 +137,68 @@
 \item H2: \resHtwoLinks{} linków dodanych do przypisów, kategoria według domeny (\kod{codebook/domains.yaml}).
 \item Data statement: regulaminy platform, licencja CC BY-SA Wikipedii, brak nazw użytkowników w analizach (RODO), surowe dane poza repozytorium (\kod{data/} w \kod{.gitignore}), posty usunięte poza ramą.
 }
+
+\paragraph{Reddit data collection.}
+Reddit data were obtained from Arctic Shift, an independent secondary archive of the
+platform, through its public application programming interface (endpoint
+\kod{api/posts/search})\footnote{\url{https://arctic-shift.photon-reddit.com}}. A secondary
+archive was used because the official Reddit API does not provide access to the complete
+posting history within a specified time window. Collection was restricted to posts
+(submissions), excluding comments, published in the ten subreddits specified in the
+project configuration: six Polish-language subreddits unrelated to science, r/science,
+r/skeptic and r/conspiracy, and r/reddit.com, which was included only for 2005, before
+topical subreddits existed. The observation period covered 2005--2020 (UTC), and the data
+were retrieved on 18 October 2026. Given the size of the largest communities, the sampling
+frame was constructed using a two-stage design: in each month, one day was drawn at random
+with a fixed seed, common to all subreddits in a given year, and all posts published on
+that day were retrieved. Each post was assigned a weight equal to the inverse of the
+selection probability of its day, i.e.\ the number of days in the month, which allows
+monthly and annual quantities to be estimated with the Horvitz--Thompson estimator
+\cite{horvitz1952}. For subreddit-years in which the drawn days yielded fewer than 100
+posts, the entire year was enumerated with a weight of 1 (38 of the 75 subreddit-years with
+at least one post), so that day sampling would not exclude small communities. Requests
+were paginated by post creation time, with 100 records per page and removal of duplicates
+at page boundaries; when the server was overloaded, requests were retried with
+exponentially increasing delays. The drawn days, the retrieval mode and the number of
+posts in each subreddit-year were recorded in a retrieval log, which ensures that the
+frame can be reproduced. Of the 75,581 retrieved posts, those removed by moderators or by
+platform mechanisms and those deleted by their authors were excluded, as they did not
+form part of the publicly visible discussion; the final frame comprises
+\resRedditFrame{} posts. The unit of analysis is the post, consisting of its title, its
+body text and, where it points outside the thread, its external link.
+
+\paragraph{Wikipedia data collection.}
+Wikipedia data were obtained from the Polish-language edition (\kod{pl.wikipedia.org})
+through the MediaWiki API (\kod{action=query},
+\kod{prop=revisions})\footnote{\url{https://www.mediawiki.org/wiki/API:Revisions}};
+requests identified the project with a \kod{User-Agent} header, in accordance with the
+Wikimedia Foundation's policy. The study covered eight purposively selected articles:
+Szczepionka (Vaccine), Medycyna (Medicine), Lekarz (Physician), Globalne ocieplenie
+(Global warming), Zmiana klimatu (Climate change), COVID-19, Zespół nabytego niedoboru
+odporności (Acquired immunodeficiency syndrome) and Kwas askorbinowy (Ascorbic acid); only
+article pages were collected, excluding talk pages.
+% [Rationale for the article selection: to be written by the authors.]
+Unlike the Reddit data, no random sampling was applied: for each article, the complete
+revision history from 1 January 2016 to the retrieval date (13 October 2026) was
+downloaded, paginated with the API's continuation mechanism. For each revision, the
+timestamp, the edit summary and the full wikitext of the article were recorded; editors'
+usernames and IP addresses were not collected. Including the history from 2016 onwards
+(2,222 revisions in total) provided a reference state for the first revision of the study
+period, which spans 1 January 2020 to 12 October 2026 (UTC) and comprises 1,595
+revisions; the year 2026 is therefore only partially covered. Two units of analysis were
+derived from the same data. The unit of the gold standard and of instrument validation is
+a revision with a non-empty edit summary (\resWikipediaFrame{} revisions), and only the
+summary itself is coded. The unit of analysis for H2 is a link added to a reference,
+defined as a URL that occurs within \kod{<ref>} tags more often than in the preceding
+revision (a multiset difference). Under this definition, moving a reference to another
+part of the article does not constitute an addition, whereas re-inserting a previously
+removed link, including through a revert, is recorded as a separate event (see
+Section~\ref{sec:h2}). Links outside references, such as those in the ``Linki
+zewnętrzne'' (External links) section, were not considered. Wayback Machine addresses
+(\kod{web.archive.org}) were replaced with the address of the archived page, and the
+domain was derived from the host name, without the \kod{www.} prefix. In the study
+period, this procedure identified \resHtwoLinks{} added links to 222 domains, 1,102 of
+which were added to the COVID-19 article, created in February 2020.
 
 \begin{table}[htbp]
 \centering
@@ -161,24 +284,114 @@
 \end{figure}
 
 \section{Wyniki}
-\subsection{H1: zaufanie do konsensusu naukowego}
-% 1,0 s., inżynier analityk. Tezy H1-A (stan: \resHoneAStatus): na \resHoneARelevantPosts postach o nauce udział
-% challenges \resHoneAChallengesShareEarly (2005--2009) i \resHoneAChallengesShareLate (2014--2018); trend
-% \resHoneAChallengesOr (p = \resHoneAChallengesP), supports \resHoneASupportsOr (p = \resHoneASupportsP);
-% wrażliwości: 2005--2020 \resHoneAChallengesTwentyOr, r/science \resHoneAChallengesScienceOr, r/conspiracy
-% \resHoneAChallengesConspiracyOr. Werdykt według docs/h1a_kroki.md (warunek trafności, kierunek, p < 0,05).
-% Tezy H1-B na \resHoneBCiting postach:
-% konsensus \resHoneBConsensusOr (p = \resHoneBConsensusP), alternatywne \resHoneBAlternativeOr
-% (p = \resHoneBAlternativeP); surowe udziały w kierunku hipotezy, ale r/conspiracy rośnie
-% z \resHoneConspiracyShareTwothousandeight do \resHoneConspiracyShareTwothousandeighteen; dekompozycja
-% (eksploracyjna): alternatywne \resHoneBAlternativeShiftTotal, w tym skład \resHoneBAlternativeShiftComposition.
-\punkty{wyniki H1, inżynier analityk}{
-\item H1-A: \resHoneAStatus{} -- trendu nie liczono (preregistrowana reguła); to wynik negatywny co do pomiaru, nie dowód braku zjawiska.
-\item H1-B na \resHoneBCiting{} postach z powołaniem, regresja z efektami stałymi subredditu (Tab.~\ref{tab:h1}): konsensus OR \resHoneBConsensusOr{} ($p$ = \resHoneBConsensusP, tylko opis, bo J $\leq$ 0,2), alternatywne OR \resHoneBAlternativeOr{} ($p$ = \resHoneBAlternativeP) -- brak trendu w kierunku hipotezy.
-\item Wrażliwości bez zmiany wniosku: 2005--2020, tylko r/science, tylko r/conspiracy (Tab.~\ref{tab:h1}).
-\item Surowe udziały idą w kierunku hipotezy (konsensus \resHoneBConsensusShareTwothousandsix{} w 2006, \resHoneBConsensusShareLateLow--\resHoneBConsensusShareLateHigh{} w 2016--2018), ale r/conspiracy rośnie z \resHoneConspiracyShareTwothousandeight{} do \resHoneConspiracyShareTwothousandeighteen{} próby (Rys.~\ref{fig:h1}).
-\item Dekompozycja (eksploracyjna): zmiana udziału alternatywnych \resHoneBAlternativeShiftTotal, w tym skład \resHoneBAlternativeShiftComposition{} i wewnątrz \resHoneBAlternativeShiftWithin.
-}
+% \subsection{H1: zaufanie do konsensusu naukowego}
+% % 1,0 s., inżynier analityk. Tezy H1-A (stan: \resHoneAStatus): na \resHoneARelevantPosts postach o nauce udział
+% % challenges \resHoneAChallengesShareEarly (2005--2009) i \resHoneAChallengesShareLate (2014--2018); trend
+% % \resHoneAChallengesOr (p = \resHoneAChallengesP), supports \resHoneASupportsOr (p = \resHoneASupportsP);
+% % wrażliwości: 2005--2020 \resHoneAChallengesTwentyOr, r/science \resHoneAChallengesScienceOr, r/conspiracy
+% % \resHoneAChallengesConspiracyOr. Werdykt według docs/h1a_kroki.md (warunek trafności, kierunek, p < 0,05).
+% % Tezy H1-B na \resHoneBCiting postach:
+% % konsensus \resHoneBConsensusOr (p = \resHoneBConsensusP), alternatywne \resHoneBAlternativeOr
+% % (p = \resHoneBAlternativeP); surowe udziały w kierunku hipotezy, ale r/conspiracy rośnie
+% % z \resHoneConspiracyShareTwothousandeight do \resHoneConspiracyShareTwothousandeighteen; dekompozycja
+% % (eksploracyjna): alternatywne \resHoneBAlternativeShiftTotal, w tym skład \resHoneBAlternativeShiftComposition.
+% \punkty{wyniki H1, inżynier analityk}{
+% \item H1-A: \resHoneAStatus{} -- trendu nie liczono (preregistrowana reguła); to wynik negatywny co do pomiaru, nie dowód braku zjawiska.
+% \item H1-B na \resHoneBCiting{} postach z powołaniem, regresja z efektami stałymi subredditu (Tab.~\ref{tab:h1}): konsensus OR \resHoneBConsensusOr{} ($p$ = \resHoneBConsensusP, tylko opis, bo J $\leq$ 0,2), alternatywne OR \resHoneBAlternativeOr{} ($p$ = \resHoneBAlternativeP) -- brak trendu w kierunku hipotezy.
+% \item Wrażliwości bez zmiany wniosku: 2005--2020, tylko r/science, tylko r/conspiracy (Tab.~\ref{tab:h1}).
+% \item Surowe udziały idą w kierunku hipotezy (konsensus \resHoneBConsensusShareTwothousandsix{} w 2006, \resHoneBConsensusShareLateLow--\resHoneBConsensusShareLateHigh{} w 2016--2018), ale r/conspiracy rośnie z \resHoneConspiracyShareTwothousandeight{} do \resHoneConspiracyShareTwothousandeighteen{} próby (Rys.~\ref{fig:h1}).
+% \item Dekompozycja (eksploracyjna): zmiana udziału alternatywnych \resHoneBAlternativeShiftTotal, w tym skład \resHoneBAlternativeShiftComposition{} i wewnątrz \resHoneBAlternativeShiftWithin.
+% }
+
+\subsection{H1: Trust in the Scientific Consensus}
+
+% Paragraph 1: model (can optionally be moved to the beginning of Section 5, jointly for H1 and H2).
+Trends were estimated using weighted logistic regression, where the dependent variable
+was a binary indicator at the post level, and the predictors included year, measured from
+the beginning of the study period, together with subreddit fixed effects. Consequently,
+the annual odds ratio (OR) reflects change within subreddits rather than changes in sample
+composition. Sampling weights (Section~2) were rescaled to have a mean of 1, and standard
+errors were clustered by sampled day, which served as the sampling unit (534 clusters in
+the main H1-B analysis). In accordance with the preregistration, a one-sided test in the
+direction of the hypothesis ($\alpha = 0.05$) and 95\,\% confidence intervals were applied,
+while secondary indicators were reported without adjustment for multiple testing.
+% optional:
+An OR below 1 indicates a decline, whereas a one-sided $p$-value close to 1 indicates an
+estimate in the direction opposite to the hypothesis. Annual proportions presented in
+Fig.~\ref{fig:h1} are weighted and shown with 95\,\% bootstrap confidence intervals.
+
+% Paragraph 2: H1-A and fallback rule.
+The primary H1 test (H1-A) was not conducted. The \kod{stance\_v1} instrument failed
+to meet the preregistered validity criterion: on the test set, it achieved an F1 score
+for the \kod{challenges} class of \resHoneATestChallengesF{} at a threshold of 0.5 and
+$\kappa$ = \resHoneATestKappa{} at a threshold of 0.4 (Section~4, Table~\ref{tab:stance}).
+According to the decision rule specified prior to trend testing, H1-A was therefore not
+estimated (Table~\ref{tab:h1}). This constitutes a negative result regarding measurement
+validity and neither supports nor refutes H1. For such a contingency, the preregistration
+specified a fallback test: the consensus-source indicator from H1-B was designated as the
+confirmatory test of H1.
+
+% Paragraph 3: H1-B, both indicators.
+The H1-B indicators were estimated on \resHoneBCiting{} source-citing posts from
+2005--2018, identified using the GLiNER instrument validated in Section~4. The
+consensus-source indicator did not satisfy the validity criterion: the Youden index
+$J$ = sensitivity + specificity $-$ 1 was \resAuditConsensusJ{} (0.199 before rounding),
+and therefore did not exceed the preregistered threshold of 0.2.
+% optional:
+The instrument's sensitivity for this category was only 0.35.
+Accordingly, this indicator is reported descriptively only, and the fallback testing
+rule cannot be applied; as a consequence, H1 lacks a valid confirmatory test.
+Descriptively, the share of consensus sources does not exhibit a decline within
+subreddits (OR = \resHoneBConsensusOr, $p$ = \resHoneBConsensusP). The only valid
+H1-B indicator is alternative sources ($J$ = \resAuditAlternativeJ), whose share
+also shows no increase (OR = \resHoneBAlternativeOr,
+$p$ = \resHoneBAlternativeP; Table~\ref{tab:h1}).
+% optional:
+The upper confidence-limit bound is inconsistent with an increase in odds greater
+than approximately 1\,\% per year; however, without an equivalence test, this does
+not constitute evidence for the absence of change.
+
+% Paragraph 4: sensitivity analyses and Rogan--Gladen correction.
+None of the three preregistered sensitivity analyses (2005--2020 period, only r/science
+during 2006--2018, and only r/conspiracy during 2008--2018) indicate a trend in the
+hypothesized direction; the smallest one-sided $p$-value is
+\resHoneBConsensusConspiracyP{} (Table~\ref{tab:h1}). Over the 2005--2020 period,
+the share of consensus sources within subreddits actually increases
+(OR = \resHoneBConsensusTwentyOr), implying change in the direction opposite to the
+hypothesis; however, because the validity criterion was not met, this result remains
+purely descriptive.
+% optional:
+Within r/conspiracy alone, confidence intervals are wide, reflecting the smaller number
+of posts.
+The preregistered Rogan--Gladen correction for annual proportions adjusts proportions
+linearly for measurement error. Consequently, for alternative sources it lowers the
+estimated level without altering the temporal pattern, whereas for consensus sources
+it yields uninformative intervals because the correction divides by a $J$ value close
+to 0.2.
+
+% Paragraph 5: raw proportions, sample composition, and decomposition (exploratory).
+Nevertheless, the raw weighted proportions in the full sample change in the
+hypothesized direction (Fig.~\ref{fig:h1}): the share of consensus sources declines
+from \resHoneBConsensusShareTwothousandsix{} in 2006 to
+\resHoneBConsensusShareLateLow--\resHoneBConsensusShareLateHigh{} during 2016--2018,
+whereas the share of alternative sources increases from approximately
+\resHoneBAlternativeShareTwothousandfive{} during 2005--2007 to
+\resHoneBAlternativeShareLateHigh{} during 2016--2018. The year 2005 was excluded
+for consensus sources because the sample for that year consisted exclusively of the
+general subreddit r/reddit.com. At the same time, sample composition changes:
+the weighted share of r/conspiracy among source-citing posts increases from
+\resHoneConspiracyShareTwothousandeight{} in 2008 to
+\resHoneConspiracyShareTwothousandeighteen{} in 2018, and in this subreddit
+citations to consensus sources are less frequent, whereas citations to alternative
+sources are more frequent, than in r/science. An exploratory decomposition
+\cite{kitagawa1955} of the change in the share of alternative sources between
+2005--2009 and 2014--2018 (\resHoneBAlternativeShiftTotal) attributes
+\resHoneBAlternativeShiftComposition{} to compositional change and only
+\resHoneBAlternativeShiftWithin{} to change within subreddits.
+In summary, H1 lacks a valid confirmatory test, the valid secondary indicator does
+not support the hypothesis, and the change observed in the overall sample is explained
+by shifts in community composition rather than by transformations occurring within
+communities themselves.
 
 \begin{figure}[htbp]
 \centering
@@ -195,6 +408,7 @@
 \end{table}
 
 \subsection{H2: źródła alternatywne w Wikipedii}
+\label{sec:h2}
 % 0,8 s., inżynier analityk. Tezy: test preregistrowany \resHtwoOr (p = \resHtwoP),
 % \resHtwoAlternativeLinks{} z \resHtwoLinks{} linków; wrażliwości nieistotne (\resHtwoWithoutCovidP,
 % permutacja \resHtwoPermutationP); \resHtwoOfficialLinks{} linków to konta WHO i GIS, link WHO
@@ -242,18 +456,24 @@
 \item Repozytorium \kod{digital-media-analysis}; polecenia \kod{make} od danych do pakietu wyników; preregistracja i jej datowane zmiany w \kod{docs/hipotezy.md}; commit zamrażający \kod{7ad9409} przed testem stanowiska.
 \item Instrumenty pomiaru to lokalne modele otwarte (GLiNER, mDeBERTa NLI) z przypiętymi rewizjami.
 \item Użycie AI (Claude, asystent kodu), zgodnie z faktami: kod i testy; etykiety wstępne źródeł JP (zatwierdzone przez JP); podpowiedzi etykiet stanowiska, audytu, przyczyn błędów i domen, sprawdzone przez AI i następnie przez JP; ślepa kontrola etykiet; przebieg próbny; pakiet wyników i punkty do tekstu.
-\item Tekst artykułu napisali autorzy.
+\item Tekst: fragmenty oparte na propozycjach asystenta AI (wstęp, opis pozyskania danych, wyniki H1) przeredagować własnymi słowami albo ujawnić tutaj; zdanie „tekst artykułu napisali autorzy'' zostawić tylko wtedy, gdy to prawda.
 }
 
 \begin{thebibliography}{99}
 \bibitem{cohen1960} J.~Cohen. A coefficient of agreement for nominal scales. \textit{Educational and Psychological Measurement}, 20(1):37--46, 1960.
 \bibitem{feinstein1990} A.~R. Feinstein, D.~V. Cicchetti. High agreement but low kappa: I.~The problems of two paradoxes. \textit{Journal of Clinical Epidemiology}, 43(6):543--549, 1990.
 \bibitem{firth1993} D.~Firth. Bias reduction of maximum likelihood estimates. \textit{Biometrika}, 80(1):27--38, 1993.
+\bibitem{gauchat2012} G.~Gauchat. Politicization of science in the public sphere: A study of public trust in the United States, 1974 to 2010. \textit{American Sociological Review}, 77(2):167--187, 2012.
+\bibitem{grimmer2013} J.~Grimmer, B.~M. Stewart. Text as data: The promise and pitfalls of automatic content analysis methods for political texts. \textit{Political Analysis}, 21(3):267--297, 2013.
+\bibitem{horvitz1952} D.~G. Horvitz, D.~J. Thompson. A generalization of sampling without replacement from a finite universe. \textit{Journal of the American Statistical Association}, 47(260):663--685, 1952.
 \bibitem{kendall1938} M.~G. Kendall. A new measure of rank correlation. \textit{Biometrika}, 30(1/2):81--93, 1938.
+\bibitem{kitagawa1955} E.~M. Kitagawa. Components of a difference between two rates. \textit{Journal of the American Statistical Association}, 50(272):1168--1194, 1955.
 \bibitem{krippendorff2004} K.~Krippendorff. \textit{Content Analysis: An Introduction to Its Methodology}. Wyd.~2. Sage, 2004.
 \bibitem{laurer2024} M.~Laurer, W.~van Atteveldt, A.~Casas, K.~Welbers. Less annotating, more classifying: Addressing the data scarcity issue of supervised machine learning with deep transfer learning and BERT-NLI. \textit{Political Analysis}, 32(1):84--100, 2024.
+\bibitem{lewandowsky2012} S.~Lewandowsky, U.~K.~H. Ecker, C.~M. Seifert, N.~Schwarz, J.~Cook. Misinformation and its correction: Continued influence and successful debiasing. \textit{Psychological Science in the Public Interest}, 13(3):106--131, 2012.
 \bibitem{mcnemar1947} Q.~McNemar. Note on the sampling error of the difference between correlated proportions or percentages. \textit{Psychometrika}, 12(2):153--157, 1947.
 \bibitem{passonneau2006} R.~Passonneau. Measuring agreement on set-valued items (MASI) for semantic and pragmatic annotation. W: \textit{Proceedings of LREC 2006}, 2006.
+\bibitem{vosoughi2018} S.~Vosoughi, D.~Roy, S.~Aral. The spread of true and false news online. \textit{Science}, 359(6380):1146--1151, 2018.
 \bibitem{zaratiana2024} U.~Zaratiana, N.~Tomeh, P.~Holat, T.~Charnois. GLiNER: Generalist model for named entity recognition using bidirectional transformer. W: \textit{Proceedings of NAACL 2024}, 2024.
 \end{thebibliography}
 
