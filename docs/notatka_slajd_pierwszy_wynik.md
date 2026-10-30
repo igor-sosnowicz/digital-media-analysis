@@ -39,7 +39,7 @@ Unikamy w ramce sformułowań „widać wzrost” i podobnych. Dla H1.1 nie ma �
 ## Zastrzeżenia (drobnym drukiem albo w notatkach prelegenta)
 
 - **Zgodność annotatorów w pilotażu jest niska według α** (`cites_source` na Reddicie: α = −0,03 przy zgodności 91 %). To paradoks częstości: prawie każdy post z linkiem cytuje źródło. Typy źródeł: MASI α = 0,34. Druga runda pilotażu (`pilot2`) jest w toku.
-- **Gold standard częściowo kodowany przez jedną osobę.** Przy analizie błędów 20 jednostek części `dev` ma etykiety prawdopodobnie niezgodne z codebookiem. Weryfikacja trwa, a wynik testu instrumentów się nie zmienia.
+- **Każda jednostka gold ma etykietę jednej osoby** (IS albo JP), więc zgodność dwóch osób jest tylko w pilotażu. Przy analizie błędów 20 jednostek części `dev` ma etykiety prawdopodobnie niezgodne z codebookiem. JP zweryfikował przyczyny błędów, a wynik testu instrumentów się nie zmienia.
 - **Pomiar w Wikipedii jest słaby** (F1 0,26). Dlatego H2 mierzymy po domenach linków, a nie instrumentem.
 - **Korelacja to nie przyczynowość.** Brak trendu wewnątrz subredditów nie wyklucza zmian w populacji użytkowników. Mówi tylko, że wzrost w całej próbie to efekt składu.
 - **Ujawnienie AI:** podpowiedzi etykiet (stanowisko, audyt, domeny) przygotował asystent AI. Sprawdził je ponownie, a potem wszystkie zatwierdził JP, nie zmieniając żadnej. Przebieg próbny na etykietach AI odbył się przed prawdziwym testem i jest ujawniony w preregistracji.

@@ -237,9 +237,9 @@ Dalej: H1-A (stanowisko wobec konsensusu) to test główny, a H1-B (rodzaj źró
 **A2. Reguły rozstrzygające.** R2, R3, R9, R10 i R14, każda jednym zdaniem (treść w `codebook/codebook.md`). Do jednej z nich dodajcie przykład z danych, sparafrazowany.
 
 **A3. Procedura.**
-- Dwie osoby kodowały pilotaż niezależnie.
-- Druga runda przy α < 0,667, `\resPilotDisputes` sporów trafiło do arbitra.
-- Gold podzielony na `dev` i `test`, część gold kodowana przez jedną osobę.
+- Obie osoby kodowały pilotaż, nie widząc swoich etykiet (JP na zatwierdzonej preannotacji AI).
+- α < 0,667 uruchomiło drugą rundę (`pilot2`), ale zakodował ją tylko JP, więc nie dała zgodności. `\resPilotDisputes` spornych jednostek czeka na arbitra: arbitrażu nie przeprowadzono.
+- Gold podzielony na `dev` i `test`. Każdą jednostkę gold zakodowała jedna osoba (IS albo JP), więc zgodność dwóch osób jest tylko w pilotażu.
 
 **A4. Zgodność.**
 - `cites_source` na Reddicie: zgodność `\resPilotRedditCitesAgreement` przy α = `\resPilotRedditCitesAlpha`. Wyjaśnić paradoks rozpowszechnienia: prawie wszystkie posty mają powołanie, więc α spada mimo wysokiej zgodności (`\cite{feinstein1990,krippendorff2004}`).
@@ -257,7 +257,8 @@ Dalej: H1-A (stanowisko wobec konsensusu) to test główny, a H1-B (rodzaj źró
 **Częste błędy:**
 - przedstawianie niskiej α jako złej jakości bez wyjaśnienia paradoksu;
 - przemilczenie 0 % poprawek;
-- „gold standard kodowany przez dwie osoby”, bo nie w całości.
+- „gold standard kodowany przez dwie osoby”, bo każdą jednostkę gold kodowała jedna osoba;
+- „spory rozstrzygnął arbiter”, bo arbitrażu nie przeprowadzono.
 
 ---
 
@@ -378,7 +379,7 @@ To najważniejsza sekcja dla kryterium kursu („sprawdzenie wiarygodności inst
 - brak pilotażu stanowiska dwóch osób;
 - etykiety JP w gold wspomagane AI;
 - przebieg próbny przed testem;
-- część gold kodowana przez jedną osobę;
+- każda jednostka gold kodowana przez jedną osobę (zgodność tylko w pilotażu); druga runda pilotażu i arbitraż niewykonane;
 - korelacja w czasie to nie przyczynowość;
 - zmiany populacji w obrębie subredditów;
 - tylko 8 stron Wikipedii i 10 linków alternatywnych.
