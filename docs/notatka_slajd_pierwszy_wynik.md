@@ -62,4 +62,4 @@ Unikamy w ramce sformułowań „widać wzrost” i podobnych. Dla H1.1 nie ma �
 
 - `report/figures/preprint_agreement.png`: zgodność w pilotażu i paradoks częstości.
 - `report/figures/preprint_instruments.png`: v1, zero-shot i GLiNER. Test McNemara na Reddicie: GLiNER lepszy od v1 (66:6, p < 0,001).
-- Analizy wrażliwości dla H2: bez COVID-19 OR 1,39, p = 0,105; bez 2020 r. OR 1,36, p = 0,138; z korektą Firtha OR 1,43, p = 0,006.
+- Analizy wrażliwości dla H2: bez COVID-19 OR 1,39, p = 0,105; bez 2020 r. OR 1,36, p = 0,138; eksploracyjnie z korektą Firtha OR 1,43 [0,96; 2,16], p = 0,040 (po poprawce testu z 30.10.2026; wcześniej podawano p = 0,006).

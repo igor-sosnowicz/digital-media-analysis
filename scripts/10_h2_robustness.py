@@ -17,11 +17,19 @@ H2 period). Analyses:
   owner of the post instead of the platform, for the accounts read by hand in
   OFFICIAL_ACCOUNTS (WHO on Periscope, the Polish Chief Sanitary Inspectorate on
   Twitter), whose posts are institutional sources, not alternative ones.
-Writes annotations/hypotheses/exploratory_h2_robustness.csv and exploratory_h2_leave_one_out.csv.
+- permutation: the years of the revisions shuffled within each page (2000 times),
+  with the preregistered model's year coefficient as the statistic;
+- exact conditional test by owner: when the alternative links left by owner are
+  all on one page, the share of equally likely sets of that page's links whose
+  years sum to at least theirs.
+Writes annotations/hypotheses/exploratory_h2_robustness.csv, exploratory_h2_leave_one_out.csv,
+exploratory_h2_permutation.json and exploratory_h2_exact_by_owner.json.
 """
 
+import json
 import warnings
 
+import numpy as np
 import pandas as pd
 
 from digital_media_analysis import hypotheses, robustness, wikipedia_refs
@@ -40,6 +48,10 @@ def account(url: str) -> str:
     """First path segment of a link, lower-case (the account on most platforms)."""
     path = url.split("://", 1)[-1].split("/", 1)
     return path[1].split("/", 1)[0].lower() if len(path) > 1 else ""
+
+
+def write_json(name: str, payload: dict) -> None:
+    (HYPOTHESES_DIR / name).write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 def row(analysis: str, definition: str, model: str, unit: str, result: dict) -> dict:
@@ -121,6 +133,30 @@ def main() -> None:
     HYPOTHESES_DIR.mkdir(parents=True, exist_ok=True)
     table.to_csv(HYPOTHESES_DIR / "exploratory_h2_robustness.csv", index=False, encoding="utf-8")
     influence.to_csv(HYPOTHESES_DIR / "exploratory_h2_leave_one_out.csv", index=False, encoding="utf-8")
+
+    with_events = links[links.groupby("page")["alternative"].transform("max").eq(1)]
+    permutation = robustness.permutation_trend(with_events, lambda frame: preregistered(frame)["beta"], "revision", "page")
+    write_json("exploratory_h2_permutation.json", {
+        "analysis": "exploratory, not preregistered", "hypothesis": "H2",
+        "test": f"permutation of years between revisions within page, {permutation['permutations']} permutations, "
+                f"seed {permutation['seed']}, statistic: FE logistic year coefficient on pages with any alternative link",
+        "observed_beta": round(permutation["observed_beta"], 3),
+        "observed_odds_ratio": round(float(np.exp(permutation["observed_beta"])), 2),
+        "p_one_sided": round(permutation["p_one_sided"], 4),
+    })
+    remaining = links[links["by_owner"].eq(1)]
+    if remaining["page"].nunique() == 1:
+        page_years = links.loc[links["page"].eq(remaining["page"].iloc[0]), "year"]
+        write_json("exploratory_h2_exact_by_owner.json", {
+            "analysis": "exploratory, not preregistered", "hypothesis": "H2",
+            "definition": "alternative by owner of the post (WHO and GIS posts institutional)",
+            "test": f"exact conditional: all remaining alternative links are on {remaining['page'].iloc[0]}; probability that "
+                    f"{len(remaining)} links drawn at random from the page's links in the H2 period have a year sum at least as large as observed",
+            "links_on_page": len(page_years),
+            "observed_years": sorted(int(year) for year in remaining["year"]),
+            "p_one_sided": round(robustness.exact_year_sum_test(page_years, remaining["year"]), 4),
+        })
+    print(f"permutation p = {permutation['p_one_sided']:.4f}")
     for item in table.itertuples(index=False):
         print(f"{item.analysis:<58} {item.measure} {item.ratio_per_year:.2f} [{item.ci_low:.2f}, {item.ci_high:.2f}] "
               f"p={item.p_one_sided:.3f} n={item.units} events={item.events} {item.note}")

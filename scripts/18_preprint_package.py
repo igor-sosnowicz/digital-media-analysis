@@ -252,6 +252,20 @@ def h2_numbers(numbers: Numbers, links: pd.DataFrame) -> None:
         numbers.put(f"htwo {key} events", count(row["events"]))
     exact = json.loads((HYPOTHESES_DIR / "exploratory_h2_exact_by_owner.json").read_text(encoding="utf-8"))
     numbers.put("htwo exact p", p_value(exact["p_one_sided"]))
+    # The preregistered descriptive indicator of H2 (scripts/09c_h2_descriptive_gold.py): gold edit summaries citing
+    # an alternative, unknown or personal source, over the whole period and the range of the yearly shares.
+    gold_path = HYPOTHESES_DIR / "h2_descriptive_gold.csv"
+    shares = pd.read_csv(gold_path, dtype={"year": str}) if gold_path.exists() else pd.DataFrame(columns=["year"])
+    pooled, yearly = shares[shares["year"].eq("all")], shares[shares["year"].ne("all")]
+    if pooled.empty:
+        for key in ["htwo gold share", "htwo gold units", "htwo gold share min", "htwo gold share max"]:
+            numbers.put(key, WAITING)
+        return
+    row = pooled.iloc[0]
+    numbers.put("htwo gold share", f"{percent(row['share'])} {interval(100 * row['low'], 100 * row['high'], 0)}")
+    numbers.put("htwo gold units", count(row["units"]))
+    numbers.put("htwo gold share min", percent(yearly["share"].min()))
+    numbers.put("htwo gold share max", percent(yearly["share"].max()))
 
 
 PENDING = r"\resPending"
@@ -531,7 +545,8 @@ def h2_table() -> str:
     permutation = json.loads((HYPOTHESES_DIR / "exploratory_h2_permutation.json").read_text(encoding="utf-8"))
     exact = json.loads((HYPOTHESES_DIR / "exploratory_h2_exact_by_owner.json").read_text(encoding="utf-8"))
     rows = []
-    for analysis, label in [("primary", "test główny"), ("without_covid19", "bez strony COVID-19"), ("without_2020", "bez roku 2020")]:
+    for analysis, label in [("primary", "test główny"), ("without_covid19", "bez strony COVID-19"), ("without_2020", "bez roku 2020"),
+                            ("classified_only", "tylko domeny sklasyfikowane")]:
         row = rows_h2.loc[analysis]
         rows.append(["preregistrowane", label, both(row["odds_ratio_per_year"], row["ci_low"], row["ci_high"]),
                      p_value(row["p_one_sided"]), count(row["positives"])])
@@ -543,7 +558,7 @@ def h2_table() -> str:
         rows.append(["eksploracyjne", label, both(row["ratio_per_year"], row["ci_low"], row["ci_high"]), p_value(row["p_one_sided"]),
                      count(row["events"])])
     rows.append(["eksploracyjne", "według właściciela, test dokładny", "--", p_value(exact["p_one_sided"]), "2"])
-    return tabular(["", "Analiza", "OR/rok [95\\% CI]", "$p$ jednostr.", "Zdarzenia"], rows, "lllrr", groups=[3])
+    return tabular(["", "Analiza", "OR/rok [95\\% CI]", "$p$ jednostr.", "Zdarzenia"], rows, "lllrr", groups=[4])
 
 
 def _axes(axis, grid: str = "x") -> None:
@@ -635,22 +650,26 @@ def _percent_formatter():
 
 
 def figure_h1(frame: pd.DataFrame, path, hypotheses_dir=HYPOTHESES_DIR) -> None:
-    """H1: yearly share of posts challenging the consensus (H1-A; a placeholder until its pipeline has run),
-    yearly shares of consensus and alternative sources (H1-B) and the subreddit make-up of the citing posts."""
+    """H1: yearly shares of consensus and alternative sources (H1-B) and the subreddit make-up of the citing posts,
+    in one row; the share of posts challenging the consensus (H1-A) comes first, in a 2 x 2 grid, only when H1-A
+    was measured (stance_v1 failed its validity gate, so its trend does not exist)."""
     import matplotlib.pyplot as plt
 
     yearly = pd.read_csv(hypotheses_dir / "confirmatory_yearly.csv")
     yearly = yearly[yearly["group"].eq("all")]
-    figure, grid = plt.subplots(2, 2, figsize=(11, 6.2), facecolor=SURFACE)
+    panels = [("H1-B", "consensus", "H1-B: źródła konsensusu (wśród postów z powołaniem)"),
+              ("H1-B", "alternative", "H1-B: źródła alternatywne (wśród postów z powołaniem)")]
+    if yearly["hypothesis"].eq("H1-A").any():
+        panels.insert(0, ("H1-A", "challenges", "H1-A: posty podważające konsensus (wśród postów o nauce)"))
+        figure, grid = plt.subplots(2, 2, figsize=(11, 6.2), facecolor=SURFACE)
+    else:
+        figure, grid = plt.subplots(1, 3, figsize=(13, 3.9), facecolor=SURFACE)
     axes = grid.flatten()
     formatter = _percent_formatter()
-    panels = [("H1-A", "challenges", "H1-A: posty podważające konsensus (wśród postów o nauce)"),
-              ("H1-B", "consensus", "H1-B: źródła konsensusu (wśród postów z powołaniem)"),
-              ("H1-B", "alternative", "H1-B: źródła alternatywne (wśród postów z powołaniem)")]
-    for axis, (hypothesis, outcome, title) in zip(axes[:3], panels):
+    for axis, (hypothesis, outcome, title) in zip(axes, panels):
         part = yearly[yearly["hypothesis"].eq(hypothesis) & yearly["outcome"].eq(outcome)].sort_values("year")
         _share_panel(axis, part, title, formatter)
-    _composition_panel(axes[3], frame, formatter)
+    _composition_panel(axes[len(panels)], frame, formatter, legend_below=len(panels) == 2)
     figure.tight_layout()
     figure.savefig(path, dpi=200, facecolor=SURFACE)
 

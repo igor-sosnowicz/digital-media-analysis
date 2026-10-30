@@ -56,23 +56,33 @@ Trend to iloraz szans (OR) na rok z ważonej regresji logistycznej z efektami st
 
 ## H2: analizy odporności i sprawdzenie pomiaru (eksploracyjne, 24.10.2026)
 
-Analizy spoza preregistracji, na tych samych danych: `scripts/10_h2_robustness.py`, `src/digital_media_analysis/robustness.py`. Tabele: `annotations/hypotheses/exploratory_h2_robustness.csv` i `exploratory_h2_leave_one_out.csv`; dokładny test: `exploratory_h2_exact_by_owner.json`. Regresja Firtha (logit z karą, odporny na rzadkie zdarzenia, zostawia też strony bez linków alternatywnych) ma test ilorazu wiarygodności z karą; implementację sprawdza wynik dokładny dla tabeli 2×2.
+Analizy spoza preregistracji, na tych samych danych: `scripts/10_h2_robustness.py` (`make h2-robustness`), `src/digital_media_analysis/robustness.py`. Tabele: `annotations/hypotheses/exploratory_h2_robustness.csv` i `exploratory_h2_leave_one_out.csv`; permutacja: `exploratory_h2_permutation.json`; dokładny test: `exploratory_h2_exact_by_owner.json`. Regresja Firtha (logit z karą, odporny na rzadkie zdarzenia, zostawia też strony bez linków alternatywnych) ma test ilorazu wiarygodności z karą i przedział z tej samej profilowanej penalizowanej wiarygodności; implementację sprawdza wynik dokładny dla tabeli 2×2.
+
+**Poprawka z 30.10.2026.** Pierwsza wersja tej tabeli (24.10) miała dwa błędy w wierszach Firtha:
+- **test ilorazu wiarygodności** porównywał model z rokiem z modelem bez roku, każdy z inną karą Firtha. Różnica kar dodawała do statystyki około 3 (dla wszystkich stron 6,29 zamiast 3,06), więc $p$ wychodziło za małe;
+- **przedział** był przedziałem Walda, niezgodnym z tym testem.
+
+Teraz $p$ i przedział pochodzą z profilowanej penalizowanej wiarygodności (Heinze i Schemper 2002): współczynnik roku jest ustalony, a kara liczona dla pełnego modelu. Wynik sprawdzono niezależną optymalizacją numeryczną.
+
+Tabela pochodzi też z danych po przeglądzie domen z 27.10, dlatego zmieniły się definicja szeroka i źródła ustalone.
+
+Permutacja i test dokładny powstały 24.10 kodem spoza repozytorium; teraz liczy je skrypt 10 (permutacja: $p$ = 0,070 zamiast 0,0705, test dokładny bez zmian).
 
 | Analiza | Efekt / rok [95% CI] | p jednostronne | zdarzenia |
 |---|---|---|---|
 | model z preregistracji (dla porównania) | OR 1,47 [1,09; 1,99] | 0,006 | 10 |
-| Firth, wszystkie strony | OR 1,43 [1,01; 2,02] | 0,006 | 10 |
-| Firth, bez efektów stałych | OR 1,32 [0,96; 1,83] | 0,010 | 10 |
-| Firth, bez 2026 (rok niepełny) | OR 1,46 [1,00; 2,13] | 0,006 | 10 |
-| Firth, bez 2020 | OR 1,27 [0,81; 2,00] | 0,029 | 6 |
-| Firth, bez COVID-19 | OR 1,31 [0,84; 2,05] | 0,028 | 2 |
-| poziom rewizji: czy dodała link alternatywny (Firth) | OR 2,25 [1,32; 3,81] | 0,001 | 9 |
+| Firth, wszystkie strony | OR 1,43 [0,96; 2,16] | 0,040 | 10 |
+| Firth, bez efektów stałych | OR 1,32 [0,92; 1,80] | 0,062 | 10 |
+| Firth, bez 2026 (rok niepełny) | OR 1,46 [0,96; 2,22] | 0,038 | 10 |
+| Firth, bez 2020 | OR 1,27 [0,72; 2,43] | 0,196 | 6 |
+| Firth, bez COVID-19 | OR 1,31 [0,72; 2,48] | 0,170 | 2 |
+| poziom rewizji: czy dodała link alternatywny (Firth) | OR 2,25 [1,22; 4,20] | 0,004 | 9 |
 | poziom rewizji: liczba linków alternatywnych (Poisson) | RR 1,46 [1,09; 1,97] | 0,006 | 10 |
-| tylko media społecznościowe i wideo (bez blogów) | OR 1,31 [0,91; 1,89] | 0,017 | 9 |
-| szeroka definicja (social_blog, other, niesklasyfikowane) | OR 1,10 [0,96; 1,27] | 0,091 | 186 |
-| źródła ustalone (scientific, institutional) maleją | OR 0,98 [0,82; 1,17] | 0,42 | 738 |
+| tylko media społecznościowe i wideo (bez blogów) | OR 1,31 [0,82; 2,03] | 0,120 | 9 |
+| szeroka definicja (social_blog, other, niesklasyfikowane) | OR 1,03 [0,90; 1,19] | 0,327 | 175 |
+| źródła ustalone (scientific, institutional) maleją | OR 0,99 [0,84; 1,17] | 0,445 | 739 |
 | bez jednego linku alternatywnego (10 przeliczeń) | OR 1,33–1,67 | p < 0,05 w 7 z 10; największe 0,055 | 9 |
-| permutacja lat między rewizjami (już w wynikach) | OR 1,47 | 0,07 | 10 |
+| permutacja lat między rewizjami (już w wynikach) | OR 1,47 | 0,070 | 10 |
 
 **Sprawdzenie pomiaru: co jest „źródłem alternatywnym”.** Przeczytaliśmy wszystkie 10 linków.
 
@@ -84,11 +94,11 @@ Analizy spoza preregistracji, na tych samych danych: `scripts/10_h2_robustness.p
 
 | Sprawdzenie pomiaru | Efekt / rok [95% CI] | p jednostronne | zdarzenia |
 |---|---|---|---|
-| tylko pierwsze dodanie każdego linku na stronie (Firth) | OR 1,59 [0,99; 2,55] | 0,009 | 4 |
-| właściciel posta: wpisy WHO i GIS jako instytucjonalne (Firth) | OR 1,31 [0,85; 2,04] | 0,027 | 2 |
+| tylko pierwsze dodanie każdego linku na stronie (Firth) | OR 1,59 [0,92; 3,74] | 0,048 | 4 |
+| właściciel posta: wpisy WHO i GIS jako instytucjonalne (Firth) | OR 1,31 [0,73; 2,50] | 0,169 | 2 |
 | właściciel posta, dokładny test warunkowy (2 linki wśród 105 linków strony) | lata 2021 i 2025 | 0,21 | 2 |
 
-Test ilorazu wiarygodności przy 2 zdarzeniach jest niewiarygodny, bo asymptotyka nie działa. Rozstrzyga test dokładny: p = 0,21.
+Test ilorazu wiarygodności przy 2 zdarzeniach jest mało wiarygodny, bo asymptotyka nie działa. Rozstrzyga test dokładny: p = 0,21. Po poprawce z 30.10 logit Firtha daje zgodny wynik (p = 0,17); wcześniejsze p = 0,027 było skutkiem błędu w teście.
 
 **Wniosek dla H2.** Formalne potwierdzenie z testu preregistrowanego (p = 0,006) jest artefaktem pomiaru. Wzrost tworzą głównie oficjalne wpisy WHO i GIS na platformach społecznościowych, policzone wielokrotnie. Po przypisaniu ich do instytucji zostają 2 linki alternatywne w siedmiu latach i dane nie wspierają H2 (test dokładny p = 0,21).
 

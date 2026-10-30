@@ -5,14 +5,20 @@ stays as committed. Firth's penalised logistic regression handles rare events
 and separation: it maximises the log-likelihood plus half the log-determinant
 of the Fisher information (Jeffreys prior), which keeps estimates finite and
 reduces their small-sample bias, so fixed-effect levels without any event can
-stay in the model. Its test is the penalised likelihood-ratio test.
+stay in the model. Its test and its 95% interval both come from the profile
+penalised likelihood (Heinze and Schemper 2002), so they always agree.
 """
 
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
+from itertools import combinations
 
 import numpy as np
 import pandas as pd
+from scipy.optimize import brentq
 from scipy.stats import chi2
+
+# Critical value of the profile penalised likelihood-ratio statistic for a 95% interval.
+CRITICAL = float(chi2.ppf(0.95, 1))
 
 
 def _penalised_loglik(x: np.ndarray, y: np.ndarray, beta: np.ndarray) -> float:
@@ -24,16 +30,30 @@ def _penalised_loglik(x: np.ndarray, y: np.ndarray, beta: np.ndarray) -> float:
     return loglik + 0.5 * logdet if sign > 0 else -np.inf
 
 
-def firth_logit(x: np.ndarray, y: np.ndarray, max_iter: int = 200, tol: float = 1e-8) -> tuple[np.ndarray, np.ndarray, float]:
-    """Coefficients, their covariance (inverse information) and the penalised log-likelihood of Firth's logit."""
-    beta = np.zeros(x.shape[1])
+def firth_logit(
+    x: np.ndarray, y: np.ndarray, max_iter: int = 200, tol: float = 1e-8,
+    fixed: dict[int, float] | None = None, start: np.ndarray | None = None,
+) -> tuple[np.ndarray, np.ndarray, float]:
+    """Coefficients, their covariance (inverse information) and the penalised log-likelihood of Firth's logit.
+
+    `fixed` holds some coefficients at given values (column -> value) and fits the
+    others; the penalty still uses the information of the whole design, as the
+    profile penalised likelihood does. `start` gives the starting coefficients.
+    """
+    fixed = fixed or {}
+    free = np.array([column for column in range(x.shape[1]) if column not in fixed], dtype=int)
+    beta = np.zeros(x.shape[1]) if start is None else np.array(start, dtype=float)
+    for column, value in fixed.items():
+        beta[column] = value
     current = _penalised_loglik(x, y, beta)
     for _ in range(max_iter):
         p = 1 / (1 + np.exp(-(x @ beta)))
         w = p * (1 - p)
-        inverse = np.linalg.pinv((x * w[:, None]).T @ x)
-        leverage = w * np.einsum("ij,jk,ik->i", x, inverse, x)
-        step = inverse @ (x.T @ (y - p + leverage * (0.5 - p)))
+        information = (x * w[:, None]).T @ x
+        leverage = w * np.einsum("ij,jk,ik->i", x, np.linalg.pinv(information), x)
+        score = x.T @ (y - p + leverage * (0.5 - p))
+        step = np.zeros_like(beta)
+        step[free] = np.linalg.pinv(information[np.ix_(free, free)]) @ score[free]
         # Halve the step until the penalised likelihood does not fall.
         for _ in range(30):
             candidate = beta + step
@@ -49,10 +69,8 @@ def firth_logit(x: np.ndarray, y: np.ndarray, max_iter: int = 200, tol: float = 
     return beta, covariance, current
 
 
-def design_matrix(frame: pd.DataFrame, fixed_effect: str | None, start_year: int, with_year: bool = True) -> pd.DataFrame:
-    columns = {"const": np.ones(len(frame))}
-    if with_year:
-        columns["year"] = frame["year"].astype(float).to_numpy() - start_year
+def design_matrix(frame: pd.DataFrame, fixed_effect: str | None, start_year: int) -> pd.DataFrame:
+    columns = {"const": np.ones(len(frame)), "year": frame["year"].astype(float).to_numpy() - start_year}
     design = pd.DataFrame(columns, index=frame.index)
     if fixed_effect:
         design = pd.concat([design, pd.get_dummies(frame[fixed_effect], prefix="fe", drop_first=True, dtype=float)], axis=1)
@@ -60,22 +78,46 @@ def design_matrix(frame: pd.DataFrame, fixed_effect: str | None, start_year: int
 
 
 def firth_trend(frame: pd.DataFrame, outcome: str, fixed_effect: str | None, direction: str, start_year: int) -> dict:
-    """Year coefficient of Firth's logit with fixed effects (all levels kept), tested one-sided by penalised LR."""
+    """Year coefficient of Firth's logit with fixed effects (all levels kept), tested one-sided by penalised LR.
+
+    The test and the 95% interval come from the same profile penalised likelihood:
+    the year coefficient is held at a value and the others are refitted under the
+    penalty of the whole design. The interval is the set of values the two-sided
+    test does not reject, so it excludes no change exactly when that test rejects it.
+    """
     y = frame[outcome].to_numpy(float)
-    full = design_matrix(frame, fixed_effect, start_year)
-    beta, covariance, loglik = firth_logit(full.to_numpy(), y)
-    _, _, restricted = firth_logit(design_matrix(frame, fixed_effect, start_year, with_year=False).to_numpy(), y)
-    column = list(full.columns).index("year")
+    design = design_matrix(frame, fixed_effect, start_year)
+    x = design.to_numpy()
+    column = list(design.columns).index("year")
+    beta, covariance, loglik = firth_logit(x, y)
     estimate, se = float(beta[column]), float(np.sqrt(covariance[column, column]))
-    statistic = max(2 * (loglik - restricted), 0.0)
+
+    def deviance(value: float) -> float:
+        start = beta.copy()
+        start[column] = value
+        return max(2 * (loglik - firth_logit(x, y, fixed={column: value}, start=start)[2]), 0.0)
+
+    statistic = deviance(0.0)
     two_sided = float(chi2.sf(statistic, 1))
     toward = estimate > 0 if direction == "increase" else estimate < 0
+    low, high = (_profile_bound(deviance, estimate, se, side) for side in (-1, 1))
     return {
         "beta": estimate, "se": se, "odds_ratio_per_year": float(np.exp(estimate)),
-        "ci_low": float(np.exp(estimate - 1.96 * se)), "ci_high": float(np.exp(estimate + 1.96 * se)),
+        "ci_low": float(np.exp(low)), "ci_high": float(np.exp(high)),
         "p_one_sided": two_sided / 2 if toward else 1 - two_sided / 2,
         "units": len(frame), "positives": int(y.sum()), "lr_statistic": statistic,
     }
+
+
+def _profile_bound(deviance: Callable[[float], float], estimate: float, se: float, side: int) -> float:
+    """Where the profile deviance reaches the 95% critical value below (side -1) or above (side 1) the estimate."""
+    step = max(se, 1e-3)
+    inner, outer = estimate, estimate + side * step
+    for _ in range(40):
+        if deviance(outer) >= CRITICAL:
+            return float(brentq(lambda value: deviance(value) - CRITICAL, min(inner, outer), max(inner, outer), xtol=1e-6))
+        inner, outer, step = outer, outer + side * step, 2 * step
+    return side * np.inf
 
 
 def revision_counts(links: pd.DataFrame, outcome: str) -> pd.DataFrame:
@@ -111,3 +153,36 @@ def leave_one_out(frame: pd.DataFrame, outcome: str, fit, ids: Sequence) -> pd.D
         result = fit(frame.drop(index=index))
         rows.append({"dropped": index, **result})
     return pd.DataFrame(rows)
+
+
+def exact_year_sum_test(years: Sequence[int], observed: Sequence[int]) -> float:
+    """Exact conditional one-sided p of a rise when all events are on one page.
+
+    Given the years of every link of the page and of its `observed` events, the
+    share of all equally likely sets of as many links whose years sum to at least
+    the observed sum (later years = a rising share).
+    """
+    sums = np.array([sum(chosen) for chosen in combinations(np.asarray(years, dtype=int), len(observed))])
+    return float(np.mean(sums >= sum(observed)))
+
+
+def permutation_trend(
+    frame: pd.DataFrame, statistic: Callable[[pd.DataFrame], float], cluster: str, group: str,
+    permutations: int = 2000, seed: int = 20261024,
+) -> dict:
+    """One-sided permutation p of a rise: years are shuffled between the clusters (revisions) of each group (page).
+
+    `statistic(frame)` returns the year coefficient; the p-value is the share of
+    permutations whose coefficient is at least the observed one.
+    """
+    observed = statistic(frame)
+    clusters = frame.groupby(cluster)[[group, "year"]].first()
+    rng = np.random.default_rng(seed)
+    draws = []
+    for _ in range(permutations):
+        years = clusters["year"].copy()
+        for members in clusters.groupby(group).groups.values():
+            years[members] = rng.permutation(years[members].to_numpy())
+        draws.append(statistic(frame.assign(year=frame[cluster].map(years))))
+    return {"observed_beta": observed, "p_one_sided": float(np.mean(np.array(draws) >= observed)),
+            "permutations": permutations, "seed": seed}

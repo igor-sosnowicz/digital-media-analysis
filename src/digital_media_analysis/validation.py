@@ -252,6 +252,43 @@ def weighted_shares(
     return pd.DataFrame(rows)
 
 
+def weighted_share_by_year(
+    reference: pd.DataFrame, manifest: pd.DataFrame, platform: str, categories: Sequence[str],
+    samples: int = BOOTSTRAP_SAMPLES, seed: int = SEED,
+) -> pd.DataFrame:
+    """Share of a platform's units whose source types include any of `categories`, per year and over all years.
+
+    Weights and intervals as in `weighted_shares`: N_h over the labelled units of
+    the stratum, bootstrap within strata. The year comes from the manifest; the row
+    with `year` "all" covers every year.
+    """
+    design = manifest.loc[manifest["platform"].eq(platform), ["unit_id", "stratum", "N_h", "year"]].astype({"unit_id": str})
+    frame = reference.loc[reference["platform"].eq(platform), ["unit_id", "source_types"]].astype({"unit_id": str}).merge(
+        design, on="unit_id"
+    ).reset_index(drop=True)
+    w = (frame["N_h"] / frame.groupby("stratum")["unit_id"].transform("size")).to_numpy(float)
+    hit = np.array([float(bool(labels & set(categories))) for labels in label_sets(frame["source_types"])])
+    years = frame["year"].astype(int).to_numpy()
+    groups = {**{int(year): years == year for year in np.unique(years)}, "all": np.ones(len(frame), dtype=bool)}
+
+    def shares(rows: np.ndarray) -> dict:
+        chosen = {key: rows[mask[rows]] for key, mask in groups.items()}
+        return {key: float((w[part] * hit[part]).sum() / w[part].sum()) for key, part in chosen.items()}
+
+    point = shares(np.arange(len(frame)))
+    rng = np.random.default_rng(seed)
+    strata = [np.flatnonzero(frame["stratum"].to_numpy() == name) for name in frame["stratum"].unique()]
+    draws = [shares(np.concatenate([rng.choice(cell, size=len(cell), replace=True) for cell in strata])) for _ in range(samples)]
+    alpha = (1 - CONFIDENCE) / 2
+    return pd.DataFrame([
+        {"year": key, "share": point[key],
+         "low": float(np.quantile([draw[key] for draw in draws], alpha)) if draws else np.nan,
+         "high": float(np.quantile([draw[key] for draw in draws], 1 - alpha)) if draws else np.nan,
+         "positives": int(hit[mask].sum()), "units": int(mask.sum())}
+        for key, mask in groups.items()
+    ])
+
+
 def _chi_square(groups: np.ndarray, errors: np.ndarray, levels: int) -> float:
     """Chi-square statistic of the groups x (error, no error) table, over cells with a positive expected count."""
     totals = np.bincount(groups, minlength=levels).astype(float)

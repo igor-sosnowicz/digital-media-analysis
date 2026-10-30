@@ -48,6 +48,44 @@ def test_firth_trend_tests_the_direction_with_penalised_lr():
     assert np.isfinite(robustness.firth_trend(with_empty, "event", "page", "increase", 2020)["beta"])
 
 
+def test_firth_interval_agrees_with_its_test():
+    # Few events, as in H2: the interval excludes no change exactly when the two-sided test rejects it.
+    for slope, seed in [(0.3, 0), (0.15, 1), (0.05, 2)]:
+        data = rising_events(slope, seed)
+        data = data[data["year"].ge(2023) | data.index.isin(data.index[::7])]
+        result = robustness.firth_trend(data, "event", "page", "increase", 2020)
+        two_sided = 2 * min(result["p_one_sided"], 1 - result["p_one_sided"])
+        assert result["ci_low"] < result["odds_ratio_per_year"] < result["ci_high"]
+        assert (result["ci_low"] > 1 or result["ci_high"] < 1) == (two_sided < 0.05)
+
+
+def test_firth_fit_with_a_fixed_coefficient_profiles_the_likelihood():
+    x, y = two_by_two(3, 40, 1, 60)
+    beta, _, loglik = robustness.firth_logit(x, y)
+    _, _, at_estimate = robustness.firth_logit(x, y, fixed={1: beta[1]})
+    fixed_beta, _, at_zero = robustness.firth_logit(x, y, fixed={1: 0.0})
+    assert at_estimate == pytest.approx(loglik, abs=1e-8)
+    assert fixed_beta[1] == 0.0 and at_zero < loglik
+
+
+def test_exact_year_sum_test_counts_equally_likely_sets():
+    # Pairs of 2020-2023 sum to 4041, 4042, 4043, 4043, 4044, 4045; only one reaches 2022 + 2023.
+    assert robustness.exact_year_sum_test([2020, 2021, 2022, 2023], [2022, 2023]) == pytest.approx(1 / 6)
+    assert robustness.exact_year_sum_test([2020, 2021, 2022, 2023], [2020, 2021]) == 1.0
+
+
+def test_permutation_trend_shuffles_years_between_revisions_within_pages():
+    data = rising_events(0.4)
+    def slope(frame: pd.DataFrame) -> float:
+        return float(np.polyfit(frame["year"], frame["event"], 1)[0])
+
+    result = robustness.permutation_trend(data, slope, "revision", "page", permutations=200, seed=1)
+    assert result["p_one_sided"] < 0.05
+    assert robustness.permutation_trend(data, slope, "revision", "page", permutations=200, seed=1) == result
+    flat = data.assign(event=np.random.default_rng(3).random(len(data)) < 0.05)
+    assert robustness.permutation_trend(flat, slope, "revision", "page", permutations=200, seed=1)["p_one_sided"] > 0.05
+
+
 def test_revision_counts_and_poisson_trend():
     links = pd.DataFrame({"page": "A", "revision": ["r1", "r1", "r2", "r3"], "year": [2020, 2020, 2021, 2022],
                           "alternative": [1, 0, 0, 1]})

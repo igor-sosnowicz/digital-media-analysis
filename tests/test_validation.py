@@ -122,6 +122,25 @@ def test_weighted_shares_pool_the_splits_of_each_stratum():
     assert shares.loc["media", "low"] <= shares.loc["media", "share"] <= shares.loc["media", "high"]
 
 
+def test_weighted_share_by_year_weights_each_stratum_and_pools_the_years():
+    manifest = pd.DataFrame({
+        "unit_id": ["u1", "u2", "u3", "u4", "r1"], "platform": ["wikipedia"] * 4 + ["reddit"],
+        "stratum": ["2020|other", "2020|other", "2021|link", "2021|link", "2020"], "N_h": [10, 10, 2, 2, 5],
+        "year": [2020, 2020, 2021, 2021, 2020],
+    })
+    labels = pd.DataFrame({
+        "unit_id": ["u1", "u2", "u3", "u4", "r1"], "platform": ["wikipedia"] * 4 + ["reddit"],
+        "source_types": ["personal", "media", "social_blog;unknown", "unknown", "personal"],
+    })
+    shares = validation.weighted_share_by_year(labels, manifest, "wikipedia", ["social_blog", "unknown", "personal"],
+                                               samples=100).set_index("year")
+    # Weights: 10 / 2 in 2020 (u1 cites, u2 not), 2 / 2 in 2021 (both cite); the Reddit unit is left out.
+    assert shares.loc[2020, "share"] == pytest.approx(0.5) and shares.loc[2021, "share"] == pytest.approx(1.0)
+    assert shares.loc["all", "share"] == pytest.approx(7 / 12)
+    assert shares.loc["all", ["positives", "units"]].tolist() == [3, 4]
+    assert shares.loc["all", "low"] <= shares.loc["all", "share"] <= shares.loc["all", "high"]
+
+
 def test_differential_errors_rate_per_group_with_a_permutation_test():
     frame = pd.DataFrame({
         "platform": "reddit", "stratum": "s", "weight": 1.0,

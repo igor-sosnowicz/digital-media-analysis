@@ -2,7 +2,7 @@
   "analysis": "exploratory, not preregistered",
   "hypothesis": "H2",
   "definition": "alternative by owner of the post (WHO and GIS posts institutional)",
-  "test": "exact conditional: both remaining alternative links are on Globalne ocieplenie; probability that two links drawn at random from the page's links in 2020-2026 have a year sum at least as large as observed",
+  "test": "exact conditional: all remaining alternative links are on Globalne ocieplenie; probability that 2 links drawn at random from the page's links in the H2 period have a year sum at least as large as observed",
   "links_on_page": 105,
   "observed_years": [
     2021,

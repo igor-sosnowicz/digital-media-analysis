@@ -1,16 +1,16 @@
 analysis,definition,model,unit,measure,ratio_per_year,ci_low,ci_high,p_one_sided,units,events,note,mode
 preregistered model (for comparison),alternative,"ML logit, page FE, clustered by revision",link,OR,1.4703959299126417,1.0879020776750927,1.9873702193161666,0.006069094835334316,1207,10,,exploratory
-"Firth, all pages",alternative,"Firth logit, page FE",link,OR,1.4329841695242587,1.014556893588103,2.023980757594459,0.0060867900902763115,1341,10,,exploratory
-"Firth, pooled",alternative,"Firth logit, no FE",link,OR,1.3224202611182296,0.9569805526612676,1.827409493487387,0.009982286729643991,1341,10,,exploratory
-"Firth, without 2026",alternative,"Firth logit, page FE",link,OR,1.456778133741822,0.9965143042398136,2.1296257584252327,0.006433673317263164,1319,10,,exploratory
-"Firth, without 2020",alternative,"Firth logit, page FE",link,OR,1.2698163017567183,0.8062349984689893,1.9999546574746334,0.028778315552689372,561,6,,exploratory
-"Firth, without COVID-19",alternative,"Firth logit, page FE",link,OR,1.3111192569280328,0.8390279726362296,2.048839564295223,0.02764636786186567,239,2,,exploratory
-"revision level, any alternative link",alternative,"Firth logit, page FE",revision,OR,2.2466914651990533,1.3231289700341584,3.8149134771555624,0.0009474165186439139,232,9,,exploratory
+"Firth, all pages",alternative,"Firth logit, page FE",link,OR,1.4329841695242587,0.9552245478285295,2.163209000040497,0.04014729833142078,1341,10,,exploratory
+"Firth, pooled",alternative,"Firth logit, no FE",link,OR,1.3224202611182296,0.917440885165613,1.800298531464192,0.06202543824076152,1341,10,,exploratory
+"Firth, without 2026",alternative,"Firth logit, page FE",link,OR,1.456778133741822,0.9597597585076341,2.2162352572537456,0.037959738415065045,1319,10,,exploratory
+"Firth, without 2020",alternative,"Firth logit, page FE",link,OR,1.2698163017567183,0.7226997319380606,2.4313179800260274,0.19633078159893147,561,6,,exploratory
+"Firth, without COVID-19",alternative,"Firth logit, page FE",link,OR,1.3111192569280328,0.724719132863144,2.4761340106185243,0.17027968392829923,239,2,,exploratory
+"revision level, any alternative link",alternative,"Firth logit, page FE",revision,OR,2.2466914651990533,1.2209228827108796,4.200448586460644,0.004116504905770009,232,9,,exploratory
 "revision level, alternative links per revision",alternative,"Poisson, offset log(links), page FE, HC1",revision,RR,1.4622199228753874,1.0856935843711895,1.969328301863401,0.006187830966509301,180,10,,exploratory
-definition: social media and video only,narrow,"Firth logit, page FE",link,OR,1.3105239136803442,0.9066124953777205,1.894384797346631,0.017357346630573523,1341,9,,exploratory
-"definition: broad (social_blog, other, unclassified)",broad,"ML logit, page FE, clustered by revision",link,OR,1.103339708768844,0.9550315062019991,1.274678903303776,0.09089404411760071,1341,186,,exploratory
-definition: established sources fall,established,"ML logit, page FE, clustered by revision",link,OR,0.9814598041292085,0.8245798778343623,1.1681868221805434,0.4165990531928775,1341,738,,exploratory
-measurement: first addition of each link only,alternative,"Firth logit, page FE",first addition,OR,1.592557371861117,0.9932197462225392,2.553552718132249,0.008881756708913715,431,4,,exploratory
-"measurement: owner of the post (WHO, GIS posts are institutional)",by_owner,"Firth logit, page FE",link,OR,1.3137548434785502,0.8477915852721918,2.035820853552369,0.026971987493530053,1341,2,,exploratory
-"measurement: owner of the post, first additions only",by_owner,"Firth logit, page FE",first addition,OR,1.3050074187448275,0.8410217303163208,2.0249707012189773,0.02678956436493317,431,2,,exploratory
+definition: social media and video only,narrow,"Firth logit, page FE",link,OR,1.3105239136803442,0.8192482154772197,2.0288846177711957,0.12011923637469245,1341,9,,exploratory
+"definition: broad (social_blog, other, unclassified)",broad,"ML logit, page FE, clustered by revision",link,OR,1.032595475780671,0.8972202099036352,1.1883965662311928,0.32730566746460277,1330,175,,exploratory
+definition: established sources fall,established,"ML logit, page FE, clustered by revision",link,OR,0.9884320864331504,0.8376710035953118,1.1663266190393162,0.44519893758606,1341,739,,exploratory
+measurement: first addition of each link only,alternative,"Firth logit, page FE",first addition,OR,1.592557371861117,0.9192156260595845,3.7365985983243415,0.04807501248111373,431,4,,exploratory
+"measurement: owner of the post (WHO, GIS posts are institutional)",by_owner,"Firth logit, page FE",link,OR,1.3137548434785502,0.7250992551887301,2.5016408694905388,0.16930345937029168,1341,2,,exploratory
+"measurement: owner of the post, first additions only",by_owner,"Firth logit, page FE",first addition,OR,1.3050074187448275,0.7274048653192258,2.464194959881888,0.17101211132570449,431,2,,exploratory
 influence: preregistered model without one alternative link,alternative,"ML logit, page FE, clustered by revision",link,OR,1.5244040586630985,1.3263332811128592,1.6654036399162353,0.05502144176934606,1340,9,"OR: median, min, max over 10 refits; p: largest; p < 0.05 in 7 of 10",exploratory

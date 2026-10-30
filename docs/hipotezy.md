@@ -221,3 +221,14 @@ Wersja po przeglądzie jest główna. Zmiana werdyktu między wersjami oznaczał
 - **odniesienie bez pomocy AI** to wyłącznie etykiety IS: 16 postów pilotażu (IS zgodny z JP) i 6 postów gold zakodowanych przez IS; raportujemy je osobno jako porównanie AI z człowiekiem (`sources_is`);
 - 16 postów pilotażu wybrano dlatego, że IS zgodził się z etykietą wspomaganą przez AI, więc to łatwiejsze przypadki;
 - 8 postów gold JP to porównanie z etykietami wspomaganymi przez AI, nie z niezależnym człowiekiem.
+
+**30.10.2026, wskaźnik opisowy H2 i poprawki analiz eksploracyjnych H2 (po przebiegu potwierdzającym; test, definicje i werdykt bez zmian).**
+
+- **Wskaźnik opisowy H2 policzony z opóźnieniem.** Preregistrowany wskaźnik bez testu (roczny udział opisów zmian z powołaniem na `social_blog`, `unknown` lub `personal` w gold Wikipedii) nie był policzony w przebiegu potwierdzającym.
+  - Liczy go teraz `scripts/09c_h2_descriptive_gold.py` (`make h2-descriptive`): gold `dev` i `test`, 294 opisy zmian, etykiety jak w gold (w tym preannotacja zatwierdzona przez JP), wagi doboru, przedziały bootstrap w warstwach.
+  - Wynik: 5,8 % [2,3; 10,6] (15 z 294), rocznie od 1,2 % do 9,5 %, bez wzrostu; plik `annotations/hypotheses/h2_descriptive_gold.csv`.
+- **Logit Firtha (analizy eksploracyjne).** Test ilorazu wiarygodności porównywał model z rokiem z modelem bez roku, każdy z inną karą, co zawyżało statystykę. Przedział był przedziałem Walda, niezgodnym z tym testem.
+  - Teraz test i przedział pochodzą z tej samej profilowanej penalizowanej wiarygodności (Heinze i Schemper 2002), sprawdzonej niezależną optymalizacją numeryczną.
+  - Zmieniają się tylko wyniki eksploracyjne. Wszystkie strony: $p$ 0,006 → 0,040. Według właściciela konta: 0,027 → 0,169. Same pierwsze dodania: 0,009 → 0,048. Pełna tabela: `wyniki_hipotez.md`.
+- **Permutacja i test dokładny według właściciela** liczy teraz `scripts/10_h2_robustness.py`; wcześniej powstały kodem spoza repozytorium. Permutacja daje $p$ = 0,070 (wcześniej 0,0705), test dokładny bez zmian (0,205).
+- **Tab. 5 preprintu** ma teraz także trzecią preregistrowaną wrażliwość (tylko domeny sklasyfikowane). Po przeglądzie domen nie ma domen bez kategorii, więc daje ona ten sam wynik co test główny.

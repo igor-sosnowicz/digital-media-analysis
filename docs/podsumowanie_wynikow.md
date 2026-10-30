@@ -148,10 +148,12 @@ Do czasu przebiegu potoku ([`h1a_kroki.md`](h1a_kroki.md)) makra pokazują „[c
 | Test z preregistracji | `\resHtwoOr`, `\resHtwoP` (1,47 [1,09; 1,99], p = 0,006) | jw. |
 | Bez strony COVID-19 / bez roku 2020 | `\resHtwoWithoutCovidP`, `\resHtwoWithoutTwentytwentyP` (0,105 / 0,138) | jw. |
 | Permutacja lat (eksploracyjna) | `\resHtwoPermutationP` (0,070) | `exploratory_h2_permutation.json` |
-| Logit Firtha, wszystkie strony | `\resHtwoFirthOr`, `\resHtwoFirthP` | `exploratory_h2_robustness.csv` |
+| Tylko domeny sklasyfikowane (preregistrowana; po przeglądzie domen to samo co test główny) | `\resHtwoClassifiedOr`, `\resHtwoClassifiedP` (1,47 [1,09; 1,99], p = 0,006) | `confirmatory_trends.csv` |
+| Logit Firtha, wszystkie strony (eksploracyjny; $p$ i przedział z profilowanej wiarygodności) | `\resHtwoFirthOr`, `\resHtwoFirthP` (1,43 [0,96; 2,16], p = 0,040) | `exploratory_h2_robustness.csv` |
 | Linki oficjalnych kont / powtórzenia linku WHO / linki alternatywne według właściciela | `\resHtwoOfficialLinks`, `\resHtwoWhoRepeats`, `\resHtwoByOwnerLinks` (8 / 6 / 2) | skrypt 18, `codebook/owners.yaml` |
-| Tylko pierwsze dodania (4 zdarzenia) / według właściciela (Firth) | `\resHtwoFirstOr`, `\resHtwoOwnerOr`, `\resHtwoOwnerP` | `exploratory_h2_robustness.csv` |
+| Tylko pierwsze dodania (4 zdarzenia) / według właściciela (Firth) | `\resHtwoFirstOr`, `\resHtwoFirstP`, `\resHtwoOwnerOr`, `\resHtwoOwnerP` (1,59 [0,92; 3,74], p = 0,048 / 1,31 [0,73; 2,50], p = 0,169) | `exploratory_h2_robustness.csv` |
 | Według właściciela, test dokładny | `\resHtwoExactP` (0,205) | `exploratory_h2_exact_by_owner.json` |
+| Preregistrowany wskaźnik opisowy (gold Wikipedii, bez testu): udział opisów zmian z powołaniem na `social_blog`, `unknown` lub `personal`, łącznie / liczba opisów / najmniejszy i największy udział roczny | `\resHtwoGoldShare`, `\resHtwoGoldUnits`, `\resHtwoGoldShareMin`, `\resHtwoGoldShareMax` (6 % [2; 11] / 294 / 1 % / 10 %) | `h2_descriptive_gold.csv`, skrypt 09c |
 
 **Zastrzeżenia:**
 - Analizy odporności i sprawdzenie pomiaru nie były preregistrowane.

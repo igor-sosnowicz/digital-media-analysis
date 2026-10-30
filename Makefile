@@ -1,4 +1,4 @@
-.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets append-sheets sample-csv import-labels agreement kappa-consensus combine-labels adjudication-sheet import-adjudication tune validate audit-metrics errors compare report-tables preprint-package h2-frame h2-history h1-frame label-h1-v2 h2-links hypotheses-v2 power check-stance import-stance validate-stance label-h1 domain-review hypotheses enriched-stance llm-annotate llm-queue llm-quality rule-queue after-verification finish-results check-preprint control-draw control-score
+.PHONY: pipeline reddit-frame codebook test notebooks gold-sample pilot-round pilot-sheets append-sheets sample-csv import-labels agreement kappa-consensus combine-labels adjudication-sheet import-adjudication tune validate audit-metrics errors compare report-tables preprint-package h2-frame h2-history h1-frame label-h1-v2 h2-links hypotheses-v2 power check-stance import-stance validate-stance label-h1 domain-review hypotheses enriched-stance llm-annotate llm-queue llm-quality rule-queue after-verification finish-results check-preprint control-draw control-score h2-descriptive h2-robustness
 
 ANNOTATORS ?= A B
 PHASE ?= pilot
@@ -146,6 +146,8 @@ finish-results:
 	uv run scripts/07c_audit_metrics.py
 	uv run scripts/11_error_analysis.py --split dev --import
 	uv run scripts/09_test_hypotheses.py --confirmatory
+	uv run scripts/09c_h2_descriptive_gold.py
+	uv run scripts/10_h2_robustness.py
 	uv run scripts/13_report_tables.py
 	uv run scripts/18_preprint_package.py
 	uv run scripts/24_check_preprint.py --zip data/preprint_overleaf.zip
@@ -163,6 +165,14 @@ domain-review:
 # CONFIRMATORY=1 for the reported run, once the preregistration is committed.
 hypotheses:
 	uv run scripts/09_test_hypotheses.py $(if $(CONFIRMATORY),--confirmatory)
+
+# The preregistered descriptive indicator of H2 from the Wikipedia gold (no test).
+h2-descriptive:
+	uv run scripts/09c_h2_descriptive_gold.py
+
+# Exploratory robustness analyses of H2 (Firth, permutation, exact test by owner, definitions, influence).
+h2-robustness:
+	uv run scripts/10_h2_robustness.py
 
 # Extended tests (docs/hipotezy_v2.md). The downloads need the committed preregistration v2.
 h2-frame:

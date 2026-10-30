@@ -183,7 +183,7 @@
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{preprint_h1.png}
-\caption{H1: roczny udział postów podważających konsensus wśród postów o nauce (H1-A), udziały źródeł konsensusu i alternatywnych wśród postów z powołaniem (H1-B), z 95\% przedziałami, oraz skład próby według subredditu.}
+\caption{H1-B: ważone roczne udziały źródeł konsensusu i alternatywnych wśród postów z powołaniem, z 95\% przedziałami bootstrap, oraz ważony skład próby według subredditu. H1-A nie jest pokazane, bo instrument stanowiska nie spełnił warunku trafności.}
 \label{fig:h1}
 \end{figure}
 
@@ -201,9 +201,10 @@
 % dodany \resHtwoWhoRepeats{} razy; według właściciela 2 linki, test dokładny \resHtwoExactP.
 \punkty{wyniki H2, inżynier analityk}{
 \item Test z preregistracji: OR \resHtwoOr{} na rok, $p$ = \resHtwoP{} (\resHtwoModelLinks{} linków w modelu); ten sam wynik przed przeglądem domen (\resHtwoBeforeReviewOr, $p$ = \resHtwoBeforeReviewP).
-\item Ale tylko \resHtwoAlternativeLinks{} z \resHtwoLinks{} linków to źródła alternatywne, na \resHtwoAlternativePages{} stronach; wrażliwości nieistotne: bez COVID-19 $p$ = \resHtwoWithoutCovidP, permutacja $p$ = \resHtwoPermutationP.
-\item Sprawdzenie pomiaru (Rys.~\ref{fig:h2}): \resHtwoOfficialLinks{} linków to oficjalne konta WHO i GIS w serwisach społecznościowych, link WHO dodano \resHtwoWhoRepeats{} razy; według właściciela konta zostają \resHtwoByOwnerLinks{} linki, test dokładny $p$ = \resHtwoExactP.
-\item Werdykt: formalnie potwierdzona, merytorycznie artefakt klasyfikacji po domenie (Tab.~\ref{tab:h2}); analizy po właścicielu są eksploracyjne.
+\item Ale tylko \resHtwoAlternativeLinks{} z \resHtwoLinks{} linków to źródła alternatywne, na \resHtwoAlternativePages{} stronach; model z efektami stałymi obejmuje więc tylko te dwie strony. Preregistrowane wrażliwości nieistotne: bez COVID-19 $p$ = \resHtwoWithoutCovidP, bez 2020 $p$ = \resHtwoWithoutTwentytwentyP; tylko domeny sklasyfikowane: po przeglądzie domen to samo co test główny. Eksploracyjnie: permutacja lat $p$ = \resHtwoPermutationP.
+\item Sprawdzenie pomiaru (eksploracyjne; Rys.~\ref{fig:h2}): \resHtwoOfficialLinks{} linków to oficjalne konta WHO i GIS w serwisach społecznościowych, link WHO dodano \resHtwoWhoRepeats{} razy; według właściciela konta zostają \resHtwoByOwnerLinks{} linki: test dokładny $p$ = \resHtwoExactP, logit Firtha $p$ = \resHtwoOwnerP; same pierwsze dodania (bez rewertów): $p$ = \resHtwoFirstP.
+\item Preregistrowany wskaźnik opisowy (bez testu): w gold Wikipedii \resHtwoGoldShare{} z \resHtwoGoldUnits{} opisów zmian powołuje się na źródła alternatywne, nieokreślone lub osobiste, rocznie od \resHtwoGoldShareMin{} do \resHtwoGoldShareMax.
+\item Werdykt: formalnie potwierdzona (preregistracja zabrania zmiany definicji po obejrzeniu danych), merytorycznie artefakt klasyfikacji po domenie (Tab.~\ref{tab:h2}); analizy po właścicielu są eksploracyjne.
 }
 
 \begin{figure}[htbp]
@@ -215,7 +216,7 @@
 
 \begin{table}[htbp]
 \centering
-\caption{H2: test z preregistracji, analizy odporności i sprawdzenie pomiaru.}
+\caption{H2: test z preregistracji i preregistrowane analizy wrażliwości oraz analizy eksploracyjne ze sprawdzeniem pomiaru. W wierszach z logitem Firtha $p$ i przedział pochodzą z tej samej profilowanej penalizowanej wiarygodności, bez grupowania błędów po rewizji; test dokładny jest warunkowy względem strony.}
 \label{tab:h2}
 \tabela{preprint_h2}
 \end{table}
