@@ -273,6 +273,9 @@ PENDING = r"\resPending"
 NOT_CODED = r"\textit{nie zakodowano}"
 # H1-A results that will never exist because stance_v1 failed its validity gate.
 NOT_TESTED = r"\textit{nie testowano}"
+# The one person who checked every plan C row people were to decide (docs/hipotezy.md, amendment "weryfikacja przez
+# człowieka" of 27.10.2026); the sheets record only that a person checked a row, not who.
+HUMAN_CHECKER = "JP"
 H1_ANALYSES = [("primary", "główna (2005--2018)"), ("sensitivity_period", "2005--2020"), ("only_science", "tylko r/science"),
                ("only_conspiracy", "tylko r/conspiracy")]
 H1_INDICATORS = [("H1-A", "challenges", "H1-A: podważanie konsensusu (wzrost)"), ("H1-A", "supports", "H1-A: wsparcie konsensusu (spadek)"),
@@ -396,11 +399,11 @@ def plan_c_numbers(numbers: Numbers, agreement_dir=AGREEMENT_DIR, hypotheses_dir
     checked = review["checked"].sum()
     numbers.put("plan c ai checked", count(checked) if checked else WAITING)
     numbers.put("plan c ai changed", percent(review["changed"].sum() / checked) if checked else WAITING)
-    # Who checked the AI suggestions (amendment of 27.10.2026): people, the AI assistant, or both.
+    # Who checked the AI suggestions (amendments of 27.10.2026): the person, the AI assistant, or both.
     labels = pd.concat([gold_labels, enriched_labels], ignore_index=True)
     checkers = set(labels.loc[labels["decided_by"].fillna("human").ne("auto"), "verified_by"].dropna()) if "verified_by" in labels else set()
-    numbers.put("plan c checked by", {frozenset({"human"}): "ludzi", frozenset({"ai"}): "asystenta AI"}.get(
-        frozenset(checkers), "ludzi i asystenta AI" if checkers else WAITING))
+    numbers.put("plan c checked by", {frozenset({"human"}): HUMAN_CHECKER, frozenset({"ai"}): "asystenta AI"}.get(
+        frozenset(checkers), f"{HUMAN_CHECKER} i asystenta AI" if checkers else WAITING))
 
     quality_path = agreement_dir / "llm_quality.csv"
     quality = pd.read_csv(quality_path) if quality_path.exists() else pd.DataFrame(columns=["name"])
@@ -469,7 +472,7 @@ def stance_table(numbers: Numbers) -> str:
          f"$\\alpha$ = {numbers['hone a pilot alpha']}"],
         ["odniesienie: reguła R14 (kontrola na ślepo)", numbers["plan c stance controls"], "--", "--",
          f"zachowane {numbers['plan c stance rule precision']}"],
-        [f"odniesienie: podpowiedzi AI sprawdzone przez {numbers['plan c checked by']}", numbers["plan c ai checked"], "--", "--",
+        [f"odniesienie: preannotacja AI zweryfikowana przez {numbers['plan c checked by']}", numbers["plan c ai checked"], "--", "--",
          f"poprawiono {numbers['plan c ai changed']}"],
         ["\\kod{stance\\_v1}, \\kod{dev} (strojenie)", numbers["hone a dev posts"], numbers["hone a dev challenges f"],
          numbers["hone a dev kappa"], f"macro-F1 {numbers['hone a dev macro f']}"],

@@ -239,8 +239,8 @@ which were added to the COVID-19 article, created in February 2020.
 % F1 challenges \resHoneATestChallengesF, kappa \resHoneATestKappa; warunek trafności (F1 >= 0,5 i kappa >= 0,4): \resHoneAGate.
 % Plan C (odniesienie stanowiska): próba wzbogacona r/conspiracy (\resEnrichedPosts postów; challenges w dev
 % \resStanceDevChallengesPosts, w teście \resStanceTestChallengesPosts); reguła R14 rozstrzyga \resPlanCStanceAutoShare
-% postów, kontrola na ślepo \resPlanCStanceRulePrecision; podpowiedzi AI sprawdzone przez ludzi: \resPlanCAiChecked,
-% poprawiono \resPlanCAiChanged. Test na \resHoneAReviewedPosts postach sprawdzonych przez ludzi: precyzja challenges
+% postów, kontrola na ślepo \resPlanCStanceRulePrecision; preannotacja AI zweryfikowana przez JP: \resPlanCAiChecked,
+% poprawiono \resPlanCAiChanged. Test na \resHoneAReviewedPosts postach zweryfikowanych przez JP: precyzja challenges
 % \resHoneATestChallengesPrecision, czułość \resHoneATestChallengesRecall (Rys. macierzy pomyłek); wszystkie wiersze:
 % F1 \resHoneATestAllRowsChallengesF, kappa \resHoneATestAllRowsKappa. Ujawnić przebieg próbny z 27.10.
 % Audyt H1-B: konsensus J = \resAuditConsensusJ (\resAuditConsensusValid), alternatywne J = \resAuditAlternativeJ
@@ -271,7 +271,7 @@ which were added to the COVID-19 article, created in February 2020.
 
 \begin{table}[htbp]
 \centering
-\caption{Stanowisko wobec konsensusu (H1-A): jakość odniesienia (zgodność dwóch osób, reguła R14, podpowiedzi AI sprawdzone przez ludzi) i wyniki instrumentu \kod{stance\_v1}; warunek trafności z preregistracji: F1 \kod{challenges} $\geq$ 0,5 i $\kappa \geq$ 0,4 na teście, na wierszach sprawdzonych przez ludzi.}
+\caption{Stanowisko wobec konsensusu (H1-A): jakość odniesienia (zgodność dwóch osób, reguła R14, preannotacja AI zweryfikowana przez \resPlanCCheckedBy) i wyniki instrumentu \kod{stance\_v1}; warunek trafności z preregistracji: F1 \kod{challenges} $\geq$ 0,5 i $\kappa \geq$ 0,4 na teście, na wierszach zweryfikowanych przez \resPlanCCheckedBy.}
 \label{tab:stance}
 \tabela{preprint_stance}
 \end{table}

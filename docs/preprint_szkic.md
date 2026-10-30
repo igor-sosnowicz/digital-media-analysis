@@ -168,7 +168,7 @@ Tezy:
    - asystent AI (Claude Code) pisał kod i testy;
    - przygotował etykiety wstępne JP, które JP zatwierdził;
    - sklasyfikował listę domen H2;
-   - przygotował podpowiedzi etykiet w planie C (stanowisko, audyt, przyczyny błędów, domeny), sprawdzone przez ludzi, z liczbą poprawek;
+   - przygotował preannotację etykiet w planie C (stanowisko, audyt, przyczyny błędów, domeny), zweryfikowaną i zatwierdzoną przez JP, z liczbą poprawek (0 %);
    - zaproponował reguły codebooka do automatycznej annotacji; ich precyzję zmierzyli ludzie na ślepo;
    - wykonał przebieg próbny potoku na swoich etykietach (wynik ujawniony w preregistracji);
    - przygotował pakiet wyników i szkic struktury;

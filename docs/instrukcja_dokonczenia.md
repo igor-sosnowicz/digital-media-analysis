@@ -125,7 +125,7 @@ Makra są zdefiniowane w `report/numbers.tex` (plik generowany; nie edytujcie go
   - `\resAuditConsensusValid` = „tylko opis”, `\resAuditAlternativeValid` = „ważny”;
   - `\resHoneAThresholds` = „relevance 0,30, supports 0,30, challenges 0,70”.
 - **Uwaga na trzy makra:**
-  - `\resPlanCCheckedBy` = „ludzi”. Faktycznie wszystkie wiersze sprawdził jeden człowiek (JP), więc lepiej napisać to wprost, bez makra.
+  - `\resPlanCCheckedBy` = „JP” (od 30.10.2026; wcześniej „ludzi”, choć wszystkie wiersze sprawdził jeden człowiek). Pasuje do zdań w rodzaju „zweryfikowana przez JP”.
   - `\resPlanCAiChanged` = „0 %”: JP nie zmienił żadnej podpowiedzi AI. To trzeba opisać uczciwie (ryzyko zakotwiczenia na podpowiedzi), a nie ukrywać.
   - `\resHoneAPilotKappa` i `\resHoneAPilotUnits` = „nie zakodowano”. Używajcie ich tylko w zdaniu, w którym to pasuje, albo napiszcie wprost, że pilotażu stanowiska dwóch osób nie było.
 - Makra trendu H1-A (`\resHoneAChallengesOr`, `\resHoneASupportsOr`, `\resHoneARelevantPosts` i inne) mają wartość „nie testowano”. W tekście ich nie używajcie, bo trendu H1-A nie liczyliśmy.

@@ -16,7 +16,7 @@ Każda odpowiedź wskazuje dowód: makro z `report/numbers.tex`, tabelę, rysune
 | 10 | **„Korelacja w czasie to nie przyczynowość.”** | Zgadzamy się i tak piszemy. Efekty stałe usuwają zmianę składu między subredditami, ale nie zmianę populacji w ich obrębie. | sekcja 6 |
 | 11 | **„Wikipedia: instrument ma F1 0,26, więc pomiar nie działa.”** | Dlatego H2 mierzymy po domenach linków, nie instrumentem tekstowym. Wynik instrumentu na Wikipedii raportujemy jako negatywny. | `\resTestGlinerWikipediaCitesF`; Tab. 2 |
 | 12 | **„Domeny sklasyfikowało AI.”** | Podpowiedzi AI sprawdził JP; przegląd zmienił 3 domeny, żadna nie dotyczy `social_blog`. H2 w dwóch wersjach daje ten sam wynik (OR 1,47, p = 0,006). | `\resHtwoBeforeReviewOr`, `\resHtwoOr`; wpis z 27.10 o domenach |
-| 13 | **„Rola AI w badaniu jest niejasna.”** | Sekcja 7 wylicza fakty: kod i testy, podpowiedzi etykiet sprawdzone przez ludzi, reguły, przebieg próbny, pakiet wyników. Tekst napisali autorzy. Instrumenty pomiaru to lokalne modele otwarte. | sekcja 7; historia commitów |
+| 13 | **„Rola AI w badaniu jest niejasna.”** | Sekcja 7 wylicza fakty: kod i testy, preannotacja etykiet zweryfikowana i zatwierdzona przez JP, reguły, przebieg próbny, pakiet wyników i propozycje szkiców części tekstu (przeredagowane przez autorów albo ujawnione). Instrumenty pomiaru to lokalne modele otwarte. | sekcja 7; historia commitów |
 
 ## Stan
 
