@@ -788,29 +788,42 @@ def figure_h2(links: pd.DataFrame, path) -> None:
     figure.savefig(path, dpi=200, facecolor=SURFACE)
 
 
-def figure_agreement(table: pd.DataFrame, path) -> None:
+# Labels of the agreement figure per language; Polish uses a decimal comma and a space before %.
+AGREEMENT_FIGURE_LABELS = {
+    "en": {"types": "types (MASI)", "agreement": "agreement", "space": "", "decimal": ".",
+           "axis": "Krippendorff's α with 95% bootstrap interval (pilot, 2 coders)"},
+    "pl": {"types": "typy (MASI)", "agreement": "zgodność", "space": " ", "decimal": ",",
+           "axis": "α Krippendorffa z 95% przedziałem bootstrap (pilotaż, 2 osoby)"},
+}
+
+
+def figure_agreement(table: pd.DataFrame, path, language: str = "en") -> None:
     """Pilot agreement of the two annotators for the headline variables, with Krippendorff's thresholds."""
     import matplotlib.pyplot as plt
+    from matplotlib.ticker import FuncFormatter
 
-    specs = [("reddit", "cites_source", "Reddit: cites_source"), ("reddit", "source_types", "Reddit: types (MASI)"),
+    labels = AGREEMENT_FIGURE_LABELS[language]
+    specs = [("reddit", "cites_source", "Reddit: cites_source"), ("reddit", "source_types", f"Reddit: {labels['types']}"),
              ("wikipedia", "cites_source", "Wikipedia: cites_source"), ("wikipedia", "edit_about_sources", "Wikipedia: edit_about_sources"),
-             ("wikipedia", "source_types", "Wikipedia: types (MASI)")]
+             ("wikipedia", "source_types", f"Wikipedia: {labels['types']}")]
     rows = table.set_index(["platform", "variable"])
     figure, axis = plt.subplots(figsize=(7.5, 2.6), facecolor=SURFACE)
     _axes(axis)
     for threshold in [ALPHA_TENTATIVE, ALPHA_RELIABLE]:
         axis.axvline(threshold, color=INK_SECONDARY, linewidth=1, linestyle=(0, (4, 3)))
-        axis.text(threshold, len(specs) - 0.45, f"{threshold:.3g}", ha="center", fontsize=7, color=INK_SECONDARY)
+        axis.text(threshold, len(specs) - 0.45, f"{threshold:.3g}".replace(".", labels["decimal"]), ha="center", fontsize=7,
+                  color=INK_SECONDARY)
     for position, (platform, variable, label) in zip(range(len(specs))[::-1], specs):
         row = rows.loc[(platform, variable)]
         axis.hlines(position, row["alpha_low"], row["alpha_high"], color=SERIES, linewidth=2)
         axis.plot(row["alpha"], position, "o", color=SERIES, markersize=7, markeredgecolor=SURFACE, markeredgewidth=2)
-        axis.text(1.04, position, f"agreement {row['observed_agreement']:.0%}, n = {int(row['units'])}",
-                  va="center", fontsize=7, color=INK_SECONDARY)
+        share = f"{row['observed_agreement']:.0%}".replace("%", f"{labels['space']}%")
+        axis.text(1.04, position, f"{labels['agreement']} {share}, n = {int(row['units'])}", va="center", fontsize=7, color=INK_SECONDARY)
     axis.set_yticks(range(len(specs))[::-1])
     axis.set_yticklabels([label for _, _, label in specs], fontsize=8, color=INK)
     axis.set_xlim(-0.3, 1.0)
-    axis.set_xlabel("Krippendorff's α with 95% bootstrap interval (pilot, 2 coders)", fontsize=8, color=INK_SECONDARY)
+    axis.xaxis.set_major_formatter(FuncFormatter(lambda value, _: f"{value:g}".replace("-", "−").replace(".", labels["decimal"])))
+    axis.set_xlabel(labels["axis"], fontsize=8, color=INK_SECONDARY)
     figure.tight_layout()
     figure.savefig(path, dpi=200, facecolor=SURFACE, bbox_inches="tight")
 
@@ -845,6 +858,7 @@ def main() -> None:
     figure_h1_slide(frame, figures / "slide_h1.png")
     figure_h2(links, figures / "preprint_h2.png")
     figure_agreement(agreement_table, figures / "preprint_agreement.png")
+    figure_agreement(agreement_table, figures / "preprint_agreement_pl.png", language="pl")
     figure_stance_confusion(figures / "preprint_stance_confusion.png")
     print(f"{len(numbers)} numbers -> {REPORT_DIR / 'numbers.tex'}; tables and figures in {REPORT_DIR}; H1-A: {status}")
 
