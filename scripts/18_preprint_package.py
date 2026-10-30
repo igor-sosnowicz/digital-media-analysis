@@ -628,7 +628,8 @@ def _share_panel(axis, part: pd.DataFrame, title: str, formatter) -> None:
     axis.yaxis.set_major_formatter(formatter)
 
 
-def _composition_panel(axis, frame: pd.DataFrame, formatter, legend_below: bool = False) -> None:
+def _composition_panel(axis, frame: pd.DataFrame, formatter, legend_below: bool = False,
+                       title: str = "skład próby H1-B (udział ważony subredditów)") -> None:
     """Weighted subreddit make-up of the H1-B sample per year."""
     weights = frame.groupby(["year", "group"])["weight"].sum().unstack(fill_value=0)
     shares = weights.div(weights.sum(axis=1), axis=0)
@@ -639,40 +640,53 @@ def _composition_panel(axis, frame: pd.DataFrame, formatter, legend_below: bool 
     axis.set_ylim(0, 1)
     axis.set_xlim(shares.index.min(), shares.index.max())
     axis.yaxis.set_major_formatter(formatter)
-    axis.set_title("skład próby H1-B (udział ważony subredditów)", loc="left", fontsize=9, color=INK)
+    axis.set_title(title, loc="left", fontsize=9, color=INK)
     if legend_below:
         axis.legend(frameon=False, fontsize=7, labelcolor=INK, loc="upper center", bbox_to_anchor=(0.5, -0.1), ncol=4)
     else:
         axis.legend(frameon=False, fontsize=7, labelcolor=INK, loc="upper left", bbox_to_anchor=(1.0, 1.0))
 
 
-def _percent_formatter():
+def _percent_formatter(space: str = " "):
     from matplotlib.ticker import FuncFormatter
 
-    return FuncFormatter(lambda value, _: f"{value:.0%}".replace("%", " %"))
+    return FuncFormatter(lambda value, _: f"{value:.0%}".replace("%", f"{space}%"))
 
 
-def figure_h1(frame: pd.DataFrame, path, hypotheses_dir=HYPOTHESES_DIR) -> None:
+# Panel titles of the H1 figure per language (Polish keeps a space before %, English does not).
+H1_FIGURE_LABELS = {
+    "pl": {"consensus": "H1-B: źródła konsensusu (wśród postów z powołaniem)",
+           "alternative": "H1-B: źródła alternatywne (wśród postów z powołaniem)",
+           "challenges": "H1-A: posty podważające konsensus (wśród postów o nauce)",
+           "composition": "skład próby H1-B (udział ważony subredditów)", "space": " "},
+    "en": {"consensus": "H1-B: consensus sources (among posts citing a source)",
+           "alternative": "H1-B: alternative sources (among posts citing a source)",
+           "challenges": "H1-A: posts challenging the consensus (among posts about science)",
+           "composition": "H1-B sample composition (weighted share of subreddits)", "space": ""},
+}
+
+
+def figure_h1(frame: pd.DataFrame, path, hypotheses_dir=HYPOTHESES_DIR, language: str = "pl") -> None:
     """H1: yearly shares of consensus and alternative sources (H1-B) and the subreddit make-up of the citing posts,
     in one row; the share of posts challenging the consensus (H1-A) comes first, in a 2 x 2 grid, only when H1-A
     was measured (stance_v1 failed its validity gate, so its trend does not exist)."""
     import matplotlib.pyplot as plt
 
+    labels = H1_FIGURE_LABELS[language]
     yearly = pd.read_csv(hypotheses_dir / "confirmatory_yearly.csv")
     yearly = yearly[yearly["group"].eq("all")]
-    panels = [("H1-B", "consensus", "H1-B: źródła konsensusu (wśród postów z powołaniem)"),
-              ("H1-B", "alternative", "H1-B: źródła alternatywne (wśród postów z powołaniem)")]
+    panels = [("H1-B", "consensus"), ("H1-B", "alternative")]
     if yearly["hypothesis"].eq("H1-A").any():
-        panels.insert(0, ("H1-A", "challenges", "H1-A: posty podważające konsensus (wśród postów o nauce)"))
+        panels.insert(0, ("H1-A", "challenges"))
         figure, grid = plt.subplots(2, 2, figsize=(11, 6.2), facecolor=SURFACE)
     else:
         figure, grid = plt.subplots(1, 3, figsize=(13, 3.9), facecolor=SURFACE)
     axes = grid.flatten()
-    formatter = _percent_formatter()
-    for axis, (hypothesis, outcome, title) in zip(axes, panels):
+    formatter = _percent_formatter(labels["space"])
+    for axis, (hypothesis, outcome) in zip(axes, panels):
         part = yearly[yearly["hypothesis"].eq(hypothesis) & yearly["outcome"].eq(outcome)].sort_values("year")
-        _share_panel(axis, part, title, formatter)
-    _composition_panel(axes[len(panels)], frame, formatter, legend_below=len(panels) == 2)
+        _share_panel(axis, part, labels[outcome], formatter)
+    _composition_panel(axes[len(panels)], frame, formatter, legend_below=len(panels) == 2, title=labels["composition"])
     figure.tight_layout()
     figure.savefig(path, dpi=200, facecolor=SURFACE)
 
@@ -782,6 +796,7 @@ def main() -> None:
     figures.mkdir(parents=True, exist_ok=True)
     figure_instruments(figures / "preprint_instruments.png")
     figure_h1(frame, figures / "preprint_h1.png")
+    figure_h1(frame, figures / "preprint_h1_en.png", language="en")
     figure_h1_slide(frame, figures / "slide_h1.png")
     figure_h2(links, figures / "preprint_h2.png")
     figure_agreement(agreement_table, figures / "preprint_agreement.png")
