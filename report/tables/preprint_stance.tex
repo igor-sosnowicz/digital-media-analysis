@@ -1,13 +1,13 @@
 \begin{tabular}{p{4.6cm}lllp{4.4cm}}
 \toprule
-Pomiar & $n$ & F1 \kod{challenges} & $\kappa$ & Uwagi \\
+Measurement & $n$ & F1 \kod{challenges} & $\kappa$ & Notes \\
 \midrule
-zgodność dwóch osób (\kod{pilot2}, bez podpowiedzi) & \textit{nie zakodowano} & -- & \textit{nie zakodowano} & $\alpha$ = \textit{nie zakodowano} \\
-odniesienie: reguła R14 (kontrola na ślepo) & 11 & -- & -- & zachowane 11/11 \\
-odniesienie: preannotacja AI zweryfikowana przez JP & 335 & -- & -- & poprawiono 0\,\% \\
+two-person agreement (\kod{pilot2}, without pre-annotations) & \textit{not coded} & -- & \textit{not coded} & $\alpha$ = \textit{not coded} \\
+reference: rule R14 (blind check) & 11 & -- & -- & retained 11/11 \\
+reference: AI pre-annotation verified by JP & 335 & -- & -- & changed 0\% \\
 \midrule
-\kod{stance\_v1}, \kod{dev} (strojenie) & 218 & 0{,}25 & 0{,}33 & macro-F1 0{,}45 \\
-\kod{stance\_v1}, test (jeden przebieg) & 171 & 0{,}33 & 0{,}24 & warunek trafności: niespełniony; precyzja 0{,}80, czułość 0{,}21 \\
-test, wszystkie wiersze (wrażliwość) & 216 & 0{,}33 & 0{,}27 & z etykietami z reguł \\
+\kod{stance\_v1}, \kod{dev} (tuning) & 218 & 0.25 & 0.33 & macro-F1 0.45 \\
+\kod{stance\_v1}, test (single run) & 171 & 0.33 & 0.24 & validity criterion: not met; precision 0.80, recall 0.21 \\
+test, all rows (sensitivity) & 216 & 0.33 & 0.27 & including rule-based labels \\
 \bottomrule
 \end{tabular}

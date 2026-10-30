@@ -24,30 +24,33 @@ def code(name: str) -> str:
     return rf"\texttt{{{escape(name)}}}"
 
 
-def number(value: float, digits: int = 2) -> str:
-    """A number with a decimal comma and a typeset minus; a dash when missing."""
+def number(value: float, digits: int = 2, english: bool = False) -> str:
+    """A number with a decimal comma (a decimal point in English) and a typeset minus; a dash when missing."""
     if value is None or (isinstance(value, float) and not np.isfinite(value)):
         return "--"
-    text = f"{abs(float(value)):.{digits}f}".replace(".", "{,}")
-    return ("$-$" if float(value) < 0 and text.strip("0{,}") else "") + text
+    text = f"{abs(float(value)):.{digits}f}"
+    text = text if english else text.replace(".", "{,}")
+    return ("$-$" if float(value) < 0 and text.strip("0.{,}") else "") + text
 
 
-def interval(low: float, high: float, digits: int = 2) -> str:
+def interval(low: float, high: float, digits: int = 2, english: bool = False) -> str:
+    """[low; high] in Polish notation, [low, high] in English."""
     if low is None or high is None or not (np.isfinite(low) and np.isfinite(high)):
         return ""
-    return f"[{number(low, digits)}; {number(high, digits)}]"
+    separator = ", " if english else "; "
+    return f"[{number(low, digits, english)}{separator}{number(high, digits, english)}]"
 
 
-def estimate(value: float, low: float, high: float, digits: int = 2) -> str:
+def estimate(value: float, low: float, high: float, digits: int = 2, english: bool = False) -> str:
     """A value with its interval below it in a smaller font, for narrow columns."""
-    bounds = interval(low, high, digits)
-    return number(value, digits) + (rf" {{\scriptsize {bounds}}}" if bounds else "")
+    bounds = interval(low, high, digits, english)
+    return number(value, digits, english) + (rf" {{\scriptsize {bounds}}}" if bounds else "")
 
 
-def p_value(value: float) -> str:
+def p_value(value: float, english: bool = False) -> str:
     if value is None or not np.isfinite(value):
         return "--"
-    return "$<$0{,}001" if value < 0.001 else number(value, 3)
+    return "$<$" + number(0.001, 3, english) if value < 0.001 else number(value, 3, english)
 
 
 def tabular(header: Sequence[str], rows: Sequence[Sequence[str]], align: str, groups: Sequence[int] = ()) -> str:

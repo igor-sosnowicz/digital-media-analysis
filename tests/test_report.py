@@ -12,6 +12,9 @@ def test_numbers_use_a_decimal_comma_and_a_typeset_minus():
     assert report.interval(0.1, 0.25) == "[0{,}10; 0{,}25]"
     assert report.interval(np.nan, 0.2) == ""
     assert report.p_value(0.0004) == "$<$0{,}001" and report.p_value(0.0283) == "0{,}028"
+    # English notation for the preprint: a decimal point and a comma between interval bounds.
+    assert report.number(-0.031, english=True) == "$-$0.03" and report.number(-0.001, english=True) == "0.00"
+    assert report.interval(0.1, 0.25, english=True) == "[0.10, 0.25]" and report.p_value(0.0004, english=True) == "$<$0.001"
 
 
 def test_special_characters_are_escaped():

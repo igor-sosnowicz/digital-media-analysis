@@ -8,7 +8,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[polish]{babel}
+\usepackage[english]{babel}
 \usepackage{lmodern}
 \usepackage{microtype}
 \usepackage[margin=2cm]{geometry}
@@ -32,7 +32,7 @@
 % Tytuł do ustalenia przez lead badawczego.
 \title{[Tytuł]}
 \author{Jan Poręba \and Igor Sosnowicz}
-\date{Analiza Mediów Cyfrowych, projekt \kod{digital-media-analysis}}
+\date{Digital Media Analysis, project \kod{digital-media-analysis}}
 
 \begin{document}
 \maketitle
@@ -202,7 +202,7 @@ which were added to the COVID-19 article, created in February 2020.
 
 \begin{table}[htbp]
 \centering
-\caption{Rama losowania, próba gold i zgodność annotatorów w pilotażu.}
+\caption{Sampling frames, gold-standard sample and annotator agreement in the pilot.}
 \label{tab:dane}
 \szeroka{preprint_data}
 \end{table}
@@ -224,7 +224,7 @@ which were added to the COVID-19 article, created in February 2020.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\linewidth]{preprint_agreement.png}
-\caption{Zgodność dwóch osób w pilotażu: $\alpha$ Krippendorffa z 95\% przedziałem i progi 0,667 oraz 0,8.}
+\caption{Agreement between the two annotators in the pilot: Krippendorff's $\alpha$ with 95\% intervals and the thresholds 0.667 and 0.8.}
 \label{fig:zgodnosc}
 \end{figure}
 
@@ -258,20 +258,20 @@ which were added to the COVID-19 article, created in February 2020.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{preprint_instruments.png}
-\caption{Metryki trzech instrumentów na zbiorze testowym, ważone, z 95\% przedziałami bootstrap.}
+\caption{Weighted test-set metrics of the three source instruments, with 95\% bootstrap intervals.}
 \label{fig:instrumenty}
 \end{figure}
 
 \begin{table}[htbp]
 \centering
-\caption{Wyniki na zbiorze testowym (jeden przebieg na zamrożonych instrumentach).}
+\caption{Results on the test split (a single run of the frozen instruments).}
 \label{tab:test}
-\tabela{test_metrics}
+\tabela{preprint_test_metrics}
 \end{table}
 
 \begin{table}[htbp]
 \centering
-\caption{Stanowisko wobec konsensusu (H1-A): jakość odniesienia (zgodność dwóch osób, reguła R14, preannotacja AI zweryfikowana przez \resPlanCCheckedBy) i wyniki instrumentu \kod{stance\_v1}; warunek trafności z preregistracji: F1 \kod{challenges} $\geq$ 0,5 i $\kappa \geq$ 0,4 na teście, na wierszach zweryfikowanych przez \resPlanCCheckedBy.}
+\caption{Stance towards the scientific consensus (H1-A): quality of the reference (two-person agreement, rule R14, AI pre-annotation verified by \resPlanCCheckedBy) and results of \kod{stance\_v1}; preregistered validity criterion: F1 for \kod{challenges} $\geq$ 0.5 and $\kappa \geq$ 0.4 on the test split, on rows verified by \resPlanCCheckedBy.}
 \label{tab:stance}
 \tabela{preprint_stance}
 \end{table}
@@ -279,7 +279,7 @@ which were added to the COVID-19 article, created in February 2020.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.6\linewidth]{preprint_stance_confusion.png}
-\caption{Macierz pomyłek \kod{stance\_v1} na części testowej (gold i próba wzbogacona): wiersze to odniesienie, kolumny to instrument.}
+\caption{Confusion matrix of \kod{stance\_v1} on the test split (gold and enriched sample): rows are the reference, columns the instrument.}
 \label{fig:stance}
 \end{figure}
 
@@ -396,13 +396,13 @@ communities themselves.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{preprint_h1_en.png}
-\caption{H1-B: ważone roczne udziały źródeł konsensusu i alternatywnych wśród postów z powołaniem, z 95\% przedziałami bootstrap, oraz ważony skład próby według subredditu. H1-A nie jest pokazane, bo instrument stanowiska nie spełnił warunku trafności.}
+\caption{H1-B: weighted yearly shares of consensus and alternative sources among posts citing a source, with 95\% bootstrap intervals, and the weighted subreddit composition of the sample. H1-A is not shown because the stance instrument did not meet its validity criterion.}
 \label{fig:h1}
 \end{figure}
 
 \begin{table}[htbp]
 \centering
-\caption{H1: iloraz szans na rok [95\% CI] z efektami stałymi subredditu, $p$ jednostronne w kierunku hipotezy; H1-A to test główny, H1-B wskaźniki poboczne.}
+\caption{H1: odds ratio per year [95\% CI] with subreddit fixed effects and one-sided $p$ in the hypothesised direction; H1-A is the primary test, H1-B the secondary indicators.}
 \label{tab:h1}
 \tabela{preprint_h1}
 \end{table}
@@ -424,13 +424,13 @@ communities themselves.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{preprint_h2.png}
-\caption{H2: wszystkie linki zaklasyfikowane jako alternatywne według domeny, według właściciela konta; puste punkty to ponowne dodania tego samego linku.}
+\caption{H2: all links classified as alternative by domain, by date and article, coloured by account owner; hollow markers are re-additions of the same link.}
 \label{fig:h2}
 \end{figure}
 
 \begin{table}[htbp]
 \centering
-\caption{H2: test z preregistracji i preregistrowane analizy wrażliwości oraz analizy eksploracyjne ze sprawdzeniem pomiaru. W wierszach z logitem Firtha $p$ i przedział pochodzą z tej samej profilowanej penalizowanej wiarygodności, bez grupowania błędów po rewizji; test dokładny jest warunkowy względem strony.}
+\caption{H2: preregistered test and sensitivity analyses, and exploratory analyses including the measurement check. In the Firth rows, $p$ and the interval come from the same profile penalised likelihood, without clustering by revision; the exact test is conditional on the article.}
 \label{tab:h2}
 \tabela{preprint_h2}
 \end{table}
@@ -468,13 +468,13 @@ communities themselves.
 \bibitem{horvitz1952} D.~G. Horvitz, D.~J. Thompson. A generalization of sampling without replacement from a finite universe. \textit{Journal of the American Statistical Association}, 47(260):663--685, 1952.
 \bibitem{kendall1938} M.~G. Kendall. A new measure of rank correlation. \textit{Biometrika}, 30(1/2):81--93, 1938.
 \bibitem{kitagawa1955} E.~M. Kitagawa. Components of a difference between two rates. \textit{Journal of the American Statistical Association}, 50(272):1168--1194, 1955.
-\bibitem{krippendorff2004} K.~Krippendorff. \textit{Content Analysis: An Introduction to Its Methodology}. Wyd.~2. Sage, 2004.
+\bibitem{krippendorff2004} K.~Krippendorff. \textit{Content Analysis: An Introduction to Its Methodology}. 2nd ed. Sage, 2004.
 \bibitem{laurer2024} M.~Laurer, W.~van Atteveldt, A.~Casas, K.~Welbers. Less annotating, more classifying: Addressing the data scarcity issue of supervised machine learning with deep transfer learning and BERT-NLI. \textit{Political Analysis}, 32(1):84--100, 2024.
 \bibitem{lewandowsky2012} S.~Lewandowsky, U.~K.~H. Ecker, C.~M. Seifert, N.~Schwarz, J.~Cook. Misinformation and its correction: Continued influence and successful debiasing. \textit{Psychological Science in the Public Interest}, 13(3):106--131, 2012.
 \bibitem{mcnemar1947} Q.~McNemar. Note on the sampling error of the difference between correlated proportions or percentages. \textit{Psychometrika}, 12(2):153--157, 1947.
-\bibitem{passonneau2006} R.~Passonneau. Measuring agreement on set-valued items (MASI) for semantic and pragmatic annotation. W: \textit{Proceedings of LREC 2006}, 2006.
+\bibitem{passonneau2006} R.~Passonneau. Measuring agreement on set-valued items (MASI) for semantic and pragmatic annotation. In: \textit{Proceedings of LREC 2006}, 2006.
 \bibitem{vosoughi2018} S.~Vosoughi, D.~Roy, S.~Aral. The spread of true and false news online. \textit{Science}, 359(6380):1146--1151, 2018.
-\bibitem{zaratiana2024} U.~Zaratiana, N.~Tomeh, P.~Holat, T.~Charnois. GLiNER: Generalist model for named entity recognition using bidirectional transformer. W: \textit{Proceedings of NAACL 2024}, 2024.
+\bibitem{zaratiana2024} U.~Zaratiana, N.~Tomeh, P.~Holat, T.~Charnois. GLiNER: Generalist model for named entity recognition using bidirectional transformer. In: \textit{Proceedings of NAACL 2024}, 2024.
 \end{thebibliography}
 
 \end{document}

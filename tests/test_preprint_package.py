@@ -22,7 +22,7 @@ def test_h1a_numbers_are_placeholders_before_the_pipeline(tmp_path):
     numbers = script.Numbers()
     status = script.h1a_numbers(numbers, tmp_path, tmp_path, tmp_path)
     keys = h1a_keys(numbers)
-    assert status == "pending" and numbers["hone a status"] == "czeka na kodowanie stanowiska"
+    assert status == "pending" and numbers["hone a status"] == "waiting for stance coding"
     assert all(value == script.PENDING for key, value in keys.items() if key != "hone a status")
     assert script.PENDING in script.h1_table(tmp_path)
 
@@ -54,12 +54,12 @@ def test_h1a_numbers_fill_in_after_the_pipeline(tmp_path):
     write_outputs(tmp_path, passed=True, with_trends=True)
     numbers = script.Numbers()
     assert script.h1a_numbers(numbers, tmp_path, tmp_path, tmp_path) == "tested"
-    assert numbers["hone a test challenges f"] == "0{,}62" and numbers["hone a gate"] == "spełniony"
-    assert numbers["hone a challenges or"] == "1{,}05 [1{,}01; 1{,}09]" and numbers["hone a challenges p"] == "0{,}004"
-    assert numbers["hone a relevant posts"] == "1186" and numbers["hone a challenges share early"] == "10\\,\\%"
-    assert numbers["hone a thresholds"] == "relevance 0{,}40, supports 0{,}30, challenges 0{,}60"
+    assert numbers["hone a test challenges f"] == "0.62" and numbers["hone a gate"] == "met"
+    assert numbers["hone a challenges or"] == "1.05 [1.01, 1.09]" and numbers["hone a challenges p"] == "0.004"
+    assert numbers["hone a relevant posts"] == "1,186" and numbers["hone a challenges share early"] == "10\\%"
+    assert numbers["hone a thresholds"] == "relevance 0.40, supports 0.30, challenges 0.60"
     table = script.h1_table(tmp_path)
-    assert script.PENDING not in table.split("H1-B")[0] and "1{,}05 [1{,}01; 1{,}09]" in table
+    assert script.PENDING not in table.split("H1-B")[0] and "1.05 [1.01, 1.09]" in table
 
 
 def test_failed_gate_and_missing_test_have_their_own_status(tmp_path):
@@ -67,7 +67,7 @@ def test_failed_gate_and_missing_test_have_their_own_status(tmp_path):
     write_outputs(tmp_path, passed=False, with_trends=False)
     numbers = script.Numbers()
     assert script.h1a_numbers(numbers, tmp_path, tmp_path, tmp_path) == "gate_failed"
-    assert numbers["hone a gate"] == "niespełniony" and numbers["hone a challenges or"] == script.NOT_TESTED
+    assert numbers["hone a gate"] == "not met" and numbers["hone a challenges or"] == script.NOT_TESTED
     assert script.NOT_TESTED in script.h1_table(tmp_path, h1a_missing=script.NOT_TESTED).split("H1-B")[0]
     write_outputs(tmp_path, passed=True, with_trends=False)
     numbers = script.Numbers()
@@ -88,8 +88,8 @@ def test_plan_c_numbers_wait_for_data_and_fill_in(tmp_path):
                  ).to_csv(tmp_path / "audit_error_rates.csv", index=False)
     numbers = script.Numbers()
     script.plan_c_numbers(numbers, tmp_path, tmp_path, tmp_path, tmp_path)
-    assert numbers["plan c stance auto share"] == "35\,\%" and numbers["plan c stance rule precision"] == "5/6"
-    assert numbers["plan c ai changed"] == "10\,\%" and numbers["audit consensus valid"] == "ważny"
+    assert numbers["plan c stance auto share"] == "35\\%" and numbers["plan c stance rule precision"] == "5/6"
+    assert numbers["plan c ai changed"] == "10\\%" and numbers["audit consensus valid"] == "valid"
 
 
 def test_confusion_figure_is_a_placeholder_before_the_test(tmp_path):

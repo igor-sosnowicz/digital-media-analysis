@@ -8,8 +8,9 @@ analysis sample and its labels. Writes:
   prose follows the results; docs/podsumowanie_wynikow.md lists them by section;
 - report/tables/preprint_data.tex (data, sample, agreement), preprint_h1.tex
   (H1-A and H1-B trends side by side), preprint_stance.tex (stance agreement and
-  stance_v1 on dev and test) and preprint_h2.tex (H2: preregistered test,
-  robustness, measurement check); the preprint also uses test_metrics.tex from scripts/13;
+  stance_v1 on dev and test), preprint_h2.tex (H2: preregistered test,
+  robustness, measurement check) and preprint_test_metrics.tex (test metrics of the source instruments); all in
+  English, as the preprint is;
 - report/figures/preprint_instruments.png, preprint_h1.png (slide_h1.png: H1-B only, 16:9), preprint_h2.png,
   preprint_agreement.png.
 H1-A numbers, its table cells and its figure panel are placeholders (macro
@@ -41,21 +42,38 @@ from digital_media_analysis.paths import (  # noqa: E402
     PROJECT_ROOT,
     VALIDATION_DIR,
 )
-from digital_media_analysis.report import code, interval, macro_file, number, p_value, tabular  # noqa: E402
+from digital_media_analysis import report  # noqa: E402
+from digital_media_analysis.report import code, macro_file, tabular  # noqa: E402
 
 REPORT_DIR = PROJECT_ROOT / "report"
 INSTRUMENTS = {"rules_v1": "v1", "zeroshot_v1": "zero-shot", "gliner_v1": "GLiNER"}
 PLATFORMS = {"reddit": "Reddit", "wikipedia": "Wikipedia"}
 
 
+def number(value: float, digits: int = 2) -> str:
+    """A number in English notation (the preprint is in English)."""
+    return report.number(value, digits, english=True)
+
+
+def interval(low: float, high: float, digits: int = 2) -> str:
+    return report.interval(low, high, digits, english=True)
+
+
+def estimate(value: float, low: float, high: float, digits: int = 2) -> str:
+    return report.estimate(value, low, high, digits, english=True)
+
+
+def p_value(value: float) -> str:
+    return report.p_value(value, english=True)
+
+
 def count(value) -> str:
-    """An integer with a thin space every three digits from 10 000 on, as Polish typesetting has it."""
-    value = int(value)
-    return f"{value:,}".replace(",", "\\,") if value >= 10_000 else str(value)
+    """An integer with a comma every three digits, as English typesetting has it."""
+    return f"{int(value):,}"
 
 
 def percent(value: float, digits: int = 0) -> str:
-    return number(100 * value, digits) + "\\,\\%"
+    return number(100 * value, digits) + "\\%"
 
 
 def both(value: float, low: float, high: float, digits: int = 2) -> str:
@@ -270,16 +288,16 @@ def h2_numbers(numbers: Numbers, links: pd.DataFrame) -> None:
 
 PENDING = r"\resPending"
 # The stance pilot people never coded.
-NOT_CODED = r"\textit{nie zakodowano}"
+NOT_CODED = r"\textit{not coded}"
 # H1-A results that will never exist because stance_v1 failed its validity gate.
-NOT_TESTED = r"\textit{nie testowano}"
+NOT_TESTED = r"\textit{not tested}"
 # The one person who checked every plan C row people were to decide (docs/hipotezy.md, amendment "weryfikacja przez
 # człowieka" of 27.10.2026); the sheets record only that a person checked a row, not who.
 HUMAN_CHECKER = "JP"
-H1_ANALYSES = [("primary", "główna (2005--2018)"), ("sensitivity_period", "2005--2020"), ("only_science", "tylko r/science"),
-               ("only_conspiracy", "tylko r/conspiracy")]
-H1_INDICATORS = [("H1-A", "challenges", "H1-A: podważanie konsensusu (wzrost)"), ("H1-A", "supports", "H1-A: wsparcie konsensusu (spadek)"),
-                 ("H1-B", "consensus", "H1-B: źródła konsensusu (spadek)"), ("H1-B", "alternative", "H1-B: źródła alternatywne (wzrost)")]
+H1_ANALYSES = [("primary", "main (2005--2018)"), ("sensitivity_period", "2005--2020"), ("only_science", "r/science only"),
+               ("only_conspiracy", "r/conspiracy only")]
+H1_INDICATORS = [("H1-A", "challenges", "H1-A: challenging the consensus (increase)"), ("H1-A", "supports", "H1-A: supporting the consensus (decrease)"),
+                 ("H1-B", "consensus", "H1-B: consensus sources (decrease)"), ("H1-B", "alternative", "H1-B: alternative sources (increase)")]
 
 
 def h1a_numbers(numbers: Numbers, validation_dir=VALIDATION_DIR, agreement_dir=AGREEMENT_DIR, hypotheses_dir=HYPOTHESES_DIR) -> str:
@@ -310,7 +328,7 @@ def h1a_numbers(numbers: Numbers, validation_dir=VALIDATION_DIR, agreement_dir=A
     run_path = validation_dir / "stance_test_run.json"
     run = json.loads(run_path.read_text(encoding="utf-8")) if run_path.exists() else {}
     passed = run.get("gate", {}).get("passed")
-    numbers.put("hone a gate", PENDING if passed is None else ("spełniony" if passed else "niespełniony"))
+    numbers.put("hone a gate", PENDING if passed is None else ("met" if passed else "not met"))
     thresholds = run.get("thresholds")
     numbers.put("hone a thresholds", PENDING if not thresholds else
                 ", ".join(f"{name} {number(thresholds[name])}" for name in ["relevance", "supports", "challenges"]))
@@ -340,9 +358,9 @@ def h1a_numbers(numbers: Numbers, validation_dir=VALIDATION_DIR, agreement_dir=A
         status = "gate_failed"
     else:
         status = "tested" if len(found) else "awaiting_test"
-    texts = {"pending": "czeka na kodowanie stanowiska",
-             "gate_failed": r"warunek trafności niespełniony: H1-A niemierzalne instrumentem \kod{stance\_v1}",
-             "awaiting_test": "warunek trafności spełniony, czeka na test potwierdzający", "tested": "przetestowane"}
+    texts = {"pending": "waiting for stance coding",
+             "gate_failed": r"validity criterion not met: H1-A cannot be measured with \kod{stance\_v1}",
+             "awaiting_test": "validity criterion met, awaiting the confirmatory test", "tested": "tested"}
     numbers.put("hone a status", texts[status])
     return status
 
@@ -402,8 +420,8 @@ def plan_c_numbers(numbers: Numbers, agreement_dir=AGREEMENT_DIR, hypotheses_dir
     # Who checked the AI suggestions (amendments of 27.10.2026): the person, the AI assistant, or both.
     labels = pd.concat([gold_labels, enriched_labels], ignore_index=True)
     checkers = set(labels.loc[labels["decided_by"].fillna("human").ne("auto"), "verified_by"].dropna()) if "verified_by" in labels else set()
-    numbers.put("plan c checked by", {frozenset({"human"}): HUMAN_CHECKER, frozenset({"ai"}): "asystenta AI"}.get(
-        frozenset(checkers), f"{HUMAN_CHECKER} i asystenta AI" if checkers else WAITING))
+    numbers.put("plan c checked by", {frozenset({"human"}): HUMAN_CHECKER, frozenset({"ai"}): "the AI assistant"}.get(
+        frozenset(checkers), f"{HUMAN_CHECKER} and the AI assistant" if checkers else WAITING))
 
     quality_path = agreement_dir / "llm_quality.csv"
     quality = pd.read_csv(quality_path) if quality_path.exists() else pd.DataFrame(columns=["name"])
@@ -437,7 +455,7 @@ def plan_c_numbers(numbers: Numbers, agreement_dir=AGREEMENT_DIR, hypotheses_dir
         numbers.put(f"audit {indicator} j", both(row["youden"], row["youden_low"], row["youden_high"]) if found else WAITING)
         numbers.put(f"audit {indicator} sensitivity", number(row["sensitivity"]) if found else WAITING)
         numbers.put(f"audit {indicator} specificity", number(row["specificity"]) if found else WAITING)
-        numbers.put(f"audit {indicator} valid", ("ważny" if bool(row["valid"]) else "tylko opis") if found else WAITING)
+        numbers.put(f"audit {indicator} valid", ("valid" if bool(row["valid"]) else "descriptive only") if found else WAITING)
         numbers.put(f"audit {indicator} positives", count(row["positives"]) if found else WAITING)
 
 
@@ -460,7 +478,7 @@ def h1_table(hypotheses_dir=HYPOTHESES_DIR, h1a_missing: str = PENDING) -> str:
             else:
                 cells.append(h1a_missing if hypothesis == "H1-A" else PENDING)
         rows.append([label, *cells])
-    header = ["Wskaźnik (oczekiwany kierunek)", *(name for _, name in H1_ANALYSES)]
+    header = ["Indicator (expected direction)", *(name for _, name in H1_ANALYSES)]
     return tabular(header, rows, "p{3.9cm}" + "p{2.55cm}" * len(H1_ANALYSES), groups=[2])
 
 
@@ -468,21 +486,21 @@ def stance_table(numbers: Numbers) -> str:
     """Quality of the stance reference (agreement of two people, rule precision, AI suggestions people changed) and
     the dev and test results of stance_v1, with the gate on reviewed rows and on all rows (placeholders until known)."""
     rows = [
-        ["zgodność dwóch osób (\\kod{pilot2}, bez podpowiedzi)", numbers["hone a pilot units"], "--", numbers["hone a pilot kappa"],
+        ["two-person agreement (\\kod{pilot2}, without pre-annotations)", numbers["hone a pilot units"], "--", numbers["hone a pilot kappa"],
          f"$\\alpha$ = {numbers['hone a pilot alpha']}"],
-        ["odniesienie: reguła R14 (kontrola na ślepo)", numbers["plan c stance controls"], "--", "--",
-         f"zachowane {numbers['plan c stance rule precision']}"],
-        [f"odniesienie: preannotacja AI zweryfikowana przez {numbers['plan c checked by']}", numbers["plan c ai checked"], "--", "--",
-         f"poprawiono {numbers['plan c ai changed']}"],
-        ["\\kod{stance\\_v1}, \\kod{dev} (strojenie)", numbers["hone a dev posts"], numbers["hone a dev challenges f"],
+        ["reference: rule R14 (blind check)", numbers["plan c stance controls"], "--", "--",
+         f"retained {numbers['plan c stance rule precision']}"],
+        [f"reference: AI pre-annotation verified by {numbers['plan c checked by']}", numbers["plan c ai checked"], "--", "--",
+         f"changed {numbers['plan c ai changed']}"],
+        ["\\kod{stance\\_v1}, \\kod{dev} (tuning)", numbers["hone a dev posts"], numbers["hone a dev challenges f"],
          numbers["hone a dev kappa"], f"macro-F1 {numbers['hone a dev macro f']}"],
-        ["\\kod{stance\\_v1}, test (jeden przebieg)", numbers["hone a reviewed posts"], numbers["hone a test challenges f"],
-         numbers["hone a test kappa"], f"warunek trafności: {numbers['hone a gate']}; precyzja "
-         f"{numbers['hone a test challenges precision']}, czułość {numbers['hone a test challenges recall']}"],
-        ["test, wszystkie wiersze (wrażliwość)", numbers["hone a test posts"], numbers["hone a test all rows challenges f"],
-         numbers["hone a test all rows kappa"], "z etykietami z reguł"],
+        ["\\kod{stance\\_v1}, test (single run)", numbers["hone a reviewed posts"], numbers["hone a test challenges f"],
+         numbers["hone a test kappa"], f"validity criterion: {numbers['hone a gate']}; precision "
+         f"{numbers['hone a test challenges precision']}, recall {numbers['hone a test challenges recall']}"],
+        ["test, all rows (sensitivity)", numbers["hone a test posts"], numbers["hone a test all rows challenges f"],
+         numbers["hone a test all rows kappa"], "including rule-based labels"],
     ]
-    header = ["Pomiar", "$n$", "F1 \\kod{challenges}", "$\\kappa$", "Uwagi"]
+    header = ["Measurement", "$n$", "F1 \\kod{challenges}", "$\\kappa$", "Notes"]
     return tabular(header, rows, "p{4.6cm}lllp{4.4cm}", groups=[3])
 
 
@@ -499,7 +517,7 @@ def figure_stance_confusion(path, validation_dir=VALIDATION_DIR, predictions_dir
     axis.set_facecolor(SURFACE)
     if not (validation_dir / "stance_test_run.json").exists() or not predictions_path.exists():
         axis.axis("off")
-        axis.text(0.5, 0.5, "czeka na test stance_v1 (07b)", ha="center", va="center", fontsize=10, color=INK_SECONDARY)
+        axis.text(0.5, 0.5, "waiting for the stance_v1 test (07b)", ha="center", va="center", fontsize=10, color=INK_SECONDARY)
         figure.savefig(path, dpi=200, facecolor=SURFACE)
         return
     sample = pd.read_csv(sample_path, dtype={"unit_id": str}) if sample_path.exists() else None
@@ -520,8 +538,8 @@ def figure_stance_confusion(path, validation_dir=VALIDATION_DIR, predictions_dir
     for side in axis.spines.values():
         side.set_visible(False)
     axis.set_xlabel("stance_v1", fontsize=8, color=INK_SECONDARY)
-    axis.set_ylabel("odniesienie", fontsize=8, color=INK_SECONDARY)
-    axis.set_title(f"stance_v1 na teście: liczba postów (n = {int(table.to_numpy().sum())})", loc="left", fontsize=9, color=INK)
+    axis.set_ylabel("reference", fontsize=8, color=INK_SECONDARY)
+    axis.set_title(f"stance_v1 on the test split: number of posts (n = {int(table.to_numpy().sum())})", loc="left", fontsize=9, color=INK)
     figure.tight_layout()
     figure.savefig(path, dpi=200, facecolor=SURFACE)
 
@@ -536,9 +554,33 @@ def data_table(coded: pd.DataFrame, agreement_table: pd.DataFrame, numbers: Numb
                      count(agree.loc[(platform, "cites_source"), "units"]),
                      both(agree.loc[(platform, "cites_source"), "alpha"], np.nan, np.nan),
                      both(agree.loc[(platform, "source_types"), "alpha"], np.nan, np.nan)])
-    header = ["", "Rama", "Próba: pilotaż / dev / test", "Gold: dev / test", "Pilotaż (2 osoby)",
-              r"$\alpha$ " + code("cites_source"), r"$\alpha$ typy (MASI)"]
+    header = ["", "Frame", "Sample: pilot / dev / test", "Gold: dev / test", "Pilot (2 coders)",
+              r"$\alpha$ " + code("cites_source"), r"$\alpha$ types (MASI)"]
     return tabular(header, rows, "lrcccrr")
+
+
+def test_table() -> str:
+    """Test-split metrics of the three frozen source instruments (Tab. 2), the English counterpart of test_metrics.tex."""
+    table = pd.read_csv(VALIDATION_DIR / "test_metrics.csv")
+    specs = [("reddit", "cites_source", "f1", "F1 " + code("cites_source")),
+             ("reddit", "cites_source", "kappa", r"$\kappa$ " + code("cites_source")),
+             ("reddit", "source_types", "masi", "MASI"), ("reddit", "source_types", "macro_f1", "macro-F1"),
+             ("wikipedia", "cites_source", "f1", "F1 " + code("cites_source")),
+             ("wikipedia", "edit_about_sources", "f1", "F1 " + code("edit_about_sources")),
+             ("wikipedia", "source_types", "masi", "MASI")]
+    rows = []
+    for platform, variable, name, label in specs:
+        cells = []
+        for instrument in INSTRUMENTS:
+            try:
+                row = metric(table, instrument, platform, variable, name)
+            except KeyError:
+                cells.append("--")
+                continue
+            shown = name != "kappa"
+            cells.append(estimate(row["value"], row["low"] if shown else np.nan, row["high"] if shown else np.nan))
+        rows.append([PLATFORMS[platform], label, *cells])
+    return tabular(["", "Metric", *INSTRUMENTS.values()], rows, "ll" + "c" * len(INSTRUMENTS), groups=[4])
 
 
 def h2_table() -> str:
@@ -548,20 +590,20 @@ def h2_table() -> str:
     permutation = json.loads((HYPOTHESES_DIR / "exploratory_h2_permutation.json").read_text(encoding="utf-8"))
     exact = json.loads((HYPOTHESES_DIR / "exploratory_h2_exact_by_owner.json").read_text(encoding="utf-8"))
     rows = []
-    for analysis, label in [("primary", "test główny"), ("without_covid19", "bez strony COVID-19"), ("without_2020", "bez roku 2020"),
-                            ("classified_only", "tylko domeny sklasyfikowane")]:
+    for analysis, label in [("primary", "main test"), ("without_covid19", "without the COVID-19 article"), ("without_2020", "without 2020"),
+                            ("classified_only", "classified domains only")]:
         row = rows_h2.loc[analysis]
-        rows.append(["preregistrowane", label, both(row["odds_ratio_per_year"], row["ci_low"], row["ci_high"]),
+        rows.append(["preregistered", label, both(row["odds_ratio_per_year"], row["ci_low"], row["ci_high"]),
                      p_value(row["p_one_sided"]), count(row["positives"])])
-    rows.append(["eksploracyjne", "permutacja lat między rewizjami", "--", p_value(permutation["p_one_sided"]), "10"])
-    for analysis, label in [("Firth, all pages", "logit Firtha, wszystkie strony"),
-                            ("measurement: first addition of each link only", "tylko pierwsze dodanie linku"),
-                            ("measurement: owner of the post (WHO, GIS posts are institutional)", "według właściciela konta (Firth)")]:
+    rows.append(["exploratory", "permutation of years across revisions", "--", p_value(permutation["p_one_sided"]), "10"])
+    for analysis, label in [("Firth, all pages", "Firth logit, all articles"),
+                            ("measurement: first addition of each link only", "first addition of each link only"),
+                            ("measurement: owner of the post (WHO, GIS posts are institutional)", "by account owner (Firth)")]:
         row = robustness.loc[analysis]
-        rows.append(["eksploracyjne", label, both(row["ratio_per_year"], row["ci_low"], row["ci_high"]), p_value(row["p_one_sided"]),
+        rows.append(["exploratory", label, both(row["ratio_per_year"], row["ci_low"], row["ci_high"]), p_value(row["p_one_sided"]),
                      count(row["events"])])
-    rows.append(["eksploracyjne", "według właściciela, test dokładny", "--", p_value(exact["p_one_sided"]), "2"])
-    return tabular(["", "Analiza", "OR/rok [95\\% CI]", "$p$ jednostr.", "Zdarzenia"], rows, "lllrr", groups=[4])
+    rows.append(["exploratory", "by account owner, exact test", "--", p_value(exact["p_one_sided"]), "2"])
+    return tabular(["", "Analysis", "OR/year [95\\% CI]", "one-sided $p$", "Events"], rows, "lllrr", groups=[4])
 
 
 def _axes(axis, grid: str = "x") -> None:
@@ -579,10 +621,10 @@ def figure_instruments(path) -> None:
     import matplotlib.pyplot as plt
 
     test = pd.read_csv(VALIDATION_DIR / "test_metrics.csv")
-    panels = {"reddit": [("cites_source", "f1", "F1 cites_source"), ("source_types", "masi", "MASI (typy)"),
-                         ("source_types", "macro_f1", "macro-F1 (typy)")],
+    panels = {"reddit": [("cites_source", "f1", "F1 cites_source"), ("source_types", "masi", "MASI (types)"),
+                         ("source_types", "macro_f1", "macro-F1 (types)")],
               "wikipedia": [("cites_source", "f1", "F1 cites_source"), ("edit_about_sources", "f1", "F1 edit_about_sources"),
-                            ("source_types", "masi", "MASI (typy)")]}
+                            ("source_types", "masi", "MASI (types)")]}
     figure, axes = plt.subplots(1, 2, figsize=(10, 3.3), sharex=True, facecolor=SURFACE)
     offsets = dict(zip(INSTRUMENTS, [0.22, 0.0, -0.22]))
     for axis, (platform, specs) in zip(axes, panels.items()):
@@ -602,10 +644,10 @@ def figure_instruments(path) -> None:
         axis.set_yticks(range(len(specs))[::-1])
         axis.set_yticklabels([label for _, _, label in specs], fontsize=8, color=INK)
         axis.set_xlim(0, 1)
-        axis.set_title(f"{PLATFORMS[platform]}: zbiór testowy", loc="left", fontsize=10, color=INK)
+        axis.set_title(f"{PLATFORMS[platform]}: test split", loc="left", fontsize=10, color=INK)
     handles, labels = axes[0].get_legend_handles_labels()
     figure.legend(handles, labels, frameon=False, fontsize=8, labelcolor=INK, loc="upper center", ncol=3, bbox_to_anchor=(0.5, 1.02))
-    figure.supxlabel("wartość miary (ważona) z 95% przedziałem bootstrap", fontsize=8, color=INK_SECONDARY)
+    figure.supxlabel("metric value (weighted) with 95% bootstrap interval", fontsize=8, color=INK_SECONDARY)
     figure.tight_layout(rect=(0, 0, 1, 0.93))
     figure.savefig(path, dpi=200, facecolor=SURFACE)
 
@@ -618,7 +660,7 @@ def _share_panel(axis, part: pd.DataFrame, title: str, formatter) -> None:
         axis.set_xticks([])
         axis.set_yticks([])
         axis.spines["bottom"].set_visible(False)
-        axis.text(0.5, 0.5, "czeka na kodowanie stanowiska i test H1-A\n(docs/h1a_kroki.md)", ha="center", va="center",
+        axis.text(0.5, 0.5, "waiting for stance coding and the H1-A test\n(docs/h1a_kroki.md)", ha="center", va="center",
                   fontsize=9, color=INK_SECONDARY, transform=axis.transAxes)
         return
     axis.fill_between(part["year"], part["low"], part["high"], color=SERIES, alpha=0.12, linewidth=0)
@@ -647,7 +689,7 @@ def _composition_panel(axis, frame: pd.DataFrame, formatter, legend_below: bool 
         axis.legend(frameon=False, fontsize=7, labelcolor=INK, loc="upper left", bbox_to_anchor=(1.0, 1.0))
 
 
-def _percent_formatter(space: str = " "):
+def _percent_formatter(space: str = ""):
     from matplotlib.ticker import FuncFormatter
 
     return FuncFormatter(lambda value, _: f"{value:.0%}".replace("%", f"{space}%"))
@@ -701,7 +743,7 @@ def figure_h1_slide(frame: pd.DataFrame, path, hypotheses_dir=HYPOTHESES_DIR) ->
     trends = pd.read_csv(hypotheses_dir / "confirmatory_trends.csv")
     trends = trends[trends["hypothesis"].eq("H1-B") & trends["analysis"].eq("primary")].set_index("outcome")
     figure, axes = plt.subplots(1, 3, figsize=(13.3, 4.2), facecolor=SURFACE)
-    formatter = _percent_formatter()
+    formatter = _percent_formatter(" ")  # the slide stays in Polish
     for axis, (outcome, title) in zip(axes[:2], [("consensus", "źródła konsensusu (wśród postów z powołaniem)"),
                                                  ("alternative", "źródła alternatywne (wśród postów z powołaniem)")]):
         _share_panel(axis, yearly[yearly["outcome"].eq(outcome)].sort_values("year"), title, formatter)
@@ -722,23 +764,25 @@ def figure_h2(links: pd.DataFrame, path) -> None:
 
     alternative = links[links["alternative"].eq(1)].copy()
     alternative["when"] = pd.to_datetime(alternative["introduced"], utc=True)
-    alternative["owner"] = np.where(alternative["owner_type"].eq("institution"), "konto instytucji (WHO, GIS)", "źródło alternatywne")
+    alternative["owner"] = np.where(alternative["owner_type"].eq("institution"), "institutional account (WHO, GIS)", "alternative source")
     pages = list(dict.fromkeys(alternative.sort_values("page")["page"]))
     figure, axis = plt.subplots(figsize=(9, 2.4), facecolor=SURFACE)
     _axes(axis)
     rng = np.random.default_rng(1)
-    for colour, owner in zip([MUTED, CATEGORICAL[1]], ["konto instytucji (WHO, GIS)", "źródło alternatywne"]):
+    for colour, owner in zip([MUTED, CATEGORICAL[1]], ["institutional account (WHO, GIS)", "alternative source"]):
         for first, marker_face in [(True, colour), (False, SURFACE)]:
             part = alternative[alternative["owner"].eq(owner) & alternative["first_addition"].eq(first)]
             if part.empty:
                 continue
             y = part["page"].map({page: index for index, page in enumerate(pages)}).to_numpy(float) + rng.uniform(-0.12, 0.12, len(part))
             axis.scatter(part["when"], y, s=48, facecolors=marker_face, edgecolors=colour, linewidths=1.8, zorder=3,
-                         label=f"{owner}{'' if first else ', ponowne dodanie'}")
+                         label=f"{owner}{'' if first else ', re-addition'}")
     axis.set_yticks(range(len(pages)))
-    axis.set_yticklabels(pages, fontsize=8, color=INK)
+    # Polish article titles keep their name, with an English gloss.
+    glosses = {"Globalne ocieplenie": "Globalne ocieplenie\n(Global warming)"}
+    axis.set_yticklabels([glosses.get(page, page) for page in pages], fontsize=8, color=INK)
     axis.set_ylim(-0.6, len(pages) - 0.4)
-    axis.set_title("H2: wszystkie linki „alternatywne” dodane do przypisów w latach 2020–2026", loc="left", fontsize=9, color=INK)
+    axis.set_title("H2: all \u2018alternative\u2019 links added to references, 2020\u20132026", loc="left", fontsize=9, color=INK)
     axis.legend(frameon=False, fontsize=7, labelcolor=INK, loc="upper left", bbox_to_anchor=(1.0, 1.05))
     figure.tight_layout()
     figure.savefig(path, dpi=200, facecolor=SURFACE)
@@ -748,33 +792,33 @@ def figure_agreement(table: pd.DataFrame, path) -> None:
     """Pilot agreement of the two annotators for the headline variables, with Krippendorff's thresholds."""
     import matplotlib.pyplot as plt
 
-    specs = [("reddit", "cites_source", "Reddit: cites_source"), ("reddit", "source_types", "Reddit: typy (MASI)"),
+    specs = [("reddit", "cites_source", "Reddit: cites_source"), ("reddit", "source_types", "Reddit: types (MASI)"),
              ("wikipedia", "cites_source", "Wikipedia: cites_source"), ("wikipedia", "edit_about_sources", "Wikipedia: edit_about_sources"),
-             ("wikipedia", "source_types", "Wikipedia: typy (MASI)")]
+             ("wikipedia", "source_types", "Wikipedia: types (MASI)")]
     rows = table.set_index(["platform", "variable"])
     figure, axis = plt.subplots(figsize=(7.5, 2.6), facecolor=SURFACE)
     _axes(axis)
     for threshold in [ALPHA_TENTATIVE, ALPHA_RELIABLE]:
         axis.axvline(threshold, color=INK_SECONDARY, linewidth=1, linestyle=(0, (4, 3)))
-        axis.text(threshold, len(specs) - 0.45, f"{threshold:.3g}".replace(".", ","), ha="center", fontsize=7, color=INK_SECONDARY)
+        axis.text(threshold, len(specs) - 0.45, f"{threshold:.3g}", ha="center", fontsize=7, color=INK_SECONDARY)
     for position, (platform, variable, label) in zip(range(len(specs))[::-1], specs):
         row = rows.loc[(platform, variable)]
         axis.hlines(position, row["alpha_low"], row["alpha_high"], color=SERIES, linewidth=2)
         axis.plot(row["alpha"], position, "o", color=SERIES, markersize=7, markeredgecolor=SURFACE, markeredgewidth=2)
-        axis.text(1.04, position, f"zgodność {row['observed_agreement']:.0%}, n = {int(row['units'])}".replace("%", " %"),
+        axis.text(1.04, position, f"agreement {row['observed_agreement']:.0%}, n = {int(row['units'])}",
                   va="center", fontsize=7, color=INK_SECONDARY)
     axis.set_yticks(range(len(specs))[::-1])
     axis.set_yticklabels([label for _, _, label in specs], fontsize=8, color=INK)
     axis.set_xlim(-0.3, 1.0)
-    axis.set_xlabel("α Krippendorffa z 95% przedziałem bootstrap (pilotaż, 2 osoby)", fontsize=8, color=INK_SECONDARY)
+    axis.set_xlabel("Krippendorff's α with 95% bootstrap interval (pilot, 2 coders)", fontsize=8, color=INK_SECONDARY)
     figure.tight_layout()
     figure.savefig(path, dpi=200, facecolor=SURFACE, bbox_inches="tight")
 
 
 def main() -> None:
     numbers = Numbers()
-    numbers.put("pending", r"\textit{[czeka na H1-A]}")
-    numbers.put("waiting", r"\textit{[czeka na dane]}")
+    numbers.put("pending", r"\textit{[awaiting H1-A]}")
+    numbers.put("waiting", r"\textit{[awaiting data]}")
     coded = data_numbers(numbers)
     agreement_table = agreement_numbers(numbers)
     instrument_numbers(numbers)
@@ -789,6 +833,7 @@ def main() -> None:
     (REPORT_DIR / "tables").mkdir(parents=True, exist_ok=True)
     (REPORT_DIR / "tables" / "preprint_data.tex").write_text(data_table(coded, agreement_table, numbers), encoding="utf-8")
     (REPORT_DIR / "tables" / "preprint_h2.tex").write_text(h2_table(), encoding="utf-8")
+    (REPORT_DIR / "tables" / "preprint_test_metrics.tex").write_text(test_table(), encoding="utf-8")
     (REPORT_DIR / "tables" / "preprint_h1.tex").write_text(
         h1_table(h1a_missing=NOT_TESTED if status == "gate_failed" else PENDING), encoding="utf-8")
     (REPORT_DIR / "tables" / "preprint_stance.tex").write_text(stance_table(numbers), encoding="utf-8")
