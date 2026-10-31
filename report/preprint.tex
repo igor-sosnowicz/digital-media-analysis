@@ -2,7 +2,7 @@
 % (docs/preprint_szkic.md). Tu są tylko: struktura, budżet stron, wstawione tabele i rysunki,
 % makra liczb (report/numbers.tex, `make preprint-package`) i lista tez do uzasadnienia w komentarzach.
 % Kompilacja: pdflatex preprint.tex (dwa razy) albo Overleaf z całym katalogiem report/.
-% Liczby H1-A są makrami-zaślepkami (\resPending, kursywa „[czeka na H1-A]”), dopóki nie przejdzie potok H1-A
+% 
 % (docs/h1a_kroki.md); potem `make preprint-package` wpisuje wyniki. Stan: \resHoneAStatus.
 \documentclass[10pt,a4paper]{article}
 
@@ -30,27 +30,36 @@
 \newcommand{\dopisania}[1]{\par\noindent\fbox{\parbox{\dimexpr\linewidth-2\fboxsep}{\small\textit{Do napisania: #1}}}\par}
 
 % Tytuł do ustalenia przez lead badawczego.
-\title{[Tytuł]}
-\author{Jan Poręba \and Igor Sosnowicz}
-\date{Digital Media Analysis, project \kod{digital-media-analysis}}
+\title{Alternative Sources or Measurement Artefacts? Validating Automated Indicators of Trust in Science on Reddit and Wikipedia}
+\author{Miłosz Krajczok \and Jan Poręba \and Igor Sosnowicz \and Krzysztof Szydłowski}
+\date{Analiza Mediów Cyfrowych Projekt}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-% 0,3 s., lead badawczy. Tezy: pytanie (H1, H2), dane (2 x 500 jednostek, gold), instrumenty AI
-% zwalidowane z jednym testem; odpowiedź H1 według wyniku H1-A (\resHoneAStatus; trend \resHoneAChallengesOr,
-% p = \resHoneAChallengesP) i H1-B (brak trendu w obrębie subredditów); H2 formalnie potwierdzona,
-% ale artefakt pomiaru (\resHtwoExactP); GLiNER działa dla wykrywania powołań na Reddicie (\resTestGlinerRedditCitesF).
-\punkty{streszczenie, do 200 słów, lead badawczy}{
-\item Pytanie: czy na Reddicie (2005--2018) słabnie zaufanie do konsensusu naukowego (H1) i czy w Wikipedii rośnie udział źródeł alternatywnych (H2); obie hipotezy preregistrowane.
-\item Dane: \resHoneSample{} postów z 4 subredditów w próbie H1 (rama: 10 subredditów), \resHtwoLinks{} linków dodanych do przypisów 8 stron Wikipedii (H2); gold standard do walidacji.
-\item H1-A (stanowisko wobec konsensusu): instrument \kod{stance\_v1} nie spełnił preregistrowanego warunku trafności w jedynym teście (F1 \kod{challenges} \resHoneATestChallengesF, $\kappa$ \resHoneATestKappa), więc H1-A jest niemierzalne tym instrumentem.
-\item H1-B (źródła): wskaźnik alternatywny trafny i bez wzrostu (OR \resHoneBAlternativeOr, $p$ = \resHoneBAlternativeP); wskaźnik konsensusu tylko opisowy; zmiana w całej próbie to zmiana składu subredditów.
-\item H2: formalnie istotna (OR \resHtwoOr, $p$ = \resHtwoP), ale to artefakt pomiaru: \resHtwoOfficialLinks{} z \resHtwoAlternativeLinks{} linków to oficjalne konta WHO i GIS; według właściciela konta $p$ = \resHtwoExactP.
-\item Wniosek: wyniki negatywne; główna lekcja dotyczy walidacji pomiaru przed testem trendu.
-}
+We test two pre-registered hypotheses: that trust in the scientific consensus declined on
+Reddit in 2005--2018 (H1) and that editors of the Polish Wikipedia increasingly cited
+alternative sources in 2020--2026 (H2). The data comprise \resHoneSample{} posts from four
+subreddits, \resHtwoLinks{} links added to the references of eight Wikipedia articles and a
+gold standard coded or verified by two annotators. Automated instruments were validated
+against this gold standard, frozen and tested once, with validity criteria fixed in
+advance. The stance instrument failed its validity criterion (F1 \resHoneATestChallengesF,
+$\kappa$ \resHoneATestKappa), and so did the fallback indicator of consensus sources; H1
+therefore lacks a valid confirmatory test. The only valid secondary indicator, the share of
+alternative sources, does not rise within subreddits; the shift visible in the pooled
+sample reflects the growing share of r/conspiracy. H2 is formally supported
+($p$ = \resHtwoP), but \resHtwoOfficialLinks{} of the \resHtwoAlternativeLinks{} alternative
+links are official accounts of the World Health Organization and the Polish Chief Sanitary
+Inspectorate; classified by account owner, the trend disappears ($p$ = \resHtwoExactP). The
+results are negative and show that measurement must be validated before trends are
+interpreted: domains do not identify publishers, and shifting community composition can
+mimic a trend.
 \end{abstract}
+
+\noindent\textbf{Keywords:} trust in science; source citation; Reddit; Wikipedia;
+measurement validity; pre-registration
+
 
 \section{Introduction}
 
@@ -125,18 +134,40 @@ reproducibility, data access and the use of AI.
 % \item Zapowiedź struktury artykułu w jednym zdaniu.
 % }
 
-\section{Dane i próba}
-% 0,8 s., inżynier danych. Tezy: źródła i okresy z config.yaml; rama Reddita (\resRedditFrame postów)
-% i Wikipedii (\resWikipediaFrame opisów); losowanie warstwowe, wagi, podział pilotaż/dev/test;
-% data statement (regulaminy, Arctic Shift, CC BY-SA, RODO, teksty w data_samples/).
-\punkty{dane, próba i data statement, inżynier danych}{
-\item Źródła i okresy z \kod{config.yaml}: Reddit (10 subredditów, w tym r/science, r/skeptic, r/conspiracy; 2005--2020, archiwum Arctic Shift), Wikipedia (8 stron, 2020 -- październik 2026, API MediaWiki).
-\item Rama: \resRedditFrame{} postów Reddita i \resWikipediaFrame{} opisów zmian Wikipedii; losowanie warstwowe po latach (Wikipedia: rok $\times$ sygnał), wagi $N_h/n_h$, stałe ziarno.
-\item Podział: pilotaż (\resRedditPilot{} + \resWikipediaPilot{} jednostek), \kod{dev} i \kod{test} (Tab.~\ref{tab:dane}); kodowane gold: Reddit \resRedditCodedDev/\resRedditCodedTest, Wikipedia \resWikipediaCodedDev/\resWikipediaCodedTest (dev/test).
-\item Próba H1: \resHoneSample{} postów w 42 subredditach-latach; próba wzbogacona r/conspiracy (\resEnrichedPosts{} postów, wagi włączenia) tylko do walidacji stanowiska.
-\item H2: \resHtwoLinks{} linków dodanych do przypisów, kategoria według domeny (\kod{codebook/domains.yaml}).
-\item Data statement: regulaminy platform, licencja CC BY-SA Wikipedii, brak nazw użytkowników w analizach (RODO), surowe dane poza repozytorium (\kod{data/} w \kod{.gitignore}), posty usunięte poza ramą.
-}
+\section{Data and sample}
+\paragraph{Gold-standard sample.}
+From each frame (\resRedditFrame{} posts and \resWikipediaFrame{} edit summaries), a
+stratified sample of 500 units per platform was drawn with a fixed seed and allocated as
+evenly as possible across years. Reddit strata were years; Wikipedia strata crossed the
+year with a surface signal independent of the instruments: a URL in the summary
+(\kod{link}, drawn in full), a source-related word such as \emph{źródło} (source) or
+\emph{przypis} (reference) (\kod{cue}, mildly oversampled), or neither (\kod{other}).
+Design weights $N_h/n_h$ undo this allocation in all estimates. A pilot sample
+(\resRedditPilot{} posts and \resWikipediaPilot{} edit summaries) was drawn first from every
+year and excluded from the gold standard; the remaining units were split within strata
+into development and test splits and coded in a fixed random order that interleaves the
+two, which yielded \resRedditCodedDev{} and \resRedditCodedTest{} coded posts and
+\resWikipediaCodedDev{} and \resWikipediaCodedTest{} coded edit summaries
+(Table~\ref{tab:dane}). The weights refer to the coded units of each
+stratum.\footnote{All Reddit strata contain coded units; on Wikipedia, one stratum (edit
+summaries with a link from 2022) has none, so gold-based estimates do not represent it.}
+
+\paragraph{Analysis samples.}
+For H1, \resHoneSample{} posts were drawn with a fixed seed from the four subreddits
+specified for the hypothesis (r/reddit.com in 2005, r/science, r/skeptic and
+r/conspiracy), up to 150 posts per subreddit-year over 42 subreddit-years in 2005--2020
+(main period 2005--2018); each post is weighted by its day weight times the ratio of the
+subreddit-year's posts in the frame to those drawn. An enriched sample of
+\resEnrichedPosts{} r/conspiracy posts from outside the gold standard, drawn with inclusion
+weights and without using any instrument or language-model label, serves only to validate
+the stance instrument (Section~4), not the trend tests.
+% optional:
+It has three strata, all posts on a consensus topic (\resEnrichedTopic), posts with a
+science term (\resEnrichedScience) and the rest (\resEnrichedRest), each split equally
+into development and test parts.
+H2 required no sampling: all \resHtwoLinks{} links added to references in 2020--2026 were
+analysed, each categorised by its domain (\kod{codebook/domains.yaml}). Data storage,
+sharing and licences are described in Section~7.
 
 \paragraph{Reddit data collection.}
 Reddit data were obtained from Arctic Shift, an independent secondary archive of the
@@ -207,58 +238,181 @@ which were added to the COVID-19 article, created in February 2020.
 \szeroka{preprint_data}
 \end{table}
 
-\section{Pomiar: codebook i gold standard}
-% 0,9 s., inżynier pipelinu. Tezy: konstrukt i jednostki; zmienne, 9 kategorii, reguły R2, R3, R9, R10;
-% annotacja w ciemno, podział gold; zgodność: \resPilotRedditCitesAlpha przy \resPilotRedditCitesAgreement
-% (paradoks rozpowszechnienia), typy \resPilotRedditMasiAlpha; druga runda, \resPilotDisputes{} sporów do arbitra;
-% etykiety JP wspomagane przez AI (ujawnić); udziały z samego gold (\resGoldShareRedditMedia).
-\punkty{codebook i gold standard, inżynier pipelinu}{
-\item Konstrukt: powołanie się na źródło (funkcja źródła, nie wiarygodność); jednostki: post Reddita, opis zmiany w Wikipedii.
-\item Zmienne: \kod{source\_types} (9 kategorii, w tym \kod{none}), \kod{cites\_source} wyliczane, \kod{edit\_about\_sources}, \kod{consensus\_stance} (4 wartości, R14); najważniejsze reguły R2, R3, R9, R10, R14 z jednym przykładem z danych.
-\item Pilotaż: zgodność \kod{cites\_source} na Reddicie \resPilotRedditCitesAgreement{} przy $\alpha$ = \resPilotRedditCitesAlpha{} (paradoks rozpowszechnienia; Rys.~\ref{fig:zgodnosc}); typy źródeł $\alpha$ = \resPilotRedditMasiAlpha; \resPilotDisputes{} sporów do arbitra.
-\item Ujawnienie: etykiety źródeł JP w pilotażu i gold to etykiety wstępne AI zatwierdzone przez JP (23.10); zgodność IS--JP nie jest więc niezależna.
-\item Odniesienie stanowiska (plan C): reguła R14 rozstrzyga \resPlanCStanceAutoShare{} postów (kontrola na ślepo \resPlanCStanceRulePrecision), resztę stanowią podpowiedzi AI sprawdzone przez \resPlanCCheckedBy{} (\resPlanCAiChecked{} postów, zmieniono \resPlanCAiChanged); JP sprawdzał, znając podpowiedzi.
-\item Pilotaż stanowiska dwóch osób: \resHoneAPilotKappa{} -- brak niezależnej zgodności ludzi dla H1-A (ograniczenie).
-}
+\section{Measurement: Codebook and Gold Standard}
+
+% Paragraph 1: construct and units.
+The construct is a source reference: an indication of where a piece of information comes
+from or what a claim rests on, given as a link, the name of a source, a generic appeal
+(``studies show'') or an invoked personal or second-hand experience. The codebook records
+the function and type of the source, not its credibility (rule R6). The units are a Reddit
+post, with its title, body text and link, and a Wikipedia edit summary (Section~2).
+
+% Paragraph 2: variables and decision rules.
+Each unit receives \kod{source\_types}, the set of categories it invokes among nine codes
+(\kod{scientific}, \kod{institutional}, \kod{media}, \kod{personal}, \kod{social\_blog},
+\kod{encyclopedia}, \kod{other}, \kod{unknown} and the exclusive \kod{none}), from which
+the binary \kod{cites\_source} is derived (R13). Wikipedia units also receive
+\kod{edit\_about\_sources}, declared work on references (R10), and Reddit posts
+\kod{consensus\_stance}: \kod{supports}, \kod{challenges}, \kod{neutral} or
+\kod{not\_applicable} (R14). Rules settle the frequent borderline cases: a mention counts
+only when it serves as a source rather than as the topic of a post (R2); media hosted by
+the platform, advertisements and spam are not sources (R3), nor are technical elements of
+Wikipedia such as policy shortcuts, bot messages and reverts (R9); and stance is judged
+from the author's own words, so that mocking pseudoscience counts as \kod{supports} and
+mocking scientists as \kod{challenges} (R14).
+% optional:
+For example, an edit summary consisting only of the tag ``minor edits, sources/references''
+(translated from Polish) declares work on references but names no source, and is coded
+\kod{edit\_about\_sources} = 1 with \kod{none} (R10).
+
+% Paragraph 3: annotation procedure and gold standard.
+Gold-standard labels cover \resRedditCodedDev{} and \resRedditCodedTest{} Reddit posts and
+\resWikipediaCodedDev{} and \resWikipediaCodedTest{} edit summaries in the development and
+test splits of the sample (Table~\ref{tab:dane}).
+% optional:
+The development split served for tuning and the test split only for the single
+evaluation of the frozen instruments (Section~4).
+Each gold-standard unit was coded by a single annotator: IS coded 66 posts and 134 edit
+summaries without pre-annotations and blind to instrument outputs, and JP coded 90 posts
+and 160 edit summaries according to the
+codebook. Both annotators coded the same pilot sample of
+\resRedditPilot{} posts and \resWikipediaPilot{} edit summaries, excluded from the gold
+standard, without seeing each other's labels. The decision rule fixed before the pilot
+required a second round of \resRedditPilotTwo{} posts and \resWikipediaPilotTwo{} edit
+summaries when $\alpha$ fell below 0.667; only JP coded it, so it yields no agreement
+measure, and the \resPilotDisputes{} disputed pilot units referred to resolution have
+not been adjudicated.
+
+% Paragraph 4: agreement in the pilot.
+In the pilot, chance-corrected agreement is low even where raw agreement is high
+(Fig.~\ref{fig:zgodnosc}). For \kod{cites\_source} on Reddit, raw agreement was
+\resPilotRedditCitesAgreement{}, yet Krippendorff's $\alpha$ \cite{krippendorff2004} was
+\resPilotRedditCitesAlpha: nearly every post cites a source, and with such skewed
+prevalence chance-corrected coefficients collapse \cite{feinstein1990}. For the sets of
+source types, $\alpha$ with the MASI distance \cite{passonneau2006} reached
+\resPilotRedditMasiAlpha. On Wikipedia, only three of the \resWikipediaPilot{} pilot
+summaries cite a source, which leaves $\alpha$ for \kod{cites\_source}
+(\resPilotWikipediaCitesAlpha) uninformative.
+% optional:
+Declared work on references reached $\alpha$ = \resPilotWikipediaEditAlpha, with a wide
+interval.
+
+
+% Paragraph 5: the stance reference.
+The stance reference was built in two steps. An automatic rule implementing R14 decided
+\resPlanCStanceAutoShare{} of the posts, and a blind check retained its label in
+\resPlanCStanceRulePrecision{} sampled cases; the remaining \resPlanCAiChecked{} posts carry
+AI pre-annotations verified and approved by \resPlanCCheckedBy, who changed none of them.
+No two-person pilot of stance coding was carried out, so independent human agreement on
+stance is not available; the quality of this reference is reported together with the
+instrument results in Table~\ref{tab:stance}.
+
+% optional (gold-only estimates):
+Weighted by the design weights, the gold standard itself yields the first estimates that
+require no instrument: a share of \resGoldShareRedditCitesSource{} of Reddit posts cite a
+source, with \kod{media} (\resGoldShareRedditMedia) and \kod{social\_blog}
+(\resGoldShareRedditSocialBlog) as the most frequent types, against only
+\resGoldShareWikipediaCitesSource{} of Wikipedia edit summaries.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\linewidth]{preprint_agreement.png}
-\caption{Agreement between the two annotators in the pilot: Krippendorff's $\alpha$ with 95\% intervals and the thresholds 0.667 and 0.8.}
+\caption{Agreement between the two annotators in the pilot: Krippendorff's $\alpha$ with 95\,\% intervals and the thresholds 0.667 and 0.8.}
 \label{fig:zgodnosc}
 \end{figure}
 
-\section{Walidacja instrumentów AI}
-% 1,3 s., inżynier pipelinu. Tezy: trzy zamrożone instrumenty źródeł, jeden test (commit 33ff729);
-% Reddit: GLiNER \resTestGlinerRedditCitesF, czułość \resTestGlinerRedditCitesRecall, typy \resTestGlinerRedditMasi,
-% McNemar \resMcnemarRedditZeroshotGlinerP; v1 nie czyta linku (\resErrorsVoneUrlShare błędów);
-% Wikipedia: wynik negatywny (\resTestGlinerWikipediaCitesF); zależność od annotatora
-% (\resTestGlinerRedditMasiIS a \resTestGlinerRedditMasiJP); błąd różnicowy; wybór GLiNER do H1-B.
-% Instrument stanowiska stance_v1 (H1-A): zgodność ludzi na pilot2 (\resHoneAPilotKappa, n = \resHoneAPilotUnits),
-% strojenie na dev (\resHoneADevPosts postów, progi \resHoneAThresholds), jeden test (\resHoneATestPosts postów):
-% F1 challenges \resHoneATestChallengesF, kappa \resHoneATestKappa; warunek trafności (F1 >= 0,5 i kappa >= 0,4): \resHoneAGate.
-% Plan C (odniesienie stanowiska): próba wzbogacona r/conspiracy (\resEnrichedPosts postów; challenges w dev
-% \resStanceDevChallengesPosts, w teście \resStanceTestChallengesPosts); reguła R14 rozstrzyga \resPlanCStanceAutoShare
-% postów, kontrola na ślepo \resPlanCStanceRulePrecision; preannotacja AI zweryfikowana przez JP: \resPlanCAiChecked,
-% poprawiono \resPlanCAiChanged. Test na \resHoneAReviewedPosts postach zweryfikowanych przez JP: precyzja challenges
-% \resHoneATestChallengesPrecision, czułość \resHoneATestChallengesRecall (Rys. macierzy pomyłek); wszystkie wiersze:
-% F1 \resHoneATestAllRowsChallengesF, kappa \resHoneATestAllRowsKappa. Ujawnić przebieg próbny z 27.10.
-% Audyt H1-B: konsensus J = \resAuditConsensusJ (\resAuditConsensusValid), alternatywne J = \resAuditAlternativeJ
-% (\resAuditAlternativeValid).
-\punkty{walidacja instrumentów, inżynier pipelinu}{
-\item Źródła: trzy zamrożone instrumenty, jeden test (commit \kod{33ff729}). Reddit: GLiNER F1 \kod{cites\_source} \resTestGlinerRedditCitesF{} (czułość \resTestGlinerRedditCitesRecall), typy MASI \resTestGlinerRedditMasi; lepszy od zero-shot (McNemar $p$ = \resMcnemarRedditZeroshotGlinerP); reguły v1 nie czytają linku (\resErrorsVoneUrlShare{} błędów).
-\item Wikipedia: wynik negatywny (F1 \resTestGlinerWikipediaCitesF), dlatego H2 mierzymy po domenach. Zależność od annotatora: MASI \resTestGlinerRedditMasiIS{} (IS) a \resTestGlinerRedditMasiJP{} (JP, etykiety wspomagane AI).
-\item Stanowisko: \kod{stance\_v1} (NLI zero-shot, \cite{laurer2024}) strojony na \kod{dev} (\resHoneADevPosts{} postów; progi \resHoneAThresholds), zamrożony, jeden test na \resHoneATestPosts{} postach (\resStanceTestChallengesPosts{} \kod{challenges} dzięki próbie wzbogaconej).
-\item Wynik testu (Tab.~\ref{tab:stance}, Rys.~\ref{fig:stance}): F1 \kod{challenges} \resHoneATestChallengesF, $\kappa$ \resHoneATestKappa{} przy progach 0,5 i 0,4: warunek \resHoneAGate; precyzja \resHoneATestChallengesPrecision, czułość \resHoneATestChallengesRecall{} -- model rzadko wskazuje podważanie nauki. Na wszystkich wierszach $\kappa$ \resHoneATestAllRowsKappa.
-\item Kontrola odniesienia (eksploracyjna): ślepe drugie kodowanie AI potwierdziło \resControlStanceAgreement{} etykiet stanowiska ($\kappa$ \resControlStanceKappa); przy źródłach AI zgadzało się z etykietami IS (bez AI) w \resControlSourcesIsExact{} postów (n = \resControlSourcesIsExactN).
-\item Ujawnić przebieg próbny z 27.10 na etykietach AI przed prawdziwym testem (bez zmian instrumentu i progów).
-\item Audyt H1-B na \resAuditConsensusPositives{}/\resAuditAlternativePositives{} pozytywach: konsensus J = \resAuditConsensusJ{} (\resAuditConsensusValid), alternatywne J = \resAuditAlternativeJ{} (\resAuditAlternativeValid).
-}
+\section{Validation of the AI Instruments}
+
+% Paragraph 1: design of the validation.
+Three instruments were evaluated for source references: a rule-based baseline (v1) carried
+over unchanged from the exploratory notebooks; a zero-shot classifier in which a
+multilingual natural language inference (NLI) model scores one hypothesis per codebook
+category; and GLiNER \cite{zaratiana2024}, which extracts mentions of sources and maps them
+onto the codebook categories. Thresholds were tuned on the development split only, and the
+instruments were frozen (commit \kod{33ff729}) before a single run on the test split. We
+report F1 for \kod{cites\_source}, MASI agreement on the sets of source types
+\cite{passonneau2006} and Cohen's $\kappa$ \cite{cohen1960}, weighted by the design
+weights and with bootstrap intervals (Fig.~\ref{fig:instrumenty}, Table~\ref{tab:test}).
+
+% Paragraph 2: source instruments on Reddit.
+On Reddit, GLiNER performed best, with an F1 of \resTestGlinerRedditCitesF{} for
+\kod{cites\_source} (recall \resTestGlinerRedditCitesRecall) and a MASI of
+\resTestGlinerRedditMasi{} for source types, and was therefore chosen for H1-B.
+% optional:
+In an exact McNemar test \cite{mcnemar1947}, GLiNER was right where the zero-shot
+classifier erred in \resMcnemarRedditZeroshotGlinerOnlySecond{} posts and the reverse
+occurred in \resMcnemarRedditZeroshotGlinerOnlyFirst{} ($p$ = \resMcnemarRedditZeroshotGlinerP),
+and it also outperformed v1 ($p$ \resMcnemarRedditVoneGlinerP).
+The baseline failed mainly because its rules ignore the link of a post, which accounts
+for \resErrorsVoneUrl{} of its \resErrorsVoneTotal{} errors on the development split.
+% optional:
+GLiNER's $\kappa$ for \kod{cites\_source} is only \resTestGlinerRedditCitesKappa{} despite
+its high F1, because almost every post cites a source \cite{feinstein1990}.
+
+% Paragraph 3: Wikipedia, the reference of IS and JP, differential error.
+On Wikipedia, no instrument performed adequately (GLiNER: F1 \resTestGlinerWikipediaCitesF),
+so H2 is measured by the domains of added links (Section~2) rather than by a classifier.
+The reference matters as well: on the units coded by IS, GLiNER's
+MASI on Reddit was \resTestGlinerRedditMasiIS, against \resTestGlinerRedditMasiJP{} on the
+units that JP coded. As these are different units, the gap
+mixes the annotator, the pre-annotation and the units themselves, but the cleanest
+reference yields clearly lower agreement on source types, so the overall value should be
+read with caution.
+% optional:
+GLiNER's false-positive rate on Reddit does not differ significantly over time
+($p$ = \resDifferentialGlinerRedditPeriodFpP) but does differ between subreddits
+($p$ = \resDifferentialGlinerRedditSubredditFpP, on few posts without a citation); subreddit
+fixed effects absorb such constant differences, so only an error that changes over time
+would bias the within-subreddit trends.
+
+% Paragraph 4: the stance instrument and its single test.
+For stance (H1-A), \kod{stance\_v1} uses the same NLI model \cite{laurer2024} to score
+whether a post concerns science, supports it or challenges the consensus. Its thresholds
+were tuned on the development split (\resHoneADevPosts{} posts; \resHoneAThresholds),
+frozen (commit \kod{7ad9409}) and applied once to \resHoneATestPosts{} test posts; an
+enriched sample from r/conspiracy (\resEnrichedPosts{} posts with inclusion weights) raised
+the number of test posts labelled \kod{challenges} to \resStanceTestChallengesPosts. The
+reference combines an automatic rule implementing R14, which decided
+\resPlanCStanceAutoShare{} of the posts and kept its label in
+\resPlanCStanceRulePrecision{} cases of a blind check, with AI pre-annotations verified and
+approved by \resPlanCCheckedBy, who changed none of them; no two-person stance pilot was
+conducted (Table~\ref{tab:stance}). The preregistered validity criterion, an F1 for
+\kod{challenges} of at least 0.5 and a $\kappa$ of at least 0.4 on the
+\resHoneAReviewedPosts{} verified test posts, was not met (F1 \resHoneATestChallengesF,
+$\kappa$ \resHoneATestKappa): with a precision of \resHoneATestChallengesPrecision{} and a
+recall of \resHoneATestChallengesRecall, the instrument is usually right when it flags a
+post as challenging the consensus but misses most such posts (Fig.~\ref{fig:stance}).
+% optional:
+On all \resHoneATestPosts{} test rows, $\kappa$ was \resHoneATestAllRowsKappa, and
+performance on the development split was similar (F1 \resHoneADevChallengesF), so the
+failure does not stem from overfitted thresholds.
+A dry run of the pipeline on AI labels preceded this single test; the instrument and its
+thresholds were not changed afterwards, and the dry run is recorded in the preregistration
+log.
+
+% Paragraph 5: audit of the H1-B indicators and exploratory checks.
+The audit of the H1-B indicators applied the preregistered criterion of Youden's $J$ above
+0.2 on the audit sample and the gold test split combined (\resAuditConsensusPositives{} and
+\resAuditAlternativePositives{} positive cases): consensus sources reached
+$J$ = \resAuditConsensusJ{} (0.199 before rounding; sensitivity
+\resAuditConsensusSensitivity) and are reported descriptively only, whereas alternative
+sources are valid ($J$ = \resAuditAlternativeJ); Section~5 reads H1-B accordingly.
+% optional:
+In an exploratory check, a blind second coding by the AI assistant agreed with the stance
+labels in \resControlStanceAgreement{} of cases ($\kappa$ = \resControlStanceKappa), which
+indicates the stability of the AI labels rather than their validity; against the source
+labels of IS, coded without AI, the AI labels agreed exactly in
+\resControlSourcesIsExact{} of posts ($n$ = \resControlSourcesIsExactN), but 16 of these
+posts came from the pilot consensus, where the IS labels already matched earlier AI labels.
+On all 253 units that IS coded without AI, two independent blind AI runs agreed with each
+other ($\kappa$ = 0.96 for \kod{cites\_source}) but matched the IS source types exactly in
+only 0.59--0.60 of the Reddit posts and 0.79 of the Wikipedia edits; the differences were
+systematic rather than random.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{preprint_instruments.png}
-\caption{Weighted test-set metrics of the three source instruments, with 95\% bootstrap intervals.}
+\caption{Weighted test-set metrics of the three source instruments, with 95\,\% bootstrap intervals.}
 \label{fig:instrumenty}
 \end{figure}
 
@@ -283,7 +437,7 @@ which were added to the COVID-19 article, created in February 2020.
 \label{fig:stance}
 \end{figure}
 
-\section{Wyniki}
+\section{Results}
 % \subsection{H1: zaufanie do konsensusu naukowego}
 % % 1,0 s., inżynier analityk. Tezy H1-A (stan: \resHoneAStatus): na \resHoneARelevantPosts postach o nauce udział
 % % challenges \resHoneAChallengesShareEarly (2005--2009) i \resHoneAChallengesShareLate (2014--2018); trend
@@ -327,9 +481,9 @@ for the \kod{challenges} class of \resHoneATestChallengesF{} at a threshold of 0
 $\kappa$ = \resHoneATestKappa{} at a threshold of 0.4 (Section~4, Table~\ref{tab:stance}).
 According to the decision rule specified prior to trend testing, H1-A was therefore not
 estimated (Table~\ref{tab:h1}). This constitutes a negative result regarding measurement
-validity and neither supports nor refutes H1. For such a contingency, the preregistration
+validity and neither supports nor refutes H1. For such a contingency, pre-registration 
 specified a fallback test: the consensus-source indicator from H1-B was designated as the
-confirmatory test of H1.
+confirmatory test for H1.
 
 % Paragraph 3: H1-B, both indicators.
 The H1-B indicators were estimated on \resHoneBCiting{} source-citing posts from
@@ -396,7 +550,7 @@ communities themselves.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{preprint_h1_en.png}
-\caption{H1-B: weighted yearly shares of consensus and alternative sources among posts citing a source, with 95\% bootstrap intervals, and the weighted subreddit composition of the sample. H1-A is not shown because the stance instrument did not meet its validity criterion.}
+\caption{Stance towards the scientific consensus (H1-A): quality of the reference (two-person agreement, rule R14, AI pre-annotation verified by \resPlanCCheckedBy) and results of \kod{stance\_v1}; preregistered validity criterion: F1 for \kod{challenges} $\geq$ 0.5 and $\kappa \geq$ 0.4 on the test split, on rows verified by \resPlanCCheckedBy.}
 \label{fig:h1}
 \end{figure}
 
@@ -407,19 +561,69 @@ communities themselves.
 \tabela{preprint_h1}
 \end{table}
 
-\subsection{H2: źródła alternatywne w Wikipedii}
+\subsection{Alternative Sources in Wikipedia}
 \label{sec:h2}
-% 0,8 s., inżynier analityk. Tezy: test preregistrowany \resHtwoOr (p = \resHtwoP),
-% \resHtwoAlternativeLinks{} z \resHtwoLinks{} linków; wrażliwości nieistotne (\resHtwoWithoutCovidP,
-% permutacja \resHtwoPermutationP); \resHtwoOfficialLinks{} linków to konta WHO i GIS, link WHO
-% dodany \resHtwoWhoRepeats{} razy; według właściciela 2 linki, test dokładny \resHtwoExactP.
-\punkty{wyniki H2, inżynier analityk}{
-\item Test z preregistracji: OR \resHtwoOr{} na rok, $p$ = \resHtwoP{} (\resHtwoModelLinks{} linków w modelu); ten sam wynik przed przeglądem domen (\resHtwoBeforeReviewOr, $p$ = \resHtwoBeforeReviewP).
-\item Ale tylko \resHtwoAlternativeLinks{} z \resHtwoLinks{} linków to źródła alternatywne, na \resHtwoAlternativePages{} stronach; model z efektami stałymi obejmuje więc tylko te dwie strony. Preregistrowane wrażliwości nieistotne: bez COVID-19 $p$ = \resHtwoWithoutCovidP, bez 2020 $p$ = \resHtwoWithoutTwentytwentyP; tylko domeny sklasyfikowane: po przeglądzie domen to samo co test główny. Eksploracyjnie: permutacja lat $p$ = \resHtwoPermutationP.
-\item Sprawdzenie pomiaru (eksploracyjne; Rys.~\ref{fig:h2}): \resHtwoOfficialLinks{} linków to oficjalne konta WHO i GIS w serwisach społecznościowych, link WHO dodano \resHtwoWhoRepeats{} razy; według właściciela konta zostają \resHtwoByOwnerLinks{} linki: test dokładny $p$ = \resHtwoExactP, logit Firtha $p$ = \resHtwoOwnerP; same pierwsze dodania (bez rewertów): $p$ = \resHtwoFirstP.
-\item Preregistrowany wskaźnik opisowy (bez testu): w gold Wikipedii \resHtwoGoldShare{} z \resHtwoGoldUnits{} opisów zmian powołuje się na źródła alternatywne, nieokreślone lub osobiste, rocznie od \resHtwoGoldShareMin{} do \resHtwoGoldShareMax.
-\item Werdykt: formalnie potwierdzona (preregistracja zabrania zmiany definicji po obejrzeniu danych), merytorycznie artefakt klasyfikacji po domenie (Tab.~\ref{tab:h2}); analizy po właścicielu są eksploracyjne.
-}
+
+% Paragraph 1: preregistered test.
+As preregistered, the share of alternative links among the \resHtwoLinks{} links added to
+references in 2020--2026 (Section~2) was modelled by logistic regression on year with
+article fixed effects, standard errors clustered by revision and a one-sided test; a link
+counted as alternative when its domain belonged to the \kod{social\_blog} category (social
+media, video platforms, blogs and newsletters), and no weights were needed, since all added
+links were analysed. As the fixed effects drop articles without any alternative link, the
+model uses \resHtwoModelLinks{} links from two articles, COVID-19 (1,102 links) and
+Globalne ocieplenie (Global warming; 105 links), added in 180 revisions. The odds ratio per
+year was \resHtwoOr{} ($p$ = \resHtwoP), meeting the preregistered criterion
+(Table~\ref{tab:h2}), and it was identical before the manual review of the domain list
+(OR = \resHtwoBeforeReviewOr, $p$ = \resHtwoBeforeReviewP), which changed no
+\kod{social\_blog} domain.
+
+% Paragraph 2: what the result rests on; preregistered sensitivity analyses.
+The estimate rests on only \resHtwoAlternativeLinks{} alternative links in nine revisions
+of \resHtwoAlternativePages{} articles, and the preregistered sensitivity analyses do not
+reproduce it: without the COVID-19 article, OR = \resHtwoWithoutCovidOr{}
+($p$ = \resHtwoWithoutCovidP), and without 2020, OR = \resHtwoWithoutTwentytwentyOr{}
+($p$ = \resHtwoWithoutTwentytwentyP). The third analysis, restricted to classified domains,
+coincides with the main test, because after the review every domain had a category.
+% optional:
+Far fewer links were added in later years (780 in 2020, about 20 per year in 2024--2026),
+so a single alternative link in 2025 already yields a share of 4.8\,\%; as the
+preregistration anticipated, the test has very low power.
+
+% Paragraph 3: measurement check (exploratory).
+A reading of all ten alternative links, which was not preregistered and therefore qualifies
+rather than replaces the test, shows that \resHtwoOfficialLinks{} of them lead to official
+accounts of public health institutions in the COVID-19 article (Fig.~\ref{fig:h2}): a World
+Health Organization livestream on Periscope, added \resHtwoWhoRepeats{} times because it
+was restored after reverts, and a post of the Polish Chief Sanitary Inspectorate (GIS) on
+Twitter, added twice. Only two links, both in Globalne ocieplenie, are alternative in the
+sense of H2: a video on \kod{video.google.com} (2021) and a post on George Monbiot's blog
+(2025). Classified by account owner, these \resHtwoByOwnerLinks{} links show no trend: an
+exact conditional test, comparing their year sum with that of every pair of links in the
+article, gives $p$ = \resHtwoExactP, and Firth's penalised logistic regression
+\cite{firth1993} agrees (OR = \resHtwoOwnerOr, $p$ = \resHtwoOwnerP). Re-additions alone
+do not explain the result: counting only the first addition of each link leaves a
+borderline estimate (OR = \resHtwoFirstOr, $p$ = \resHtwoFirstP; \resHtwoFirstEvents{}
+events). In the Firth models, $p$ and the interval come from the same profile penalised
+likelihood \cite{heinze2002}, so a one-sided $p$ just below 0.05 is compatible with a
+95\,\% interval that includes 1. The main test is also fragile, as permuting years across
+revisions within articles gives $p$ = \resHtwoPermutationP.
+% optional:
+Firth's model fitted to all articles gives OR = \resHtwoFirthOr{} ($p$ = \resHtwoFirthP).
+Removing either of two links added in 2023, or the link added in 2025, lifts the $p$-value
+of the preregistered model above 0.05, and the share of established sources, which should
+fall if H2 held, does not decline (OR = 0.99, $p$ = 0.45).
+
+% Paragraph 4: descriptive indicator and verdict.
+The preregistered descriptive indicator, reported without a test, is consistent with this
+reading: in the Wikipedia gold standard, \resHtwoGoldShare{} of \resHtwoGoldUnits{} edit
+summaries cite an alternative, unknown or personal source, with yearly shares between
+\resHtwoGoldShareMin{} and \resHtwoGoldShareMax{} and no rise. H2 is therefore formally
+supported, because the preregistered test met its criterion and the indicator may not be
+redefined after seeing the data. Substantively, however, the result is an artefact of
+classifying sources by domain, which does not separate an institution's account from an
+alternative publisher, and of counting re-added links repeatedly; it does not show that
+Wikipedia editors increasingly cite alternative sources.
 
 \begin{figure}[htbp]
 \centering
@@ -435,29 +639,123 @@ communities themselves.
 \tabela{preprint_h2}
 \end{table}
 
-\section{Dyskusja i ograniczenia}
-% 0,7 s., lead i analityk. Tezy: co dane rozstrzygają, a czego nie; lekcja o pomiarze
-% (domena a właściciel konta, rewerty); ograniczenia (zgodność ludzi, etykiety wspomagane przez AI,
-% błąd instrumentu, korelacja a przyczynowość, zmiany w obrębie subredditu, 8 stron);
-% preregistracja v2 i analiza mocy jako dalsze prace.
-\punkty{dyskusja i ograniczenia, lead badawczy i inżynier analityk}{
-\item Co dane rozstrzygają: brak wzrostu źródeł alternatywnych w obrębie subredditów; H2 nie świadczy o zmianie zachowań redaktorów.
-\item Czego nie rozstrzygają: H1-A (instrument nie przeszedł walidacji); wskaźnik konsensusu tylko opisowy.
-\item Lekcja o pomiarze: domena to nie wydawca (konta WHO), skład próby zmienia się w czasie, walidacja przed testem zmieniła odczytanie obu hipotez.
-\item Ograniczenia: odniesienie stanowiska z podpowiedzi AI sprawdzonych przez jedną osobę znającą podpowiedzi; brak pilotażu stanowiska dwóch osób; etykiety JP w gold wspomagane AI; przebieg próbny przed testem; korelacja w czasie to nie przyczynowość; zmiany populacji w obrębie subredditów; mało stron Wikipedii.
-\item Dalsze prace: instrument stanowiska trenowany na etykietach ludzi, niezależna zgodność dwóch osób, preregistracja v2 z analizą mocy.
-}
+\section{Discussion and Limitations}
 
-\section{Odtwarzalność, dane i użycie AI}
-% 0,3 s. Tezy: repozytorium, commit, polecenia make, preregistracje z commitami; data statement;
-% użycie AI zgodne z faktami (kod i testy, etykiety wstępne JP zatwierdzone przez JP, lista domen,
-% propozycje przyczyn błędów, pakiet wyników i szkic struktury; tekst napisali autorzy).
-\punkty{odtwarzalność, data statement i ujawnienie AI, inżynier danych i wszyscy}{
-\item Repozytorium \kod{digital-media-analysis}; polecenia \kod{make} od danych do pakietu wyników; preregistracja i jej datowane zmiany w \kod{docs/hipotezy.md}; commit zamrażający \kod{7ad9409} przed testem stanowiska.
-\item Instrumenty pomiaru to lokalne modele otwarte (GLiNER, mDeBERTa NLI) z przypiętymi rewizjami.
-\item Użycie AI (Claude, asystent kodu), zgodnie z faktami: kod i testy; etykiety wstępne źródeł JP (zatwierdzone przez JP); podpowiedzi etykiet stanowiska, audytu, przyczyn błędów i domen, sprawdzone przez AI i następnie przez JP; ślepa kontrola etykiet; przebieg próbny; pakiet wyników i punkty do tekstu.
-\item Tekst: fragmenty oparte na propozycjach asystenta AI (wstęp, opis pozyskania danych, wyniki H1) przeredagować własnymi słowami albo ujawnić tutaj; zdanie „tekst artykułu napisali autorzy'' zostawić tylko wtedy, gdy to prawda.
-}
+% Paragraph 1: what the data establish.
+Neither hypothesis receives substantive support, although for different reasons. For
+H1, the only valid indicator, the share of alternative sources among posts citing a
+source, does not rise within subreddits; the shift visible in the pooled sample is a
+composition effect, as the growing share of r/conspiracy accounts for
+\resHoneBAlternativeShiftComposition{} of the \resHoneBAlternativeShiftTotal{} change
+(Section~5). For H2, the formally significant trend rests largely on official accounts of
+the World Health Organization and the Polish Chief Sanitary Inspectorate
+(\resHtwoOfficialLinks{} of \resHtwoAlternativeLinks{} links) and does not show that
+Wikipedia editors increasingly cite alternative sources.
+
+% Paragraph 2: what the data leave open.
+The central question of H1 remains open. Its primary test could not be carried out
+because the stance instrument did not meet the preregistered validity criterion, which
+neither supports nor refutes the hypothesis, and the fallback indicator of consensus
+sources failed its own criterion, so H1 has no valid confirmatory test. Since the study
+included neither a power analysis nor an equivalence test, the absence of a detectable
+trend in H1-B is not evidence that no change occurred.
+
+% Paragraph 3: lessons for measurement.
+The main lesson concerns measurement. Without validating the instruments and the
+indicators, H2 would have been read as a shift towards alternative sources and the raw
+decline of consensus sources as a sign of declining trust. First, a domain does not
+identify the publisher: an institution's account on a social platform looks like an
+alternative source, and a link restored after reverts is counted as added several times,
+so the unit of analysis has to be checked on raw cases. Second, a changing mix of
+communities can masquerade as a trend, so pooled trends should be decomposed into
+composition and within-community change. Third, an AI instrument should not be validated
+against labels derived from AI pre-annotations: on the units coded by IS without
+pre-annotations, GLiNER's agreement on source types was \resTestGlinerRedditMasiIS,
+against \resTestGlinerRedditMasiJP{} on the units coded by JP, a gap that, although it compares different units, suggests that such a
+reference can flatter an instrument.
+% optional:
+Finally, high precision is not enough to measure a trend: the stance instrument reached a
+precision of \resHoneATestChallengesPrecision{} but a recall of only
+\resHoneATestChallengesRecall, whereas a trend requires recall that is high and stable over
+time. Automated measures therefore have to be validated anew for each application
+\cite{grimmer2013}.
+
+% Paragraph 4: limitations by type of validity.
+We group the limitations by type of validity \cite{shadish2002}. \emph{Construct
+validity:} the stance instrument and the consensus indicator do not measure their
+constructs validly, domain-based classification conflates platforms with publishers, and
+the sources people cite are only an indirect proxy for trust. \emph{Quality of the
+reference:} the references for stance and for the audit of the H1-B indicators, like JP's labels in the gold standard; every gold-standard unit was coded by a single annotator, so two-coder
+agreement exists only for the pilot, whose second round was coded by one annotator and
+whose disputed units were never adjudicated, and no two-person stance pilot was
+conducted. The evaluation in Section~4 and the validity decisions for H1-B may thus be
+biased in an unknown direction, although for source types the cleanest reference gives
+lower agreement. \emph{Statistical conclusion validity:} H2 rests on
+\resHtwoAlternativeLinks{} events in two articles, a dry run of the pipeline on AI labels
+preceded the confirmatory test (disclosed in the preregistration log, with the instrument
+and thresholds unchanged), and the measurement checks were defined after seeing the data.
+\emph{Internal validity:} the trends are correlational, and subreddit fixed effects remove
+differences between communities but not changes in their membership. \emph{External
+validity:} the evidence comes from posts, without comments, in four English-language
+subreddits and from eight purposively selected articles of the Polish Wikipedia, which
+limits generalisation to the online space named in the hypotheses.
+
+% Paragraph 5: future work.
+These limitations point to clear next steps. Pilot round 2 and resolution could be
+completed. Independent double-coding, without pre-annotations, could be added for the
+stance and audit references and for part of the gold standard. These labels would make
+H1-A testable. A second preregistration (v2) was drafted before any new data collection.
+It could measure stance on specific consensus topics. It could classify sources by
+account owner. It could count only first additions. It could size both frames with a
+power analysis. It could add equivalence tests against a smallest effect size of
+interest (odds ratios 1.25 for H1 and 1.5 for H2).
+
+\section{Reproducibility, Data and Use of AI}
+
+% Paragraph 1: reproducibility.
+Code, configuration, labels and results are available in the project
+repository\footnote{\url{https://github.com/igor-sosnowicz/digital-media-analysis}}. The
+environment is pinned, random seeds are
+fixed. Data retrieval runs with
+\kod{make pipeline} and the path from labels to the results package with
+\kod{make finish-results}; every number in the text is a macro generated by
+\kod{make preprint-package}. The preregistration and its dated amendments are kept in
+\kod{docs/hipotezy.md} (commit \kod{440b5fb}); the source instruments were frozen in
+commit \kod{33ff729} and the stance instrument in \kod{7ad9409}, before their single
+tests, and the follow-up preregistration (v2) was committed in \kod{f375df6}. Re-running
+the retrieval may yield slightly different data, because the archive and Wikipedia change
+over time; the repository therefore keeps the annotation sample with its design weights
+and the labels, and the human coding steps are stored as label files rather than re-run.
+
+% Paragraph 2: data statement.
+Posts from ten subreddits were obtained from the Arctic Shift archive and the revision
+histories of eight articles of the Polish Wikipedia through the MediaWiki API
+(Section~2); no usernames, editor names or IP addresses were collected.  The repository
+shares the texts of the annotation sample, so that the coding can be repeated, together
+with the labels and results, but not the full sampling frames. Wikipedia content is
+available under the CC BY-SA licence, and Reddit content is subject to the platform's user
+agreement.
+% Check before submission: whether Reddit's and Arctic Shift's terms allow sharing the post
+% texts of the annotation sample, and how the CC BY-SA attribution of Wikipedia texts is given.
+
+% Paragraph 3: use of AI.
+Two AI coding assistants, Claude (Anthropic) and OpenCode (with a Chinese model DeepSeek 4.1) supported the
+project; they were not measurement instruments in the hypothesis tests, which used the local
+open models with pinned revisions described in Section~4. At the team's request, the
+assistants wrote code, tests and analysis scripts, produced the results package (macros,
+tables and figures) and drafted documentation, including the text of both preregistrations
+and their amendments; commits prepared with it are marked as co-authored in the
+repository history. 
+% Variant B (current state): keep while the drafts are not rewritten by the authors.
+Drafts of the introduction, of the data-collection paragraphs in Section~2, of Sections~3
+to 6 and of this section were prepared by the assistant from the authors' outlines and
+results and were revised by the authors.
+% Variant A: use instead of variant B only if the authors rewrote all these drafts in their own words.
+% The assistant prepared outlines of the sections; the text was written by the authors.
+The authors checked the results and take responsibility for the content.
+
+% Optional: author contributions (list only what each person actually did).
+% \paragraph{Author contributions.} J.P.: [...]. I.S.: [...].
 
 \begin{thebibliography}{99}
 \bibitem{cohen1960} J.~Cohen. A coefficient of agreement for nominal scales. \textit{Educational and Psychological Measurement}, 20(1):37--46, 1960.
@@ -468,13 +766,16 @@ communities themselves.
 \bibitem{horvitz1952} D.~G. Horvitz, D.~J. Thompson. A generalization of sampling without replacement from a finite universe. \textit{Journal of the American Statistical Association}, 47(260):663--685, 1952.
 \bibitem{kendall1938} M.~G. Kendall. A new measure of rank correlation. \textit{Biometrika}, 30(1/2):81--93, 1938.
 \bibitem{kitagawa1955} E.~M. Kitagawa. Components of a difference between two rates. \textit{Journal of the American Statistical Association}, 50(272):1168--1194, 1955.
-\bibitem{krippendorff2004} K.~Krippendorff. \textit{Content Analysis: An Introduction to Its Methodology}. 2nd ed. Sage, 2004.
+\bibitem{krippendorff2004} K.~Krippendorff. \textit{Content Analysis: An Introduction to Its Methodology}. Wyd.~2. Sage, 2004.
 \bibitem{laurer2024} M.~Laurer, W.~van Atteveldt, A.~Casas, K.~Welbers. Less annotating, more classifying: Addressing the data scarcity issue of supervised machine learning with deep transfer learning and BERT-NLI. \textit{Political Analysis}, 32(1):84--100, 2024.
 \bibitem{lewandowsky2012} S.~Lewandowsky, U.~K.~H. Ecker, C.~M. Seifert, N.~Schwarz, J.~Cook. Misinformation and its correction: Continued influence and successful debiasing. \textit{Psychological Science in the Public Interest}, 13(3):106--131, 2012.
 \bibitem{mcnemar1947} Q.~McNemar. Note on the sampling error of the difference between correlated proportions or percentages. \textit{Psychometrika}, 12(2):153--157, 1947.
-\bibitem{passonneau2006} R.~Passonneau. Measuring agreement on set-valued items (MASI) for semantic and pragmatic annotation. In: \textit{Proceedings of LREC 2006}, 2006.
+\bibitem{passonneau2006} R.~Passonneau. Measuring agreement on set-valued items (MASI) for semantic and pragmatic annotation. W: \textit{Proceedings of LREC 2006}, 2006.
 \bibitem{vosoughi2018} S.~Vosoughi, D.~Roy, S.~Aral. The spread of true and false news online. \textit{Science}, 359(6380):1146--1151, 2018.
-\bibitem{zaratiana2024} U.~Zaratiana, N.~Tomeh, P.~Holat, T.~Charnois. GLiNER: Generalist model for named entity recognition using bidirectional transformer. In: \textit{Proceedings of NAACL 2024}, 2024.
+\bibitem{zaratiana2024} U.~Zaratiana, N.~Tomeh, P.~Holat, T.~Charnois. GLiNER: Generalist model for named entity recognition using bidirectional transformer. W: \textit{Proceedings of NAACL 2024}, 2024.
+\bibitem{heinze2002} G.~Heinze, M.~Schemper. A solution to the problem of separation in logistic regression. \textit{Statistics in Medicine}, 21(16):2409--2419, 2002.
+
 \end{thebibliography}
+
 
 \end{document}
