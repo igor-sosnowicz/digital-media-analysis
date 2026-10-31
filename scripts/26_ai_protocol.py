@@ -206,7 +206,8 @@ def score(run: str) -> None:
     reference = pd.concat([coder(LABELS_DIR / phase / "IS.csv", "is").assign(phase=phase) for phase in ["pilot", "gold"]])
     table = run_labels(run, "ai").merge(reference, on=["platform", "unit_id"], validate="one_to_one")
 
-    scores = {"run": run, "labels_sha256": digest(labels_path),
+    # Labels hashed with LF line endings, as they were written, so a CRLF checkout gives the same hash.
+    scores = {"run": run, "labels_sha256": digest(labels_path, b"\n"),
               "frozen_files_unchanged": {name: unchanged(path, freeze[f"{name}_sha256"]) for name, path in FROZEN.items()},
               "uncertain_share": rounded(table["ai_uncertain"].mean()), "ai_vs_is": by_platform(table, "ai", "is")}
     wiki = table[table["platform"].eq("wikipedia")].dropna(subset=["ai_edit", "is_edit"])
