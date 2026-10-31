@@ -1,0 +1,88 @@
+platform,unit_id,phase,ai_types,is_types,ai_edit,is_edit,ai_uncertain
+reddit,10nax3,gold,none,personal,,,1
+reddit,155rje,pilot,social_blog,media,,,1
+reddit,15vi2k,gold,none,media,,,1
+reddit,1b6ytt,pilot,social_blog,media,,,0
+reddit,1prxzq,gold,none,social_blog,,,0
+reddit,1yeyr8,pilot,none,social_blog,,,0
+reddit,20385,pilot,institutional,scientific,,,0
+reddit,26lz5n,gold,institutional;media,media,,,1
+reddit,274,gold,social_blog,personal,,,1
+reddit,2dfyeb,pilot,none,media,,,0
+reddit,3gxu91,pilot,other;social_blog,social_blog,,,1
+reddit,3h122r,gold,media;other,other;personal,,,1
+reddit,4bp56r,gold,none,personal,,,1
+reddit,4y0ewi,gold,media,social_blog,,,0
+reddit,52bb5i,gold,none,social_blog,,,1
+reddit,5444,gold,social_blog,other,,,1
+reddit,5446,gold,media,institutional,,,0
+reddit,5zf0c,pilot,media,social_blog,,,0
+reddit,6f5xev,pilot,social_blog,media,,,0
+reddit,6uqrum,gold,none,other,,,0
+reddit,7lb60,gold,social_blog,personal,,,1
+reddit,8i9fd,gold,social_blog,media,,,0
+reddit,8vj5ik,gold,none,social_blog,,,0
+reddit,9j6m9,gold,social_blog,personal;social_blog,,,0
+reddit,9jsar,pilot,unknown,social_blog,,,0
+reddit,cpqvr0,gold,scientific,media,,,1
+reddit,cyn4a,gold,none,unknown,,,1
+reddit,dw2voc,pilot,media,other,,,1
+reddit,dwc8u8,pilot,institutional,media,,,1
+reddit,fanutg,gold,unknown,personal,,,1
+reddit,fn86ht,pilot,social_blog;unknown,personal;social_blog;unknown,,,0
+reddit,hj6vz,pilot,social_blog,media,,,1
+reddit,kxevl,gold,social_blog,other,,,1
+reddit,ntj9v,pilot,none,other,,,0
+reddit,o5aq6,gold,none,social_blog,,,1
+reddit,qtcj,pilot,other,scientific,,,1
+reddit,qwaj,gold,social_blog,media,,,1
+reddit,woc95,gold,social_blog,media,,,0
+reddit,wphmg,gold,social_blog;unknown,other;social_blog,,,1
+wikipedia,COVID-19#131,gold,none,personal,0.0,0.0,0
+wikipedia,COVID-19#282,gold,none,none,0.0,1.0,1
+wikipedia,COVID-19#331,gold,institutional,none,1.0,0.0,0
+wikipedia,COVID-19#350,gold,none,personal,0.0,0.0,0
+wikipedia,COVID-19#58,gold,none,none,1.0,0.0,0
+wikipedia,COVID-19#641,gold,none,personal,0.0,0.0,0
+wikipedia,COVID-19#653,pilot,none,personal,0.0,0.0,0
+wikipedia,COVID-19#664,gold,none,other,0.0,1.0,0
+wikipedia,COVID-19#780,gold,none,other,0.0,0.0,0
+wikipedia,COVID-19#816,gold,none,personal,0.0,1.0,0
+wikipedia,COVID-19#818,gold,none,personal,0.0,1.0,0
+wikipedia,COVID-19#832,gold,none,personal,0.0,0.0,0
+wikipedia,COVID-19#844,gold,none,personal,0.0,0.0,0
+wikipedia,Globalne ocieplenie#111,gold,encyclopedia,encyclopedia,0.0,1.0,0
+wikipedia,Globalne ocieplenie#140,gold,none,encyclopedia,0.0,1.0,0
+wikipedia,Globalne ocieplenie#147,gold,none,personal,0.0,1.0,0
+wikipedia,Globalne ocieplenie#152,gold,none,personal,0.0,1.0,0
+wikipedia,Globalne ocieplenie#162,gold,scientific,none,0.0,1.0,1
+wikipedia,Globalne ocieplenie#164,gold,scientific,institutional,0.0,1.0,1
+wikipedia,Globalne ocieplenie#181,pilot,none,none,1.0,0.0,0
+wikipedia,Globalne ocieplenie#186,gold,none,institutional,0.0,1.0,1
+wikipedia,Globalne ocieplenie#193,gold,none,media,0.0,0.0,1
+wikipedia,Globalne ocieplenie#195,gold,none,none,1.0,0.0,0
+wikipedia,Globalne ocieplenie#215,gold,none,personal,0.0,0.0,0
+wikipedia,Globalne ocieplenie#221,gold,none,encyclopedia,0.0,1.0,0
+wikipedia,Globalne ocieplenie#257,pilot,none,personal,0.0,1.0,0
+wikipedia,Kwas askorbinowy#123,gold,unknown,other,1.0,1.0,1
+wikipedia,Kwas askorbinowy#127,gold,none,none,1.0,0.0,0
+wikipedia,Kwas askorbinowy#128,gold,none,none,1.0,0.0,0
+wikipedia,Kwas askorbinowy#140,gold,none,none,0.0,1.0,0
+wikipedia,Lekarz#124,gold,none,none,0.0,1.0,0
+wikipedia,Lekarz#128,gold,none,none,0.0,1.0,1
+wikipedia,Lekarz#131,gold,none,none,0.0,1.0,1
+wikipedia,Lekarz#155,gold,none,institutional,0.0,1.0,0
+wikipedia,Lekarz#174,gold,none,personal,0.0,1.0,0
+wikipedia,Lekarz#194,pilot,none,other,1.0,1.0,0
+wikipedia,Medycyna#41,gold,none,none,0.0,1.0,1
+wikipedia,Szczepionka#243,gold,encyclopedia,encyclopedia,0.0,1.0,1
+wikipedia,Szczepionka#244,gold,none,encyclopedia,0.0,0.0,0
+wikipedia,Szczepionka#267,gold,none,none,1.0,0.0,1
+wikipedia,Szczepionka#282,gold,none,personal,0.0,0.0,0
+wikipedia,Szczepionka#299,gold,none,encyclopedia,0.0,1.0,0
+wikipedia,Zespół nabytego niedoboru odporności#236,gold,none,encyclopedia,0.0,0.0,0
+wikipedia,Zespół nabytego niedoboru odporności#291,gold,none,other,0.0,0.0,0
+wikipedia,Zespół nabytego niedoboru odporności#303,gold,encyclopedia,encyclopedia,0.0,1.0,0
+wikipedia,Zespół nabytego niedoboru odporności#309,gold,none,other,0.0,1.0,1
+wikipedia,Zmiana klimatu#50,gold,none,none,1.0,0.0,0
+wikipedia,Zmiana klimatu#70,gold,none,encyclopedia,0.0,1.0,0

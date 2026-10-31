@@ -1,0 +1,333 @@
+{
+  "run": "B",
+  "labels_sha256": "3a766c729deaab4b0e023ea7a8d98516253d8510f431e264eb8644eab08aee07",
+  "frozen_files_unchanged": {
+    "codebook": true,
+    "protocol": true
+  },
+  "uncertain_share": 0.233,
+  "ai_vs_is": {
+    "reddit": {
+      "units": 98,
+      "cites_agreement": 0.888,
+      "cites_kappa": 0.124,
+      "cites_f1": 0.94,
+      "types_exact": 0.592,
+      "types_masi": 0.609
+    },
+    "wikipedia": {
+      "units": 155,
+      "cites_agreement": 0.806,
+      "cites_kappa": 0.243,
+      "cites_f1": 0.318,
+      "types_exact": 0.794,
+      "types_masi": 0.794
+    },
+    "wikipedia_edit_about_sources": {
+      "units": 155,
+      "agreement": 0.774,
+      "kappa": 0.359,
+      "f1": 0.493
+    }
+  },
+  "ai_vs_is_by_uncertain": {
+    "reddit_uncertain_0": {
+      "units": 61,
+      "cites_agreement": 0.918,
+      "cites_kappa": 0.0,
+      "cites_f1": 0.957,
+      "types_exact": 0.77,
+      "types_masi": 0.783
+    },
+    "reddit_uncertain_1": {
+      "units": 37,
+      "cites_agreement": 0.838,
+      "cites_kappa": 0.184,
+      "cites_f1": 0.909,
+      "types_exact": 0.297,
+      "types_masi": 0.321
+    },
+    "wikipedia_uncertain_0": {
+      "units": 133,
+      "cites_agreement": 0.797,
+      "cites_kappa": 0.092,
+      "cites_f1": 0.129,
+      "types_exact": 0.797,
+      "types_masi": 0.797
+    },
+    "wikipedia_uncertain_1": {
+      "units": 22,
+      "cites_agreement": 0.864,
+      "cites_kappa": 0.673,
+      "cites_f1": 0.769,
+      "types_exact": 0.773,
+      "types_masi": 0.773
+    }
+  },
+  "ai_vs_is_per_code": {
+    "scientific": {
+      "is_units": 6,
+      "ai_units": 7,
+      "kappa": 0.605
+    },
+    "institutional": {
+      "is_units": 7,
+      "ai_units": 7,
+      "kappa": 0.412
+    },
+    "media": {
+      "is_units": 39,
+      "ai_units": 33,
+      "kappa": 0.709
+    },
+    "personal": {
+      "is_units": 22,
+      "ai_units": 1,
+      "kappa": -0.008
+    },
+    "social_blog": {
+      "is_units": 36,
+      "ai_units": 40,
+      "kappa": 0.69
+    },
+    "encyclopedia": {
+      "is_units": 9,
+      "ai_units": 3,
+      "kappa": 0.491
+    },
+    "other": {
+      "is_units": 14,
+      "ai_units": 6,
+      "kappa": 0.276
+    },
+    "unknown": {
+      "is_units": 2,
+      "ai_units": 6,
+      "kappa": 0.241
+    }
+  },
+  "wikipedia_cites_missed_by_ai_is_labels": {
+    "personal": 14,
+    "encyclopedia": 6,
+    "other": 5,
+    "institutional": 2
+  },
+  "pilot": {
+    "ai_vs_is": {
+      "reddit": {
+        "units": 32,
+        "cites_agreement": 0.906,
+        "cites_kappa": 0.0,
+        "cites_f1": 0.951,
+        "types_exact": 0.562,
+        "types_masi": 0.576
+      },
+      "wikipedia": {
+        "units": 21,
+        "cites_agreement": 0.857,
+        "cites_kappa": 0.0,
+        "cites_f1": 0.0,
+        "types_exact": 0.857,
+        "types_masi": 0.857
+      }
+    },
+    "ai_vs_earlier_claude": {
+      "reddit": {
+        "units": 32,
+        "cites_agreement": 1.0,
+        "cites_kappa": 1.0,
+        "cites_f1": 1.0,
+        "types_exact": 0.938,
+        "types_masi": 0.938
+      },
+      "wikipedia": {
+        "units": 21,
+        "cites_agreement": 1.0,
+        "cites_kappa": null,
+        "cites_f1": 0.0,
+        "types_exact": 1.0,
+        "types_masi": 1.0
+      }
+    },
+    "is_vs_earlier_claude": {
+      "reddit": {
+        "units": 32,
+        "cites_agreement": 0.906,
+        "cites_kappa": 0.0,
+        "cites_f1": 0.951,
+        "types_exact": 0.5,
+        "types_masi": 0.514
+      },
+      "wikipedia": {
+        "units": 21,
+        "cites_agreement": 0.857,
+        "cites_kappa": 0.0,
+        "cites_f1": 0.0,
+        "types_exact": 0.857,
+        "types_masi": 0.857
+      }
+    }
+  },
+  "control_27_10": {
+    "units": 22,
+    "ai_vs_27_10_exact": 1.0,
+    "ai_vs_is_exact": 0.955
+  },
+  "instruments": {
+    "gliner_v1": {
+      "reddit": {
+        "units": 66,
+        "ai_cites_f1": 0.934,
+        "ai_types_masi": 0.625,
+        "tool_cites_f1": 0.969,
+        "tool_types_masi": 0.401,
+        "ai_cites_errors": 8,
+        "ai_types_errors": 26,
+        "tool_cites_errors": 4,
+        "tool_types_errors": 43,
+        "kappa_cites_errors": 0.456,
+        "kappa_types_errors": 0.345,
+        "ai_errors_shared": 23
+      },
+      "wikipedia": {
+        "units": 134,
+        "ai_cites_f1": 0.341,
+        "ai_types_masi": 0.784,
+        "tool_cites_f1": 0.167,
+        "tool_types_masi": 0.769,
+        "ai_cites_errors": 27,
+        "ai_types_errors": 29,
+        "tool_cites_errors": 30,
+        "tool_types_errors": 31,
+        "kappa_cites_errors": 0.8,
+        "kappa_types_errors": 0.828,
+        "ai_errors_shared": 26
+      }
+    },
+    "zeroshot_v1": {
+      "reddit": {
+        "units": 66,
+        "ai_cites_f1": 0.934,
+        "ai_types_masi": 0.625,
+        "tool_cites_f1": 0.926,
+        "tool_types_masi": 0.322,
+        "ai_cites_errors": 8,
+        "ai_types_errors": 26,
+        "tool_cites_errors": 9,
+        "tool_types_errors": 49,
+        "kappa_cites_errors": 0.123,
+        "kappa_types_errors": 0.203,
+        "ai_errors_shared": 23
+      },
+      "wikipedia": {
+        "units": 134,
+        "ai_cites_f1": 0.341,
+        "ai_types_masi": 0.784,
+        "tool_cites_f1": 0.26,
+        "tool_types_masi": 0.507,
+        "ai_cites_errors": 27,
+        "ai_types_errors": 29,
+        "tool_cites_errors": 57,
+        "tool_types_errors": 66,
+        "kappa_cites_errors": 0.181,
+        "kappa_types_errors": 0.353,
+        "ai_errors_shared": 26
+      }
+    },
+    "rules_v1": {
+      "reddit": {
+        "units": 66,
+        "ai_cites_f1": 0.934,
+        "ai_types_masi": 0.625,
+        "tool_cites_f1": 0.061,
+        "tool_types_masi": 0.04,
+        "ai_cites_errors": 8,
+        "ai_types_errors": 26,
+        "tool_cites_errors": 62,
+        "tool_types_errors": 64,
+        "kappa_cites_errors": -0.019,
+        "kappa_types_errors": -0.011,
+        "ai_errors_shared": 25
+      },
+      "wikipedia": {
+        "units": 134,
+        "ai_cites_f1": 0.341,
+        "ai_types_masi": 0.784,
+        "tool_cites_f1": 0.239,
+        "tool_types_masi": 0.56,
+        "ai_cites_errors": 27,
+        "ai_types_errors": 29,
+        "tool_cites_errors": 51,
+        "tool_types_errors": 59,
+        "kappa_cites_errors": 0.443,
+        "kappa_types_errors": 0.488,
+        "ai_errors_shared": 28
+      }
+    }
+  },
+  "k2_error_kappa_below_0_4": {
+    "gliner_v1_reddit": false,
+    "gliner_v1_wikipedia": false,
+    "zeroshot_v1_reddit": true,
+    "zeroshot_v1_wikipedia": true,
+    "rules_v1_reddit": true,
+    "rules_v1_wikipedia": false
+  },
+  "stability_vs_A": {
+    "cites_kappa": {
+      "value": 0.958,
+      "low": 0.916,
+      "high": 0.991
+    },
+    "types_alpha_masi": {
+      "value": 0.945,
+      "low": 0.906,
+      "high": 0.979
+    },
+    "edit_kappa": {
+      "value": 0.954,
+      "low": 0.875,
+      "high": 1.0
+    },
+    "k1_met": true,
+    "by_platform": {
+      "reddit": {
+        "units": 98,
+        "cites_agreement": 0.969,
+        "cites_kappa": 0.863,
+        "cites_f1": 0.982,
+        "types_exact": 0.929,
+        "types_masi": 0.94,
+        "types_alpha_masi": {
+          "value": 0.919,
+          "low": 0.852,
+          "high": 0.971
+        }
+      },
+      "wikipedia": {
+        "units": 155,
+        "cites_agreement": 0.987,
+        "cites_kappa": 0.882,
+        "cites_f1": 0.889,
+        "types_exact": 0.987,
+        "types_masi": 0.987,
+        "types_alpha_masi": {
+          "value": 0.885,
+          "low": 0.661,
+          "high": 1.0
+        }
+      }
+    },
+    "per_code_kappa": {
+      "scientific": 1.0,
+      "institutional": 1.0,
+      "media": 0.947,
+      "personal": 0.0,
+      "social_blog": 0.985,
+      "encyclopedia": 1.0,
+      "other": 0.592,
+      "unknown": 0.907
+    },
+    "uncertain_kappa": 0.667
+  }
+}

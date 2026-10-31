@@ -1,0 +1,12 @@
+platform,unit_id,phase,is_types,B_types,B_edit,B_uncertain,A_types,A_edit,A_uncertain
+reddit,10nax3,gold,personal,other,,1,none,,1
+reddit,1pke3c,gold,media,social_blog,,1,media,,1
+reddit,3gxu91,pilot,social_blog,social_blog,,1,other;social_blog,,1
+reddit,cyn4a,gold,unknown,other,,1,none,,1
+reddit,far1cu,gold,none,personal,,1,none,,1
+reddit,kxevl,gold,other,media;social_blog,,1,social_blog,,1
+reddit,wphmg,gold,other;social_blog,other;social_blog;unknown,,1,social_blog;unknown,,1
+wikipedia,Globalne ocieplenie#193,gold,media,media,0.0,1,none,0.0,1
+wikipedia,Kwas askorbinowy#123,gold,other,unknown,0.0,1,unknown,1.0,1
+wikipedia,Kwas askorbinowy#133,gold,none,unknown,1.0,1,none,1.0,0
+wikipedia,Kwas askorbinowy#148,gold,none,none,1.0,1,none,0.0,0
