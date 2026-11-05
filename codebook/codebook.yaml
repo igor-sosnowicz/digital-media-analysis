@@ -4,8 +4,8 @@
 # Kody (zmienne, kategorie, kolumny) są po angielsku; nazwy i definicje po polsku.
 
 title: Powoływanie się na źródła informacji
-version: "2.2"
-date: 2026-10-25
+version: "2.3"
+date: 2026-11-02
 status: wersja robocza przed pilotażem annotacji
 
 construct: >-
@@ -186,20 +186,24 @@ categories:
   - code: personal
     name: Doświadczenia własne
     definition: >-
-      Autor opiera twierdzenie na własnym doświadczeniu albo na relacji
-      konkretnej osoby z otoczenia, w tym specjalisty spotkanego osobiście
-      („Z własnego doświadczenia powiem, że…”).
+      Autor opiera twierdzenie na własnym doświadczeniu, na własnej opinii lub
+      ocenie albo na relacji konkretnej osoby z otoczenia, w tym specjalisty
+      spotkanego osobiście („Z własnego doświadczenia powiem, że…”, „moim
+      zdaniem to kłamstwo”).
     include:
       - „z własnego doświadczenia”, „u mnie w pracy zawsze…” użyte jako dowód twierdzenia
       - „znajomy pracuje w szpitalu i mówi, że…”, „lekarz powiedział mi, że…”
       - kontakt z urzędem opisany jako własne przeżycie
+      - własna opinia, ocena lub spekulacja autora podana jako podstawa twierdzenia albo zmiany („według mnie”, „moim zdaniem”, „Ściema”), także jako cały opis zmiany na Wikipedii (R8, od wersji 2.3)
     exclude:
       - opis sytuacji bez funkcji dowodu („mieszkam w centrum, można odebrać”)
       - osoby jako uczestnicy, np. szukanie znajomych czy prezent dla znajomego
-      - własna opinia („według mnie”, „moim zdaniem”; R8)
+      - prośba o opinię innych („co sądzicie?”) bez własnej oceny
     positive:
       - platform: reddit
         text: Opis wielu lat problemów zdrowotnych; „ostatni lekarz umocnił moje przypuszczenia”.
+      - platform: wikipedia
+        text: Cały opis zmiany „Globalne ocieplenie to JEDNO WIELKIE GLOBALNE KŁAMSTWO”.
     negative:
       - platform: reddit
         text: Para szuka znajomych do wspólnego wychodzenia.
@@ -242,11 +246,14 @@ categories:
       - link do artykułu Wikipedii, Wikidata, Britannica, IMDb
       - sjp.pl, sjp.pwn.pl i poradnia językowa PWN
       - linki objaśniające nazwy, np. nazwa partii podlinkowana do Wikipedii
+      - dodanie linków interwiki albo linków wewnętrznych do artykułów Wikipedii („interwiki”, „int.”, automatyczny opis narzędzia „dodaj link”, `growthexperiments-addlink`; R9, od wersji 2.3)
     exclude:
       - skróty zasad i narzędzi Wikipedii w opisach edycji (`[[WP:SK]]`, `[[WP:POP]]`, `[[Pomoc:…]]`; R9)
     positive:
       - platform: wikipedia
         text: „Brzydki rusycyzm” i link do poradni językowej sjp.pwn.pl.
+      - platform: wikipedia
+        text: "„/* Debata polityczno-publiczna */ interwiki”"
       - platform: reddit
         text: Nazwy partii w tabeli sondaży podlinkowane do artykułów angielskiej Wikipedii.
     negative:
@@ -266,10 +273,11 @@ categories:
       - „według strony producenta rama waży 1,2 kg”, link do oferty jako dowód ceny lub dostępności
       - link do gov.pl lub strony urzędu, „komunikat policji”, treść ustawy
       - link do strony fundacji, NGO lub partii (wwf.pl, greenpeace.org), „raport fundacji X”
+      - post-reklama albo spam z linkiem do strony firmy lub usługi (R3, od wersji 2.3)
     exclude:
       - źródło pasujące do innej kategorii; `other` stosujemy tylko w ostateczności (R7)
       - serwis lub strona jako miejsce poszukiwań albo przedmiot rozmowy (R2)
-      - reklama, link afiliacyjny, spam, kod rabatowy (R3)
+      - kod rabatowy bez linku (R3)
       - instytucja lub sklep jako uczestnik albo miejsce zdarzenia („Sejm uchwalił ustawę”, „sklepy zamykały rolety”)
     positive:
       - platform: reddit
@@ -278,13 +286,12 @@ categories:
         text: Link do strony WWF o klimacie z dopiskiem „inspiracja”.
       - platform: reddit
         text: "Konstruowany: „Według komunikatu urzędu miasta tramwaje nie jeżdżą do niedzieli”."
+      - platform: reddit
+        text: Post kasyna online o bonusie powitalnym; link posta prowadzi do serwisu z promocjami hazardowymi (strona firmy, R3).
     negative:
       - platform: reddit
         text: Pytanie po angielsku, czy poza OLX i Otodom są inne serwisy z mieszkaniami na krótki termin.
         why: Serwisy są przedmiotem pytania, a nie źródłem informacji (R2).
-      - platform: reddit
-        text: Post kasyna online o bonusie powitalnym; link posta prowadzi do serwisu z promocjami hazardowymi.
-        why: Reklama lub spam (R3).
       - platform: reddit
         text: Pytanie o aplikacje do „zbierania kwadratów” z linkami do ich stron głównych.
         why: Linki wskazują przedmiot rozmowy, a nie źródło informacji (R2).
@@ -303,7 +310,7 @@ categories:
     exclude:
       - sam znacznik „źródła/przypisy” lub „dodano przypis” w opisie edycji (to `edit_about_sources`; R10)
       - słowo „link” lub „artykuł” w innym znaczeniu („podeślijcie link partnerkom”, „poprawiam link”)
-      - własna opinia („według mnie”; R8)
+      - własna opinia („według mnie”; wtedy `personal`, R8)
     positive:
       - platform: wikipedia
         text: Uwaga, że takie badania przeprowadzono, a korzyści leku są dyskusyjne; bez wskazania badań.
@@ -355,8 +362,9 @@ rules:
     text: >-
       Nie są źródłem: własne zdjęcia i filmy hostowane przez platformę
       (i.redd.it, preview.redd.it, v.redd.it, imgur), formularze ankiet,
-      reklamy, linki afiliacyjne, spam, kody rabatowe i linki do profili
-      użytkowników.
+      kody rabatowe bez linku i linki do profili użytkowników. Post-reklama
+      albo spam z linkiem do strony firmy lub usługi (także link afiliacyjny)
+      dostaje kategorię linkowanej strony, zwykle `other` (od wersji 2.3).
   - code: R4
     text: >-
       Kategorię wyznacza wydawca lub kanał, z którego pochodzi informacja,
@@ -380,16 +388,19 @@ rules:
       sprawdzić, kto ją prowadzi, ale nie kodujemy treści strony docelowej.
   - code: R8
     text: >-
-      Nie są powołaniem: własna opinia („według mnie”, „moim zdaniem”),
-      prośba o źródło („macie jakieś dane?”) ani własne badanie autora
-      (rekrutacja do ankiety).
+      Nie są powołaniem: prośba o źródło („macie jakieś dane?”) ani własne
+      badanie autora (rekrutacja do ankiety). Własna opinia lub ocena autora
+      podana jako podstawa twierdzenia („według mnie”, „moim zdaniem”,
+      „Ściema”) to `personal` (od wersji 2.3).
   - code: R9
     text: >-
       Wikipedia, elementy techniczne. Pomijamy automatyczny prefiks sekcji
       `/* … */`. Skróty zasad i narzędzi (`[[WP:…]]`, `[[Pomoc:…]]`), opisy
-      redakcyjne („drobne redakcyjne”, „int.”, „kat.”), komunikaty botów i
-      rewerty („Wycofano edycje użytkownika…”, „Anulowanie wersji…”) nie są
-      źródłem.
+      redakcyjne („drobne redakcyjne”, „kat.”), komunikaty botów i rewerty
+      („Wycofano edycje użytkownika…”, „Anulowanie wersji…”) nie są źródłem.
+      Wyjątek od wersji 2.3: dodanie linków interwiki albo linków
+      wewnętrznych do artykułów Wikipedii („interwiki”, „int.”, automatyczny
+      opis narzędzia „dodaj link”) to `encyclopedia`.
   - code: R10
     text: >-
       Wikipedia, praca nad przypisami. Deklaracja pracy nad źródłami
@@ -486,3 +497,16 @@ changelog:
       komentarzy z Reddita, kodowana razem z `consensus_stance` w arkuszu
       walidacyjnym rozszerzonego testu H1 (R15). Stanowisko oceniamy względem
       konsensusu danego tematu. Pozostałe zmienne bez zmian.
+  - version: "2.3"
+    date: 2026-11-02
+    changes: >-
+      Rozstrzygnięcie szarych stref z ćwiczenia protokołu AI
+      (docs/cwiczenie_protokolu_ai.md) zgodnie z odczytaniem w etykietach IS
+      (decyzja D0.5 z docs/plan_poprawy_krok_po_kroku.md). Własna opinia lub
+      ocena autora podana jako podstawa twierdzenia albo zmiany to `personal`,
+      a nie brak powołania (R8). Dodanie linków interwiki albo linków
+      wewnętrznych do artykułów Wikipedii to `encyclopedia` (wyjątek w R9;
+      „int.” nie jest już opisem redakcyjnym). Post-reklama albo spam z linkiem
+      do strony firmy lub usługi dostaje kategorię linkowanej strony (R3).
+      Strony będące przedmiotem rozmowy (R2) i rewerty (R9) bez zmian. Etykiety
+      v1 i zamrożone instrumenty v1 powstały według wersji 2.2.

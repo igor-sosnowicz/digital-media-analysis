@@ -1,0 +1,125 @@
+{
+  "run": "S1",
+  "task": "stance",
+  "labels_sha256": "db50d62e966fa988d9e760b8eb5e289477fe52a9c2c81f08f4472be82634aae3",
+  "frozen_files_unchanged": {
+    "codebook": true,
+    "protocol": true
+  },
+  "uncertain_share": 0.293,
+  "ai_counts": {
+    "not_applicable": 235,
+    "neutral": 104,
+    "challenges": 76,
+    "supports": 19
+  },
+  "reference_counts": {
+    "not_applicable": 240,
+    "challenges": 92,
+    "neutral": 86,
+    "supports": 16
+  },
+  "ai_vs_reference": {
+    "units": 434,
+    "reference_challenges": 92,
+    "sensitivity": 0.761,
+    "specificity": 0.982,
+    "precision": 0.921,
+    "f1": 0.833,
+    "agreement": 0.901,
+    "kappa_four_values": 0.839
+  },
+  "gate_b2_sensitivity_0_8": false,
+  "by_phase": {
+    "enriched": {
+      "units": 277,
+      "reference_challenges": 88,
+      "sensitivity": 0.761,
+      "specificity": 0.968,
+      "precision": 0.918,
+      "f1": 0.832,
+      "agreement": 0.87,
+      "kappa_four_values": 0.771
+    },
+    "gold": {
+      "units": 157,
+      "reference_challenges": 4,
+      "sensitivity": 0.75,
+      "specificity": 1.0,
+      "precision": 1.0,
+      "f1": 0.857,
+      "agreement": 0.955,
+      "kappa_four_values": 0.925
+    }
+  },
+  "by_decided_by": {
+    "auto": {
+      "units": 99,
+      "reference_challenges": 0,
+      "sensitivity": null,
+      "specificity": 0.99,
+      "precision": 0.0,
+      "f1": 0.0,
+      "agreement": 0.96,
+      "kappa_four_values": 0.0
+    },
+    "human": {
+      "units": 335,
+      "reference_challenges": 92,
+      "sensitivity": 0.761,
+      "specificity": 0.979,
+      "precision": 0.933,
+      "f1": 0.838,
+      "agreement": 0.884,
+      "kappa_four_values": 0.829
+    }
+  },
+  "by_uncertain": {
+    "uncertain_0": {
+      "units": 307,
+      "reference_challenges": 36,
+      "sensitivity": 1.0,
+      "specificity": 0.996,
+      "precision": 0.973,
+      "f1": 0.986,
+      "agreement": 0.987,
+      "kappa_four_values": 0.975
+    },
+    "uncertain_1": {
+      "units": 127,
+      "reference_challenges": 56,
+      "sensitivity": 0.607,
+      "specificity": 0.93,
+      "precision": 0.872,
+      "f1": 0.716,
+      "agreement": 0.693,
+      "kappa_four_values": 0.568
+    }
+  },
+  "confusion_reference_by_ai": {
+    "challenges": {
+      "challenges": 70,
+      "neutral": 18,
+      "not_applicable": 3,
+      "supports": 1
+    },
+    "neutral": {
+      "challenges": 2,
+      "neutral": 78,
+      "not_applicable": 4,
+      "supports": 2
+    },
+    "not_applicable": {
+      "challenges": 4,
+      "neutral": 7,
+      "not_applicable": 228,
+      "supports": 1
+    },
+    "supports": {
+      "challenges": 0,
+      "neutral": 1,
+      "not_applicable": 0,
+      "supports": 15
+    }
+  }
+}

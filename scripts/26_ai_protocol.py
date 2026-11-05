@@ -1,15 +1,20 @@
-"""Blind AI annotation protocol A1 (docs/protokol_anotacji_ai.md), practised on the 253 units IS coded without AI.
+"""Blind AI annotation protocol A1 (docs/protokol_anotacji_ai.md, version 1.1: docs/protokol_anotacji_ai_1_1.md).
 
-`blind --run A` (seed 20261031; run B: 20261032) draws a batch once: the fields people saw in the sheets, under
-random codes and in random order, go to annotations/sheets/ai_protocol/blind_<run>.csv (outside git); the key
-(code -> unit) and freeze_<run>.json with the hashes of the codebook and the protocol, taken before coding, go to
-annotations/ai_protocol/. The annotator writes labels_<run>.csv there (code, source_types, edit_about_sources,
+Runs A and B (protocol 1.0, codebook 2.2) and C and D (protocol 1.1, codebook 2.3) code the sources of the 253 units
+IS coded without AI; runs S1 and S2 (protocol 1.1) code the stance of the 434 posts of the plan C reference.
+`blind --run A` draws a batch once: the fields people saw in the sheets, under random codes and in random order, go to
+annotations/sheets/ai_protocol/blind_<run>.csv (outside git); the key (code -> unit) and freeze_<run>.json with the
+hashes of the codebook and the protocol, taken before coding, go to annotations/ai_protocol/. The annotator writes
+labels_<run>.csv there (sources: code, source_types, edit_about_sources, uncertain; stance: code, consensus_stance,
 uncertain) and does not change it after the run.
-`score --run A` compares the frozen labels with the labels of IS, with the earlier Claude labels of the pilot (JP's
-pilot labels are AI first labels JP approved on 23.10.2026), with the blind AI coding of 27.10.2026, with the
-instruments, whose errors should not fall on the same units (N6), and with every other run that has labels: K1 asks
-for kappa of cites_source, alpha (MASI) of source_types and kappa of edit_about_sources of 0.8 or more (fixed on
-31.10.2026 before the labels of run B were seen). Exploratory and unweighted.
+`score --run A` compares the frozen labels of a sources run with the labels of IS, with the earlier Claude labels of
+the pilot (JP's pilot labels are AI first labels JP approved on 23.10.2026), with the blind AI coding of 27.10.2026,
+with the instruments, whose errors should not fall on the same units (N6), and with every earlier run of the task:
+K1 asks for kappa of cites_source, alpha (MASI) of source_types and kappa of edit_about_sources of 0.8 or more (fixed
+on 31.10.2026 before the labels of run B were seen). A stance run is compared with the plan C reference (sensitivity,
+specificity, precision and F1 of `challenges`, kappa of the four values; gate B2 of docs/plan_poprawy_krok_po_kroku.md
+asks for a sensitivity of 0.8 or more) and with the earlier stance run (K1: kappa of 0.8 or more). Exploratory and
+unweighted.
 """
 
 import argparse
@@ -22,6 +27,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import cohen_kappa_score, f1_score
 
+from digital_media_analysis import gold, stance
 from digital_media_analysis.agreement import (
     Estimate,
     cohen_kappa,
@@ -41,13 +47,20 @@ from digital_media_analysis.validation import label_sets
 
 PROTOCOL = ANNOTATIONS_DIR / "ai_protocol"
 BLIND = SHEETS_DIR / "ai_protocol"
-SEEDS = {"A": 20261031, "B": 20261032}
-FROZEN = {"codebook": PROJECT_ROOT / "codebook" / "codebook.md", "protocol": PROJECT_ROOT / "docs" / "protokol_anotacji_ai.md"}
+CODEBOOK = PROJECT_ROOT / "codebook" / "codebook.md"
+PROTOCOL_1_0 = PROJECT_ROOT / "docs" / "protokol_anotacji_ai.md"
+PROTOCOL_1_1 = PROJECT_ROOT / "docs" / "protokol_anotacji_ai_1_1.md"
+# Run: seed, task and protocol; runs of protocol 1.1 use codebook 2.3.
+RUNS = {"A": (20261031, "sources", PROTOCOL_1_0), "B": (20261032, "sources", PROTOCOL_1_0),
+        "C": (20261102, "sources", PROTOCOL_1_1), "D": (20261103, "sources", PROTOCOL_1_1),
+        "S1": (20261104, "stance", PROTOCOL_1_1), "S2": (20261105, "stance", PROTOCOL_1_1)}
 CONTROL_AI = ANNOTATIONS_DIR / "control" / "ai_blind_claude-opus-5-5.csv"
 INSTRUMENTS = ["gliner_v1", "zeroshot_v1", "rules_v1"]
+STANCES = ["supports", "challenges", "neutral", "not_applicable"]
 NONE = frozenset({NO_SOURCE})
 K1_LIMIT = 0.8
 K2_LIMIT = 0.4
+B2_LIMIT = 0.8
 
 
 def digest(path: Path, eol: bytes | None = None) -> str:
@@ -64,7 +77,17 @@ def unchanged(path: Path, frozen: str) -> bool:
     return frozen in {digest(path, eol) for eol in (None, b"\n", b"\r\n")}
 
 
-def units() -> pd.DataFrame:
+def frozen_files(run: str) -> dict[str, Path]:
+    return {"codebook": CODEBOOK, "protocol": RUNS[run][2]}
+
+
+def earlier(run: str) -> list[str]:
+    """Runs of the same task drawn before this one, which it is compared with (B with A, D with A to C)."""
+    order = list(RUNS)
+    return [other for other in order[: order.index(run)] if RUNS[other][1] == RUNS[run][1]]
+
+
+def source_units() -> pd.DataFrame:
     """The units IS coded (pilot and gold) with the fields of the sheets (annotation_sheets.CONTENT_COLUMNS)."""
     wanted = pd.concat([pd.read_csv(LABELS_DIR / phase / "IS.csv", dtype=str)[["platform", "unit_id"]] for phase in ["pilot", "gold"]])
     wanted = set(map(tuple, wanted.to_numpy()))
@@ -84,25 +107,54 @@ def units() -> pd.DataFrame:
     ], ignore_index=True)
 
 
+def stance_reference() -> pd.DataFrame:
+    """The plan C stance reference (gold and enriched sample): one stance per post, its phase and who decided it."""
+    frames = []
+    for phase in ("gold", stance.ENRICHED_PHASE):
+        kept, _ = stance.reference(stance.load_labels(phase))
+        frames.append(pd.DataFrame({"unit_id": kept["unit_id"], "ref_stance": kept[stance.STANCE], "phase": phase,
+                                    "decided_by": kept["decided_by"]}))
+    return pd.concat(frames, ignore_index=True)
+
+
+def stance_units() -> pd.DataFrame:
+    """The posts of the plan C reference with the fields of the stance sheets (the same as the source sheets)."""
+    wanted = set(stance_reference()["unit_id"])
+    posts = gold.reddit_units(gold.load_reddit_frame())
+    posts = posts[posts["unit_id"].isin(wanted)].sort_values("unit_id")
+    if len(posts) != len(wanted):
+        raise SystemExit(f"{len(wanted) - len(posts)} reference posts are not in the local Reddit frame.")
+    return pd.DataFrame({"platform": "reddit", "unit_id": posts["unit_id"].to_numpy(), "group": ("r/" + posts["group"]).to_numpy(),
+                         "title": posts["title"].fillna("").to_numpy(), "text": posts["text"].fillna("").to_numpy(),
+                         "link": posts["link"].fillna("").to_numpy()})
+
+
 def blind(run: str) -> None:
     freeze = PROTOCOL / f"freeze_{run}.json"
     if freeze.exists():
         raise SystemExit(f"{freeze} exists: each run is drawn once, before coding.")
-    batch = units()
-    batch = batch.iloc[np.random.default_rng(SEEDS[run]).permutation(len(batch))].reset_index(drop=True)
+    seed, task, _ = RUNS[run]
+    batch = source_units() if task == "sources" else stance_units()
+    batch = batch.iloc[np.random.default_rng(seed).permutation(len(batch))].reset_index(drop=True)
     batch["code"] = [f"U{index + 1:03d}" for index in range(len(batch))]
     PROTOCOL.mkdir(parents=True, exist_ok=True)
     BLIND.mkdir(parents=True, exist_ok=True)
     batch[["code", "platform", "group", "title", "text", "link"]].to_csv(BLIND / f"blind_{run}.csv", index=False)
     batch[["code", "platform", "unit_id"]].to_csv(PROTOCOL / f"key_{run}.csv", index=False)
-    record = {"created_utc": datetime.now(UTC).isoformat(timespec="seconds"), "seed": SEEDS[run], "units": len(batch),
-              **{f"{name}_sha256": digest(path) for name, path in FROZEN.items()}}
+    record = {"created_utc": datetime.now(UTC).isoformat(timespec="seconds"), "seed": seed, "units": len(batch),
+              **{f"{name}_sha256": digest(path) for name, path in frozen_files(run).items()}}
+    if task == "stance" or RUNS[run][2] != PROTOCOL_1_0:  # runs A and B were frozen before these fields existed
+        record |= {"task": task, "protocol": RUNS[run][2].relative_to(PROJECT_ROOT).as_posix()}
     freeze.write_text(json.dumps(record, indent=2), encoding="utf-8")
     print(json.dumps(record), batch["platform"].value_counts().to_dict())
 
 
 def rounded(value: float) -> float:
     return round(float(value), 3)
+
+
+def ratio(numerator: int, denominator: int) -> float | None:
+    return None if denominator == 0 else rounded(numerator / denominator)
 
 
 def kappa(reference: pd.Series, labels: pd.Series) -> float | None:
@@ -133,16 +185,30 @@ def coder(path: Path, name: str) -> pd.DataFrame:
                          f"{name}_edit": pd.to_numeric(frame["edit_about_sources"], errors="coerce")})
 
 
-def run_labels(run: str, name: str) -> pd.DataFrame:
-    """Frozen labels of a run by platform and unit: `<name>_types` (sets), `<name>_edit` and `<name>_uncertain`."""
+def keyed_labels(run: str) -> pd.DataFrame:
+    """The frozen labels of a run joined with its key; each unit of the key must be labelled exactly once."""
     path = PROTOCOL / f"labels_{run}.csv"
     raw = pd.read_csv(path, dtype=str, keep_default_na=False)
     key = pd.read_csv(PROTOCOL / f"key_{run}.csv", dtype=str)
     if sorted(raw["code"]) != sorted(key["code"]):
         raise SystemExit(f"{path} must label each of the {len(key)} units of the key exactly once.")
-    labels = raw.merge(key, on="code")
+    return raw.merge(key, on="code")
+
+
+def run_labels(run: str, name: str) -> pd.DataFrame:
+    """Frozen labels of a sources run by platform and unit: `<name>_types` (sets), `<name>_edit` and `<name>_uncertain`."""
+    labels = keyed_labels(run)
     return pd.DataFrame({"platform": labels["platform"], "unit_id": labels["unit_id"], f"{name}_types": label_sets(labels["source_types"]),
                          f"{name}_edit": pd.to_numeric(labels["edit_about_sources"], errors="coerce"),
+                         f"{name}_uncertain": labels["uncertain"].astype(int)})
+
+
+def stance_labels(run: str, name: str) -> pd.DataFrame:
+    """Frozen labels of a stance run by unit: `<name>_stance` and `<name>_uncertain`."""
+    labels = keyed_labels(run)
+    if unknown := sorted(set(labels["consensus_stance"]) - set(STANCES)):
+        raise SystemExit(f"labels_{run}.csv has stance values outside the codebook: {unknown}")
+    return pd.DataFrame({"unit_id": labels["unit_id"], f"{name}_stance": labels["consensus_stance"],
                          f"{name}_uncertain": labels["uncertain"].astype(int)})
 
 
@@ -200,16 +266,22 @@ def stability(both: pd.DataFrame) -> dict:
             "uncertain_kappa": kappa(both["other_uncertain"], both["ai_uncertain"])}
 
 
-def score(run: str) -> None:
-    labels_path = PROTOCOL / f"labels_{run}.csv"
+def frozen_check(run: str, labels_path: Path) -> dict:
     freeze = json.loads((PROTOCOL / f"freeze_{run}.json").read_text(encoding="utf-8"))
+    # Labels hashed with LF line endings, as they were written, so a CRLF checkout gives the same hash.
+    return {"run": run, "task": RUNS[run][1], "labels_sha256": digest(labels_path, b"\n"),
+            "frozen_files_unchanged": {name: unchanged(path, freeze[f"{name}_sha256"]) for name, path in frozen_files(run).items()}}
+
+
+def score_sources(run: str) -> None:
+    labels_path = PROTOCOL / f"labels_{run}.csv"
     reference = pd.concat([coder(LABELS_DIR / phase / "IS.csv", "is").assign(phase=phase) for phase in ["pilot", "gold"]])
     table = run_labels(run, "ai").merge(reference, on=["platform", "unit_id"], validate="one_to_one")
 
-    # Labels hashed with LF line endings, as they were written, so a CRLF checkout gives the same hash.
-    scores = {"run": run, "labels_sha256": digest(labels_path, b"\n"),
-              "frozen_files_unchanged": {name: unchanged(path, freeze[f"{name}_sha256"]) for name, path in FROZEN.items()},
-              "uncertain_share": rounded(table["ai_uncertain"].mean()), "ai_vs_is": by_platform(table, "ai", "is")}
+    scores = {**frozen_check(run, labels_path), "uncertain_share": rounded(table["ai_uncertain"].mean()),
+              "ai_vs_is": by_platform(table, "ai", "is")}
+    if RUNS[run][2] == PROTOCOL_1_0:  # keeps the scores of runs A and B as they were published
+        scores.pop("task")
     wiki = table[table["platform"].eq("wikipedia")].dropna(subset=["ai_edit", "is_edit"])
     scores["ai_vs_is"]["wikipedia_edit_about_sources"] = {
         "units": len(wiki), "agreement": rounded((wiki["ai_edit"] == wiki["is_edit"]).mean()),
@@ -224,8 +296,8 @@ def score(run: str) -> None:
     missed = table[table["platform"].eq("wikipedia") & cites(table["ai_types"]).eq(0) & cites(table["is_types"]).eq(1)]
     scores["wikipedia_cites_missed_by_ai_is_labels"] = missed["is_types"].map(lambda labels: ";".join(sorted(labels))).value_counts().to_dict()
 
-    earlier = coder(LABELS_DIR / "pilot" / "JP.csv", "claude")
-    pilot = table[table["phase"].eq("pilot")].merge(earlier, on=["platform", "unit_id"])
+    earlier_claude = coder(LABELS_DIR / "pilot" / "JP.csv", "claude")
+    pilot = table[table["phase"].eq("pilot")].merge(earlier_claude, on=["platform", "unit_id"])
     scores["pilot"] = {"ai_vs_is": by_platform(pilot, "ai", "is"), "ai_vs_earlier_claude": by_platform(pilot, "ai", "claude"),
                        "is_vs_earlier_claude": by_platform(pilot, "is", "claude")}
     control = pd.read_csv(CONTROL_AI, dtype=str, keep_default_na=False)
@@ -237,8 +309,7 @@ def score(run: str) -> None:
     scores["k2_error_kappa_below_0_4"] = {f"{instrument}_{platform}": all(value is not None and value < K2_LIMIT
                                                                            for value in (row["kappa_cites_errors"], row["kappa_types_errors"]))
                                           for instrument, rows in scores["instruments"].items() for platform, row in rows.items()}
-    # Each later run is compared with the earlier ones (B with A).
-    for other in sorted(SEEDS)[: sorted(SEEDS).index(run)]:
+    for other in earlier(run):
         if (PROTOCOL / f"labels_{other}.csv").exists():
             both = table.merge(run_labels(other, "other"), on=["platform", "unit_id"], validate="one_to_one")
             scores[f"stability_vs_{other}"] = stability(both)
@@ -255,12 +326,63 @@ def score(run: str) -> None:
     print(json.dumps(scores, indent=1, ensure_ascii=False))
 
 
+def challenges_metrics(reference: pd.Series, labels: pd.Series) -> dict:
+    """Detection of `challenges` (sensitivity, specificity, precision, F1) and agreement on all four stance values."""
+    truth, predicted = reference.eq("challenges"), labels.eq("challenges")
+    hits, false_alarms = int((truth & predicted).sum()), int((~truth & predicted).sum())
+    misses, rejections = int((truth & ~predicted).sum()), int((~truth & ~predicted).sum())
+    return {"units": len(reference), "reference_challenges": hits + misses, "sensitivity": ratio(hits, hits + misses),
+            "specificity": ratio(rejections, rejections + false_alarms), "precision": ratio(hits, hits + false_alarms),
+            "f1": ratio(2 * hits, 2 * hits + false_alarms + misses), "agreement": rounded((reference == labels).mean()),
+            "kappa_four_values": kappa(reference, labels)}
+
+
+def score_stance(run: str) -> None:
+    labels_path = PROTOCOL / f"labels_{run}.csv"
+    table = stance_labels(run, "ai").merge(stance_reference(), on="unit_id", validate="one_to_one")
+    overall = challenges_metrics(table["ref_stance"], table["ai_stance"])
+    scores = {**frozen_check(run, labels_path), "uncertain_share": rounded(table["ai_uncertain"].mean()),
+              "ai_counts": table["ai_stance"].value_counts().to_dict(), "reference_counts": table["ref_stance"].value_counts().to_dict(),
+              "ai_vs_reference": overall,
+              "gate_b2_sensitivity_0_8": overall["sensitivity"] is not None and overall["sensitivity"] >= B2_LIMIT,
+              "by_phase": {phase: challenges_metrics(part["ref_stance"], part["ai_stance"]) for phase, part in table.groupby("phase")},
+              "by_decided_by": {who: challenges_metrics(part["ref_stance"], part["ai_stance"]) for who, part in table.groupby("decided_by")},
+              "by_uncertain": {f"uncertain_{flag}": challenges_metrics(part["ref_stance"], part["ai_stance"])
+                               for flag, part in table.groupby("ai_uncertain")},
+              "confusion_reference_by_ai": pd.crosstab(table["ref_stance"], table["ai_stance"]).to_dict(orient="index")}
+    for other in earlier(run):
+        if (PROTOCOL / f"labels_{other}.csv").exists():
+            both = table.merge(stance_labels(other, "other"), on="unit_id", validate="one_to_one")
+            estimate = cohen_kappa(both["ai_stance"], both["other_stance"])
+            scores[f"stability_vs_{other}"] = {
+                "kappa": interval(estimate), "k1_met": bool(estimate.value >= K1_LIMIT),
+                "agreement": rounded((both["ai_stance"] == both["other_stance"]).mean()),
+                "challenges_kappa": kappa(both["other_stance"].eq("challenges"), both["ai_stance"].eq("challenges")),
+                "uncertain_kappa": kappa(both["other_uncertain"], both["ai_uncertain"])}
+            changed = both[both["ai_stance"] != both["other_stance"]]
+            changed.rename(columns={"ai_stance": f"{run}_stance", "other_stance": f"{other}_stance", "ai_uncertain": f"{run}_uncertain",
+                                    "other_uncertain": f"{other}_uncertain"}).sort_values("unit_id")[
+                ["unit_id", "phase", "ref_stance", f"{run}_stance", f"{other}_stance", f"{run}_uncertain", f"{other}_uncertain"]
+            ].to_csv(PROTOCOL / f"disagreements_{run}_vs_{other}.csv", index=False, encoding="utf-8")
+
+    (PROTOCOL / f"scores_{run}.json").write_text(json.dumps(scores, indent=2, ensure_ascii=False), encoding="utf-8")
+    table[table["ai_stance"] != table["ref_stance"]].sort_values("unit_id")[
+        ["unit_id", "phase", "decided_by", "ref_stance", "ai_stance", "ai_uncertain"]
+    ].to_csv(PROTOCOL / f"disagreements_{run}.csv", index=False, encoding="utf-8")
+    print(json.dumps(scores, indent=1, ensure_ascii=False))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("step", choices=["blind", "score"])
-    parser.add_argument("--run", choices=sorted(SEEDS), default="A")
+    parser.add_argument("--run", choices=list(RUNS), default="A")
     args = parser.parse_args()
-    blind(args.run) if args.step == "blind" else score(args.run)
+    if args.step == "blind":
+        blind(args.run)
+    elif RUNS[args.run][1] == "stance":
+        score_stance(args.run)
+    else:
+        score_sources(args.run)
 
 
 if __name__ == "__main__":

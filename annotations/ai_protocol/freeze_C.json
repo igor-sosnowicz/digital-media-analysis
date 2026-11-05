@@ -1,0 +1,9 @@
+{
+  "created_utc": "2026-11-02T14:44:46+00:00",
+  "seed": 20261102,
+  "units": 253,
+  "codebook_sha256": "c6ac89ba2d54ca797fa9a450f30d82f4aeed89e73ce050c7d87502106ee65a04",
+  "protocol_sha256": "1b97fe37bf4ec84540458c30b0f5919b97c2631c7c420c96031552e52de3dd80",
+  "task": "sources",
+  "protocol": "docs/protokol_anotacji_ai_1_1.md"
+}

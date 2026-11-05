@@ -1,6 +1,6 @@
-# Powoływanie się na źródła informacji: codebook v2.2
+# Powoływanie się na źródła informacji: codebook v2.3
 
-*2026-10-25 · wersja robocza przed pilotażem annotacji.*
+*2026-11-02 · wersja robocza przed pilotażem annotacji.*
 Ten plik jest generowany z `codebook/codebook.yaml` (`make codebook`); nie edytuj go ręcznie.
 
 ## Konstrukt
@@ -138,20 +138,22 @@ Portale, gazety, telewizja, radio, agencje prasowe i magazyny publicystyczne (np
 
 ### `personal`: Doświadczenia własne
 
-Autor opiera twierdzenie na własnym doświadczeniu albo na relacji konkretnej osoby z otoczenia, w tym specjalisty spotkanego osobiście („Z własnego doświadczenia powiem, że…”).
+Autor opiera twierdzenie na własnym doświadczeniu, na własnej opinii lub ocenie albo na relacji konkretnej osoby z otoczenia, w tym specjalisty spotkanego osobiście („Z własnego doświadczenia powiem, że…”, „moim zdaniem to kłamstwo”).
 
 **Włączamy:**
 - „z własnego doświadczenia”, „u mnie w pracy zawsze…” użyte jako dowód twierdzenia
 - „znajomy pracuje w szpitalu i mówi, że…”, „lekarz powiedział mi, że…”
 - kontakt z urzędem opisany jako własne przeżycie
+- własna opinia, ocena lub spekulacja autora podana jako podstawa twierdzenia albo zmiany („według mnie”, „moim zdaniem”, „Ściema”), także jako cały opis zmiany na Wikipedii (R8, od wersji 2.3)
 
 **Wykluczamy:**
 - opis sytuacji bez funkcji dowodu („mieszkam w centrum, można odebrać”)
 - osoby jako uczestnicy, np. szukanie znajomych czy prezent dla znajomego
-- własna opinia („według mnie”, „moim zdaniem”; R8)
+- prośba o opinię innych („co sądzicie?”) bez własnej oceny
 
 **Przykłady pozytywne:**
 - *(reddit)* Opis wielu lat problemów zdrowotnych; „ostatni lekarz umocnił moje przypuszczenia”.
+- *(wikipedia)* Cały opis zmiany „Globalne ocieplenie to JEDNO WIELKIE GLOBALNE KŁAMSTWO”.
 
 **Przykłady negatywne:**
 - *(reddit)* Para szuka znajomych do wspólnego wychodzenia. **Dlaczego nie:** „znajomych” to cel posta, a nie źródło informacji.
@@ -186,12 +188,14 @@ Encyklopedie (w tym artykuły Wikipedii i Britannica), słowniki (np. Słownik J
 - link do artykułu Wikipedii, Wikidata, Britannica, IMDb
 - sjp.pl, sjp.pwn.pl i poradnia językowa PWN
 - linki objaśniające nazwy, np. nazwa partii podlinkowana do Wikipedii
+- dodanie linków interwiki albo linków wewnętrznych do artykułów Wikipedii („interwiki”, „int.”, automatyczny opis narzędzia „dodaj link”, `growthexperiments-addlink`; R9, od wersji 2.3)
 
 **Wykluczamy:**
 - skróty zasad i narzędzi Wikipedii w opisach edycji (`[[WP:SK]]`, `[[WP:POP]]`, `[[Pomoc:…]]`; R9)
 
 **Przykłady pozytywne:**
 - *(wikipedia)* „Brzydki rusycyzm” i link do poradni językowej sjp.pwn.pl.
+- *(wikipedia)* „/* Debata polityczno-publiczna */ interwiki”
 - *(reddit)* Nazwy partii w tabeli sondaży podlinkowane do artykułów angielskiej Wikipedii.
 
 **Przykłady negatywne:**
@@ -205,21 +209,22 @@ Encyklopedie (w tym artykuły Wikipedii i Britannica), słowniki (np. Słownik J
 - „według strony producenta rama waży 1,2 kg”, link do oferty jako dowód ceny lub dostępności
 - link do gov.pl lub strony urzędu, „komunikat policji”, treść ustawy
 - link do strony fundacji, NGO lub partii (wwf.pl, greenpeace.org), „raport fundacji X”
+- post-reklama albo spam z linkiem do strony firmy lub usługi (R3, od wersji 2.3)
 
 **Wykluczamy:**
 - źródło pasujące do innej kategorii; `other` stosujemy tylko w ostateczności (R7)
 - serwis lub strona jako miejsce poszukiwań albo przedmiot rozmowy (R2)
-- reklama, link afiliacyjny, spam, kod rabatowy (R3)
+- kod rabatowy bez linku (R3)
 - instytucja lub sklep jako uczestnik albo miejsce zdarzenia („Sejm uchwalił ustawę”, „sklepy zamykały rolety”)
 
 **Przykłady pozytywne:**
 - *(reddit)* Konstruowany: „Na Allegro ten model kosztuje 300 zł, więc 500 zł to przesada” z linkiem do oferty.
 - *(wikipedia)* Link do strony WWF o klimacie z dopiskiem „inspiracja”.
 - *(reddit)* Konstruowany: „Według komunikatu urzędu miasta tramwaje nie jeżdżą do niedzieli”.
+- *(reddit)* Post kasyna online o bonusie powitalnym; link posta prowadzi do serwisu z promocjami hazardowymi (strona firmy, R3).
 
 **Przykłady negatywne:**
 - *(reddit)* Pytanie po angielsku, czy poza OLX i Otodom są inne serwisy z mieszkaniami na krótki termin. **Dlaczego nie:** Serwisy są przedmiotem pytania, a nie źródłem informacji (R2).
-- *(reddit)* Post kasyna online o bonusie powitalnym; link posta prowadzi do serwisu z promocjami hazardowymi. **Dlaczego nie:** Reklama lub spam (R3).
 - *(reddit)* Pytanie o aplikacje do „zbierania kwadratów” z linkami do ich stron głównych. **Dlaczego nie:** Linki wskazują przedmiot rozmowy, a nie źródło informacji (R2).
 - *(reddit)* Post o rozłamie w partii z linkiem do artykułu wprost.pl. **Dlaczego nie:** Partia jest tematem, a wydawcą jest medium, więc `media` (R4).
 
@@ -234,7 +239,7 @@ Autor odwołuje się do źródła, którego nie da się zidentyfikować („Bada
 **Wykluczamy:**
 - sam znacznik „źródła/przypisy” lub „dodano przypis” w opisie edycji (to `edit_about_sources`; R10)
 - słowo „link” lub „artykuł” w innym znaczeniu („podeślijcie link partnerkom”, „poprawiam link”)
-- własna opinia („według mnie”; R8)
+- własna opinia („według mnie”; wtedy `personal`, R8)
 
 **Przykłady pozytywne:**
 - *(wikipedia)* Uwaga, że takie badania przeprowadzono, a korzyści leku są dyskusyjne; bez wskazania badań.
@@ -267,13 +272,13 @@ Brak odwołania do źródła: jednostka nie zawiera żadnego powołania zgodnego
 
 - **R1.** Etykietujemy całą jednostkę: post (tytuł, treść i link) albo opis zmiany. Przy `source_types` zaznacz każdą kategorię, która wystąpiła choć raz; liczba wystąpień nie ma znaczenia.
 - **R2.** Powołanie wymaga funkcji źródła: tekst lub link musi wskazywać, skąd pochodzi informacja, albo podawać ją jako podstawę twierdzenia. Sama wzmianka o instytucji, osobie lub serwisie jako uczestniku zdarzenia albo przedmiocie rozmowy to nie powołanie.
-- **R3.** Nie są źródłem: własne zdjęcia i filmy hostowane przez platformę (i.redd.it, preview.redd.it, v.redd.it, imgur), formularze ankiet, reklamy, linki afiliacyjne, spam, kody rabatowe i linki do profili użytkowników.
+- **R3.** Nie są źródłem: własne zdjęcia i filmy hostowane przez platformę (i.redd.it, preview.redd.it, v.redd.it, imgur), formularze ankiet, kody rabatowe bez linku i linki do profili użytkowników. Post-reklama albo spam z linkiem do strony firmy lub usługi (także link afiliacyjny) dostaje kategorię linkowanej strony, zwykle `other` (od wersji 2.3).
 - **R4.** Kategorię wyznacza wydawca lub kanał, z którego pochodzi informacja, a nie temat ani osoby opisane w materiale. Artykuł wp.pl o decyzji ministerstwa to `media`. Gdy autor wymienia też źródło pierwotne przywołane w materiale („onet, powołując się na raport GUS”), zaznacz obie kategorie.
 - **R5.** Konkret wygrywa z ogólnikiem. `unknown` zaznaczamy tylko wtedy, gdy jakieś odwołanie w jednostce pozostaje nierozpoznawalne. Jeśli ten sam fragment wskazuje konkretne źródło, kodujemy jego kategorię.
 - **R6.** Nie oceniamy wiarygodności. Tekst pseudonaukowy w repozytorium publikacji to nadal `scientific`, a artykuł z portalu o niskiej wiarygodności to nadal `media`.
 - **R7.** Kategoria `other` jest ostatecznością. Gdy domena jest nieznana, można sprawdzić, kto ją prowadzi, ale nie kodujemy treści strony docelowej.
-- **R8.** Nie są powołaniem: własna opinia („według mnie”, „moim zdaniem”), prośba o źródło („macie jakieś dane?”) ani własne badanie autora (rekrutacja do ankiety).
-- **R9.** Wikipedia, elementy techniczne. Pomijamy automatyczny prefiks sekcji `/* … */`. Skróty zasad i narzędzi (`[[WP:…]]`, `[[Pomoc:…]]`), opisy redakcyjne („drobne redakcyjne”, „int.”, „kat.”), komunikaty botów i rewerty („Wycofano edycje użytkownika…”, „Anulowanie wersji…”) nie są źródłem.
+- **R8.** Nie są powołaniem: prośba o źródło („macie jakieś dane?”) ani własne badanie autora (rekrutacja do ankiety). Własna opinia lub ocena autora podana jako podstawa twierdzenia („według mnie”, „moim zdaniem”, „Ściema”) to `personal` (od wersji 2.3).
+- **R9.** Wikipedia, elementy techniczne. Pomijamy automatyczny prefiks sekcji `/* … */`. Skróty zasad i narzędzi (`[[WP:…]]`, `[[Pomoc:…]]`), opisy redakcyjne („drobne redakcyjne”, „kat.”), komunikaty botów i rewerty („Wycofano edycje użytkownika…”, „Anulowanie wersji…”) nie są źródłem. Wyjątek od wersji 2.3: dodanie linków interwiki albo linków wewnętrznych do artykułów Wikipedii („interwiki”, „int.”, automatyczny opis narzędzia „dodaj link”) to `encyclopedia`.
 - **R10.** Wikipedia, praca nad przypisami. Deklaracja pracy nad źródłami (znacznik „źródła/przypisy”, „dodano przypis”, poprawa przypisów) daje `edit_about_sources = 1`. Kategorię źródła zamiast `none` dajemy tylko wtedy, gdy opis identyfikuje źródło albo jego typ („wg WHO”, „źródło uniwersyteckie”).
 - **R11.** Wpisy po angielsku i w innych językach kodujemy według tych samych reguł.
 - **R12.** W razie wątpliwości wybierz najlepszą etykietę, ustaw `uncertain = 1` i opisz problem w `notes`. Takie przypadki omawiamy przy uzgadnianiu etykiet i mogą one zmienić codebook.
@@ -300,3 +305,4 @@ Brak odwołania do źródła: jednostka nie zawiera żadnego powołania zgodnego
 - **2.0** (2026-10-18): Kategorie i kody zgodne ze slajdem „Codebook”: dziewięć angielskich kodów (`scientific`, `institutional`, `media`, `personal`, `social_blog`, `encyclopedia`, `other`, `unknown`, `none`) zamiast dziesięciu polskich. `nauka` dzieli się na `scientific` (publikacje) i `institutional` (uczelnie, instytuty, sondażownie); `oficjalne` na `institutional` (instytucje statystyczne i zdrowia publicznego) i `other` (urzędy, administracja, prawo). `komercyjne`, `organizacje` i `inne` łączą się w `other`, z wyjątkiem blogów, które trafiają do `social_blog`. Nowy kod `none` zastępuje puste `source_types`, a `cites_source` jest wyliczane z `source_types` (R13).
 - **2.1** (2026-10-24): Nowa zmienna `consensus_stance` (stanowisko wobec konsensusu naukowego: `supports`, `challenges`, `neutral`, `not_applicable`) dla postów z Reddita, kodowana w osobnym arkuszu stanowiska, do weryfikacji hipotezy o spadku zaufania do konsensusu naukowego w latach 2005–2018 (R14). Kategorie i zmienne z wersji 2.0 bez zmian.
 - **2.2** (2026-10-25): Nowa zmienna `consensus_topic` (temat konsensusu naukowego: `climate`, `vaccines`, `evolution`, `gmo`, `fluoride`, `none`) dla postów i komentarzy z Reddita, kodowana razem z `consensus_stance` w arkuszu walidacyjnym rozszerzonego testu H1 (R15). Stanowisko oceniamy względem konsensusu danego tematu. Pozostałe zmienne bez zmian.
+- **2.3** (2026-11-02): Rozstrzygnięcie szarych stref z ćwiczenia protokołu AI (docs/cwiczenie_protokolu_ai.md) zgodnie z odczytaniem w etykietach IS (decyzja D0.5 z docs/plan_poprawy_krok_po_kroku.md). Własna opinia lub ocena autora podana jako podstawa twierdzenia albo zmiany to `personal`, a nie brak powołania (R8). Dodanie linków interwiki albo linków wewnętrznych do artykułów Wikipedii to `encyclopedia` (wyjątek w R9; „int.” nie jest już opisem redakcyjnym). Post-reklama albo spam z linkiem do strony firmy lub usługi dostaje kategorię linkowanej strony (R3). Strony będące przedmiotem rozmowy (R2) i rewerty (R9) bez zmian. Etykiety v1 i zamrożone instrumenty v1 powstały według wersji 2.2.

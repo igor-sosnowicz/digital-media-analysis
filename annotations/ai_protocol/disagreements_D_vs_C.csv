@@ -1,0 +1,12 @@
+platform,unit_id,phase,is_types,D_types,D_edit,D_uncertain,C_types,C_edit,C_uncertain
+reddit,1bl6f,gold,media,media,,1,other,,1
+reddit,1pke3c,gold,media,media;social_blog,,1,social_blog;unknown,,1
+reddit,228pcd,gold,social_blog,media;social_blog,,1,social_blog,,0
+reddit,3gxu91,pilot,social_blog,personal;social_blog,,1,social_blog,,1
+reddit,qwaj,gold,media,other,,1,media,,1
+wikipedia,COVID-19#723,gold,none,none,1.0,1,none,0.0,1
+wikipedia,COVID-19#832,gold,personal,none,0.0,1,encyclopedia,0.0,1
+wikipedia,COVID-19#841,gold,none,personal,0.0,1,none,0.0,0
+wikipedia,COVID-19#89,gold,none,personal,0.0,1,none,0.0,1
+wikipedia,Kwas askorbinowy#133,gold,none,unknown,1.0,1,none,1.0,0
+wikipedia,Zespół nabytego niedoboru odporności#291,gold,other,personal,0.0,1,none,0.0,1

@@ -1,0 +1,136 @@
+{
+  "run": "S2",
+  "task": "stance",
+  "labels_sha256": "2d33280f945d7230e06ec24b65c6621cb8b17310a3ab9c8b6cf9950dc6e51b7c",
+  "frozen_files_unchanged": {
+    "codebook": true,
+    "protocol": true
+  },
+  "uncertain_share": 0.293,
+  "ai_counts": {
+    "not_applicable": 233,
+    "neutral": 101,
+    "challenges": 83,
+    "supports": 17
+  },
+  "reference_counts": {
+    "not_applicable": 240,
+    "challenges": 92,
+    "neutral": 86,
+    "supports": 16
+  },
+  "ai_vs_reference": {
+    "units": 434,
+    "reference_challenges": 92,
+    "sensitivity": 0.815,
+    "specificity": 0.977,
+    "precision": 0.904,
+    "f1": 0.857,
+    "agreement": 0.91,
+    "kappa_four_values": 0.854
+  },
+  "gate_b2_sensitivity_0_8": true,
+  "by_phase": {
+    "enriched": {
+      "units": 277,
+      "reference_challenges": 88,
+      "sensitivity": 0.818,
+      "specificity": 0.958,
+      "precision": 0.9,
+      "f1": 0.857,
+      "agreement": 0.874,
+      "kappa_four_values": 0.778
+    },
+    "gold": {
+      "units": 157,
+      "reference_challenges": 4,
+      "sensitivity": 0.75,
+      "specificity": 1.0,
+      "precision": 1.0,
+      "f1": 0.857,
+      "agreement": 0.975,
+      "kappa_four_values": 0.957
+    }
+  },
+  "by_decided_by": {
+    "auto": {
+      "units": 99,
+      "reference_challenges": 0,
+      "sensitivity": null,
+      "specificity": 0.99,
+      "precision": 0.0,
+      "f1": 0.0,
+      "agreement": 0.97,
+      "kappa_four_values": 0.0
+    },
+    "human": {
+      "units": 335,
+      "reference_challenges": 92,
+      "sensitivity": 0.815,
+      "specificity": 0.971,
+      "precision": 0.915,
+      "f1": 0.862,
+      "agreement": 0.893,
+      "kappa_four_values": 0.843
+    }
+  },
+  "by_uncertain": {
+    "uncertain_0": {
+      "units": 307,
+      "reference_challenges": 37,
+      "sensitivity": 1.0,
+      "specificity": 0.993,
+      "precision": 0.949,
+      "f1": 0.974,
+      "agreement": 0.987,
+      "kappa_four_values": 0.975
+    },
+    "uncertain_1": {
+      "units": 127,
+      "reference_challenges": 55,
+      "sensitivity": 0.691,
+      "specificity": 0.917,
+      "precision": 0.864,
+      "f1": 0.768,
+      "agreement": 0.724,
+      "kappa_four_values": 0.606
+    }
+  },
+  "confusion_reference_by_ai": {
+    "challenges": {
+      "challenges": 75,
+      "neutral": 14,
+      "not_applicable": 2,
+      "supports": 1
+    },
+    "neutral": {
+      "challenges": 2,
+      "neutral": 79,
+      "not_applicable": 4,
+      "supports": 1
+    },
+    "not_applicable": {
+      "challenges": 6,
+      "neutral": 6,
+      "not_applicable": 227,
+      "supports": 1
+    },
+    "supports": {
+      "challenges": 0,
+      "neutral": 2,
+      "not_applicable": 0,
+      "supports": 14
+    }
+  },
+  "stability_vs_S1": {
+    "kappa": {
+      "value": 0.937,
+      "low": 0.905,
+      "high": 0.963
+    },
+    "k1_met": true,
+    "agreement": 0.961,
+    "challenges_kappa": 0.946,
+    "uncertain_kappa": 0.855
+  }
+}

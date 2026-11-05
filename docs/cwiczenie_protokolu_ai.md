@@ -229,9 +229,80 @@ Porównanie obejmuje jednostki, dla których instrumenty mają predykcje (`dev` 
    - operacjonalizację K1: κ `cites_source`, α (MASI) `source_types` i κ `edit_about_sources`, każde ≥ 0,8;
    - minimalną liczbę błędów przy K2.
 
+## Protokół 1.1 (02.11.2026): przebiegi C, D, S1 i S2
+
+Kroki 1.2 i 1.3 planu (`docs/plan_poprawy_krok_po_kroku.md`). Instrukcja to codebook 2.3 i protokół 1.1 (`docs/protokol_anotacji_ai_1_1.md`). Szare strefy rozstrzygnięto tak, jak w etykietach IS (decyzja D0.5).
+
+### Przebiegi
+
+| | C i D: źródła | S1 i S2: stanowisko |
+|---|---|---|
+| Jednostki | 253 jednostki IS | 434 posty odniesienia planu C (157 gold, 277 wzbogaconych; 92 `challenges`) |
+| Agenci | jeden nowy agent (`claude-opus-5-5`) na przebieg | dwa nowe agenty na przebieg, każdy na połowie partii |
+| Zamrożenie partii (UTC) | 14:44:46 i 14:44:53 | 14:45:02 i 14:45:11 |
+
+**Kontrola.**
+- Klucze leżały poza repozytorium przez cały czas kodowania.
+- Zapisy pracy agentów potwierdzają, że każdy czytał tylko swoje trzy pliki i własne części. Polecenia powłoki tylko łączyły części i sprawdzały format.
+- Przebiegi C i D przerwał limit sesji API. Wznowiono je tymi samymi instrukcjami: C miał już zapisaną pierwszą część, D zaczął od nowa.
+
+### Źródła: przebiegi C i D (codebook 2.3) a IS
+
+| Miara | A (2.2) | B (2.2) | C (2.3) | D (2.3) |
+|---|---|---|---|---|
+| Reddit: F1 `cites_source` / MASI | 0,93 / 0,62 | 0,94 / 0,61 | 0,98 / 0,66 | 0,98 / 0,65 |
+| Wikipedia: F1 `cites_source` / MASI | 0,29 / 0,79 | 0,32 / 0,79 | **0,66 / 0,84** | **0,63 / 0,82** |
+| Wikipedia: κ `cites_source` | 0,22 | 0,24 | 0,57 | 0,53 |
+| κ dla `personal` / `encyclopedia` | 0,00 / 0,49 | −0,01 / 0,49 | 0,58 / 0,65 | 0,51 / 0,68 |
+| powołania na Wikipedii pominięte względem IS | 28 | 27 | 14 | 14 |
+
+- **Luka względem IS.** Codebook 2.3 zamknął około połowę luki na Wikipedii. Bramka B1 jest spełniona: F1 wzrosło, a K1 jest spełnione (niżej).
+- **Stabilność K1 dla protokołu 1.1** (D względem C):
+
+  | Miara | Wartość | 95% CI |
+  |---|---|---|
+  | κ `cites_source` | 0,96 | 0,92–0,99 |
+  | α (MASI) `source_types` | 0,95 | 0,91–0,98 |
+  | κ `edit_about_sources` | 0,98 | 0,92–1,00 |
+
+  Przebiegi różnią się w 11 jednostkach. Najmniej stabilne kody to `personal` (κ 0,84) i `unknown` (0,83), czyli dokładnie nowa reguła 2.3 dla opinii.
+- **Zmiana etykiet przez codebook.** κ C i D względem A i B wynosi 0,74–0,79 (`cites_source`) i 0,73–0,78 (α MASI). To spodziewane, bo zmieniła się instrukcja, a nie stabilność anotatora.
+- **K2 dla C i D:**
+  - zero-shot i reguły v1: spełnione na obu platformach;
+  - GLiNER na Wikipedii: niespełnione dla typów (κ błędów około 0,5);
+  - GLiNER na Reddicie: κ błędów `cites_source` około 0,85, ale przy F1 0,98 AI ma tylko kilka błędów, więc κ jest niestabilne (K2 wymaga ≥ 10 błędów każdego systemu).
+
+### Stanowisko: przebiegi S1 i S2
+
+**Stabilność (K1):** κ S2 względem S1 wynosi 0,94 [0,91; 0,96], dla samego `challenges` 0,95. Przebiegi zgadzają się w 96% postów. K1 jest spełnione.
+
+**Zgodność z odniesieniem planu C:**
+
+| | czułość `challenges` | swoistość | precyzja | F1 | κ (4 wartości) |
+|---|---|---|---|---|---|
+| S1 | 0,76 | 0,98 | 0,92 | 0,83 | 0,84 |
+| S2 | 0,82 | 0,98 | 0,90 | 0,86 | 0,85 |
+| etykiety pewne (zgodne w S1 i S2; 417 postów) | **0,81** | 0,98 | 0,92 | 0,86 | 0,87 |
+
+- **Bramka B2** (czułość ≥ 0,8): spełniona dla etykiet pewnych, ale na granicy. Z osobnych przebiegów spełnia ją tylko S2.
+- **Główny błąd:** post `challenges` w odniesieniu oznaczony przez AI jako `neutral` (18 razy w S1, 14 w S2). To nagłówki z twierdzeniem przeciw konsensusowi udostępnione bez komentarza.
+  - Wszyscy czterej agenci niezależnie wskazali tu konflikt w R14 między „artykuł o badaniu bez komentarza to `neutral`” a „promowanie twierdzenia sprzecznego z nauką to `challenges`”.
+  - Doprecyzowanie R14 to decyzja zespołu. Wymaga codebooka 2.4 i nowych przebiegów.
+- **Flaga `uncertain`** obejmuje 29% postów i prawie wszystkie błędy. Na postach bez flagi czułość wynosi 1,00, a κ 0,975.
+- **Wiersze rozstrzygnięte przez reguły** (99, bez `challenges` w odniesieniu): swoistość AI 0,99.
+- **Zastrzeżenie:** odniesienie planu C to preannotacje AI zweryfikowane przez JP oraz reguły, a sprawdzenia przez człowieka bez podpowiedzi nie było (D0.4). Zgodność jest więc zawyżona.
+
+### Co z tego wynika dla planu
+
+- **Etykiety uczące.** Etykiety AI nadają się na etykiety uczące dla `stance_v2`. Uczeń będzie jednak zwykle słabszy od nauczyciela: nauczyciel ma czułość około 0,8, a bramka B6 wymaga od instrumentu ≥ 0,7.
+- **R14 przed v2.** Przed etykietowaniem danych v2 warto doprecyzować R14. Bez tego część `challenges` trafi do `neutral`, co obniża czułość i moc H1.
+
 ## Pliki
 
-- `scripts/26_ai_protocol.py`: krok `blind` oraz krok `score`, który porównuje też przebieg B z A.
+- `scripts/26_ai_protocol.py`: krok `blind` oraz krok `score`, który porównuje też późniejsze przebiegi z wcześniejszymi (B z A, D z A–C, S2 z S1).
+- Przebiegi protokołu 1.1 w `annotations/ai_protocol/`:
+  - `freeze_C.json`, `freeze_D.json`, `freeze_S1.json`, `freeze_S2.json`;
+  - klucze, etykiety, `scores_*.json` i `disagreements_*.csv` tych przebiegów.
 - `annotations/ai_protocol/`:
   - `freeze_A.json`, `freeze_B.json`;
   - `key_A.csv`, `key_B.csv`;

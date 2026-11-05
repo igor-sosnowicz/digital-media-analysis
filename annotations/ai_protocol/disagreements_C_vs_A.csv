@@ -1,0 +1,46 @@
+platform,unit_id,phase,is_types,C_types,C_edit,C_uncertain,A_types,A_edit,A_uncertain
+reddit,10nax3,gold,personal,other,,1,none,,1
+reddit,15vi2k,gold,media,other,,0,none,,1
+reddit,1bl6f,gold,media,other,,1,media,,1
+reddit,1pke3c,gold,media,social_blog;unknown,,1,media,,1
+reddit,1yeyr8,pilot,social_blog,social_blog,,1,none,,0
+reddit,2dfyeb,pilot,media,other,,0,none,,0
+reddit,3gxu91,pilot,social_blog,social_blog,,1,other;social_blog,,1
+reddit,4bp56r,gold,personal,personal,,1,none,,1
+reddit,5444,gold,other,other,,1,social_blog,,1
+reddit,6f5xev,pilot,media,other,,1,social_blog,,0
+reddit,6uqrum,gold,other,other,,1,none,,0
+reddit,8vj5ik,gold,social_blog,other,,0,none,,0
+reddit,9j6m9,gold,personal;social_blog,personal;social_blog,,1,social_blog,,0
+reddit,abe3v,gold,social_blog,institutional;social_blog,,1,social_blog,,0
+reddit,b0igw,pilot,media,other,,1,media,,1
+reddit,cyn4a,gold,unknown,other,,1,none,,1
+reddit,fanutg,gold,personal,personal;unknown,,1,unknown,,1
+reddit,far1cu,gold,none,personal,,0,none,,1
+reddit,fn86ht,pilot,personal;social_blog;unknown,personal;social_blog;unknown,,1,social_blog;unknown,,0
+reddit,kxevl,gold,other,media;social_blog,,1,social_blog,,1
+reddit,ntj9v,pilot,other,other,,0,none,,0
+reddit,o5aq6,gold,social_blog,other,,1,none,,1
+reddit,qwaj,gold,media,media,,1,social_blog,,1
+reddit,wphmg,gold,other;social_blog,other;social_blog;unknown,,0,social_blog;unknown,,1
+wikipedia,COVID-19#140,gold,none,encyclopedia,1.0,0,none,1.0,0
+wikipedia,COVID-19#641,gold,personal,personal,0.0,1,none,0.0,0
+wikipedia,COVID-19#723,gold,none,none,0.0,1,none,1.0,1
+wikipedia,COVID-19#816,gold,personal,personal,0.0,0,none,0.0,0
+wikipedia,COVID-19#832,gold,personal,encyclopedia,0.0,1,none,0.0,0
+wikipedia,Globalne ocieplenie#140,gold,encyclopedia,encyclopedia,0.0,0,none,0.0,0
+wikipedia,Globalne ocieplenie#147,gold,personal,personal,0.0,0,none,0.0,0
+wikipedia,Globalne ocieplenie#152,gold,personal,personal,0.0,1,none,0.0,0
+wikipedia,Globalne ocieplenie#193,gold,media,media,0.0,1,none,0.0,1
+wikipedia,Globalne ocieplenie#221,gold,encyclopedia,encyclopedia,0.0,0,none,0.0,0
+wikipedia,Globalne ocieplenie#249,gold,none,encyclopedia,0.0,1,none,0.0,1
+wikipedia,Globalne ocieplenie#257,pilot,personal,personal,0.0,0,none,0.0,0
+wikipedia,Kwas askorbinowy#123,gold,other,unknown,0.0,1,unknown,1.0,1
+wikipedia,Kwas askorbinowy#147,gold,none,encyclopedia,0.0,0,none,0.0,0
+wikipedia,Lekarz#128,gold,none,encyclopedia,0.0,1,none,0.0,1
+wikipedia,Szczepionka#282,gold,personal,personal,0.0,1,none,0.0,0
+wikipedia,Szczepionka#299,gold,encyclopedia,encyclopedia,0.0,0,none,0.0,0
+wikipedia,Zespół nabytego niedoboru odporności#236,gold,encyclopedia,encyclopedia,0.0,0,none,0.0,0
+wikipedia,Zespół nabytego niedoboru odporności#309,gold,other,encyclopedia,0.0,1,none,0.0,1
+wikipedia,Zmiana klimatu#58,gold,none,encyclopedia,0.0,0,none,0.0,0
+wikipedia,Zmiana klimatu#70,gold,encyclopedia,encyclopedia,0.0,0,none,0.0,0
