@@ -58,8 +58,9 @@ def category_members(get: Callable[[dict], dict], category: str, depth: int) -> 
     return pd.DataFrame(rows, columns=["title", "pageid", "depth", "path"])
 
 
-def build_frame(get: Callable[[dict], dict], groups: dict[str, list[str]], depth: int, per_group: int, seed: int) -> tuple[pd.DataFrame, dict]:
-    """Drawn pages of every group (group, title, pageid, depth, path) and the size of each group before the draw."""
+def build_frame(get: Callable[[dict], dict], groups: dict[str, list[str]], depth: int, per_group: int | None, seed: int) -> tuple[pd.DataFrame, dict]:
+    """Drawn pages of every group (group, title, pageid, depth, path) and the size of each group before the draw;
+    `per_group` None takes every page (change 1 of docs/hipotezy_v2.md)."""
     rng = np.random.default_rng(seed)
     taken, parts, sizes = set(), [], {}
     for group, categories in groups.items():
@@ -67,7 +68,7 @@ def build_frame(get: Callable[[dict], dict], groups: dict[str, list[str]], depth
                             ignore_index=True).drop_duplicates("pageid")
         members = members[~members["pageid"].isin(taken)]
         sizes[group] = {"pages": len(members), "categories": {category: int(members["category"].eq(category).sum()) for category in categories}}
-        chosen = members if len(members) <= per_group else members.iloc[np.sort(rng.choice(len(members), size=per_group, replace=False))]
+        chosen = members if per_group is None or len(members) <= per_group else members.iloc[np.sort(rng.choice(len(members), size=per_group, replace=False))]
         taken.update(chosen["pageid"])
         parts.append(chosen.assign(group=group))
     frame = pd.concat(parts, ignore_index=True) if parts else pd.DataFrame(columns=["title", "pageid", "depth", "path", "category", "group"])

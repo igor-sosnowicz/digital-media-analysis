@@ -15,6 +15,9 @@ PREREGISTRATION_V2 = [
     "src/digital_media_analysis/wikipedia_frame.py", "src/digital_media_analysis/wikipedia_history.py",
     "src/digital_media_analysis/owners.py", "src/digital_media_analysis/topics.py",
     "scripts/16_test_hypotheses_v2.py",
+    # Change 1 (docs/hipotezy_v2.md): the codebook and the AI protocol of the labels, the ladders and the power gate.
+    "codebook/codebook.yaml", "docs/protokol_anotacji_ai_1_1.md", "src/digital_media_analysis/ladders.py",
+    "src/digital_media_analysis/power.py", "scripts/14_label_h1_v2.py", "scripts/27_power_gate.py",
 ]
 
 

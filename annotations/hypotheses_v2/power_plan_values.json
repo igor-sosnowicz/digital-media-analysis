@@ -1,0 +1,30 @@
+{
+  "h1_stance_share_challenges": 0.05128205128205128,
+  "h1_stance_units_with_stance": 78,
+  "h1_alternative_observed_share": 0.44062863795110596,
+  "h1_alternative_true_share": 0.36343591212716736,
+  "h1_gliner_alternative_sensitivity": 0.8138172655399163,
+  "h1_gliner_alternative_specificity": 0.7724373389821075,
+  "h1_implied_design_effect": 2.786566506379848,
+  "h2_links_2020_2026": 1341,
+  "h2_links_per_page_year": 23.946428571428573,
+  "h2_alt_domain_share": 0.007457121551081283,
+  "h2_alt_owner_share": 0.0014914243102162566,
+  "h2_non_specialist_share_without_bulk": 0.49183303085299457,
+  "h2_design_effect": {
+    "all_revisions": {
+      "units": 1341,
+      "clusters": 232,
+      "icc": 0.1839,
+      "mean_size": 72.3915,
+      "design_effect": 14.1274
+    },
+    "without_bulk_revisions": {
+      "units": 551,
+      "clusters": 223,
+      "icc": 0.3973,
+      "mean_size": 5.8929,
+      "design_effect": 2.9441
+    }
+  }
+}

@@ -11,8 +11,10 @@ Steps (docs/hipotezy_v2.md), each a flag:
   annotations/labels/h1v2_validation/adjudicated.csv);
 - --tune: stance_v2 thresholds on the dev part of the validation sample;
 - --evaluate: once, on the frozen and committed instruments, the test part:
-  metrics per period, the validity gate and the error counts for the corrected trend.
-Needs the `ml` dependency group for stance_v2.
+  metrics per period, the validity gate and the error counts for the corrected trend;
+- --sources: the source labels of the frozen gliner_v1 for every sample unit
+  (annotations/frame_labels/h1v2_gliner_v1.csv), for H1-S1 and H1-S2 (change 1 of docs/hipotezy_v2.md).
+Needs the `ml` dependency group for stance_v2 and gliner_v1.
 """
 
 import argparse
@@ -27,7 +29,7 @@ import pandas as pd
 from digital_media_analysis import agreement, h1_frame, hypotheses, topics, validation
 from digital_media_analysis.codebook import load_codebook
 from digital_media_analysis.config_reader import get_hypotheses_v2
-from digital_media_analysis.instruments import distrust_v1, stance_v2
+from digital_media_analysis.instruments import distrust_v1, runner, stance_v2
 from digital_media_analysis.paths import (
     FRAME_LABELS_DIR,
     HYPOTHESES_V2_DIR,
@@ -86,6 +88,7 @@ def main() -> None:
     parser.add_argument("--evaluate", action="store_true")
     parser.add_argument("--force", action="store_true", help="Overwrite existing validation workbooks.")
     parser.add_argument("--refresh", action="store_true", help="Recompute stance_v2 scores instead of reading the cache.")
+    parser.add_argument("--sources", action="store_true", help="Label the sources of every sample unit with gliner_v1.")
     args = parser.parse_args()
     settings = get_hypotheses_v2()["h1"]
     codebook = load_codebook()
@@ -94,9 +97,10 @@ def main() -> None:
     found_topics = topics.load_topics()
 
     frame = load_frame()
-    sample = h1_frame.analysis_sample(frame, settings["period"], int(settings["units_per_cell"]), SEED)
+    caps = {"post": settings.get("posts_per_cell", settings["units_per_cell"]), "comment": int(settings["units_per_cell"])}
+    sample = h1_frame.analysis_sample(frame, settings["period"], int(settings["units_per_cell"]), SEED, caps)
     sample = sample.assign(author_id=h1_frame.pseudonym(sample["author"], salt()))
-    public = ["unit_id", "kind", "author_id", "group", "year", "day", "day_weight", "weight", "topics"]
+    public = ["unit_id", "post_id", "kind", "author_id", "group", "year", "day", "day_weight", "weight", "topics"]
     sample[public].to_csv(HYPOTHESES_V2_DIR / "h1_sample.csv", index=False, encoding="utf-8")
     print(f"H1 v2 sample: {len(sample)} units ({sample['kind'].value_counts().to_dict()}), "
           f"{len(h1_frame.panel_authors(sample, int(settings['panel_min_years'])))} panel authors")
@@ -107,6 +111,12 @@ def main() -> None:
                                       lambda units: stance_v2.score(units, found_topics), refresh=args.refresh)
     if stance_v2.TUNED:
         stance_v2.labels(scores, inputs["unit_id"]).to_csv(FRAME_LABELS_DIR / "h1v2_stance_v2.csv", index=False, encoding="utf-8")
+    if args.sources:
+        units = sample.assign(platform="reddit")[["unit_id", "platform", "group", "title", "text", "link"]]
+        raw = runner.raw_output("gliner_v1", units, "h1v2", refresh=args.refresh)
+        labels = runner.document_labels("gliner_v1", units, raw)
+        labels.to_csv(FRAME_LABELS_DIR / "h1v2_gliner_v1.csv", index=False, encoding="utf-8")
+        print(f"gliner_v1 labels: {len(labels)} units -> {FRAME_LABELS_DIR / 'h1v2_gliner_v1.csv'}")
 
     drawn_path = HYPOTHESES_V2_DIR / "h1_validation_sample.csv"
     if args.validation_annotators:

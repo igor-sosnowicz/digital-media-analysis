@@ -96,12 +96,14 @@ hypotheses_v2:
     # subreddit-year with fewer than `census_below` posts on those days is taken whole.
     subreddits: [science, askscience, skeptic, conspiracy, health, vaccines, climate, climateskeptics,
                  news, worldnews, politics, todayilearned, AskReddit]
-    days_per_month: 2
+    days_per_month: 4
     census_below: 100
     comments_scanned_per_post: 100
-    comments_per_post: 20
-    # Analysis sample: at most this many units of each kind (post, comment) per subreddit and year.
-    units_per_cell: 200
+    comments_per_post: 30
+    # Analysis sample: at most this many comments per subreddit and year, and at most `posts_per_cell` posts
+    # (null: every post); labels are automatic, so more units cost only computing time (change 1).
+    units_per_cell: 500
+    posts_per_cell: null
     # Within-author analysis: authors with units in at least this many years.
     panel_min_years: 3
     # Human validation sample, the same number of units in every period, so
@@ -120,9 +122,9 @@ hypotheses_v2:
     wiki: pl.wikipedia.org
     # Frame: articles (and their talk pages) in these category trees, up to
     # `category_depth` levels below each category, at most `pages_per_group`
-    # pages per group drawn at random (seed in docs/hipotezy_v2.md).
+    # pages per group drawn at random (seed in docs/hipotezy_v2.md); null takes every page (change 1).
     category_depth: 2
-    pages_per_group: 400
+    pages_per_group: null
     groups:
       health: [Medycyna, Choroby, Szczepionki, Dietetyka, Medycyna niekonwencjonalna, Globalne ocieplenie, Klimatologia]
       control: [Matematyka, Fizyka, Architektura]
@@ -134,3 +136,33 @@ hypotheses_v2:
     alternative_owner_types: [independent_expert, influencer, anonymous]
     alternative_categories: [social_blog]
     unreliable_rsp_statuses: [gu, d, b]
+  # Change 1 (docs/hipotezy_v2.md, "Zmiany"; docs/plan_poprawy_krok_po_kroku.md, sections 3-4): hypothesis
+  # ladders, the power gate that picks each family's primary test before the confirmatory run, and exclusions.
+  ladders:
+    target_power: 0.8
+    # Posts of the v1 Reddit frames (with their comments) and the v1 Wikipedia pages are left out of every v2 test.
+    exclude_v1_units: true
+    v1_reddit_frames: [data/raw/reddit_frame, data/raw/reddit_frame_en_2005_2018]
+    h1:
+      # Communities that question the consensus (H1-S3); r/skeptic defends it, so it is not one of them.
+      questioning_subreddits: [conspiracy, climateskeptics]
+      # Alternative sources of H1-S1 and H1-S2: the v1 definition, measured with gliner_v1.
+      alternative_sources: [social_blog, unknown, personal]
+      # Gate B6 of the stance instrument, on top of the v2 gate (F1 and kappa).
+      stance_gate: {sensitivity: 0.7, specificity: 0.98}
+    h2:
+      # Revisions adding more links than this (imports, translations) leave the main analyses.
+      bulk_revision_links: 20
+      non_specialist_categories: [media, social_blog, other]
+      # H2-S2: smallest odds ratio of interest between health and control articles.
+      group_sesoi_odds_ratio: 1.5
+      # H2-S3: smallest hazard ratio of interest of removal, non-specialist against specialist links.
+      survival_hazard_ratio: 1.25
+      # H2-S4: alternative sources (by owner) are marginal below this share; its power uses the planning share
+      # of v1 (2 of 10 alternative links by domain stay alternative by owner: 0.15%).
+      marginal_share: 0.02
+      planning_alternative_share: 0.0015
+      # H2-S5: share of alternative-by-domain links that lead to institutions' accounts, against this null;
+      # its power uses the planning share below.
+      institution_null_share: 0.25
+      planning_institution_share: 0.5

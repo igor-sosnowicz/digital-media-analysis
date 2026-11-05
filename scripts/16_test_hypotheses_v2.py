@@ -18,7 +18,14 @@ alternative, talk pages, the rate model, difference in differences against
 control articles and the interrupted time series at the break month (with the
 2015-2019 baseline), Firth's logit, how long links stay, and the specification curve.
 
-`--confirmatory` is the reported run and needs the committed preregistration v2;
+Change 1 (docs/hipotezy_v2.md, docs/plan_poprawy_krok_po_kroku.md): units of v1 (posts of the v1 frames with their
+comments, the eight v1 pages) and bulk revisions are left out; the hypothesis ladders add H1-S1 to H1-S3 and H2-S1
+to H2-S5; the power gate (scripts/27, annotations/hypotheses_v2/power_gate.json) makes one variant of each family
+its primary test, the others secondary or descriptive; Holm adjusts the two primary tests and, within each family,
+the secondary ones, and every ladder test gets the v2 verdict (confirmed, refuted: no effect, refuted: opposite
+effect, inconclusive). TOST of the H1 stance trend uses the bound flattened by the instrument's error.
+
+`--confirmatory` is the reported run and needs the committed preregistration v2 and the committed power gate;
 without it the run is exploratory and its files say so.
 """
 
@@ -33,13 +40,16 @@ matplotlib.use("Agg")
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 
-from digital_media_analysis import charts, external, hypotheses, inference, multiverse, robustness  # noqa: E402
-from digital_media_analysis.config_reader import get_hypotheses_v2  # noqa: E402
-from digital_media_analysis.paths import FRAME_LABELS_DIR, HYPOTHESES_V2_DIR  # noqa: E402
+from digital_media_analysis import charts, external, hypotheses, inference, ladders, multiverse, robustness, wikipedia_refs  # noqa: E402
+from digital_media_analysis.config_reader import get_hypotheses_v2, get_wikipedia_pages  # noqa: E402
+from digital_media_analysis.datasets import page_title  # noqa: E402
+from digital_media_analysis.owners import UNCODED  # noqa: E402
+from digital_media_analysis.paths import FRAME_LABELS_DIR, HYPOTHESES_V2_DIR, PROJECT_ROOT  # noqa: E402
 from digital_media_analysis.prereg import git, require_committed, uncommitted  # noqa: E402
 
 GENERAL_SUBREDDITS = {"news", "worldnews", "politics", "todayilearned", "askreddit"}
 FIGURES = HYPOTHESES_V2_DIR / "figures"
+GATE_PATH = HYPOTHESES_V2_DIR / "power_gate.json"
 
 
 def row(hypothesis: str, analysis: str, outcome: str, model: str, result: dict, direction: str, bound: float | None,
@@ -62,7 +72,15 @@ def logit_term(frame: pd.DataFrame, outcome: str, term: str, fixed_effects: list
     return table.iloc[0].to_dict()
 
 
-def h1(settings: dict, notes: dict) -> tuple[list[dict], pd.DataFrame]:
+def h1_sample(rules: dict) -> pd.DataFrame:
+    """The H1 analysis sample without the posts of the v1 frames and their comments (change 1)."""
+    sample = pd.read_csv(HYPOTHESES_V2_DIR / "h1_sample.csv", dtype={"unit_id": str, "post_id": str})
+    if rules["exclude_v1_units"] and "post_id" in sample:
+        sample = ladders.without_v1_posts(sample, ladders.v1_post_ids(PROJECT_ROOT / folder for folder in rules["v1_reddit_frames"]))
+    return sample
+
+
+def h1(settings: dict, notes: dict, rules: dict) -> tuple[list[dict], pd.DataFrame]:
     stance_path = FRAME_LABELS_DIR / "h1v2_stance_v2.csv"
     test_path = HYPOTHESES_V2_DIR / "h1_instrument_test.json"
     if not (stance_path.exists() and test_path.exists()):
@@ -71,7 +89,7 @@ def h1(settings: dict, notes: dict) -> tuple[list[dict], pd.DataFrame]:
     test = json.loads(test_path.read_text(encoding="utf-8"))
     period, start = settings["period"], settings["period"][0]
     bound = inference.per_year_bound(settings["sesoi_period_odds_ratio"], period)
-    sample = pd.read_csv(HYPOTHESES_V2_DIR / "h1_sample.csv", dtype={"unit_id": str})
+    sample = h1_sample(rules)
     stance = pd.read_csv(stance_path, dtype={"unit_id": str})
     distrust = pd.read_csv(FRAME_LABELS_DIR / "h1v2_distrust_v1.csv", dtype={"unit_id": str})
     frame = sample.merge(stance, on="unit_id").merge(distrust[["unit_id", "distrust"]], on="unit_id")
@@ -81,6 +99,14 @@ def h1(settings: dict, notes: dict) -> tuple[list[dict], pd.DataFrame]:
     relevant = frame[frame["consensus_stance"].ne("not_applicable")].reset_index(drop=True)
     main_outcome = "challenges" if test["gate_passed"] else "distrust"
     notes["H1 main outcome"] = main_outcome if test["gate_passed"] else "distrust (stance_v2 nie przeszedł warunku trafności)"
+    counts = test["challenges_counts"]["all"]
+    # Change 1: TOST of the primary stance trend against the bound flattened by the instrument's error.
+    primary_bound = bound
+    if main_outcome == "challenges":
+        sensitivity = counts["tp"] / max(counts["tp"] + counts["fn"], 1)
+        specificity = counts["tn"] / max(counts["tn"] + counts["fp"], 1)
+        primary_bound = ladders.attenuated_bound(bound, float(relevant["challenges"].mean()), sensitivity, specificity)
+        notes["H1 TOST bound per year (flattened by instrument error)"] = primary_bound
     rows = []
     for analysis, data in [("primary", relevant), ("only posts", relevant[relevant["kind"].eq("post")]),
                            ("only comments", relevant[relevant["kind"].eq("comment")]),
@@ -89,7 +115,8 @@ def h1(settings: dict, notes: dict) -> tuple[list[dict], pd.DataFrame]:
             if outcome == "supports" and main_outcome != "challenges":
                 continue
             result = logit_term(data, outcome, "year_c", ["group"], "day")
-            rows.append(row("H1", analysis, outcome, "logit, subreddit FE, clustered by day", result, direction, bound))
+            tost_bound = primary_bound if analysis == "primary" and outcome == main_outcome else bound
+            rows.append(row("H1", analysis, outcome, "logit, subreddit FE, clustered by day", result, direction, tost_bound))
     if main_outcome == "challenges":
         rows.append(row("H1", "distrust lexicon", "distrust", "logit, subreddit FE, clustered by day",
                         logit_term(relevant, "distrust", "year_c", ["group"], "day"), "increase", bound))
@@ -97,7 +124,6 @@ def h1(settings: dict, notes: dict) -> tuple[list[dict], pd.DataFrame]:
     rows.append(row("H1", "within author (panel)", main_outcome, "conditional logit by author",
                     inference.within_author_trend(panel, main_outcome, "author_id", start, "increase"), "increase", bound,
                     estimate="odds_ratio_per_year"))
-    counts = test["challenges_counts"]["all"]
     if main_outcome == "challenges":
         draws = inference.error_rate_draws(counts["tp"], counts["fn"], counts["tn"], counts["fp"], 100, 20261025)
         corrected = inference.corrected_trend(relevant.assign(year=relevant["year"]), "challenges", "group", "day", start, draws)
@@ -141,7 +167,7 @@ def h1(settings: dict, notes: dict) -> tuple[list[dict], pd.DataFrame]:
     return rows, yearly.assign(hypothesis="H1", outcome=main_outcome)
 
 
-def h2(settings: dict, notes: dict) -> tuple[list[dict], pd.DataFrame]:
+def h2(settings: dict, notes: dict, rules: dict) -> tuple[list[dict], pd.DataFrame]:
     links = pd.read_csv(HYPOTHESES_V2_DIR / "h2_links.csv", dtype={"url": str})
     period, baseline = settings["period"], settings["baseline_period"]
     bound = inference.per_year_bound(settings["sesoi_period_odds_ratio"], period)
@@ -149,12 +175,19 @@ def h2(settings: dict, notes: dict) -> tuple[list[dict], pd.DataFrame]:
     links = links.assign(year_c=links["year"] - start, health=links["group"].eq("health").astype(int),
                          alt_upper=(links["alt_owner"].eq(1) | links["uncoded_owner"].eq(1)).astype(int), weight=1.0)
     articles = links[links["ns"].eq(0)]
+    # Change 1: bulk revisions and the v1 pages leave the analyses; the main test with bulk revisions is reported apart.
+    with_bulk = articles[articles["year"].between(*period) & articles["health"].eq(1) & articles["first_addition"]].reset_index(drop=True)
+    articles = ladders.without_bulk(articles, int(rules["h2"]["bulk_revision_links"]))
+    if rules["exclude_v1_units"]:
+        articles = ladders.without_pages(articles, [page_title(url) for url in get_wikipedia_pages()])
     in_period = articles[articles["year"].between(*period) & articles["health"].eq(1)]
     main = in_period[in_period["first_addition"]].reset_index(drop=True)
     social = main[main["platform"].fillna("").ne("")]
     notes["H2 uncoded share of social links"] = float(social["uncoded_owner"].mean()) if len(social) else 0.0
     model = "logit, page FE, clustered by revision"
-    rows = [row("H2", "primary", "alt_owner", model, logit_term(main, "alt_owner", "year_c", ["article"], "revid", None), "increase", bound)]
+    rows = [row("H2", "primary", "alt_owner", model, logit_term(main, "alt_owner", "year_c", ["article"], "revid", None), "increase", bound),
+            row("H2", "with bulk revisions", "alt_owner", model, logit_term(with_bulk, "alt_owner", "year_c", ["article"], "revid", None),
+                "increase", bound)]
     for analysis, data, outcome in [
         ("definition: domain category", main, "alt_domain"), ("definition: perennial sources", main, "alt_rsp"),
         ("all additions", in_period, "alt_owner"), ("first additions not reverted", main[~main["reverted_edit"]], "alt_owner"),
@@ -227,7 +260,112 @@ def h2(settings: dict, notes: dict) -> tuple[list[dict], pd.DataFrame]:
     if len(heat):
         charts.heatmap(heat, "udział alternatywnych", path=FIGURES / "h2_heatmap.png")
     charts.specification_curve(curve, ["definition", "unit", "namespace", "model"], path=FIGURES / "h2_specifications.png")
+    rows += h2_ladder(articles, settings, rules)
     return rows, yearly.assign(hypothesis="H2", outcome="alt_owner")
+
+
+def h1_ladder(settings: dict, rules: dict, notes: dict) -> list[dict]:
+    """H1-S1 and H1-S2 (gliner_v1 sources of the sample units) and H1-S3 (participation, no labels) of change 1."""
+    if not (HYPOTHESES_V2_DIR / "h1_sample.csv").exists():
+        return []
+    start = settings["period"][0]
+    bound = inference.per_year_bound(settings["sesoi_period_odds_ratio"], settings["period"])
+    sample = h1_sample(rules).assign(year_c=lambda frame: frame["year"] - start)
+    questioning = {name.lower() for name in rules["h1"]["questioning_subreddits"]}
+    sample["questioning"] = sample["group"].str.lower().isin(questioning).astype(int)
+    rows = [row("H1", "H1-S3: share of units in questioning communities", "questioning", "weighted logit, no FE, clustered by day",
+                logit_term(sample, "questioning", "year_c", [], "day"), "increase", bound) | {"variant": "H1-S3"}]
+    sources_path = FRAME_LABELS_DIR / "h1v2_gliner_v1.csv"
+    if not sources_path.exists():
+        notes["H1-S1, H1-S2"] = "czeka: etykiety źródeł gliner_v1 (skrypt 14 --sources)"
+        return rows
+    labels = pd.read_csv(sources_path, dtype={"unit_id": str})
+    citing = sample.merge(labels[labels["cites_source"].astype(int).eq(1)][["unit_id", "source_types"]], on="unit_id")
+    citing = citing.assign(alternative=hypotheses.has_any(citing["source_types"], rules["h1"]["alternative_sources"]))
+    errors = pd.read_csv(PROJECT_ROOT / "annotations" / "hypotheses" / "audit_error_rates.csv")
+    errors = errors[errors["source"].eq("pooled") & errors["indicator"].eq("alternative")].iloc[0]
+    # TOST against the bound flattened by gliner_v1's error on alternative sources (v1 audit).
+    flattened = ladders.attenuated_bound(bound, float(citing["alternative"].mean()), errors["sensitivity"], errors["specificity"])
+    for variant, analysis, effects in (("H1-S1", "H1-S1: alternative sources within communities", ["group"]),
+                                       ("H1-S2", "H1-S2: alternative sources in the whole discussion", [])):
+        model = "weighted logit, " + ("subreddit FE" if effects else "no FE") + ", clustered by day"
+        rows.append(row("H1", analysis, "alternative", model, logit_term(citing, "alternative", "year_c", effects, "day"), "increase",
+                        flattened) | {"variant": variant})
+    return rows
+
+
+def h2_ladder(articles: pd.DataFrame, settings: dict, rules: dict) -> list[dict]:
+    """H2-S1 to H2-S5 of change 1 on first additions to articles without v1 pages and bulk revisions."""
+    period, extra = settings["period"], rules["h2"]
+    bound = inference.per_year_bound(settings["sesoi_period_odds_ratio"], period)
+    first = articles[articles["year"].between(*period) & articles["first_addition"]].reset_index(drop=True)
+    classified = first[first["category"].ne(wikipedia_refs.UNCLASSIFIED)]
+    classified = classified.assign(non_specialist=classified["category"].isin(extra["non_specialist_categories"]).astype(int))
+    health = classified[classified["health"].eq(1)]
+    rows = [row("H2", "H2-S1: non-specialist sources", "non_specialist", "logit, page FE, clustered by revision",
+                logit_term(health, "non_specialist", "year_c", ["article"], "revid", None), "increase", bound) | {"variant": "H2-S1"},
+            row("H2", "H2-S2: health against control articles", "non_specialist", "logit, no FE, clustered by page",
+                logit_term(classified, "non_specialist", "health", [], "article", None), "increase", extra["group_sesoi_odds_ratio"])
+            | {"variant": "H2-S2"}]
+    lasting = health.assign(type=np.where(health["non_specialist"].eq(1), "nieeksperckie", "eksperckie"))
+    _, comparison = inference.survival(lasting, "days_present", "censored", "type")
+    if {"hazard_ratio", "ci_low", "ci_high"} <= set(comparison):
+        se = (np.log(comparison["ci_high"]) - np.log(comparison["ci_low"])) / (2 * 1.959964)
+        result = {"beta": np.log(comparison["hazard_ratio"]), "se": se, "hazard_ratio": comparison["hazard_ratio"],
+                  "ci_low": comparison["ci_low"], "ci_high": comparison["ci_high"], "units": len(lasting),
+                  "events": int((~lasting["censored"].astype(bool)).sum())}
+        rows.append(row("H2", "H2-S3: removal of non-specialist against specialist links", "removal", "Cox, time to removal", result,
+                        "increase", extra["survival_hazard_ratio"], estimate="hazard_ratio", effect="HR") | {"variant": "H2-S3"})
+    main = first[first["health"].eq(1)]
+    below = ladders.share_below(main["alt_owner"], main["article"], extra["marginal_share"])
+    rows.append({"hypothesis": "H2", "analysis": f"H2-S4: alternative sources below {extra['marginal_share']:.0%} of first additions",
+                 "outcome": "alt_owner", "model": "share, page-clustered error", "effect": "share", "estimate": below["estimate"],
+                 "ci_low": np.nan, "ci_high": below["ci_high"], "p_one_sided": below["p_one_sided"], "units": below["units"],
+                 "events": below["events"], "direction": "below", "note": "", "variant": "H2-S4"})
+    owned = main[main["alt_domain"].eq(1) & ~main["owner_type"].fillna("").isin(["", UNCODED])]
+    above = ladders.share_above(int(owned["owner_type"].eq(ladders.INSTITUTION).sum()), len(owned), extra["institution_null_share"])
+    rows.append({"hypothesis": "H2", "analysis": "H2-S5: institutions' accounts among alternative links by domain", "outcome": "institution",
+                 "model": "exact binomial", "effect": "share", "estimate": above["estimate"], "ci_low": above.get("ci_low", np.nan),
+                 "ci_high": above.get("ci_high", np.nan), "p_one_sided": above["p_one_sided"], "units": above["units"],
+                 "events": above["events"], "direction": "above", "note": "", "variant": "H2-S5"})
+    return rows
+
+
+def verdict(item: pd.Series, alpha: float) -> str:
+    """The v2 decision rule on Holm-adjusted p-values (primary and secondary) or raw ones (descriptive, marked)."""
+    if item["role"] == "analysis":
+        return ""
+    suffix = "" if item["role"] == "descriptive" else "_holm"
+    if item.get(f"p_one_sided{suffix}", np.nan) < alpha:
+        found = "potwierdzona"
+    elif item.get(f"tost_p_tost{suffix}", np.nan) < alpha:
+        found = "obalona: brak efektu"
+    elif item.get(f"p_opposite{suffix}", np.nan) < alpha:
+        found = "obalona: efekt przeciwny"
+    else:
+        found = "nierozstrzygnięta"
+    return found + (" (opisowo)" if item["role"] == "descriptive" else "")
+
+
+def decide(table: pd.DataFrame, roles: dict[str, str], alpha: float) -> pd.DataFrame:
+    """Variant and role of every row, Holm across the primary tests and within each family's secondary tests, verdicts."""
+    table = table.copy()
+    if "variant" not in table:
+        table["variant"] = np.nan
+    table.loc[table["analysis"].eq("primary"), "variant"] = table["hypothesis"]
+    table["role"] = table["variant"].map(lambda variant: roles.get(variant, "descriptive") if isinstance(variant, str) else "analysis")
+    if "tost_p_tost" not in table:
+        table["tost_p_tost"] = np.nan
+    table["p_opposite"] = np.where(table["effect"].isin(["OR", "HR", "RR"]), 1 - table["p_one_sided"], np.nan)
+    families = [table.index[table["role"].eq("primary")]]
+    families += [table.index[table["role"].eq("secondary") & table["hypothesis"].eq(name)] for name in ("H1", "H2")]
+    for column in ("p_one_sided", "tost_p_tost", "p_opposite"):
+        table[f"{column}_holm"] = np.nan
+        for index in families:
+            if len(index):
+                table.loc[index, f"{column}_holm"] = pd.Series(ladders.holm(table.loc[index, column].to_dict()))
+    table["verdict"] = table.apply(verdict, axis=1, alpha=alpha)
+    return table
 
 
 def main() -> None:
@@ -236,27 +374,31 @@ def main() -> None:
     parser.add_argument("--confirmatory", action="store_true", help="The reported run: the preregistration v2 must be committed.")
     args = parser.parse_args()
     commit = require_committed() if args.confirmatory else git("rev-parse", "HEAD")
+    gate_file = GATE_PATH.relative_to(PROJECT_ROOT).as_posix()
+    if args.confirmatory and (not GATE_PATH.exists() or uncommitted([gate_file])):
+        raise SystemExit(f"Commit {gate_file} (scripts/27_power_gate.py) before the confirmatory run.")
+    roles = ladders.roles(json.loads(GATE_PATH.read_text(encoding="utf-8"))["decision"]) if GATE_PATH.exists() else {}
     mode = "confirmatory" if args.confirmatory else "exploratory"
     settings = get_hypotheses_v2()
     notes, rows, yearly = {}, [], []
     if "h1" in args.hypotheses:
-        found, shares = h1(settings["h1"], notes)
-        rows += found
+        found, shares = h1(settings["h1"], notes, settings["ladders"])
+        rows += found + h1_ladder(settings["h1"], settings["ladders"], notes)
         yearly.append(shares)
     if "h2" in args.hypotheses:
-        found, shares = h2(settings["h2"], notes)
+        found, shares = h2(settings["h2"], notes, settings["ladders"])
         rows += found
         yearly.append(shares)
     table = pd.DataFrame(rows)
     if len(table):
         table["supported"] = table["p_one_sided"] < settings["alpha"]
+        table = decide(table, roles, settings["alpha"])
         table.to_csv(HYPOTHESES_V2_DIR / f"{mode}_trends.csv", index=False, encoding="utf-8")
-        primary = table[table["analysis"].eq("primary")]
         charts.forest(table.assign(label=table["hypothesis"] + ": " + table["analysis"] + " (" + table["outcome"] + ")"),
                       "label", "estimate", "ci_low", "ci_high", section="hypothesis", path=FIGURES / f"{mode}_forest.png")
-        for item in primary.itertuples(index=False):
-            print(f"{item.hypothesis} {item.outcome}: {item.effect} {item.estimate:.3f} [{item.ci_low:.3f}, {item.ci_high:.3f}] "
-                  f"p={item.p_one_sided:.4f} TOST p={getattr(item, 'tost_p_tost', np.nan):.4f}")
+        for item in table[table["role"].ne("analysis")].itertuples(index=False):
+            print(f"{item.variant} [{item.role}] {item.outcome}: {item.effect} {item.estimate:.3f} p={item.p_one_sided:.4f} "
+                  f"TOST p={item.tost_p_tost:.4f} -> {item.verdict}")
     if any(len(part) for part in yearly):
         pd.concat(yearly, ignore_index=True).to_csv(HYPOTHESES_V2_DIR / f"{mode}_yearly.csv", index=False, encoding="utf-8")
     (HYPOTHESES_V2_DIR / f"{mode}_run.json").write_text(json.dumps({

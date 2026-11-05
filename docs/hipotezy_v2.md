@@ -148,4 +148,48 @@ Moc 0,8 wymaga około 40–50 tys. pierwszych dodań w artykułach o zdrowiu. Li
 
 ## Zmiany
 
-*(brak; tu zapisujemy każdą zmianę po commicie preregistracji, z datą i powodem, przed przebiegiem potwierdzającym)*
+*Tu zapisujemy każdą zmianę po commicie preregistracji, z datą i powodem, przed przebiegiem potwierdzającym.*
+
+### Zmiana 1 — PROJEKT z 02.11.2026, niezatwierdzony
+
+Zespół zatwierdza ten wpis osobnym commitem, który usuwa z nagłówka słowa „PROJEKT” i „niezatwierdzony”, razem z plikami z listy `PREREGISTRATION_V2`, przed pobraniem danych v2. Do tego czasu wpis nie obowiązuje, także wtedy, gdy projekt i te pliki są już w repozytorium. Szczegóły i uzasadnienie liczb są w `docs/plan_poprawy_krok_po_kroku.md`.
+
+**Powód.**
+- Analiza mocy z błędem instrumentu i efektem klastrów pokazała, że przy parametrach powyżej:
+  - H1 ze `stance_v1` ma moc ≤ 0,49;
+  - H2 według właściciela konta wymaga ponad 220 tys. linków, bo źródła alternatywne to około 0,15% dodań.
+
+  Liczby odtwarza `scripts/17_power_analysis.py --plan`.
+- Zespół zdecydował, że nie koduje ręcznie walidacji. Etykiety daje protokół AI, przećwiczony 31.10 i 02.11.2026 (`docs/cwiczenie_protokolu_ai.md`).
+- Żadnych danych v2 nie oglądaliśmy.
+
+**Zmiany.**
+1. **Rama** (`config.yaml`):
+   - H1: 4 dni w miesiącu, 30 komentarzy na post, do 500 komentarzy na subreddit i rok, posty bez limitu;
+   - H2: wszystkie artykuły drzew kategorii.
+2. **Wyłączenia z każdego testu v2:**
+   - posty ram Reddita v1 z ich komentarzami;
+   - 8 stron Wikipedii z v1.
+
+   Z analiz H2 wypadają też rewizje dodające ponad 20 linków. Test główny H2 z tymi rewizjami raportujemy osobno.
+3. **Etykiety walidacyjne i uczące** zamiast kodowania przez dwie osoby:
+   - protokół AI 1.1 (`docs/protokol_anotacji_ai_1_1.md`, codebook 2.3), czyli dwa ślepe przebiegi w nowych agentach;
+   - odniesieniem są jednostki, w których oba przebiegi się zgadzają; odsetek niezgodnych raportujemy;
+   - sprawdzenia przez człowieka nie ma (decyzja D0.4), co ujawniamy jako słabszy dowód trafności.
+4. **Warunek trafności stanowiska.** Do F1 ≥ 0,5 i κ ≥ 0,4 dochodzą:
+   - czułość ≥ 0,7 i swoistość ≥ 0,98 dla `challenges`;
+   - test grup znanych: udział `challenges` w r/conspiracy i r/climateskeptics wyższy niż w r/science i r/climate, p < 0,05;
+   - różnica czułości między okresami walidacji < 0,15.
+5. **Drabiny hipotez** (brzmienie w rozdz. 3 planu):
+   - H1 → H1-S1 (źródła alternatywne w społecznościach, gliner_v1) → H1-S2 (to samo w całej dyskusji, bez efektów stałych) → H1-S3 (udział jednostek w r/conspiracy i r/climateskeptics, bez etykiet);
+   - H2 → H2-S1 (udział źródeł nieeksperckich: media, platformy, inne) → H2-S2 (zdrowie a grupa kontrolna) → H2-S4 (źródła alternatywne według właściciela poniżej 2% pierwszych dodań);
+   - H2-S3 (linki nieeksperckie usuwane szybciej; HR ≥ 1,25) i H2-S5 (≥ 25% linków alternatywnych według domeny to konta instytucji) są zawsze drugorzędne.
+6. **Bramka mocy** (`scripts/27_power_gate.py`):
+   - testem głównym rodziny zostaje pierwszy wariant drabiny, który przeszedł bramki trafności i ma moc ≥ 0,8 dla wykrycia SESOI i dla TOST;
+   - moc liczymy z liczebności, czułości i swoistości, łącznego udziału bazowego i efektu klastrów liczonego bez roku;
+   - `power_gate.json` commitujemy przed przebiegiem potwierdzającym, a `scripts/16` bez niego odmawia.
+7. **TOST** trendów mierzonych instrumentem (H1, H1-S1, H1-S2) liczymy względem granicy spłaszczonej przez błąd instrumentu.
+8. **Wielokrotność:** poprawka Holma na dwóch testach głównych i, osobno, w rodzinach testów drugorzędnych. Werdykt każdego testu drabiny wynika z reguły decyzji powyżej, stosowanej do skorygowanych p.
+9. **Bez zmian:** SESOI, α, okresy, kierunki i modele główne (poza wyłączeniami z punktu 2).
+
+**Kolejność prac.** Krok 3 (kodowanie walidacji przez IS i JP) zastępuje protokół AI 1.1. Krok 5 poprzedza `scripts/27_power_gate.py` i commit `power_gate.json`.

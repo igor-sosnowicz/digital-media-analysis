@@ -2,6 +2,8 @@
 
 Dokument roboczy do decyzji zespołu. Nie zmienia preregistracji: każda propozycja z rozdziałów 3–5 wymaga datowanego wpisu w `docs/hipotezy_v2.md` **przed** pobraniem danych v2.
 
+Plan wykonawczy z liczbami mocy i bramkami: [`plan_poprawy_krok_po_kroku.md`](plan_poprawy_krok_po_kroku.md) (02.11.2026).
+
 **Wersja 2 propozycji:** plan nie wymaga nowego kodowania przez ludzi. Dodatkowe etykiety powstają automatycznie (rozdz. 4), a trafność sprawdzamy na istniejących etykietach ludzi i metodami, które nie potrzebują nowych etykiet.
 
 ## 0. W skrócie

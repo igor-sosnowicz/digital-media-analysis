@@ -33,7 +33,7 @@ COMMENT_COLUMNS = ["subreddit", "id", "link_id", "author", "body", "created_utc"
 REMOVED_TEXT = {"[removed]", "[deleted]"}
 # Accounts that are not people: bots and the deleted-author placeholder.
 NOT_AUTHORS = {"", "[deleted]", "automoderator", "autotldr", "remindmebot"}
-UNIT_COLUMNS = ["unit_id", "kind", "author", "group", "year", "day", "introduced", "title", "text", "link",
+UNIT_COLUMNS = ["unit_id", "post_id", "kind", "author", "group", "year", "day", "introduced", "title", "text", "link",
                 "day_weight", "weight", "removed", "topics"]
 VALIDATION_LABELS = ["consensus_topic", "consensus_stance", "uncertain", "notes", "annotator"]
 
@@ -82,7 +82,7 @@ def units(posts: pd.DataFrame, comments: pd.DataFrame) -> pd.DataFrame:
     """Posts and comments of the frame as units: post units read title, body and link; comment units the body."""
     introduced = pd.to_datetime(posts["created_at_utc"], utc=True, format="ISO8601")
     post_units = pd.DataFrame({
-        "unit_id": "p_" + posts["id"].astype(str), "kind": "post", "author": posts["author"].fillna("").astype(str),
+        "unit_id": "p_" + posts["id"].astype(str), "post_id": posts["id"].astype(str), "kind": "post", "author": posts["author"].fillna("").astype(str),
         "group": posts["subreddit"], "year": introduced.dt.year, "day": introduced.dt.strftime("%Y-%m-%d"),
         "introduced": posts["created_at_utc"], "title": posts["title"].fillna(""), "text": posts["text"].fillna(""),
         "link": posts["url"].fillna(""), "day_weight": posts["day_weight"].astype(float),
@@ -92,7 +92,7 @@ def units(posts: pd.DataFrame, comments: pd.DataFrame) -> pd.DataFrame:
     post_units["weight"] = post_units["day_weight"]
     when = pd.to_datetime(comments["created_at_utc"], utc=True, format="ISO8601")
     comment_units = pd.DataFrame({
-        "unit_id": "c_" + comments["id"].astype(str), "kind": "comment", "author": comments["author"].fillna("").astype(str),
+        "unit_id": "c_" + comments["id"].astype(str), "post_id": comments["link_id"].astype(str), "kind": "comment", "author": comments["author"].fillna("").astype(str),
         "group": comments["subreddit"], "year": when.dt.year, "day": when.dt.strftime("%Y-%m-%d"),
         "introduced": comments["created_at_utc"], "title": "", "text": comments["body"].fillna(""), "link": "",
         "day_weight": comments["day_weight"].astype(float), "removed": comments["removed"].astype(int),
@@ -102,13 +102,16 @@ def units(posts: pd.DataFrame, comments: pd.DataFrame) -> pd.DataFrame:
     return pd.concat([post_units, comment_units], ignore_index=True)[UNIT_COLUMNS]
 
 
-def analysis_sample(frame: pd.DataFrame, period: list[int], per_cell: int, seed: int) -> pd.DataFrame:
-    """At most `per_cell` visible units per subreddit, year and kind, with weights back to the frame."""
+def analysis_sample(frame: pd.DataFrame, period: list[int], per_cell: int, seed: int,
+                    caps: dict[str, int | None] | None = None) -> pd.DataFrame:
+    """At most `per_cell` visible units per subreddit, year and kind, with weights back to the frame; `caps` sets the
+    limit of each kind instead (None: every unit of the kind; change 1 of docs/hipotezy_v2.md)."""
     eligible = frame[frame["year"].between(*period) & frame["removed"].eq(0)]
     rng = np.random.default_rng(seed)
     parts = []
-    for _, cell in eligible.groupby(["group", "year", "kind"], sort=True):
-        chosen = cell if len(cell) <= per_cell else cell.sample(n=per_cell, random_state=rng)
+    for (_, _, kind), cell in eligible.groupby(["group", "year", "kind"], sort=True):
+        limit = caps.get(kind, per_cell) if caps is not None else per_cell
+        chosen = cell if limit is None or len(cell) <= limit else cell.sample(n=limit, random_state=rng)
         parts.append(chosen.assign(weight=chosen["weight"] * cell["weight"].sum() / chosen["weight"].sum()))
     return pd.concat(parts, ignore_index=True) if parts else eligible.iloc[0:0]
 

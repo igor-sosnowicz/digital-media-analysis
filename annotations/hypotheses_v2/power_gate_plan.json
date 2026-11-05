@@ -1,0 +1,247 @@
+{
+  "created_utc": "2026-11-03T08:30:45+00:00",
+  "commit": "034bb9cafe71762e6a9e4e64f256280dc7b93ed4",
+  "source": "planning values (illustration, not for the confirmatory run)",
+  "target_power": 0.8,
+  "inputs": {
+    "H1": {
+      "test": "trend",
+      "valid": true,
+      "units": 50000,
+      "share": 0.1,
+      "sensitivity": 0.7,
+      "specificity": 0.98,
+      "design_effect": 2.786566506379848,
+      "years": 14,
+      "sesoi_period_odds_ratio": 1.25
+    },
+    "H1-S1": {
+      "test": "trend",
+      "valid": true,
+      "sensitivity": 0.8138172655399163,
+      "specificity": 0.7724373389821075,
+      "units": 50000,
+      "share": 0.36343591212716736,
+      "design_effect": 2.786566506379848,
+      "years": 14,
+      "sesoi_period_odds_ratio": 1.25
+    },
+    "H1-S2": {
+      "test": "trend",
+      "valid": true,
+      "sensitivity": 0.8138172655399163,
+      "specificity": 0.7724373389821075,
+      "units": 50000,
+      "share": 0.36343591212716736,
+      "design_effect": 2.786566506379848,
+      "years": 14,
+      "sesoi_period_odds_ratio": 1.25
+    },
+    "H1-S3": {
+      "test": "trend",
+      "valid": true,
+      "units": 60000,
+      "share": 0.1,
+      "design_effect": 1.5,
+      "years": 14,
+      "sesoi_period_odds_ratio": 1.25
+    },
+    "H2": {
+      "test": "trend",
+      "valid": true,
+      "units": 4000,
+      "share": 0.0014914243102162566,
+      "design_effect": 2.9441,
+      "years": 7,
+      "sesoi_period_odds_ratio": 1.5
+    },
+    "H2-S1": {
+      "test": "trend",
+      "valid": true,
+      "units": 4000,
+      "share": 0.49183303085299457,
+      "design_effect": 2.9441,
+      "years": 7,
+      "sesoi_period_odds_ratio": 1.5
+    },
+    "H2-S2": {
+      "test": "two_shares",
+      "valid": true,
+      "share": 0.49183303085299457,
+      "units_first": 4000,
+      "units_second": 4000,
+      "sesoi_odds_ratio": 1.5,
+      "design_effect": 2.9441
+    },
+    "H2-S4": {
+      "test": "bound",
+      "valid": true,
+      "units": 4000,
+      "planning_share": 0.0015,
+      "bound": 0.02,
+      "design_effect": 2.9441
+    },
+    "H2-S3": {
+      "test": "cox",
+      "valid": true,
+      "events": 600,
+      "exposed_share": 0.49183303085299457,
+      "hazard_ratio": 1.25
+    },
+    "H2-S5": {
+      "test": "binomial",
+      "valid": true,
+      "units": 30,
+      "planning_share": 0.5,
+      "null_share": 0.25
+    }
+  },
+  "decision": {
+    "H1": {
+      "primary": "H1-S3",
+      "secondary": [],
+      "descriptive": [
+        "H1",
+        "H1-S1",
+        "H1-S2"
+      ],
+      "variants": {
+        "H1": {
+          "test": "trend",
+          "units": 50000,
+          "share": 0.1,
+          "sensitivity": 0.7,
+          "specificity": 0.98,
+          "design_effect": 2.786566506379848,
+          "years": 14,
+          "sesoi_period_odds_ratio": 1.25,
+          "power": 0.639623731556415,
+          "power_equivalence": 0.2792474631128301,
+          "valid": true,
+          "passed": false
+        },
+        "H1-S1": {
+          "test": "trend",
+          "sensitivity": 0.8138172655399163,
+          "specificity": 0.7724373389821075,
+          "units": 50000,
+          "share": 0.36343591212716736,
+          "design_effect": 2.786566506379848,
+          "years": 14,
+          "sesoi_period_odds_ratio": 1.25,
+          "power": 0.8125376589410835,
+          "power_equivalence": 0.6250753178821671,
+          "valid": true,
+          "passed": false
+        },
+        "H1-S2": {
+          "test": "trend",
+          "sensitivity": 0.8138172655399163,
+          "specificity": 0.7724373389821075,
+          "units": 50000,
+          "share": 0.36343591212716736,
+          "design_effect": 2.786566506379848,
+          "years": 14,
+          "sesoi_period_odds_ratio": 1.25,
+          "power": 0.8125376589410835,
+          "power_equivalence": 0.6250753178821671,
+          "valid": true,
+          "passed": false
+        },
+        "H1-S3": {
+          "test": "trend",
+          "units": 60000,
+          "share": 0.1,
+          "design_effect": 1.5,
+          "years": 14,
+          "sesoi_period_odds_ratio": 1.25,
+          "power": 0.9939081577183035,
+          "power_equivalence": 0.9878163154366071,
+          "valid": true,
+          "passed": true
+        }
+      }
+    },
+    "H2": {
+      "primary": "H2-S2",
+      "secondary": [
+        "H2-S4",
+        "H2-S3",
+        "H2-S5"
+      ],
+      "descriptive": [
+        "H2",
+        "H2-S1"
+      ],
+      "variants": {
+        "H2": {
+          "test": "trend",
+          "units": 4000,
+          "share": 0.0014914243102162566,
+          "design_effect": 2.9441,
+          "years": 7,
+          "sesoi_period_odds_ratio": 1.5,
+          "power": 0.07316668002367663,
+          "power_equivalence": 0.0,
+          "valid": true,
+          "passed": false
+        },
+        "H2-S1": {
+          "test": "trend",
+          "units": 4000,
+          "share": 0.49183303085299457,
+          "design_effect": 2.9441,
+          "years": 7,
+          "sesoi_period_odds_ratio": 1.5,
+          "power": 0.8011433215660761,
+          "power_equivalence": 0.6022866431321523,
+          "valid": true,
+          "passed": false
+        },
+        "H2-S2": {
+          "test": "two_shares",
+          "share": 0.49183303085299457,
+          "units_first": 4000,
+          "units_second": 4000,
+          "sesoi_odds_ratio": 1.5,
+          "design_effect": 2.9441,
+          "power": 0.9998675872084191,
+          "power_equivalence": 0.9997256992810897,
+          "valid": true,
+          "passed": true
+        },
+        "H2-S4": {
+          "test": "bound",
+          "units": 4000,
+          "planning_share": 0.0015,
+          "bound": 0.02,
+          "design_effect": 2.9441,
+          "power": 1.0,
+          "power_equivalence": null,
+          "valid": true,
+          "passed": true
+        },
+        "H2-S3": {
+          "test": "cox",
+          "events": 600,
+          "exposed_share": 0.49183303085299457,
+          "hazard_ratio": 1.25,
+          "power": 0.8616408482047013,
+          "power_equivalence": null,
+          "valid": true,
+          "passed": true
+        },
+        "H2-S5": {
+          "test": "binomial",
+          "units": 30,
+          "planning_share": 0.5,
+          "null_share": 0.25,
+          "power": 0.8192026959732175,
+          "power_equivalence": null,
+          "valid": true,
+          "passed": true
+        }
+      }
+    }
+  }
+}
