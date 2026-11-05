@@ -50,3 +50,16 @@ def test_check_counts_point_boxes(tmp_path):
         handle.write("\punkty{wstęp}{\item fakt}\n")
     problems, _ = script.check(tmp_path)
     assert any(r"\punkty" in problem for problem in problems)
+
+
+def test_check_reads_another_preprint_with_two_macro_files(tmp_path):
+    script = load_script()
+    write_report(tmp_path, "1", box=False)
+    (tmp_path / "numbers_v2.tex").write_text(r"\newcommand{\resNew}{2}" + "\n", encoding="utf-8")
+    text = [r"\input{numbers}", r"\input{numbers_v2}", r"\resResult{} and \resNew.", r"\tabela{t}"]
+    (tmp_path / "preprint_v2.tex").write_text("\n".join(text) + "\n", encoding="utf-8")
+    problems, needed = script.check(tmp_path, "preprint_v2.tex", ("numbers.tex", "numbers_v2.tex"))
+    assert problems == []
+    assert [path.name for path in needed] == ["preprint_v2.tex", "numbers.tex", "numbers_v2.tex", "t.tex"]
+    problems, _ = script.check(tmp_path, "preprint_v2.tex")
+    assert any("resNew" in problem for problem in problems)

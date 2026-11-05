@@ -6,7 +6,8 @@ placeholder ([czeka na H1-A], [czeka na dane]), boxes \\dopisania{} not yet
 replaced by text, and tables or figures the preprint needs but that do not
 exist. With `--strict` it exits with an error while anything is left (before
 submission); `--zip` writes the Overleaf package with preprint.tex,
-numbers.tex and only the tables and figures the preprint uses.
+numbers.tex and only the tables and figures the preprint uses. `--preprint preprint_v2.tex
+--numbers numbers.tex numbers_v2.tex` checks the new preprint (scripts/28) instead.
 """
 
 import argparse
@@ -26,21 +27,25 @@ def macro_values(numbers_text: str) -> dict[str, str]:
     return dict(re.findall(r"^\\newcommand\{\\(res[A-Za-z]+)\}\{(.*)\}$", numbers_text, flags=re.MULTILINE))
 
 
-def check(report_dir: Path = REPORT_DIR) -> tuple[list[str], list[Path]]:
-    """Problems found, and the files the preprint needs (preprint.tex, numbers.tex, tables, figures)."""
-    preprint = (report_dir / "preprint.tex").read_text(encoding="utf-8")
-    values = macro_values((report_dir / "numbers.tex").read_text(encoding="utf-8"))
+def check(report_dir: Path = REPORT_DIR, preprint_name: str = "preprint.tex",
+          numbers_names: tuple[str, ...] = ("numbers.tex",)) -> tuple[list[str], list[Path]]:
+    """Problems found, and the files the preprint needs (the preprint, its macro files, tables, figures)."""
+    preprint = (report_dir / preprint_name).read_text(encoding="utf-8")
+    values = {}
+    for name in numbers_names:
+        values |= macro_values((report_dir / name).read_text(encoding="utf-8"))
     body = "\n".join(line for line in preprint.splitlines() if not line.lstrip().startswith("%"))
     tables = re.findall(r"\\(?:tabela|szeroka)\{([^}]+)\}", body)
     figures = re.findall(r"\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}", body)
-    needed = [report_dir / "preprint.tex", report_dir / "numbers.tex",
+    first_table = 1 + len(numbers_names)
+    needed = [report_dir / preprint_name, *(report_dir / name for name in numbers_names),
               *(report_dir / "tables" / f"{name}.tex" for name in tables),
               *(report_dir / "figures" / name for name in figures)]
     problems = [f"brak pliku {path.relative_to(report_dir)}" for path in needed if not path.exists()]
 
     used = set(re.findall(r"\\(res[A-Z][A-Za-z]*)", preprint))
-    problems += [f"makro \\{name} nie jest zdefiniowane w numbers.tex" for name in sorted(used - set(values))]
-    texts = [body, *(path.read_text(encoding="utf-8") for path in needed[2:2 + len(tables)] if path.exists())]
+    problems += [f"makro \\{name} nie jest zdefiniowane w plikach makr" for name in sorted(used - set(values))]
+    texts = [body, *(path.read_text(encoding="utf-8") for path in needed[first_table:first_table + len(tables)] if path.exists())]
     shown = {name for text in texts for name in re.findall(r"\\(res[A-Z][A-Za-z]*)", text)}
     waiting = sorted(name for name in shown if name in values and values[name].strip() in PLACEHOLDERS)
     if waiting:
@@ -66,9 +71,11 @@ def build_zip(needed: list[Path], path: Path, report_dir: Path = REPORT_DIR) -> 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--strict", action="store_true", help="Exit with an error while anything is left.")
+    parser.add_argument("--preprint", default="preprint.tex", help="Preprint file in report/, e.g. preprint_v2.tex.")
+    parser.add_argument("--numbers", nargs="+", default=["numbers.tex"], help="Macro files in report/ the preprint inputs.")
     parser.add_argument("--zip", type=Path, help="Write the Overleaf package to this path, e.g. data/preprint_overleaf.zip.")
     args = parser.parse_args()
-    problems, needed = check()
+    problems, needed = check(REPORT_DIR, args.preprint, tuple(args.numbers))
     for problem in problems:
         print(f"- {problem}")
     print("Preprint gotowy do oddania." if not problems else f"{len(problems)} rzeczy do dokończenia.")
